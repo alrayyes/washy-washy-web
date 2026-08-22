@@ -236,7 +236,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
           href="/config"
           className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
         >
-          config page
+          washing loads page
         </a>
         .
       </p>
