@@ -1,3 +1,9 @@
+## [1.10.0](https://github.com/alrayyes/washy-washy-web/compare/v1.9.0...v1.10.0) (2026-08-22)
+
+### Features
+
+* add Linen to the bundled washing chart ([#76](https://github.com/alrayyes/washy-washy-web/issues/76)) ([82db3e1](https://github.com/alrayyes/washy-washy-web/commit/82db3e1c36c45cf883a60a5b8452dca8c7110b28)), closes [#75](https://github.com/alrayyes/washy-washy-web/issues/75)
+
 ## [1.9.0](https://github.com/alrayyes/washy-washy-web/compare/v1.8.5...v1.9.0) (2026-08-22)
 
 ### Features
