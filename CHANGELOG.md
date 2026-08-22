@@ -1,3 +1,9 @@
+## [1.14.0](https://github.com/alrayyes/washy-washy-web/compare/v1.13.0...v1.14.0) (2026-08-22)
+
+### Features
+
+* a proper font pairing and a heading-size pass ([#100](https://github.com/alrayyes/washy-washy-web/issues/100)) ([c1904c4](https://github.com/alrayyes/washy-washy-web/commit/c1904c4ab81668a5c62bbc7167e412309831c580)), closes [#60](https://github.com/alrayyes/washy-washy-web/issues/60) [#56](https://github.com/alrayyes/washy-washy-web/issues/56) [#42](https://github.com/alrayyes/washy-washy-web/issues/42)
+
 ## [1.13.0](https://github.com/alrayyes/washy-washy-web/compare/v1.12.4...v1.13.0) (2026-08-22)
 
 ### Features
