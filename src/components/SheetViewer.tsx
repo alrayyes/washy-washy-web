@@ -10,6 +10,7 @@ import { readCustomConfig } from "../lib/customConfig";
 import { filterByPile } from "../lib/filter";
 import { slug } from "../lib/slug";
 import { readFilters, writeFilters } from "../lib/storage";
+import { ALERT, BUTTON_PRIMARY, FIELD_LABEL } from "../lib/styles";
 import { readUrlFilters } from "../lib/url";
 import { writeUrlFilters } from "../lib/urlHistory";
 import Sheet from "./Sheet";
@@ -20,14 +21,8 @@ const CUT_LABEL: Record<Variant, string> = {
   iron: "Ironing only",
 };
 
-// text-body, not text-muted: muted-on-panel is 4.39:1, just under WCAG AA's
-// 4.5:1 for this text's size and weight.
-const FIELD_LABEL = "block text-xs font-semibold tracking-wide text-body uppercase";
 const FIELD_INPUT =
   "mt-1 block w-full min-w-0 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
 
 /**
  * A tap-to-open "?" next to a field label — `title` alone is a hover-only
@@ -221,7 +216,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         <legend className="px-1 text-sm font-semibold text-ink">Filter the chart</legend>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <span className={FIELD_LABEL}>
+            <span className={`block ${FIELD_LABEL}`}>
               <label htmlFor="filter-cut">Cut</label>
               <HelpBubble
                 id="filter-cut-help"
@@ -242,7 +237,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             </select>
           </div>
           <div className="flex-1">
-            <span className={FIELD_LABEL}>
+            <span className={`block ${FIELD_LABEL}`}>
               <label htmlFor="filter-pile">Pile</label>
               <HelpBubble
                 id="filter-pile-help"

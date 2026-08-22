@@ -1,10 +1,14 @@
 ---
+import { colour } from "../lib/theme";
+
 /**
  * A miniature of the dial illustrations every card draws (see dials.tsx):
  * an accent ring, a knob, and a pointer at 12 o'clock, with a steam-blue
  * swirl standing in for the porthole glass. Same brand colours as
- * `src/lib/theme.ts`, kept in step by eye for the same reason that file
- * documents — a static icon has no reason to import react-pdf's styles.
+ * `src/lib/theme.ts`, imported directly — unlike that file's own
+ * relationship to `packages/pdf`'s theme (a different shape, react-pdf
+ * style objects), this is the same language and the same repo, so there's
+ * no reason to keep a hand-copied set of hexes here (#60).
  */
 interface Props {
   size?: number;
@@ -20,16 +24,16 @@ const { size = 36 } = Astro.props;
   role="img"
   aria-label="Washy washy"
 >
-  <circle cx="20" cy="20" r="18" fill="none" stroke="#d1132b" stroke-width="2"></circle>
-  <circle cx="20" cy="20" r="11" fill="#eaf2fa" stroke="#9ec5e8" stroke-width="1.5"></circle>
+  <circle cx="20" cy="20" r="18" fill="none" stroke={colour.accent} stroke-width="2"></circle>
+  <circle cx="20" cy="20" r="11" fill={colour.steamSoft} stroke={colour.steam} stroke-width="1.5"></circle>
   <path
     d="M13 21a7 7 0 0 1 12-5"
     fill="none"
-    stroke="#9ec5e8"
+    stroke={colour.steam}
     stroke-width="2"
     stroke-linecap="round"
   ></path>
-  <line x1="20" y1="20" x2="20" y2="11" stroke="#d1132b" stroke-width="2" stroke-linecap="round"
+  <line x1="20" y1="20" x2="20" y2="11" stroke={colour.accent} stroke-width="2" stroke-linecap="round"
   ></line>
-  <circle cx="20" cy="20" r="1.6" fill="#d1132b"></circle>
+  <circle cx="20" cy="20" r="1.6" fill={colour.accent}></circle>
 </svg>

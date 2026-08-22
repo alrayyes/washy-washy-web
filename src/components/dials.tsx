@@ -68,7 +68,7 @@ export function ProgramDial({
         cx={centre}
         cy={centre}
         r={knob}
-        fill="#e8e8ea"
+        fill={colour.knob}
         stroke={colour.line}
         strokeWidth={0.8}
       />
@@ -159,7 +159,7 @@ export function IronDial({
         cx={centre}
         cy={centre}
         r={knob}
-        fill={off ? "#f4f4f5" : "#e8e8ea"}
+        fill={off ? colour.panel : colour.knob}
         stroke={colour.line}
         strokeWidth={0.8}
       />

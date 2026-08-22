@@ -13,8 +13,9 @@ import {
   washGroups,
 } from "@washy-washy/core/browser";
 import { useState } from "react";
-import { colour } from "../lib/theme";
+import { CHART_CARD, CHART_CARD_HEADER } from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
+import SectionHeading from "./SectionHeading";
 
 const SUBTITLE: Record<Variant, string> = {
   full: "Scroll for the pile you are holding.",
@@ -35,12 +36,6 @@ function sheetGroups(
   if (variant === "wash") return washGroups(items);
   if (variant === "iron") return ironGroups(items, ironSettingKeys(machine));
   return cardGroups(items);
-}
-
-function SectionHeading({ children }: { children: string }) {
-  return (
-    <p className="mb-1 text-xs font-bold tracking-wide text-muted">{children.toUpperCase()}</p>
-  );
 }
 
 function Masthead({ machine, subtitle }: { machine: Machine; subtitle: string }) {
@@ -291,16 +286,13 @@ function Field({
 function SoftenerBadge({ on }: { on: boolean }) {
   return (
     <span
-      className="rounded px-1.5 py-0.5 text-xs font-bold text-white"
-      style={{ backgroundColor: on ? colour.yes : colour.no }}
+      className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${on ? "bg-yes" : "bg-no"}`}
     >
       {on ? "SOFTENER OK" : "NO SOFTENER"}
     </span>
   );
 }
 
-const CARD_CLASS = "rounded-lg border border-line p-4";
-const CARD_HEADER_CLASS = "mb-3 flex items-center justify-between gap-2 border-b border-ink pb-1.5";
 const CARD_ACTION =
   "rounded border border-line bg-white px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
 
@@ -422,8 +414,8 @@ function Card({
   );
 
   return (
-    <article className={CARD_CLASS}>
-      <div className={CARD_HEADER_CLASS}>
+    <article className={CHART_CARD}>
+      <div className={CHART_CARD_HEADER}>
         <h3 className="text-base font-bold text-ink">
           {index}. {heading}
         </h3>
@@ -487,8 +479,8 @@ function IronCard({
   const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined;
 
   return (
-    <article className={CARD_CLASS}>
-      <div className={CARD_HEADER_CLASS}>
+    <article className={CHART_CARD}>
+      <div className={CHART_CARD_HEADER}>
         <h3 className="text-base font-bold text-ink">
           {index}. {setting ? `${setting.label} — ${setting.detail}` : "Do not iron"}
         </h3>

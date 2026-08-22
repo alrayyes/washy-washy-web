@@ -19,25 +19,21 @@ import {
   writeCustomConfig,
 } from "../lib/customConfig";
 import { isValidDuration } from "../lib/duration";
-import { TEXT_INPUT } from "../lib/styles";
-import { colour } from "../lib/theme";
+import {
+  ALERT,
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  CARD,
+  CHART_CARD,
+  CHART_CARD_HEADER,
+  FIELD_LABEL,
+  TEXT_INPUT,
+} from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
+import SectionHeading from "./SectionHeading";
 
 const SECTION = "mb-6";
 const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
-const CARD = "rounded-lg border border-hairline bg-panel p-4";
-const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
-
-// Matches Sheet.tsx's read-only card exactly (CARD_CLASS/CARD_HEADER_CLASS
-// there) — white, not the gray `CARD` panel above, which is this page's own
-// machine-summary boxes, a different thing.
-const CHART_CARD = "rounded-lg border border-line p-4";
-const CHART_CARD_HEADER = "mb-3 flex items-center justify-between gap-2 border-b border-ink pb-1.5";
 const SUB_PANEL = "rounded-md border border-hairline bg-panel p-3";
 const CHIP_BUTTON = "rounded border px-1.5 py-0.5 text-xs";
 const CHIP_BUTTON_ON = "border-accent bg-accent font-bold text-white";
@@ -55,13 +51,6 @@ const SORT_FIELDS: { value: (typeof COLUMNS)[number]; label: string }[] = [
   { value: "detergent", label: "Detergent" },
   { value: "notes", label: "Notes" },
 ];
-
-/** Matches Sheet.tsx's `SectionHeading` exactly. */
-function SectionHeading({ children }: { children: string }) {
-  return (
-    <p className="mb-1 text-xs font-bold tracking-wide text-muted">{children.toUpperCase()}</p>
-  );
-}
 
 function ChipList({ values }: { values: readonly string[] }) {
   return (
@@ -258,8 +247,7 @@ function PillToggle({
       type="button"
       data-testid={`toggle-${name}`}
       aria-pressed={on}
-      className={PILL_BUTTON}
-      style={{ backgroundColor: on ? colour.yes : colour.no }}
+      className={`${PILL_BUTTON} ${on ? "bg-yes" : "bg-no"}`}
       onClick={onClick}
     >
       {on ? onLabel : offLabel}
