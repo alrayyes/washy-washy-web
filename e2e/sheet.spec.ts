@@ -95,6 +95,54 @@ test("the download button generates a PDF only when clicked, not before", async 
   expect(path).not.toBeNull();
 });
 
+test("a single card's download button generates just that card's PDF", async ({ page }) => {
+  await goto(page);
+
+  const card = page.locator("article").first();
+  const heading = (await card.locator("h3").innerText()).replace(/^\d+\.\s*/, "");
+  // "1. White" -> "white" (the same slug the download filename is built
+  // from) — not asserting the exact filename since a merged card's
+  // heading can be "White + White Socks", joined differently in the name.
+  const expectedStem = heading
+    .split(" + ")[0]
+    ?.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  const downloadPromise = page.waitForEvent("download");
+  await card.getByRole("button", { name: /Download/ }).click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toContain(expectedStem as string);
+  expect(download.suggestedFilename()).not.toBe("washing-instructions-phone.pdf");
+  const path = await download.path();
+  expect(path).not.toBeNull();
+});
+
+test('a single card\'s "Copy link" copies a URL that opens straight to it', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await goto(page);
+
+  const card = page.locator("article").first();
+  const heading = (await card.locator("h3").innerText()).replace(/^\d+\.\s*/, "");
+  const pileName = heading.split(" + ")[0] as string;
+
+  await card.getByRole("button", { name: /Copy link/ }).click();
+  await expect(card.getByRole("button", { name: /Copied!/ })).toBeVisible();
+
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  const url = new URL(copied);
+  expect(url.searchParams.get("pile")).toBe(pileName);
+
+  await goto(page, `${url.pathname}${url.search}`);
+  const headings = await page.locator("article h3").allInnerTexts();
+  expect(headings.length).toBeGreaterThan(0);
+  for (const h of headings) expect(h.toLowerCase()).toContain((pileName as string).toLowerCase());
+});
+
 test("an uploaded config (from the config page) shows here too", async ({ page }) => {
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "E2E Custom Pile";

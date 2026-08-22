@@ -12,6 +12,7 @@ import {
   type Variant,
   washGroups,
 } from "@washy-washy/core/browser";
+import { useState } from "react";
 import { colour } from "../lib/theme";
 import { IronDial, ProgramDial } from "./dials";
 
@@ -300,17 +301,87 @@ function SoftenerBadge({ on }: { on: boolean }) {
 
 const CARD_CLASS = "rounded-lg border border-line p-4";
 const CARD_HEADER_CLASS = "mb-3 flex items-center justify-between gap-2 border-b border-ink pb-1.5";
+const CARD_ACTION =
+  "rounded border border-line bg-white px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
+
+/**
+ * Download and share for a single card — the pile(s) it draws, not the
+ * whole sheet. The actual work (rendering a PDF, touching `window`/
+ * `navigator`) lives in `SheetViewer` and arrives as callbacks: this file
+ * is imported directly by `test/sheet-render.test.ts` under a Bun-only
+ * tsconfig with no DOM lib, so it can never reference `window`,
+ * `document` or `navigator` itself. Only the downloading/error/copied
+ * state — which needs no DOM types — lives here.
+ */
+function CardActions({
+  group,
+  onDownload,
+  onShare,
+}: {
+  group: ResolvedInstruction[];
+  onDownload: (group: ResolvedInstruction[]) => Promise<void>;
+  onShare: (group: ResolvedInstruction[]) => Promise<void>;
+}) {
+  const [downloading, setDownloading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  async function handleDownload() {
+    setDownloading(true);
+    setError(null);
+    try {
+      await onDownload(group);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setDownloading(false);
+    }
+  }
+
+  async function handleShare() {
+    await onShare(group);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <div className="flex shrink-0 gap-1.5">
+        <button type="button" className={CARD_ACTION} onClick={handleShare}>
+          {copied ? "Copied!" : "Copy link"}
+        </button>
+        <button
+          type="button"
+          className={CARD_ACTION}
+          onClick={handleDownload}
+          disabled={downloading}
+        >
+          {downloading ? "Preparing…" : "Download"}
+        </button>
+      </div>
+      {error && (
+        <p className="text-right text-xs text-no" role="alert">
+          Could not generate the PDF: {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 function Card({
   group,
   index,
   variant,
   machine,
+  onDownloadCard,
+  onShareCard,
 }: {
   group: ResolvedInstruction[];
   index: number;
   variant: Variant;
   machine: Machine;
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
   const item = group[0] as ResolvedInstruction;
   const heading = group.map((member) => member.clothingType).join(" + ");
@@ -326,7 +397,12 @@ function Card({
         <h3 className="text-base font-bold text-ink">
           {index}. {heading}
         </h3>
-        <span className="shrink-0 text-xs font-bold text-accent">{durationsOf(group)}</span>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="text-xs font-bold text-accent">{durationsOf(group)}</span>
+          {onDownloadCard && onShareCard && (
+            <CardActions group={group} onDownload={onDownloadCard} onShare={onShareCard} />
+          )}
+        </div>
       </div>
 
       <div className="mb-3 flex items-center gap-2">
@@ -428,6 +504,14 @@ interface Props {
   items: ResolvedInstruction[];
   machine: Machine;
   variant: Variant;
+  /**
+   * Per-card download/share — optional so `test/sheet-render.test.ts` can
+   * render `Sheet` without them and so `variant === "iron"` (grouped by
+   * thermostat setting, not by pile — no single "this card's pile" to
+   * name) simply doesn't get the actions row at all.
+   */
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }
 
 /**
@@ -440,7 +524,7 @@ interface Props {
  * phone standing in front of the machine — a two-column grid only kicks in
  * once there's room to actually read two cards side by side.
  */
-export default function Sheet({ items, machine, variant }: Props) {
+export default function Sheet({ items, machine, variant, onDownloadCard, onShareCard }: Props) {
   const groups = sheetGroups(items, machine, variant);
 
   return (
@@ -464,6 +548,8 @@ export default function Sheet({ items, machine, variant }: Props) {
               index={index + 1}
               variant={variant}
               machine={machine}
+              onDownloadCard={onDownloadCard}
+              onShareCard={onShareCard}
             />
           ),
         )}
