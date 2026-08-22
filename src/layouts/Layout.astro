@@ -58,19 +58,24 @@ const NAV_LINK_INACTIVE = "text-body";
       </a>
     </div>
     <header
-      class={`mx-auto flex ${CHROME_WIDTH} items-center justify-between gap-4 border-b border-hairline px-4 py-4 sm:px-6`}
+      class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:flex-nowrap sm:px-6`}
     >
       <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
         <Logo size={32} />
         <span class="text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
       </a>
       <nav
-        class="flex items-center gap-3 pr-28 text-sm font-semibold sm:pr-32"
+        class="flex w-full items-center gap-3 text-sm font-semibold sm:w-auto sm:pr-32"
         aria-label="Site"
       >
-        {/* The right padding clears the "Fork me on GitHub" corner ribbon
-        (.gh-ribbon in global.css) — without it, the last link sits under
-        the ribbon's diagonal strip at both viewport sizes. */}
+        {/* `w-full` below `sm` forces nav onto its own row unconditionally
+        (not just "wrap if it doesn't fit") — otherwise there's a range of
+        widths just under `sm` where three links happen to fit on the logo's
+        row with no reserved space, and the last one sits under the ribbon.
+        On its own row, nav starts from the left edge, clear of the ribbon
+        without needing padding. At `sm` and up, `w-auto` puts nav back on
+        the logo's row, where `pr-32` clears the "Fork me on GitHub" ribbon
+        (.gh-ribbon in global.css) instead (#46). */}
         <a
           href="/"
           aria-current={path === "/" ? "page" : undefined}

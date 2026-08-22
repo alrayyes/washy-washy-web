@@ -108,6 +108,17 @@ test("the nav reaches all three pages, each marking only itself active", async (
   await expect(page).toHaveURL(/\/$/);
 });
 
+test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/");
+  await page.waitForSelector('[data-hydrated="true"]');
+
+  // Scoped to the site chrome's own <header> — Sheet.tsx has an unrelated
+  // <header> of its own further down the page.
+  const header = page.locator("body > header");
+  await expect.poll(() => header.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+});
+
 test("editing a chart field and saving applies it across the site", async ({ page }) => {
   await goto(page);
 
