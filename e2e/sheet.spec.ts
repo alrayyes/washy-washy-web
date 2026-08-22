@@ -22,12 +22,14 @@ async function goto(page: Page, path = "/") {
 }
 
 /**
- * Uploads a config through the config page — the only place a chart or
- * machine can be replaced now (#11) — then returns to the given index path.
+ * Uploads a config through the config page's own upload input (there's also
+ * a global one in the header now, #80 — this helper deliberately exercises
+ * the page-local one, which still shows the more detailed error/status
+ * text these tests check) — then returns to the given index path.
  */
 async function uploadConfig(page: Page, config: unknown, indexPath = "/") {
   await goto(page, "/config");
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "washy-washy.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(config, null, 2)),
@@ -179,6 +181,38 @@ test("an uploaded config (from the config page) shows here too", async ({ page }
   await page.fill('input[type="search"]', "E2E Custom Pile");
   await expect(page.locator("article")).toHaveCount(1);
   await expect(page.locator("article h3").first()).toContainText("E2E Custom Pile");
+});
+
+test("the header's upload control works from any page, not just /config", async ({ page }) => {
+  const config = await downloadedConfig(page);
+  config.chart[0].clothing_type = "Header Upload Pile";
+
+  await goto(page, "/");
+  await page.setInputFiles('[data-testid="header-upload-input"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+
+  // A successful upload reloads the page — the app has no live cross-page
+  // sync, so this is the same "reload to see it" behaviour every other
+  // config change already has.
+  await page.waitForSelector('[data-hydrated="true"]');
+  await expect(page.locator("article h3").first()).toContainText("Header Upload Pile");
+});
+
+test("the header's upload control shows an error inline, without navigating away", async ({
+  page,
+}) => {
+  await goto(page, "/");
+  await page.setInputFiles('[data-testid="header-upload-input"]', {
+    name: "broken.json",
+    mimeType: "application/json",
+    buffer: Buffer.from("{not valid json"),
+  });
+
+  await expect(page.getByRole("alert")).toContainText("Could not use that file");
+  await expect(page).toHaveURL("/");
 });
 
 test("filters and an uploaded config both survive a reload", async ({ page }) => {
