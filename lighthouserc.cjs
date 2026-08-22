@@ -18,6 +18,7 @@ module.exports = {
         "http://localhost:4321/",
         "http://localhost:4321/config/",
         "http://localhost:4321/config/machine/",
+        "http://localhost:4321/docs/",
       ],
       numberOfRuns: 3,
     },
