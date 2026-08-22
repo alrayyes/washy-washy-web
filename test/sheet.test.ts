@@ -1,22 +1,20 @@
 import { describe, expect, test } from "bun:test";
-import { parseInstructions, resolve, variants } from "@washy-washy/core";
+import { resolve, variants } from "@washy-washy/core";
 import { renderPhone } from "@washy-washy/pdf";
 import { PDFDocument } from "pdf-lib";
 import { buildChart } from "../src/lib/chart";
 import { emptyAdvancedFilters, filterAdvanced, filterByPile } from "../src/lib/filter";
-import { DIST_MACHINE, loadMachine } from "./support/loadMachine";
+import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 async function loadWebChart() {
-  const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-  const machineSource = await Bun.file("data/machine.json.dist").text();
-  return buildChart(csv, machineSource);
+  const configSource = await Bun.file(DIST_CONFIG).text();
+  return buildChart(configSource);
 }
 
 describe("buildChart", () => {
   test("parses the same items and machine the CLI draws the bundled examples from", async () => {
-    const machine = await loadMachine(DIST_MACHINE);
-    const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-    const expected = resolve(parseInstructions(csv, machine));
+    const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
+    const expected = resolve(instructions);
 
     const chart = await loadWebChart();
 

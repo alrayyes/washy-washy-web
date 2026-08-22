@@ -53,7 +53,7 @@ test("an edit that breaks the chart's validity against the machine is called out
 }) => {
   await goto(page);
 
-  // The bundled chart's first row uses "Cottons" (data/washing-instructions.csv.dist).
+  // The bundled chart's first row uses "Cottons" (data/washy-washy.json.dist).
   // Remove just that one programme via its own Remove button, keeping the
   // rest — a row-level mismatch, not the machine itself failing to parse.
   const section = page.getByTestId("list-editor-programmes");

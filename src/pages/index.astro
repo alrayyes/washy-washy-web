@@ -1,16 +1,15 @@
 ---
-// The committed chart, never the gitignored one a household keeps for
+// The committed config, never the gitignored one a household keeps for
 // itself — this is only the starting point a visitor can replace with
-// their own upload (SheetViewer, customChart.ts). Vite resolves both
+// their own upload (SheetViewer, customConfig.ts). Vite resolves this
 // statically at build time, unlike a path built from import.meta.url,
 // which breaks once Rollup relocates this page's chunk.
-import machineSource from "../../data/machine.json.dist?raw";
-import csvSource from "../../data/washing-instructions.csv.dist?raw";
+import configSource from "../../data/washy-washy.json.dist?raw";
 import SheetViewer from "../components/SheetViewer";
 import Layout from "../layouts/Layout.astro";
 import { buildChart } from "../lib/chart";
 
-const { items, machine } = buildChart(csvSource, machineSource);
+const { items, machine } = buildChart(configSource);
 ---
 
 <Layout
