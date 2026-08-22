@@ -8,6 +8,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { readCustomConfig } from "../lib/customConfig";
 import { filterByPile } from "../lib/filter";
+import { slug } from "../lib/slug";
 import { readFilters, writeFilters } from "../lib/storage";
 import { readUrlFilters } from "../lib/url";
 import { writeUrlFilters } from "../lib/urlHistory";
@@ -137,6 +138,21 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   const sourceItems = customItems ?? bundledItems;
   const filtered = useMemo(() => filterByPile(sourceItems, pileQuery), [sourceItems, pileQuery]);
 
+  function savePdf(pdf: Uint8Array, filename: string) {
+    // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
+    // Uint8Array is typed over the wider ArrayBufferLike (which also
+    // covers SharedArrayBuffer) — pdf is always a fresh copy from
+    // Blob.arrayBuffer(), never shared, so this is a safe narrowing.
+    const url = URL.createObjectURL(new Blob([pdf as BlobPart], { type: "application/pdf" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+    // Revoked after the click has had a chance to start the download —
+    // revoking synchronously can cancel it in some browsers.
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   async function handleDownload() {
     setDownloading(true);
     setDownloadError(null);
@@ -146,23 +162,29 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
       // would ship both in the page's main chunk regardless.
       const { renderPhone } = await import("@washy-washy/pdf");
       const { pdf } = await renderPhone(filtered, activeMachine, cut);
-      // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
-      // Uint8Array is typed over the wider ArrayBufferLike (which also
-      // covers SharedArrayBuffer) — pdf is always a fresh copy from
-      // Blob.arrayBuffer(), never shared, so this is a safe narrowing.
-      const url = URL.createObjectURL(new Blob([pdf as BlobPart], { type: "application/pdf" }));
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${STEM}-phone${SUFFIX[cut]}.pdf`;
-      link.click();
-      // Revoked after the click has had a chance to start the download —
-      // revoking synchronously can cancel it in some browsers.
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      savePdf(pdf, `${STEM}-phone${SUFFIX[cut]}.pdf`);
     } catch (reason) {
       setDownloadError(reason instanceof Error ? reason.message : String(reason));
     } finally {
       setDownloading(false);
     }
+  }
+
+  // Passed to Sheet -> Card as callbacks (Sheet.tsx can't touch window/
+  // document/navigator itself — see the comment on CardActions there).
+  async function handleDownloadCard(group: ResolvedInstruction[]) {
+    const { renderPhone } = await import("@washy-washy/pdf");
+    const { pdf } = await renderPhone(group, activeMachine, cut);
+    const names = [...new Set(group.map((member) => slug(member.clothingType)))];
+    savePdf(pdf, `${names.join("-")}.pdf`);
+  }
+
+  async function handleShareCard(group: ResolvedInstruction[]) {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("cut", cut);
+    url.searchParams.set("pile", (group[0] as ResolvedInstruction).clothingType);
+    await navigator.clipboard.writeText(url.toString());
   }
 
   return (
@@ -240,7 +262,13 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
               Could not generate the PDF: {downloadError}
             </p>
           )}
-          <Sheet items={filtered} machine={activeMachine} variant={cut} />
+          <Sheet
+            items={filtered}
+            machine={activeMachine}
+            variant={cut}
+            onDownloadCard={handleDownloadCard}
+            onShareCard={handleShareCard}
+          />
         </>
       )}
     </div>
