@@ -409,6 +409,7 @@ function Card({
         </div>
       </div>
 
+      <SectionHeading>Wash</SectionHeading>
       <div className="mb-3 flex items-center gap-2">
         <SoftenerBadge on={item.fabricSoftener} />
         <span className="text-xs font-bold text-ink">
@@ -420,15 +421,6 @@ function Card({
       <ControlPanel item={item} machine={machine} />
 
       <SplitField label="Detergent" items={group} pick={(member) => member.detergent} />
-
-      {variant !== "wash" && (
-        <div className="mt-3">
-          <SectionHeading>Iron</SectionHeading>
-          <IronPanel items={group} machine={machine} />
-        </div>
-      )}
-
-      <SplitField label="Drying" items={group} pick={(member) => member.drying} />
       <Field
         label="Wash together with"
         value={
@@ -442,6 +434,15 @@ function Card({
         }
         emphasis
       />
+      <SplitField label="Drying" items={group} pick={(member) => member.drying} />
+
+      {variant !== "wash" && (
+        <div className="mt-3">
+          <SectionHeading>Iron</SectionHeading>
+          <IronPanel items={group} machine={machine} />
+        </div>
+      )}
+
       <SplitField label="Notes" items={group} pick={(member) => member.notes} />
     </article>
   );
