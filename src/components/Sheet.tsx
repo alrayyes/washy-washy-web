@@ -258,6 +258,9 @@ function SplitField({
 
   return (
     <div className="mt-2">
+      {/* Not <SectionHeading> (#94): its own mb-1 has no margin to
+      collapse with here — Prose's <p> carries no mt-* — so it would add
+      a real 4px gap that isn't there today. */}
       <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <Prose items={items} pick={pick} emphasis={emphasis} />
     </div>
@@ -275,6 +278,7 @@ function Field({
 }) {
   return (
     <div className="mt-2">
+      {/* Not <SectionHeading> — same reason as SplitField above (#94). */}
       <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <p className={`text-sm leading-relaxed ${emphasis ? "font-bold text-ink" : "text-body"}`}>
         {value}

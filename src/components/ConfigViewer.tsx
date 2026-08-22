@@ -326,6 +326,11 @@ function EditableSplitField({
 
   return (
     <div className="mt-2">
+      {/* Not <SectionHeading> (#94): needs its own id for
+      ProseField's aria-labelledby (#66), which the component doesn't
+      take — and same as Sheet.tsx's SplitField/Field, ProseField's
+      textarea carries no mt-* to collapse SectionHeading's mb-1
+      against, so it would add a real 4px gap regardless. */}
       <p id={labelId} className="text-xs font-bold tracking-wide text-muted">
         {label.toUpperCase()}
       </p>
@@ -536,7 +541,7 @@ function ChartCards({
             />
 
             <div className="mt-2">
-              <p className="text-xs font-bold tracking-wide text-muted">COLOUR GROUP</p>
+              <SectionHeading>Colour group</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {colourGroups.map((group) => (
                   <button
@@ -556,7 +561,7 @@ function ChartCards({
             </div>
 
             <div className="mt-2">
-              <p className="text-xs font-bold tracking-wide text-muted">MIX TAGS</p>
+              <SectionHeading>Mix tags</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {mixTags.map((tag) => {
                   const selected = splitPipe(row.mix_tags);
