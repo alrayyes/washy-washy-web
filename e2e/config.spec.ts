@@ -65,7 +65,7 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
 
   await page
     .getByRole("radiogroup", { name: "Sort by" })
-    .getByRole("button", { name: "Pile" })
+    .getByRole("radio", { name: "Pile" })
     .click();
 
   const names = await pileNames(page);
@@ -73,6 +73,35 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
   // Sorting reorders the cards, it doesn't reset them — the edit above is
   // still there, now wherever "Zzz Edited Pile" alphabetizes to.
   expect(names).toContain("Zzz Edited Pile");
+});
+
+test("sort-by is a real radiogroup: arrow keys move selection via native radio behaviour", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const group = page.getByRole("radiogroup", { name: "Sort by" });
+  const chartOrder = group.getByRole("radio", { name: "Chart order" });
+  const pile = group.getByRole("radio", { name: "Pile" });
+
+  await expect(chartOrder).toBeChecked();
+  await expect(pile).not.toBeChecked();
+
+  // Real <input type="radio"> elements sharing a name: the browser handles
+  // roving tabindex and arrow-key movement natively — nothing here is this
+  // app's own code to re-verify, just that wiring onChange to setSortField
+  // actually reorders the chart when the browser moves the selection.
+  await chartOrder.focus();
+  await page.keyboard.press("ArrowRight");
+
+  await expect(pile).toBeChecked();
+  await expect(chartOrder).not.toBeChecked();
+
+  const names = await pileNames(page);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+
+  await page.keyboard.press("ArrowLeft");
+  await expect(chartOrder).toBeChecked();
 });
 
 test("the nav reaches all three pages, each marking only itself active", async ({ page }) => {
