@@ -1,3 +1,9 @@
+## [1.11.3](https://github.com/alrayyes/washy-washy-web/compare/v1.11.2...v1.11.3) (2026-08-22)
+
+### Bug Fixes
+
+* validate the duration field's H:MM shape, allow typing a colon ([#87](https://github.com/alrayyes/washy-washy-web/issues/87)) ([0658348](https://github.com/alrayyes/washy-washy-web/commit/06583489f3278a0c58c54ae680c0367c2f4d5619)), closes [#53](https://github.com/alrayyes/washy-washy-web/issues/53)
+
 ## [1.11.2](https://github.com/alrayyes/washy-washy-web/compare/v1.11.1...v1.11.2) (2026-08-22)
 
 ### Bug Fixes
