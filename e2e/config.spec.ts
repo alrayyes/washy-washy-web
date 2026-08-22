@@ -9,11 +9,19 @@ async function goto(page: Page) {
   await page.waitForSelector('[data-hydrated="true"]');
 }
 
+/** The config page's own download link — the current active config, as `{ machine, chart }`. */
+async function downloadedConfig(page: Page) {
+  const href = await page.locator('a[download="washy-washy.json"]').getAttribute("href");
+  return JSON.parse(
+    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
+  );
+}
+
 test("shows the machine's washer and iron settings, not a raw JSON dump", async ({ page }) => {
   await goto(page);
 
-  await expect(page.getByText(/Generic front loader/)).toBeVisible();
-  await expect(page.getByText(/Generic steam iron/)).toBeVisible();
+  await expect(page.locator("#washer-name")).toHaveValue(/Generic front loader/);
+  await expect(page.locator("#iron-name")).toHaveValue(/Generic steam iron/);
   // A raw dump would read as one giant blob of braces and quotes; a
   // structured page has program names as their own visible list items.
   await expect(page.locator("pre")).toHaveCount(0);
@@ -59,35 +67,6 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
   expect(names).toContain("Zzz Edited Pile");
 });
 
-test("reflects an uploaded chart, not the bundled example", async ({ page }) => {
-  // Upload happens on the main page — the config page reads the same
-  // localStorage-backed chart, the same way SheetViewer does.
-  await page.goto("/");
-  await page.waitForSelector('[data-hydrated="true"]');
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  rows[0].clothing_type = "Config Page E2E Pile";
-  await page.setInputFiles('input[type="file"]', {
-    name: "chart.json",
-    mimeType: "application/json",
-    buffer: Buffer.from(JSON.stringify(rows, null, 2)),
-  });
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
-
-  await goto(page);
-
-  // Chart cells are editable inputs, not plain text (#74) — getByText
-  // can't see an input's value, so check the value directly.
-  await expect(
-    page
-      .locator('[data-testid="chart-cards"] > article')
-      .first()
-      .locator('input[name="clothing_type"]'),
-  ).toHaveValue("Config Page E2E Pile");
-});
-
 test("the nav reaches both pages, in both directions", async ({ page }) => {
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
@@ -116,11 +95,11 @@ test("editing a chart field and saving applies it across the site", async ({ pag
   await detergentInput.fill("E2E Custom Detergent Note");
   await page.getByRole("button", { name: /Save changes/ }).click();
 
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
   await expect(detergentInput).toHaveValue("E2E Custom Detergent Note");
 
   // The same edit shows up on the main page — both read the same
-  // localStorage-backed chart (customChart.ts).
+  // localStorage-backed config (customConfig.ts).
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
   await expect(page.getByText("E2E Custom Detergent Note")).toBeVisible();
@@ -142,8 +121,24 @@ test("an invalid edit names the row and column, and isn't applied", async ({ pag
 
   await expect(page.getByRole("alert")).toContainText(/row \d+, column "clothing_type"/);
   await expect(page.getByRole("alert")).toContainText("must not be empty");
-  // The bad edit never took: still the bundled chart, not a half-applied one.
-  await expect(page.getByText("Showing the bundled example chart.")).toBeVisible();
+  // The bad edit never took: still the bundled config, not a half-applied one.
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("an edit that breaks the chart's validity against the machine is called out", async ({
+  page,
+}) => {
+  await goto(page);
+
+  // The bundled chart's first row uses "Cottons" (data/washing-instructions.csv.dist)
+  // — drop it from the washer, keeping enough other programmes that this is
+  // a row-level mismatch, not the machine itself failing to parse.
+  await page.getByLabel("Programmes").fill("Off, Synthetics");
+  await page.getByRole("button", { name: /Save changes/ }).click();
+
+  await expect(page.getByRole("alert")).toContainText(/row \d+, column "program"/);
+  // The bad edit never took: still the bundled config, not a half-applied one.
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
 });
 
 test("chips and pills all apply and download correctly", async ({ page }) => {
@@ -159,17 +154,15 @@ test("chips and pills all apply and download correctly", async ({ page }) => {
   await card.locator('[data-testid="chip-mix_tags-solo"]').click();
   await page.getByRole("button", { name: /Save changes/ }).click();
 
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
 
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  expect(rows[0].temperature).toBe("30");
-  expect(rows[0].fabric_softener).toBe("yes");
-  expect(rows[0].options.split("|")).toContain("Speed");
-  expect(rows[0].colour_group).toBe("dark");
-  expect(rows[0].mix_tags.split("|")).toContain("solo");
+  const config = await downloadedConfig(page);
+  const row = config.chart[0];
+  expect(row.temperature).toBe("30");
+  expect(row.fabric_softener).toBe("yes");
+  expect(row.options.split("|")).toContain("Speed");
+  expect(row.colour_group).toBe("dark");
+  expect(row.mix_tags.split("|")).toContain("solo");
 });
 
 test("toggling ironing off hides the iron setting chips and clears the value", async ({ page }) => {
@@ -184,14 +177,11 @@ test("toggling ironing off hides the iron setting chips and clears the value", a
 
   await expect(card.locator('[data-testid="chip-iron_setting-3"]')).toHaveCount(0);
   await page.getByRole("button", { name: /Save changes/ }).click();
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
 
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  expect(rows[0].ironing).toBe("no");
-  expect(rows[0].iron_setting).toBe("");
+  const config = await downloadedConfig(page);
+  expect(config.chart[0].ironing).toBe("no");
+  expect(config.chart[0].iron_setting).toBe("");
 });
 
 test("an edit survives a reload", async ({ page }) => {
@@ -203,18 +193,18 @@ test("an edit survives a reload", async ({ page }) => {
     .locator('textarea[name="notes"]');
   await notesInput.fill("Persisted E2E note");
   await page.getByRole("button", { name: /Save changes/ }).click();
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
 
   await page.reload();
   await page.waitForSelector('[data-hydrated="true"]');
 
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
   await expect(
     page.locator('[data-testid="chart-cards"] > article').first().locator('textarea[name="notes"]'),
   ).toHaveValue("Persisted E2E note");
 });
 
-test("downloading the chart from the config page reflects an edit", async ({ page }) => {
+test("downloading the config from the config page reflects an edit", async ({ page }) => {
   await goto(page);
 
   const notesInput = page
@@ -223,11 +213,95 @@ test("downloading the chart from the config page reflects an edit", async ({ pag
     .locator('textarea[name="notes"]');
   await notesInput.fill("Download E2E note");
   await page.getByRole("button", { name: /Save changes/ }).click();
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
 
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  expect(rows[0].notes).toBe("Download E2E note");
+  const config = await downloadedConfig(page);
+  expect(config.chart[0].notes).toBe("Download E2E note");
+});
+
+test("editing the washer applies live, before Save, and downloads with the config", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const card = page.locator('[data-testid="chart-cards"] > article').first();
+  await expect(card.locator('[data-testid="chip-temperature-99"]')).toHaveCount(0);
+
+  // Add a temperature the bundled machine doesn't have, appended rather
+  // than replacing the list wholesale — some other row in the chart may
+  // use a temperature this test doesn't otherwise know about. A chart
+  // card's chips read the draft machine live, not just the bundled one,
+  // so the new chip should appear before Save is even clicked.
+  const temperatureField = page.locator("#washer-temperatures");
+  await temperatureField.fill(`${await temperatureField.inputValue()}, 99`);
+  await expect(card.locator('[data-testid="chip-temperature-99"]')).toBeVisible();
+
+  await page.locator("#washer-name").fill("E2E Custom Washer");
+  await page.getByRole("button", { name: /Save changes/ }).click();
+
+  const config = await downloadedConfig(page);
+  expect(config.machine.washer.name).toBe("E2E Custom Washer");
+  expect(config.machine.washer.temperatures).toContain("99");
+});
+
+test("uploading a config, downloading it back out, and clearing it round-trip", async ({
+  page,
+}) => {
+  await goto(page);
+
+  // Download the active (bundled) config, edit one pile's name, and
+  // re-upload it — the same round trip a household member editing their
+  // config externally would do.
+  const config = await downloadedConfig(page);
+  config.chart[0].clothing_type = "E2E Custom Pile";
+
+  await page.setInputFiles('input[type="file"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+  await expect(
+    page
+      .locator('[data-testid="chart-cards"] > article')
+      .first()
+      .locator('input[name="clothing_type"]'),
+  ).toHaveValue("E2E Custom Pile");
+
+  // Upload something invalid: the error shows, and the just-uploaded
+  // config stays active rather than silently reverting.
+  await page.setInputFiles('input[type="file"]', {
+    name: "broken.json",
+    mimeType: "application/json",
+    buffer: Buffer.from("{not valid json"),
+  });
+  await expect(page.getByRole("alert")).toContainText("Could not use that file");
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+
+  await page.getByRole("button", { name: /Use the bundled example instead/ }).click();
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("an uploaded config with a value the machine doesn't have names the row and column", async ({
+  page,
+}) => {
+  await goto(page);
+
+  // Valid JSON, but a temperature the bundled machine can't be set to — the
+  // kind of typo a household member editing the config by hand would make.
+  // #72: this should name exactly what's wrong, not just "invalid chart".
+  const config = await downloadedConfig(page);
+  config.chart[0].temperature = "99";
+
+  await page.setInputFiles('input[type="file"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+
+  await expect(page.getByRole("alert")).toContainText(/row \d+, column "temperature"/);
+  await expect(page.getByRole("alert")).toContainText("99");
+  // The bad upload never took: still the bundled config, not a half-applied one.
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
 });

@@ -10,6 +10,11 @@ interface Props {
 
 const { title, description, wide = false } = Astro.props;
 const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
+// The nav and footer stay at the widest page's width on every page — fixed
+// regardless of `wide`, so switching between a narrow and a wide page never
+// shifts the nav links sideways. Only <main>, whose content actually needs
+// the room, varies.
+const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent";
 const NAV_LINK_ACTIVE = "text-accent";
@@ -32,7 +37,7 @@ const NAV_LINK_INACTIVE = "text-body";
       </a>
     </div>
     <nav
-      class={`mx-auto flex ${WIDTH} items-center gap-4 px-4 pt-6 text-sm font-semibold sm:px-6`}
+      class={`mx-auto flex ${CHROME_WIDTH} items-center gap-4 px-4 pt-6 text-sm font-semibold sm:px-6`}
       aria-label="Site"
     >
       <a
@@ -54,7 +59,7 @@ const NAV_LINK_INACTIVE = "text-body";
       <slot />
     </main>
     <footer
-      class={`mx-auto ${WIDTH} space-y-2 border-t border-hairline px-4 pt-6 pb-10 text-sm text-muted sm:px-6`}
+      class={`mx-auto ${CHROME_WIDTH} space-y-2 border-t border-hairline px-4 pt-6 pb-10 text-sm text-muted sm:px-6`}
     >
       <p>
         <a
