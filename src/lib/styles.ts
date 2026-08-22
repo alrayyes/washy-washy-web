@@ -5,7 +5,7 @@
  * this site's primary target (#58).
  */
 export const TEXT_INPUT =
-  "w-full min-w-[8rem] rounded border border-line bg-transparent px-1 py-0.5 text-body focus:border-accent focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+  "w-full min-w-[8rem] rounded border border-line bg-transparent px-1 py-0.5 text-body focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 /**
  * An uppercase field/section label. `text-body`, not `text-muted`:
@@ -35,10 +35,10 @@ export const BUTTON_PRIMARY =
 
 /** The secondary button (Download config, Reset, …) — MachineEditor.tsx and ConfigViewer.tsx only; SheetViewer.tsx has no use for it. */
 export const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
+  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 
 /** A failure message, always both visible and announced (`role="alert"`). */
-export const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
+export const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no-text";
 
 /** A grey info-box section (machine summary, upload controls, …). */
 export const CARD = "rounded-lg border border-hairline bg-panel p-4";

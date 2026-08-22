@@ -37,7 +37,7 @@ const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const SUB_PANEL = "rounded-md border border-hairline bg-panel p-3";
 const CHIP_BUTTON = "rounded border px-1.5 py-0.5 text-xs";
 const CHIP_BUTTON_ON = "border-accent bg-accent font-bold text-white";
-const CHIP_BUTTON_OFF = "border-hairline bg-white text-muted hover:border-line";
+const CHIP_BUTTON_OFF = "border-hairline bg-surface text-muted hover:border-line";
 const PILL_BUTTON = "rounded px-1.5 py-0.5 text-xs font-bold text-white";
 
 interface Props {
@@ -58,7 +58,7 @@ function ChipList({ values }: { values: readonly string[] }) {
       {values.map((value) => (
         <span
           key={value}
-          className="rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body"
+          className="rounded border border-line bg-surface px-1.5 py-0.5 text-xs text-body"
         >
           {value}
         </span>
@@ -82,7 +82,7 @@ function MachineSummary({ machine }: { machine: Machine }) {
         </p>
         <a
           href="/config/machine"
-          className="shrink-0 rounded border border-line bg-white px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="shrink-0 rounded border border-line bg-surface px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Edit machine →
         </a>
@@ -301,7 +301,7 @@ function DurationField({
           }}
         />
       </div>
-      <p id={hintId} className={invalid ? "text-xs text-no" : "sr-only"}>
+      <p id={hintId} className={invalid ? "text-xs text-no-text" : "sr-only"}>
         {invalid ? "Use H:MM, like 2:30" : "Format: H:MM, like 2:30"}
       </p>
     </div>
@@ -417,7 +417,7 @@ function ChartCards({
               <div className="w-20 shrink-0 text-center">
                 <ProgramDial program={row.program} washer={washer} size={78} />
                 <select
-                  className="mt-1 w-full rounded border border-line bg-transparent px-0 text-center text-xs font-bold text-ink focus:border-accent focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="mt-1 w-full rounded border border-line bg-transparent px-0 text-center text-xs font-bold text-ink focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   name="program"
                   aria-label="Programme"
                   value={row.program}
