@@ -1,4 +1,5 @@
 ---
+import Logo from "../components/Logo.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -12,10 +13,10 @@ const { title, description, wide = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL("/og-image.png", Astro.site);
 const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
-// The nav and footer stay at the widest page's width on every page — fixed
-// regardless of `wide`, so switching between a narrow and a wide page never
-// shifts the nav links sideways. Only <main>, whose content actually needs
-// the room, varies.
+// The header and footer stay at the widest page's width on every page —
+// fixed regardless of `wide`, so switching between a narrow and a wide page
+// never shifts the nav links sideways. Only <main>, whose content actually
+// needs the room, varies.
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent";
@@ -52,49 +53,66 @@ const NAV_LINK_INACTIVE = "text-body";
         Fork me on GitHub
       </a>
     </div>
-    <nav
-      class={`mx-auto flex ${CHROME_WIDTH} items-center gap-4 px-4 pt-6 text-sm font-semibold sm:px-6`}
-      aria-label="Site"
+    <header
+      class={`mx-auto flex ${CHROME_WIDTH} items-center justify-between gap-4 border-b border-hairline px-4 py-4 sm:px-6`}
     >
-      <a
-        href="/"
-        aria-current={path === "/" ? "page" : undefined}
-        class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-      >
-        Home
+      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
+        <Logo size={28} />
+        <span class="text-base font-bold tracking-tight">Washy washy</span>
       </a>
-      <a
-        href="/config"
-        aria-current={path.startsWith("/config") ? "page" : undefined}
-        class={`${NAV_LINK} ${path.startsWith("/config") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+      <nav
+        class="flex items-center gap-1 pr-28 text-sm font-semibold sm:pr-32"
+        aria-label="Site"
       >
-        Config
-      </a>
-    </nav>
+        {/* The right padding clears the "Fork me on GitHub" corner ribbon
+        (.gh-ribbon in global.css) — without it, "Config" sits under the
+        ribbon's diagonal strip at both viewport sizes. */}
+        <a
+          href="/"
+          aria-current={path === "/" ? "page" : undefined}
+          class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        >
+          Home
+        </a>
+        <a
+          href="/config"
+          aria-current={path.startsWith("/config") ? "page" : undefined}
+          class={`${NAV_LINK} ${path.startsWith("/config") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        >
+          Config
+        </a>
+      </nav>
+    </header>
     <main class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
       <slot />
     </main>
     <footer
-      class={`mx-auto ${CHROME_WIDTH} space-y-2 border-t border-hairline px-4 pt-6 pb-10 text-sm text-muted sm:px-6`}
+      class={`mx-auto ${CHROME_WIDTH} border-t border-hairline px-4 py-8 text-sm text-muted sm:px-6`}
     >
-      <p>
-        <a
-          href="https://github.com/alrayyes/washy-washy"
-          class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
-        >
-          Washy washy on GitHub
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+        <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
+          <Logo size={20} />
+          <span class="text-sm font-semibold">Washy washy</span>
         </a>
-      </p>
-      <p class="text-xs text-muted">
-        {"© 2026 Ryan Kes. Licensed under the "}<a
-          href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
-          class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
-        >
-          GPL-3.0-or-later
-        </a>{
-          " — provided as-is, with no warranty of any kind (see the licence, sections 15–16). Always check a garment's own care label; this chart reflects one household's settings, not a manufacturer's guarantee."
-        }
-      </p>
+        <div class="flex flex-col gap-2 sm:items-end sm:text-right">
+          <a
+            href="https://github.com/alrayyes/washy-washy"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+          >
+            Washy washy on GitHub
+          </a>
+          <p class="max-w-md text-xs text-muted">
+            {"© 2026 Ryan Kes. Licensed under the "}<a
+              href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
+              class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+            >
+              GPL-3.0-or-later
+            </a>{
+              " — provided as-is, with no warranty of any kind (see the licence, sections 15–16). Always check a garment's own care label; this chart reflects one household's settings, not a manufacturer's guarantee."
+            }
+          </p>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
