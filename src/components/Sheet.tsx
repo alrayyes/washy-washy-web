@@ -323,18 +323,20 @@ function CardActions({
   onShare,
 }: {
   group: ResolvedInstruction[];
-  onDownload: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownload: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShare: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dropped, setDropped] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
 
   async function handleDownload() {
     setDownloading(true);
     setError(null);
+    setDropped([]);
     try {
-      await onDownload(group);
+      setDropped(await onDownload(group));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason));
     } finally {
@@ -368,6 +370,11 @@ function CardActions({
           Could not generate the PDF: {error}
         </p>
       )}
+      {dropped.length > 0 && (
+        <p className="text-right text-xs text-muted" role="status">
+          Couldn't render in the PDF: {dropped.join(" ")}
+        </p>
+      )}
     </div>
   );
 }
@@ -384,7 +391,7 @@ function Card({
   index: number;
   variant: Variant;
   machine: Machine;
-  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
   const item = group[0] as ResolvedInstruction;
@@ -515,7 +522,7 @@ interface Props {
    * thermostat setting, not by pile — no single "this card's pile" to
    * name) simply doesn't get the actions row at all.
    */
-  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }
 
