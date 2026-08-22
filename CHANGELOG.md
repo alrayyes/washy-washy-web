@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/alrayyes/washy-washy-web/compare/v1.3.0...v1.4.0) (2026-08-22)
+
+### Features
+
+* download a single pile's card as its own PDF ([#29](https://github.com/alrayyes/washy-washy-web/issues/29)) ([9a9475d](https://github.com/alrayyes/washy-washy-web/commit/9a9475dc5228df5d0ba7b61dd28be01a84fed175)), closes [#10](https://github.com/alrayyes/washy-washy-web/issues/10)
+
 ## [1.3.0](https://github.com/alrayyes/washy-washy-web/compare/v1.2.0...v1.3.0) (2026-08-22)
 
 ### Features
