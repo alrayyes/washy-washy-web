@@ -8,6 +8,7 @@ import {
   type Machine,
   mixTags,
   type Row,
+  RowError,
   rowsFromInstructions,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
@@ -17,6 +18,7 @@ import {
   uploadConfigFile,
   writeCustomConfig,
 } from "../lib/customConfig";
+import { isValidDuration } from "../lib/duration";
 import { colour } from "../lib/theme";
 import { IronDial, ProgramDial } from "./dials";
 
@@ -276,30 +278,47 @@ function PillToggle({
 function DurationField({
   value,
   name,
+  rowId,
   onChange,
 }: {
   value: string;
   name: string;
+  /** Makes the hint's id unique across every card's own copy of this field. */
+  rowId: number;
   onChange: (value: string) => void;
 }) {
+  const stripped = value.replace(/^~/, "");
+  const invalid = stripped !== "" && !isValidDuration(stripped);
+  const hintId = `${name}-format-hint-${rowId}`;
+
   return (
-    <div className="flex items-center gap-1">
-      <span aria-hidden="true" className="text-body">
-        ~
-      </span>
-      <input
-        className={`${TEXT_INPUT} w-16`}
-        type="text"
-        inputMode="numeric"
-        name={name}
-        aria-label="Duration"
-        placeholder="2:30"
-        value={value.replace(/^~/, "")}
-        onChange={(event) => {
-          const stripped = event.target.value.replace(/^~/, "");
-          onChange(stripped ? `~${stripped}` : "");
-        }}
-      />
+    <div className="flex flex-col items-end gap-0.5">
+      <div className="flex items-center gap-1">
+        <span aria-hidden="true" className="text-body">
+          ~
+        </span>
+        <input
+          className={`${TEXT_INPUT} w-16 ${invalid ? "border-no focus:border-no" : ""}`}
+          type="text"
+          // "numeric" requests a digits-only keypad on some Android
+          // keyboards, with no ":" key — the one separator this format
+          // needs (#53).
+          inputMode="text"
+          name={name}
+          aria-label="Duration"
+          aria-invalid={invalid}
+          aria-describedby={hintId}
+          placeholder="2:30"
+          value={stripped}
+          onChange={(event) => {
+            const next = event.target.value.replace(/^~/, "");
+            onChange(next ? `~${next}` : "");
+          }}
+        />
+      </div>
+      <p id={hintId} className={invalid ? "text-[0.6rem] text-no" : "sr-only"}>
+        {invalid ? "Use H:MM, like 2:30" : "Format: H:MM, like 2:30"}
+      </p>
     </div>
   );
 }
@@ -385,6 +404,7 @@ function ChartCards({
               <DurationField
                 value={row.duration}
                 name="duration"
+                rowId={index}
                 onChange={(value) => set("duration", value)}
               />
             </div>
@@ -655,6 +675,16 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
 
   function handleSave() {
     try {
+      // instructionsFromRows doesn't validate duration at all — it's free
+      // text as far as @washy-washy/core is concerned — so this page owns
+      // that check itself, in the same row/column shape RowError already
+      // uses (#53).
+      draftRows.forEach((row, index) => {
+        const stripped = row.duration.replace(/^~/, "");
+        if (!isValidDuration(stripped)) {
+          throw new RowError(index + 2, "duration", `must match H:MM, found "${row.duration}"`);
+        }
+      });
       // Against the active machine — read-only here, editable on its own
       // page (#30) — so an edit that no longer fits (an unknown programme,
       // temperature or spin) is called out by row and column, not silently
