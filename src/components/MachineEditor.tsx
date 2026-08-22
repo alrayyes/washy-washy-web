@@ -258,8 +258,16 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
       already the right width — but a <table> wider than its ancestor
       still leaks into document.documentElement.scrollWidth regardless,
       forcing the whole page to scroll horizontally. contain: layout
-      stops that leak without changing the scroll behaviour itself. */}
-      <div className="mt-1 overflow-x-auto contain-layout">
+      stops that leak without changing the scroll behaviour itself.
+      Below sm: this table is hidden entirely (#102) in favour of the
+      stacked cards below — dragging sideways through a 512px table on
+      a phone is worse than the scroll this already fixed. Both copies
+      share one data-testid-scoped locator each so a test never has to
+      guess which markup is actually on screen at a given viewport. */}
+      <div
+        data-testid="iron-settings-table"
+        className="mt-1 hidden overflow-x-auto contain-layout sm:block"
+      >
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">
@@ -325,6 +333,69 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* The same fields and the same handlers as the table above, stacked
+      instead of laid out sideways (#102) — a rendering change only, so
+      this reuses setSetting/removeSetting rather than any state of its
+      own. Hidden from sm: up, where the table takes over. */}
+      <div data-testid="iron-settings-cards" className="mt-1 flex flex-col gap-3 sm:hidden">
+        {iron.settings.map((setting, index) => (
+          <div key={setting.key} className="rounded-md border border-hairline p-3">
+            <div className="flex flex-col gap-2">
+              <div>
+                <span className={FIELD_LABEL}>Setting</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} label`}
+                  type="text"
+                  value={setting.label}
+                  onChange={(event) => setSetting(index, { label: event.target.value })}
+                />
+              </div>
+              <div>
+                <span className={FIELD_LABEL}>Dots</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} dots`}
+                  type="text"
+                  value={setting.dots}
+                  onChange={(event) => setSetting(index, { dots: event.target.value })}
+                />
+              </div>
+              <div>
+                <span className={FIELD_LABEL}>Detail</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} detail`}
+                  type="text"
+                  value={setting.detail}
+                  onChange={(event) => setSetting(index, { detail: event.target.value })}
+                />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="flex items-center gap-2 text-sm text-body">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    aria-label={`Setting ${index + 1} makes steam`}
+                    checked={setting.steam}
+                    onChange={(event) => setSetting(index, { steam: event.target.checked })}
+                  />
+                  Steam
+                </span>
+                <button
+                  type="button"
+                  className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  onClick={() => removeSetting(index)}
+                  aria-label={`Remove setting ${index + 1}`}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <button
         type="button"
