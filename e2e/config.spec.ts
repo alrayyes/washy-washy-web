@@ -61,7 +61,10 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
   const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
   await firstCard.locator('input[name="clothing_type"]').fill("Zzz Edited Pile");
 
-  await page.getByLabel("Sort by").selectOption("clothing_type");
+  await page
+    .getByRole("radiogroup", { name: "Sort by" })
+    .getByRole("button", { name: "Pile" })
+    .click();
 
   const names = await pileNames(page);
   expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));

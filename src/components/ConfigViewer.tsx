@@ -710,23 +710,29 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
           Every field is editable. Save checks each row against the machine above, the same way an
           upload does — an unknown value is called out by row and column, not silently accepted.
         </p>
-        <div className="mb-3 flex items-center gap-2">
-          <label htmlFor="sort-by" className={FIELD_LABEL}>
-            Sort by
-          </label>
-          <select
-            id="sort-by"
-            className={TEXT_INPUT}
-            value={sortField}
-            onChange={(event) => setSortField(event.target.value as (typeof COLUMNS)[number] | "")}
-          >
-            <option value="">Chart order</option>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className={FIELD_LABEL}>Sort by</span>
+          <div className="flex flex-wrap gap-1" role="radiogroup" aria-label="Sort by">
+            <button
+              type="button"
+              aria-pressed={sortField === ""}
+              className={`${CHIP_BUTTON} ${sortField === "" ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
+              onClick={() => setSortField("")}
+            >
+              Chart order
+            </button>
             {SORT_FIELDS.map((field) => (
-              <option key={field.value} value={field.value}>
+              <button
+                key={field.value}
+                type="button"
+                aria-pressed={sortField === field.value}
+                className={`${CHIP_BUTTON} ${sortField === field.value ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
+                onClick={() => setSortField(field.value)}
+              >
                 {field.label}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
         <ChartCards
           rows={displayRows}
