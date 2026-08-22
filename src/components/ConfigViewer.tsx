@@ -684,7 +684,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
             />
           </label>
           <a className={BUTTON_SECONDARY} href={downloadHref} download="washy-washy.json">
-            Download this config as JSON
+            Download current config
           </a>
           {customConfig && (
             <button className={BUTTON_SECONDARY} type="button" onClick={handleClear}>
