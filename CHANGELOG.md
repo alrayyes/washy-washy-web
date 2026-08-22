@@ -1,3 +1,9 @@
+## [1.12.4](https://github.com/alrayyes/washy-washy-web/compare/v1.12.3...v1.12.4) (2026-08-22)
+
+### Bug Fixes
+
+* help tooltip can overflow narrow viewports ([#93](https://github.com/alrayyes/washy-washy-web/issues/93)) ([28fa51e](https://github.com/alrayyes/washy-washy-web/commit/28fa51ea2c2cab2af73269c592ee1f46465fd708)), closes [#59](https://github.com/alrayyes/washy-washy-web/issues/59)
+
 ## [1.12.3](https://github.com/alrayyes/washy-washy-web/compare/v1.12.2...v1.12.3) (2026-08-22)
 
 ### Bug Fixes
