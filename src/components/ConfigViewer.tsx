@@ -128,10 +128,14 @@ function ProseField({
   value,
   name,
   onChange,
+  ariaLabel,
+  ariaLabelledBy,
 }: {
   value: string;
   name: string;
   onChange: (value: string) => void;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
 }) {
   return (
     <textarea
@@ -140,6 +144,8 @@ function ProseField({
       name={name}
       value={value}
       onChange={(event) => onChange(event.target.value)}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
     />
   );
 }
@@ -286,17 +292,24 @@ function EditableSplitField({
   label,
   value,
   name,
+  rowId,
   onChange,
 }: {
   label: string;
   value: string;
   name: string;
+  /** Makes the label's id unique across every card's own copy of this field. */
+  rowId: number;
   onChange: (value: string) => void;
 }) {
+  const labelId = `${name}-label-${rowId}`;
+
   return (
     <div className="mt-2">
-      <p className="text-[0.6rem] font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
-      <ProseField value={value} name={name} onChange={onChange} />
+      <p id={labelId} className="text-[0.6rem] font-bold tracking-wide text-muted">
+        {label.toUpperCase()}
+      </p>
+      <ProseField value={value} name={name} onChange={onChange} ariaLabelledBy={labelId} />
     </div>
   );
 }
@@ -426,6 +439,7 @@ function ChartCards({
               label="Detergent"
               value={row.detergent}
               name="detergent"
+              rowId={index}
               onChange={(value) => set("detergent", value)}
             />
 
@@ -482,6 +496,7 @@ function ChartCards({
                     value={row.ironing_notes}
                     name="ironing_notes"
                     onChange={(value) => set("ironing_notes", value)}
+                    ariaLabel="Ironing notes"
                   />
                 </div>
               </div>
@@ -491,6 +506,7 @@ function ChartCards({
               label="Drying"
               value={row.drying}
               name="drying"
+              rowId={index}
               onChange={(value) => set("drying", value)}
             />
 
@@ -545,6 +561,7 @@ function ChartCards({
               label="Notes"
               value={row.notes}
               name="notes"
+              rowId={index}
               onChange={(value) => set("notes", value)}
             />
           </article>

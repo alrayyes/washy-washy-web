@@ -29,9 +29,7 @@ test("shows a read-only machine summary, with a link to edit it", async ({ page 
 
   const editLink = page.getByRole("link", { name: /Edit machine/ });
   await expect(editLink).toHaveAttribute("href", "/config/machine");
-  // label: every chart card's detergent/drying/notes/ironing-notes textarea
-  // has no accessible name yet — tracked by #66.
-  await expectNoA11yViolations(page, ["label"]);
+  await expectNoA11yViolations(page);
 });
 
 test("shows every pile in the bundled chart", async ({ page }) => {
