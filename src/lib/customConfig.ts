@@ -39,3 +39,16 @@ export function clearCustomConfig(): void {
     // reliably stored to begin with.
   }
 }
+
+/**
+ * Parses and stores an uploaded config file — shared by every upload
+ * control (the header's global one, `/config`'s own) so "upload a config"
+ * means the same thing everywhere it appears. Throws on invalid JSON or a
+ * config that doesn't validate; callers surface that as their own error.
+ */
+export async function uploadConfigFile(file: File): Promise<Config> {
+  const text = await file.text();
+  const config = configFromJson(text);
+  writeCustomConfig(config);
+  return config;
+}

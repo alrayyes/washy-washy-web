@@ -291,7 +291,7 @@ test("uploading a config, downloading it back out, and clearing it round-trip", 
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "E2E Custom Pile";
 
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "washy-washy.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(config, null, 2)),
@@ -307,7 +307,7 @@ test("uploading a config, downloading it back out, and clearing it round-trip", 
 
   // Upload something invalid: the error shows, and the just-uploaded
   // config stays active rather than silently reverting.
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "broken.json",
     mimeType: "application/json",
     buffer: Buffer.from("{not valid json"),
@@ -330,7 +330,7 @@ test("an uploaded config with a value the machine doesn't have names the row and
   const config = await downloadedConfig(page);
   config.chart[0].temperature = "99";
 
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "washy-washy.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(config, null, 2)),

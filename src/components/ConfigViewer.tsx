@@ -2,7 +2,6 @@ import {
   type COLUMNS,
   type Config,
   colourGroups,
-  configFromJson,
   configToJson,
   type Instruction,
   instructionsFromRows,
@@ -12,7 +11,12 @@ import {
   rowsFromInstructions,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
-import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../lib/customConfig";
+import {
+  clearCustomConfig,
+  readCustomConfig,
+  uploadConfigFile,
+  writeCustomConfig,
+} from "../lib/customConfig";
 import { colour } from "../lib/theme";
 import { IronDial, ProgramDial } from "./dials";
 
@@ -670,13 +674,10 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
     event.target.value = "";
     if (!file) return;
 
-    file
-      .text()
-      .then((text) => {
-        const config = configFromJson(text);
+    uploadConfigFile(file)
+      .then((config) => {
         setCustomConfig(config);
         setDraftRows(rowsFromInstructions(config.chart));
-        writeCustomConfig(config);
         setUploadError(null);
       })
       .catch((reason) => {
@@ -713,6 +714,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
               className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
               type="file"
               accept="application/json,.json"
+              data-testid="page-upload-input"
               onChange={handleUpload}
             />
           </label>
