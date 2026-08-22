@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/alrayyes/washy-washy-web/compare/v1.0.0...v1.1.0) (2026-08-22)
+
+### Features
+
+* sort the config page's chart cards ([#23](https://github.com/alrayyes/washy-washy-web/issues/23)) ([a95d588](https://github.com/alrayyes/washy-washy-web/commit/a95d588038f6403ae0efb54fc1fec0e00f8e1f28)), closes [#9](https://github.com/alrayyes/washy-washy-web/issues/9)
+
 ## 1.0.0 (2026-08-22)
 
 ### Features
