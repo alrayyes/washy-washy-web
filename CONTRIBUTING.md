@@ -14,6 +14,7 @@ bun install
 bun run build       # astro build, static output to dist/
 bun run check        # astro check, type-checks .astro files
 bun run typecheck    # tsc --noEmit, everything else
+bun run test          # bun:test, unit tests under test/
 bun run test:e2e     # Playwright, against a real astro build
 bun run lighthouse   # Category-score gates, see lighthouserc.cjs
 ```

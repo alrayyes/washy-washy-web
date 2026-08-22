@@ -54,3 +54,5 @@ pre-push:
       run: bun run typecheck
     - name: astro-check
       run: bun run check
+    - name: test
+      run: bun run test
