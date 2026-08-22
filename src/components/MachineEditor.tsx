@@ -13,13 +13,12 @@ import {
 import { useEffect, useState } from "react";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import { slug } from "../lib/slug";
+import { TEXT_INPUT } from "../lib/styles";
 
 const SECTION = "mb-6";
 const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const CARD = "rounded-lg border border-hairline bg-panel p-4";
 const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const TEXT_INPUT =
-  "w-full min-w-[8rem] rounded border border-line bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 const BUTTON_PRIMARY =
   "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 const BUTTON_SECONDARY =
