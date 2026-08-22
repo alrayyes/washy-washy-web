@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/alrayyes/washy-washy-web/compare/v1.7.1...v1.8.0) (2026-08-22)
+
+### Features
+
+* add a Machine link to the nav, and rename "Config" to a clearer label ([#45](https://github.com/alrayyes/washy-washy-web/issues/45)) ([b751d58](https://github.com/alrayyes/washy-washy-web/commit/b751d583ce9fef1cead0d17f0046961b73f37cbf)), closes [#41](https://github.com/alrayyes/washy-washy-web/issues/41)
+
 ## [1.7.1](https://github.com/alrayyes/washy-washy-web/compare/v1.7.0...v1.7.1) (2026-08-22)
 
 ### Bug Fixes
