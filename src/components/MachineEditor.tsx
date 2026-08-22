@@ -96,7 +96,7 @@ function StringListEditor({
 
   return (
     <div data-testid={`list-editor-${slug(label)}`}>
-      <p className={FIELD_LABEL}>{label}</p>
+      <h3 className={FIELD_LABEL}>{label}</h3>
       {hint && <p className="mt-0.5 mb-1 text-[0.65rem] text-muted">{hint}</p>}
       <ul className="flex flex-col gap-1">
         {values.map((value, index) => (
@@ -251,7 +251,8 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         value={iron.name}
         onChange={(v) => onChange({ ...iron, name: v })}
       />
-      <div className="mt-3 overflow-x-auto">
+      <h3 className={`${FIELD_LABEL} mt-3`}>Settings</h3>
+      <div className="mt-1 overflow-x-auto">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">

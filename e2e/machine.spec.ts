@@ -21,6 +21,15 @@ test("shows the bundled washer and iron settings", async ({ page }) => {
   await expectNoA11yViolations(page, ["color-contrast"]);
 });
 
+test("every washer field and the iron settings table is reachable by heading navigation", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const h3s = await page.getByRole("heading", { level: 3 }).allTextContents();
+  expect(h3s).toEqual(["Programmes", "Temperatures (°C)", "Spin speeds", "Buttons", "Settings"]);
+});
+
 test("adding, reordering and removing a programme", async ({ page }) => {
   await goto(page);
 
