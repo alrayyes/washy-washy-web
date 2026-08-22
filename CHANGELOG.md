@@ -1,3 +1,9 @@
+## [1.15.0](https://github.com/alrayyes/washy-washy-web/compare/v1.14.1...v1.15.0) (2026-08-22)
+
+### Features
+
+* advanced filters on the main page (detergent, programme, temperature, spin) ([#103](https://github.com/alrayyes/washy-washy-web/issues/103)) ([5599e1e](https://github.com/alrayyes/washy-washy-web/commit/5599e1e0810a5417eab4433069d3585e1939e44e)), closes [#8](https://github.com/alrayyes/washy-washy-web/issues/8)
+
 ## [1.14.1](https://github.com/alrayyes/washy-washy-web/compare/v1.14.0...v1.14.1) (2026-08-22)
 
 ### Bug Fixes
