@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { expectNoA11yViolations } from "./a11y";
 
 /**
  * See `sheet.spec.ts` for why every navigation waits on `data-hydrated`
@@ -14,6 +15,10 @@ test("shows the bundled washer and iron settings", async ({ page }) => {
 
   await expect(page.locator("#washer-name")).toHaveValue(/Generic front loader/);
   await expect(page.locator("#iron-name")).toHaveValue(/Generic steam iron/);
+  // color-contrast: text-muted on bg-panel falls just under AA (4.39:1 vs.
+  // 4.5:1) in a couple of places on this page — tracked by #57's systematic
+  // contrast pass across the whole app, not fixed piecemeal here.
+  await expectNoA11yViolations(page, ["color-contrast"]);
 });
 
 test("adding, reordering and removing a programme", async ({ page }) => {
