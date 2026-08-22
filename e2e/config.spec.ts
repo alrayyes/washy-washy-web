@@ -151,6 +151,26 @@ test("the nav reaches all three pages, each marking only itself active", async (
   await expect(page).toHaveURL(/\/$/);
 });
 
+test("the footer's legal links reach real pages with the site's own chrome", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForSelector('[data-hydrated="true"]');
+
+  await page.getByRole("link", { name: "Disclaimer" }).click();
+  await expect(page).toHaveURL(/\/disclaimer\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Disclaimer" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
+  // Scoped to <main> — the footer's own small print repeats this exact
+  // phrase on every page, including this one.
+  await expect(page.locator("main").getByText(/not a manufacturer's guarantee/)).toBeVisible();
+
+  await page.goto("/");
+  await page.getByRole("link", { name: "Privacy policy" }).click();
+  await expect(page).toHaveURL(/\/privacy\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Privacy policy" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
+  await expect(page.locator("main").getByText(/no cookies, no analytics/)).toBeVisible();
+});
+
 test("a skip-to-content link is the first tab stop on every page, and lands focus on main", async ({
   page,
 }) => {
