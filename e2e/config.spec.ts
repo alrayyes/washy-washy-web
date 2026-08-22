@@ -151,6 +151,32 @@ test("the nav reaches all three pages, each marking only itself active", async (
   await expect(page).toHaveURL(/\/$/);
 });
 
+test("a skip-to-content link is the first tab stop on every page, and lands focus on main", async ({
+  page,
+}) => {
+  for (const path of ["/", "/config", "/config/machine"]) {
+    await page.goto(path);
+    await page.waitForSelector('[data-hydrated="true"]');
+
+    // Visually hidden until it holds focus — this is the check for that,
+    // not just that it exists in the DOM. `sr-only`'s `clip: rect(0,0,0,0)`
+    // still gives Playwright's toBeVisible() a non-empty 1x1px box (the
+    // same reason the chip radios needed opacity instead of sr-only, #49),
+    // so the bounding box's size is the real signal here, not toBeVisible.
+    const skipLink = page.getByRole("link", { name: "Skip to content" });
+    const hiddenBox = await skipLink.boundingBox();
+    expect(hiddenBox?.width).toBeLessThanOrEqual(1);
+
+    await page.keyboard.press("Tab");
+    await expect(skipLink).toBeFocused();
+    const visibleBox = await skipLink.boundingBox();
+    expect(visibleBox?.width).toBeGreaterThan(1);
+
+    await skipLink.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+  }
+});
+
 test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
   await page.goto("/");
