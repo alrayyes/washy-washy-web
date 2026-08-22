@@ -368,14 +368,16 @@ function ChartCards({
             className={CHART_CARD}
           >
             <div className={CHART_CARD_HEADER}>
-              <input
-                className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
-                type="text"
-                name="clothing_type"
-                aria-label="Pile"
-                value={row.clothing_type}
-                onChange={(event) => set("clothing_type", event.target.value)}
-              />
+              <h3 className="min-w-0 flex-1">
+                <input
+                  className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
+                  type="text"
+                  name="clothing_type"
+                  aria-label="Pile"
+                  value={row.clothing_type}
+                  onChange={(event) => set("clothing_type", event.target.value)}
+                />
+              </h3>
               <DurationField
                 value={row.duration}
                 name="duration"

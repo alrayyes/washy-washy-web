@@ -39,6 +39,18 @@ test("shows every pile in the bundled chart", async ({ page }) => {
   await expect(rows).not.toHaveCount(0);
 });
 
+test("each chart card exposes an h3 heading that tracks the pile name", async ({ page }) => {
+  await goto(page);
+
+  const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
+  const heading = firstCard.getByRole("heading", { level: 3 });
+
+  await expect(heading).toHaveAccessibleName("White");
+
+  await firstCard.locator('input[name="clothing_type"]').fill("Renamed Pile");
+  await expect(heading).toHaveAccessibleName("Renamed Pile");
+});
+
 function pileNames(page: Page) {
   return page
     .locator('[data-testid="chart-cards"] input[name="clothing_type"]')
