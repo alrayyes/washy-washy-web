@@ -1,3 +1,9 @@
+## [1.8.4](https://github.com/alrayyes/washy-washy-web/compare/v1.8.3...v1.8.4) (2026-08-22)
+
+### Bug Fixes
+
+* chip selectors claim radiogroup semantics they don't implement ([#69](https://github.com/alrayyes/washy-washy-web/issues/69)) ([de1688b](https://github.com/alrayyes/washy-washy-web/commit/de1688b5b51c5e3da26be2eb212858c70f5eec64)), closes [#49](https://github.com/alrayyes/washy-washy-web/issues/49)
+
 ## [1.8.3](https://github.com/alrayyes/washy-washy-web/compare/v1.8.2...v1.8.3) (2026-08-22)
 
 ### Bug Fixes
