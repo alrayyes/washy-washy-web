@@ -2,7 +2,7 @@
 
 ## Toolchain
 
-- [Bun](https://bun.sh/) 1.4.0, [TypeScript](https://www.typescriptlang.org/) 6.0.3 (pinned separately from `washy-washy`'s own TypeScript — see `astro check`'s own version needs).
+- [Bun](https://bun.sh/) 1.3.14, [TypeScript](https://www.typescriptlang.org/) 6.0.3 (pinned separately from `washy-washy`'s own TypeScript — see `astro check`'s own version needs).
 
 ```sh
 bun install

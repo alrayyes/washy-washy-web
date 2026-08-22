@@ -17,7 +17,7 @@ from the page.
 
 ## Requirements
 
-- [Bun](https://bun.sh/) 1.4.0
+- [Bun](https://bun.sh/) 1.3.14
 - A Cloudflare account with access to this app's Workers project
   (`washy-washy-web`), for anyone deploying rather than just running it
   locally — deploys happen automatically via Cloudflare's GitHub
