@@ -26,6 +26,39 @@ test("shows every pile in the bundled chart", async ({ page }) => {
   await expect(rows).not.toHaveCount(0);
 });
 
+function pileNames(page: Page) {
+  return page
+    .locator('[data-testid="chart-cards"] input[name="clothing_type"]')
+    .evaluateAll((inputs) => inputs.map((input) => (input as HTMLInputElement).value));
+}
+
+test("the default is chart order, not sorted", async ({ page }) => {
+  await goto(page);
+
+  // The bundled chart's own order ("White", "White Socks", "White Towels",
+  // "Coloured", ...) is not alphabetical, so this fails the moment the
+  // default silently applies a sort.
+  const names = await pileNames(page);
+  expect(names).not.toEqual([...names].sort((a, b) => a.localeCompare(b)));
+});
+
+test("sorting by pile reorders the cards, and an in-progress edit survives it", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
+  await firstCard.locator('input[name="clothing_type"]').fill("Zzz Edited Pile");
+
+  await page.getByLabel("Sort by").selectOption("clothing_type");
+
+  const names = await pileNames(page);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  // Sorting reorders the cards, it doesn't reset them — the edit above is
+  // still there, now wherever "Zzz Edited Pile" alphabetizes to.
+  expect(names).toContain("Zzz Edited Pile");
+});
+
 test("reflects an uploaded chart, not the bundled example", async ({ page }) => {
   // Upload happens on the main page — the config page reads the same
   // localStorage-backed chart, the same way SheetViewer does.
