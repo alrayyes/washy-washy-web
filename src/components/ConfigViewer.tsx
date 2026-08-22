@@ -117,27 +117,12 @@ function MachineSummary({ machine }: { machine: Machine }) {
   );
 }
 
-/** "~2:30" -> "02:30" for `<input type="time">`; unparsable/empty -> "". */
-function toTimeValue(duration: string): string {
-  const match = duration.match(/(\d+):(\d{2})/);
-  return match ? `${match[1].padStart(2, "0")}:${match[2]}` : "";
-}
-
-/** The reverse of `toTimeValue` — always writes back the "~H:MM" shape every duration in this app already uses. */
-function fromTimeValue(value: string): string {
-  if (!value) return "";
-  const [hours, minutes] = value.split(":");
-  return `~${Number(hours)}:${minutes}`;
-}
-
 function splitPipe(value: string): string[] {
   return value
     .split("|")
     .map((part) => part.trim())
     .filter((part) => part.length > 0);
 }
-
-const SELECT_INPUT = `${TEXT_INPUT} bg-white`;
 
 function ProseField({
   value,
@@ -261,7 +246,12 @@ function PillToggle({
   );
 }
 
-function TimeField({
+/**
+ * A duration, not a time of day — `<input type="time">` renders a wall-clock
+ * picker (12-hour AM/PM in some locales), which read as "2:30 AM" for a wash
+ * cycle that takes about two and a half hours. Plain text avoids that.
+ */
+function DurationField({
   value,
   name,
   onChange,
@@ -276,11 +266,17 @@ function TimeField({
         ~
       </span>
       <input
-        className={SELECT_INPUT}
-        type="time"
+        className={`${TEXT_INPUT} w-16`}
+        type="text"
+        inputMode="numeric"
         name={name}
-        value={toTimeValue(value)}
-        onChange={(event) => onChange(fromTimeValue(event.target.value))}
+        aria-label="Duration"
+        placeholder="2:30"
+        value={value.replace(/^~/, "")}
+        onChange={(event) => {
+          const stripped = event.target.value.replace(/^~/, "");
+          onChange(stripped ? `~${stripped}` : "");
+        }}
       />
     </div>
   );
@@ -355,7 +351,7 @@ function ChartCards({
                 value={row.clothing_type}
                 onChange={(event) => set("clothing_type", event.target.value)}
               />
-              <TimeField
+              <DurationField
                 value={row.duration}
                 name="duration"
                 onChange={(value) => set("duration", value)}
