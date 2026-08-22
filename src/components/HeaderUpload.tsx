@@ -36,7 +36,7 @@ export default function HeaderUpload() {
     <div className="relative">
       <button
         type="button"
-        className="inline-flex min-h-9 items-center justify-center rounded-md border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+        className="inline-flex min-h-9 items-center justify-center rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         onClick={() => inputRef.current?.click()}
       >
         Upload config
@@ -53,7 +53,7 @@ export default function HeaderUpload() {
       {error && (
         <p
           role="alert"
-          className="absolute top-full right-0 z-10 mt-1 w-56 rounded-md border border-no/30 bg-no/5 p-2 text-xs text-no shadow-md"
+          className="absolute top-full right-0 z-10 mt-1 w-56 rounded-md border border-no/30 bg-no/5 p-2 text-xs text-no-text shadow-md"
         >
           Could not use that file: {error}
         </p>

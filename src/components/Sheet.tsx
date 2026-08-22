@@ -70,13 +70,13 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
                 index === groups.length - 1 ? "" : "border-b border-hairline"
               }`}
             >
-              <span className="w-18 shrink-0 text-xs font-bold text-accent">
+              <span className="w-18 shrink-0 text-xs font-bold text-accent-text">
                 {first.program} {formatTemperature(first.temperature)}
               </span>
               <span className="flex-1 text-sm text-body">
                 {group.map((item) => item.clothingType).join("  +  ")}
                 {group.length > 1 && (
-                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-xs font-bold tracking-wide text-accent">
+                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-xs font-bold tracking-wide text-accent-text">
                     TOGETHER
                   </span>
                 )}
@@ -147,7 +147,7 @@ function ChipRow({
               className={`rounded border px-1.5 py-0.5 text-xs ${
                 on
                   ? "border-accent bg-accent font-bold text-white"
-                  : "border-hairline bg-white text-muted"
+                  : "border-hairline bg-surface text-muted"
               }`}
             >
               {value}
@@ -298,7 +298,7 @@ function SoftenerBadge({ on }: { on: boolean }) {
 }
 
 const CARD_ACTION =
-  "rounded border border-line bg-white px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
+  "rounded border border-line bg-surface px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
 
 /**
  * Download and share for a single card — the pile(s) it draws, not the
@@ -376,12 +376,12 @@ function CardActions({
         {shareStatus}
       </p>
       {shareError && (
-        <p className="text-right text-xs text-no" role="alert">
+        <p className="text-right text-xs text-no-text" role="alert">
           Could not copy the link: {shareError}
         </p>
       )}
       {error && (
-        <p className="text-right text-xs text-no" role="alert">
+        <p className="text-right text-xs text-no-text" role="alert">
           Could not generate the PDF: {error}
         </p>
       )}
@@ -424,7 +424,7 @@ function Card({
           {index}. {heading}
         </h3>
         <div className="flex shrink-0 items-center gap-2">
-          <span className="text-xs font-bold text-accent">{durationsOf(group)}</span>
+          <span className="text-xs font-bold text-accent-text">{durationsOf(group)}</span>
           {onDownloadCard && onShareCard && (
             <CardActions group={group} onDownload={onDownloadCard} onShare={onShareCard} />
           )}

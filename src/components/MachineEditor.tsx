@@ -25,7 +25,7 @@ import {
 const SECTION = "mb-6";
 const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const ITEM_BUTTON =
-  "rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
+  "rounded border border-line bg-surface px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
 
 function EditableField({
   label,
@@ -103,7 +103,7 @@ function StringListEditor({
         {values.map((value, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: a freeform string list has no id of its own, and a value alone isn't guaranteed unique
           <li key={`${value}-${index}`} className="flex items-center gap-1">
-            <span className="flex-1 rounded border border-hairline bg-white px-2 py-1 text-sm text-ink">
+            <span className="flex-1 rounded border border-hairline bg-surface px-2 py-1 text-sm text-ink">
               {value}
             </span>
             <button
@@ -308,7 +308,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 <td className="py-1">
                   <button
                     type="button"
-                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     onClick={() => removeSetting(index)}
                     aria-label={`Remove setting ${index + 1}`}
                   >
@@ -430,7 +430,7 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
         Changes apply across the whole site once saved — the same config{" "}
         <a
           href="/config"
-          className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+          className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
           the washing loads page
         </a>{" "}

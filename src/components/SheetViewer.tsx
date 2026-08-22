@@ -22,7 +22,7 @@ const CUT_LABEL: Record<Variant, string> = {
 };
 
 const FIELD_INPUT =
-  "mt-1 block w-full min-w-0 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
+  "mt-1 block w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
 
 /**
  * A tap-to-open "?" next to a field label — `title` alone is a hover-only
@@ -75,7 +75,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
         <span
           id={id}
           role="tooltip"
-          className={`absolute top-full z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-white p-2 text-xs font-normal text-body shadow-md ${alignRight ? "right-0" : "left-0"}`}
+          className={`absolute top-full z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-surface p-2 text-xs font-normal text-body shadow-md ${alignRight ? "right-0" : "left-0"}`}
         >
           {text}
         </span>
@@ -263,7 +263,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         Upload, download or edit your own on the{" "}
         <a
           href="/config"
-          className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+          className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
           washing loads page
         </a>

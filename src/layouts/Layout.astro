@@ -24,8 +24,8 @@ const path = Astro.url.pathname;
 // pathname ("/config/"), so this is a prefix check, not `path === "/config"`
 // — and Machine gets its own link now, so Washing loads must exclude it.
 const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
-const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent";
-const NAV_LINK_ACTIVE = "text-accent";
+const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
+const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";
 ---
 
@@ -35,6 +35,10 @@ const NAV_LINK_INACTIVE = "text-body";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {/* Belt-and-braces alongside global.css's `color-scheme: light dark`
+    (#62) — declared in two places because the AC named both, and this
+    one is readable before the stylesheet loads. */}
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
@@ -52,7 +56,7 @@ const NAV_LINK_INACTIVE = "text-body";
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
   </head>
-  <body class="bg-white text-body antialiased">
+  <body class="bg-base text-body antialiased">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg"
@@ -67,7 +71,7 @@ const NAV_LINK_INACTIVE = "text-body";
     <header
       class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
     >
-      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
+      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
         <Logo size={32} />
         <span class="text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
       </a>
@@ -118,21 +122,21 @@ const NAV_LINK_INACTIVE = "text-body";
       class={`mx-auto ${CHROME_WIDTH} border-t border-hairline px-4 py-8 text-sm text-muted sm:px-6`}
     >
       <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-        <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
+        <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
           <Logo size={20} />
           <span class="text-sm font-semibold">Washy washy</span>
         </a>
         <div class="flex flex-col gap-2 sm:items-end sm:text-right">
           <a
             href="https://github.com/alrayyes/washy-washy"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
           >
             Washy washy on GitHub
           </a>
           <p class="max-w-md text-xs text-muted">
             {"© 2026 Ryan Kes. Licensed under the "}<a
               href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
-              class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+              class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
             >
               GPL-3.0-or-later
             </a>{

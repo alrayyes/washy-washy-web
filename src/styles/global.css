@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
 /**
- * Same values as src/lib/theme.ts, kept in step by eye — that file feeds
- * the SVG dial illustrations, which need per-tick, JS-computed colours
- * (selected vs. not, on vs. off) that a static Tailwind class can't
- * express, so it stays a plain object rather than becoming these tokens.
- * Everything else in the page — layout, typography, cards — uses these
- * as Tailwind utilities (bg-panel, text-ink, border-accent, …) instead.
+ * src/lib/theme.ts's SVG-only `colour` object references these by name
+ * (`var(--color-accent)`, …) rather than holding its own copy — the two
+ * used to be "kept in step by eye," which is exactly the kind of drift
+ * #60 went after; now there's one definition; theme.ts just points at
+ * it. Everything else in the page — layout, typography, cards — uses
+ * these as Tailwind utilities (bg-panel, text-ink, border-accent, …).
+ *
+ * Light values here; dark counterparts are redefined once, below, under
+ * `@media (prefers-color-scheme: dark)` — never as a per-component
+ * `dark:` variant (#62).
  */
 @theme {
   /* Same family for --font-sans and Tailwind's default font-bold — the
@@ -25,14 +29,69 @@
   --color-faint: #a1a1aa;
   --color-line: #d4d4d8;
   --color-hairline: #e4e4e7;
+  /* The page's own background — Layout.astro's <body> (#62; previously
+     a literal bg-white, which a dark redefinition here can't reach). */
+  --color-base: #ffffff;
+  /* A control that should read as the brightest surface in the page —
+     an input, a button, a tooltip — sitting on top of a panel or the
+     page background (#62; previously literal bg-white at every one of
+     its ~12 call sites, for the same reason as --color-base above). */
+  --color-surface: #ffffff;
   --color-panel: #f4f4f5;
-  /* Bosch fascia red — the dial arc and the pointer. */
+  /* Bosch fascia red — the dial arc and the pointer. Solid fills only
+     (bg-accent + text-white, border-accent rings): white-on-it and the
+     3:1 non-text bar for rings both hold in both modes without this
+     needing to change, so it doesn't (#62). */
   --color-accent: #d1132b;
   --color-accent-soft: #fdeaed;
+  /* accent's own hue used AS text directly on the page — light mode:
+     identical to --color-accent (already 5.47:1+ on white). Dark mode
+     needs a lighter value than the fill colour above, or plain accent
+     text would sit at ~3.2-3.6:1 against a dark background, under
+     AA's 4.5:1 (#62). */
+  --color-accent-text: #d1132b;
   --color-steam: #9ec5e8;
   --color-steam-soft: #eaf2fa;
+  /* Fill only (bg-yes + text-white) — no plain-text usage exists, so,
+     unlike no below, it doesn't need a text-specific counterpart. */
   --color-yes: #15803d;
   --color-no: #b91c1c;
+  /* Same split as --color-accent-text, same reason: no/30-opacity
+     borders and no/5-opacity tints (ALERT) stay on the fill value
+     unchanged; plain error text uses this one (#62). */
+  --color-no-text: #b91c1c;
+}
+
+/* Dial-only — no bg-knob/text-knob utility needs it, so it doesn't need
+   to be a @theme entry, just a plain custom property theme.ts can read. */
+:root {
+  --color-knob: #e8e8ea;
+}
+
+:root {
+  /* Tells the browser both schemes are genuinely supported, so native
+     form controls and scrollbars follow prefers-color-scheme too,
+     without a second dark: declaration anywhere (#62). */
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-ink: #fafafa;
+    --color-body: #d4d4d8;
+    --color-muted: #a1a1aa;
+    --color-faint: #52525b;
+    --color-line: #3f3f46;
+    --color-hairline: #27272a;
+    --color-base: #09090b;
+    --color-surface: #27272a;
+    --color-panel: #18181b;
+    --color-accent-soft: #3b0d13;
+    --color-accent-text: #f75b6e;
+    --color-steam-soft: #0f2436;
+    --color-no-text: #f87171;
+    --color-knob: #3f3f46;
+  }
 }
 
 /**
