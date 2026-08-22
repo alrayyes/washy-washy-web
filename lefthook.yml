@@ -27,6 +27,16 @@ pre-commit:
       glob: "*.{yml,yaml}"
       run: bunx --bun prettier --write {staged_files}
       stage_fixed: true
+    # Error level only. Vale's warnings are style advice, and advice that blocks
+    # a commit is how you teach someone to reach for --no-verify; `bun run
+    # lint:prose:advice` and the CI job are where the full read lives. LTeX is
+    # deliberately absent — a ~300 MB download with its own Java runtime is more
+    # than a commit should wait on, so it runs in CI and in the editor over LSP.
+    - name: vale
+      glob: "*.md"
+      exclude:
+        - CHANGELOG.md
+      run: .tools/vale --minAlertLevel=error {staged_files}
 
 commit-msg:
   jobs:

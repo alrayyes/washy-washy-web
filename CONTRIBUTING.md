@@ -26,6 +26,7 @@ bun run lint         # biome check .
 bun run lint:fix     # biome check --write .
 bun run lint:md       # prettier --check + markdownlint-cli2
 bun run lint:yaml     # prettier --check
+bun run lint:prose    # vale, error-level only (bun run prose:sync first)
 ```
 
 [Lefthook](https://github.com/evilmartians/lefthook) runs the fast checks on

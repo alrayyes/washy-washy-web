@@ -1,0 +1,44 @@
+{
+  "language": "en-GB",
+  "dictionary": {
+    "en-GB": [
+      "Astro",
+      "Biome",
+      "Codecov",
+      "Dependabot",
+      "GitHub",
+      "JSONC",
+      "LanguageTool",
+      "LTeX",
+      "Playwright",
+      "Toolchain",
+      "Vite",
+      "Washy",
+      "Workers",
+      "alrayyes",
+      "bunx",
+      "commitlint",
+      "filesystem",
+      "gitignored",
+      "lefthook",
+      "linted",
+      "lockfile",
+      "markdownlint",
+      "npm",
+      "typecheck",
+      "typechecks",
+      "washy",
+      "wrangler"
+    ]
+  },
+  "disabledRules": {
+    "en-GB": [
+      "PASSIVE_VOICE",
+      "UPPERCASE_SENTENCE_START",
+      "THIS_NNS",
+      "LICENCE_LICENSE_NOUN_SINGULAR",
+      "OXFORD_SPELLING_Z_NOT_S",
+      "ENGLISH_WORD_REPEAT_RULE"
+    ]
+  }
+}
