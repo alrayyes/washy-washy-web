@@ -1,3 +1,9 @@
+## [1.12.1](https://github.com/alrayyes/washy-washy-web/compare/v1.12.0...v1.12.1) (2026-08-22)
+
+### Bug Fixes
+
+* copy-link confirmation is silent for screen readers ([#90](https://github.com/alrayyes/washy-washy-web/issues/90)) ([b093e4f](https://github.com/alrayyes/washy-washy-web/commit/b093e4fad337e707f986c2e5792f7f76f61ef80c)), closes [#55](https://github.com/alrayyes/washy-washy-web/issues/55)
+
 ## [1.12.0](https://github.com/alrayyes/washy-washy-web/compare/v1.11.3...v1.12.0) (2026-08-22)
 
 ### Features
