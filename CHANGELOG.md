@@ -1,3 +1,9 @@
+## [1.9.0](https://github.com/alrayyes/washy-washy-web/compare/v1.8.5...v1.9.0) (2026-08-22)
+
+### Features
+
+* label the machine page's temperature list with its unit ([#73](https://github.com/alrayyes/washy-washy-web/issues/73)) ([0a9c9d6](https://github.com/alrayyes/washy-washy-web/commit/0a9c9d6adb2f60abc72c5326e6b98453fdd93402))
+
 ## [1.8.5](https://github.com/alrayyes/washy-washy-web/compare/v1.8.4...v1.8.5) (2026-08-22)
 
 ### Bug Fixes
