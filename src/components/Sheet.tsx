@@ -63,6 +63,10 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
   return (
     <section className="mb-4">
       <SectionHeading>Loads — one line, one wash</SectionHeading>
+      <p className="mb-2 text-xs text-muted">
+        A TOGETHER badge means every pile on that line shares one wash — put them in the machine at
+        once.
+      </p>
       <div className="rounded-md border border-hairline px-3">
         {groups.map((group, index) => {
           const first = group[0] as ResolvedInstruction;
@@ -76,13 +80,14 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
               <span className="w-18 shrink-0 text-xs font-bold text-accent">
                 {first.program} {formatTemperature(first.temperature)}
               </span>
-              <span
-                className={`flex-1 text-sm ${
-                  group.length > 1 ? "font-bold text-ink" : "text-body"
-                }`}
-              >
+              <span className="flex-1 text-sm text-body">
                 {group.map((item) => item.clothingType).join("  +  ")}
-                {group.length === 1 ? "   (on its own)" : ""}
+                {group.length > 1 && (
+                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-[0.6rem] font-bold tracking-wide text-accent">
+                    TOGETHER
+                  </span>
+                )}
+                {group.length === 1 && "   (on its own)"}
               </span>
               <span className="shrink-0 text-xs text-muted">{durationsOf(group)}</span>
             </div>
