@@ -27,13 +27,13 @@ import {
   CHART_CARD,
   CHART_CARD_HEADER,
   FIELD_LABEL,
+  SECTION_HEADING,
   TEXT_INPUT,
 } from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
 import SectionHeading from "./SectionHeading";
 
 const SECTION = "mb-6";
-const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const SUB_PANEL = "rounded-md border border-hairline bg-panel p-3";
 const CHIP_BUTTON = "rounded border px-1.5 py-0.5 text-xs";
 const CHIP_BUTTON_ON = "border-accent bg-accent font-bold text-white";

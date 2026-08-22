@@ -19,11 +19,11 @@ import {
   BUTTON_SECONDARY,
   CARD,
   FIELD_LABEL,
+  SECTION_HEADING,
   TEXT_INPUT,
 } from "../lib/styles";
 
 const SECTION = "mb-6";
-const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const ITEM_BUTTON =
   "rounded border border-line bg-surface px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
 
