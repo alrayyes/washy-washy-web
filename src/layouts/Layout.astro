@@ -53,6 +53,12 @@ const NAV_LINK_INACTIVE = "text-body";
     <meta name="twitter:image" content={ogImageUrl} />
   </head>
   <body class="bg-white text-body antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg"
+    >
+      Skip to content
+    </a>
     <div class="gh-ribbon">
       <a href="https://github.com/alrayyes/washy-washy" target="_blank" rel="noopener noreferrer">
         Fork me on GitHub
@@ -105,7 +111,7 @@ const NAV_LINK_INACTIVE = "text-body";
         <HeaderUpload client:load />
       </div>
     </header>
-    <main class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
+    <main id="main" tabindex="-1" class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
       <slot />
     </main>
     <footer
