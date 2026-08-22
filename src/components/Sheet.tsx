@@ -87,7 +87,6 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
                     TOGETHER
                   </span>
                 )}
-                {group.length === 1 && "   (on its own)"}
               </span>
               <span className="shrink-0 text-xs text-muted">{durationsOf(group)}</span>
             </div>
