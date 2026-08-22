@@ -192,7 +192,7 @@ function WasherEditor({
           onChange={(v) => set("programs", v)}
         />
         <StringListEditor
-          label="Temperatures"
+          label="Temperatures (°C)"
           values={washer.temperatures}
           onChange={(v) => set("temperatures", v)}
         />
