@@ -1,3 +1,9 @@
+## [1.14.1](https://github.com/alrayyes/washy-washy-web/compare/v1.14.0...v1.14.1) (2026-08-22)
+
+### Bug Fixes
+
+* the iron settings table forces horizontal scroll on mobile ([#101](https://github.com/alrayyes/washy-washy-web/issues/101)) ([bd8f2a4](https://github.com/alrayyes/washy-washy-web/commit/bd8f2a49783836ccbaf9c548d36095a93b479830)), closes [#47](https://github.com/alrayyes/washy-washy-web/issues/47)
+
 ## [1.14.0](https://github.com/alrayyes/washy-washy-web/compare/v1.13.0...v1.14.0) (2026-08-22)
 
 ### Features
