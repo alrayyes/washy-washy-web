@@ -1,3 +1,9 @@
+## [1.16.0](https://github.com/alrayyes/washy-washy-web/compare/v1.15.0...v1.16.0) (2026-08-22)
+
+### Features
+
+* add a Starlight docs site at /docs ([#104](https://github.com/alrayyes/washy-washy-web/issues/104)) ([eec852e](https://github.com/alrayyes/washy-washy-web/commit/eec852ed31cee05ee4679bd66c283db90d5ea8f6)), closes [#12](https://github.com/alrayyes/washy-washy-web/issues/12)
+
 ## [1.15.0](https://github.com/alrayyes/washy-washy-web/compare/v1.14.1...v1.15.0) (2026-08-22)
 
 ### Features
