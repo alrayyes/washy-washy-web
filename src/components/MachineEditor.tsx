@@ -96,7 +96,9 @@ function StringListEditor({
   return (
     <div data-testid={`list-editor-${slug(label)}`}>
       <h3 className={FIELD_LABEL}>{label}</h3>
-      {hint && <p className="mt-0.5 mb-1 text-xs text-muted">{hint}</p>}
+      {/* text-body, not text-muted: muted-on-panel is 4.40:1, just under
+      WCAG AA's 4.5:1 (#57) — see the same note in SheetViewer.tsx. */}
+      {hint && <p className="mt-0.5 mb-1 text-xs text-body">{hint}</p>}
       <ul className="flex flex-col gap-1">
         {values.map((value, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: a freeform string list has no id of its own, and a value alone isn't guaranteed unique
