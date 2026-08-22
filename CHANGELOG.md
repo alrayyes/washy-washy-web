@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/alrayyes/washy-washy-web/compare/v1.6.0...v1.7.0) (2026-08-22)
+
+### Features
+
+* sort-by as a horizontal pill selector, not a dropdown ([#38](https://github.com/alrayyes/washy-washy-web/issues/38)) ([374b0c2](https://github.com/alrayyes/washy-washy-web/commit/374b0c2f3e3ff756025e0675574c43b715187ac3)), closes [#34](https://github.com/alrayyes/washy-washy-web/issues/34)
+
 ## [1.6.0](https://github.com/alrayyes/washy-washy-web/compare/v1.5.0...v1.6.0) (2026-08-22)
 
 ### Features
