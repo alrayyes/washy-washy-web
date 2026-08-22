@@ -1,3 +1,9 @@
+## [1.8.2](https://github.com/alrayyes/washy-washy-web/compare/v1.8.1...v1.8.2) (2026-08-22)
+
+### Bug Fixes
+
+* the filter help bubble is a button inside a label, and its tooltip is never announced ([#64](https://github.com/alrayyes/washy-washy-web/issues/64)) ([3370dc3](https://github.com/alrayyes/washy-washy-web/commit/3370dc3602b20590c162ee0744cdbf8131c66e50)), closes [#50](https://github.com/alrayyes/washy-washy-web/issues/50)
+
 ## [1.8.1](https://github.com/alrayyes/washy-washy-web/compare/v1.8.0...v1.8.1) (2026-08-22)
 
 ### Bug Fixes
