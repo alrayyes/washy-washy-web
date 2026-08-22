@@ -1,4 +1,5 @@
 [![check](https://github.com/alrayyes/washy-washy-web/actions/workflows/check.yml/badge.svg)](https://github.com/alrayyes/washy-washy-web/actions/workflows/check.yml)
+[![codecov](https://codecov.io/gh/alrayyes/washy-washy-web/graph/badge.svg)](https://codecov.io/gh/alrayyes/washy-washy-web)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 
 # washy-washy-web

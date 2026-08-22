@@ -35,6 +35,15 @@ jobs:
       - run: bun run typecheck
       - run: bun run check
       - run: bun run build
+      # Coverage instrumentation slows the suite down, which is why the
+      # pre-push hook runs plain `bun run test` and only CI pays for this.
+      - run: bun test test/ --coverage --coverage-reporter=lcov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: true
 
   # Real browser, real clicks — the layer type checks and static-markup
   # assertions can't reach. Runs against a plain static file server over a
