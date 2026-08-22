@@ -1,3 +1,9 @@
+## [1.8.3](https://github.com/alrayyes/washy-washy-web/compare/v1.8.2...v1.8.3) (2026-08-22)
+
+### Bug Fixes
+
+* chart card textareas (detergent, drying, notes, ironing notes) have no accessible label ([#68](https://github.com/alrayyes/washy-washy-web/issues/68)) ([560a885](https://github.com/alrayyes/washy-washy-web/commit/560a885e70e74fac77040ab25d5572daeb6bae12)), closes [#65](https://github.com/alrayyes/washy-washy-web/issues/65) [#66](https://github.com/alrayyes/washy-washy-web/issues/66)
+
 ## [1.8.2](https://github.com/alrayyes/washy-washy-web/compare/v1.8.1...v1.8.2) (2026-08-22)
 
 ### Bug Fixes
