@@ -1,3 +1,9 @@
+## [1.8.1](https://github.com/alrayyes/washy-washy-web/compare/v1.8.0...v1.8.1) (2026-08-22)
+
+### Bug Fixes
+
+* nav overflows horizontally at 320px viewport width ([#48](https://github.com/alrayyes/washy-washy-web/issues/48)) ([ac06a37](https://github.com/alrayyes/washy-washy-web/commit/ac06a37c3576e77589bd9a7a534e998e7dd61804)), closes [#46](https://github.com/alrayyes/washy-washy-web/issues/46)
+
 ## [1.8.0](https://github.com/alrayyes/washy-washy-web/compare/v1.7.1...v1.8.0) (2026-08-22)
 
 ### Features
