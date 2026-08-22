@@ -1,3 +1,9 @@
+## [1.12.2](https://github.com/alrayyes/washy-washy-web/compare/v1.12.1...v1.12.2) (2026-08-22)
+
+### Bug Fixes
+
+* raise the micro-type floor (9.6px labels, 10px mobile ribbon) ([#91](https://github.com/alrayyes/washy-washy-web/issues/91)) ([8f68e83](https://github.com/alrayyes/washy-washy-web/commit/8f68e83775738a2f95e8c9807b39eeee7e8f6eab)), closes [#56](https://github.com/alrayyes/washy-washy-web/issues/56) [#42](https://github.com/alrayyes/washy-washy-web/issues/42) [#56](https://github.com/alrayyes/washy-washy-web/issues/56)
+
 ## [1.12.1](https://github.com/alrayyes/washy-washy-web/compare/v1.12.0...v1.12.1) (2026-08-22)
 
 ### Bug Fixes
