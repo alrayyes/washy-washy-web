@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/alrayyes/washy-washy-web/compare/v1.7.0...v1.7.1) (2026-08-22)
+
+### Bug Fixes
+
+* nav hover spacing and duplicate homepage title ([#43](https://github.com/alrayyes/washy-washy-web/issues/43)) ([0d6874f](https://github.com/alrayyes/washy-washy-web/commit/0d6874f58443b7f97aca1280d8d3789ae5700e6a)), closes [#39](https://github.com/alrayyes/washy-washy-web/issues/39)
+* the chart's duration field renders as a wall-clock time, not a duration ([#44](https://github.com/alrayyes/washy-washy-web/issues/44)) ([50327ef](https://github.com/alrayyes/washy-washy-web/commit/50327ef5ea0100531de01b50b34790a7ddfef859)), closes [#40](https://github.com/alrayyes/washy-washy-web/issues/40)
+
 ## [1.7.0](https://github.com/alrayyes/washy-washy-web/compare/v1.6.0...v1.7.0) (2026-08-22)
 
 ### Features
