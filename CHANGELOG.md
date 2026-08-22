@@ -1,3 +1,9 @@
+## [1.11.2](https://github.com/alrayyes/washy-washy-web/compare/v1.11.1...v1.11.2) (2026-08-22)
+
+### Bug Fixes
+
+* give text fields keyboard focus a real ring, not a 1px border change ([#86](https://github.com/alrayyes/washy-washy-web/issues/86)) ([69514a4](https://github.com/alrayyes/washy-washy-web/commit/69514a41d84dfeb0f5e155f7c2de438413de5b89)), closes [#52](https://github.com/alrayyes/washy-washy-web/issues/52)
+
 ## [1.11.1](https://github.com/alrayyes/washy-washy-web/compare/v1.11.0...v1.11.1) (2026-08-22)
 
 ### Bug Fixes
