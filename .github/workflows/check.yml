@@ -151,8 +151,11 @@ jobs:
       # specific code would pass a failing document. Let the shell judge
       # non-zero. The files are named rather than passing `.`: LTeX traverses
       # recursively and reads plain text as prose, so a bare dot lints the
-      # committed Vale vocabulary as though it were a document.
-      - run: ./ltex-ls-plus-${LTEX_VERSION}/bin/ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md
+      # committed Vale vocabulary as though it were a document. The docs site
+      # (#12) is plain Markdown, so it's named alongside them rather than
+      # exempted — passing the directory is safe because it holds nothing but
+      # genuine prose, unlike the repo root.
+      - run: ./ltex-ls-plus-${LTEX_VERSION}/bin/ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md src/content/docs/docs
 
   # Style. House voice, weasel words, wordiness, undefined jargon. Advice
   # rather than a verdict: Vale exits non-zero only on error-severity alerts,

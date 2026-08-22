@@ -18,6 +18,7 @@
       "alrayyes",
       "bunx",
       "commitlint",
+      "copy-pasteable",
       "filesystem",
       "gitignored",
       "lefthook",
@@ -28,6 +29,7 @@
       "typecheck",
       "typechecks",
       "washy",
+      "washy-washy-cli",
       "wrangler"
     ]
   },
