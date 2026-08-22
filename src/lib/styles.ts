@@ -43,6 +43,9 @@ export const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm t
 /** A grey info-box section (machine summary, upload controls, …). */
 export const CARD = "rounded-lg border border-hairline bg-panel p-4";
 
+/** A page-level <h2> ("Your config", "Machine", "Washer", "Iron", …) — the heading font, one step down from the page's own <h1> (#42). */
+export const SECTION_HEADING = "mb-2 font-heading text-xl font-bold text-ink";
+
 /**
  * A single pile's card — used identically by Sheet.tsx's read-only sheet
  * and ConfigViewer.tsx's editable chart, which is why they have to look

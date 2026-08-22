@@ -1,4 +1,10 @@
 @import "tailwindcss";
+/* Self-hosted (woff2 shipped in the npm package, pinned exact like every
+   other dependency) — never a fonts.googleapis.com/fonts.gstatic.com
+   request, the first exception this site's zero-third-party-request
+   posture would otherwise have (#36's privacy page, #42). */
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/inter";
 
 /**
  * src/lib/theme.ts's SVG-only `colour` object references these by name
@@ -13,10 +19,16 @@
  * `dark:` variant (#62).
  */
 @theme {
-  /* Same family for --font-sans and Tailwind's default font-bold — the
-     PDF's "Helvetica-Bold" is a different font resource, but on the web
-     it's the same family at a heavier weight, not a second family. */
-  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Body copy — Inter, chosen for legibility at the small sizes this
+     phone-first site leans on. The PDF's own font (Helvetica/
+     Helvetica-Bold via react-pdf in @washy-washy/pdf) is that package's
+     concern, untouched by this — the two were never meant to match,
+     they just happened to share a fallback stack before this (#42). */
+  --font-sans: "Inter Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Headings and the nav brand mark only — a distinct, more geometric
+     grotesk for contrast against the body copy, applied via font-heading
+     (#42). */
+  --font-heading: "Space Grotesk Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --color-ink: #18181b;
   --color-body: #3f3f46;
   /* Text on white: 4.83:1, passes WCAG AA. Text on panel or
