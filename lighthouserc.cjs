@@ -14,7 +14,11 @@ module.exports = {
       startServerCommand: "bun run build && bun scripts/serve-dist.ts",
       startServerReadyPattern: "Serving",
       startServerReadyTimeout: 60_000,
-      url: ["http://localhost:4321/"],
+      url: [
+        "http://localhost:4321/",
+        "http://localhost:4321/config/",
+        "http://localhost:4321/config/machine/",
+      ],
       numberOfRuns: 3,
     },
     assert: {
