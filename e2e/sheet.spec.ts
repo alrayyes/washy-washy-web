@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { expectNoA11yViolations } from "./a11y";
 
 /**
  * The real user journeys `test/*.test.ts` can't reach: those exercise pure
@@ -50,6 +51,7 @@ test("shows the bundled chart as a real page, not an embedded PDF", async ({ pag
   await expect(page.locator("iframe")).toHaveCount(0);
   await expect(page.locator("article")).not.toHaveCount(0);
   await expect(page.locator("svg").first()).toBeVisible();
+  await expectNoA11yViolations(page);
 });
 
 test("cut filter switches which sheet renders", async ({ page }) => {
