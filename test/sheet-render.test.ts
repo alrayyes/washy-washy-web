@@ -68,6 +68,29 @@ describe("Sheet", () => {
 
     expect(html).toContain("Do not iron");
   });
+
+  test("a cited row shows its source as a safe off-site link", () => {
+    const cited = {
+      ...(items[0] as ResolvedInstruction),
+      referenceName: "Which?",
+      referenceLink: "https://example.com/wash-guide",
+    };
+
+    const html = render("full", [cited]);
+
+    expect(html).toContain("SOURCE");
+    expect(html).toContain('href="https://example.com/wash-guide"');
+    expect(html).toContain(">Which?<");
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+
+  test("no row citing a source means no SOURCE field at all", () => {
+    const uncited = items[0] as ResolvedInstruction;
+    expect(uncited.referenceName).toBe("");
+
+    expect(render("full", [uncited])).not.toContain("SOURCE");
+  });
 });
 
 describe("sheetGroups", () => {

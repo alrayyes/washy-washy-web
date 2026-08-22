@@ -13,7 +13,7 @@ import {
   washGroups,
 } from "@washy-washy/core/browser";
 import { useState } from "react";
-import { CHART_CARD, CHART_CARD_HEADER } from "../lib/styles";
+import { CHART_CARD, CHART_CARD_HEADER, LINK } from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
 import SectionHeading from "./SectionHeading";
 
@@ -267,6 +267,39 @@ function SplitField({
   );
 }
 
+/**
+ * Where a washing instruction came from, when a row cites one — a
+ * manufacturer's own guidance, a care label, a trade source. Hidden
+ * entirely when nothing in the group cites anything (#79); a group can
+ * mix cited and uncited members, so each cited member gets its own line
+ * rather than picking one to speak for the whole card.
+ */
+function ReferenceField({ items }: { items: ResolvedInstruction[] }) {
+  const cited = items.filter((item) => item.referenceName !== "");
+  if (cited.length === 0) return null;
+
+  return (
+    <div className="mt-2">
+      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      {cited.map((item, index) => (
+        <p
+          key={item.clothingType}
+          className={`text-sm leading-relaxed text-body ${index === 0 ? "" : "mt-0.5"}`}
+        >
+          {items.length > 1 && <span className="font-bold text-ink">{item.clothingType}: </span>}
+          {item.referenceLink !== "" ? (
+            <a href={item.referenceLink} target="_blank" rel="noopener noreferrer" className={LINK}>
+              {item.referenceName}
+            </a>
+          ) : (
+            item.referenceName
+          )}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function Field({
   label,
   value,
@@ -466,6 +499,7 @@ function Card({
       )}
 
       <SplitField label="Notes" items={group} pick={(member) => member.notes} />
+      <ReferenceField items={group} />
     </article>
   );
 }

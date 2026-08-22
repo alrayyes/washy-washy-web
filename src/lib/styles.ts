@@ -46,6 +46,10 @@ export const CARD = "rounded-lg border border-hairline bg-panel p-4";
 /** A page-level <h2> ("Your config", "Machine", "Washer", "Iron", …) — the heading font, one step down from the page's own <h1> (#42). */
 export const SECTION_HEADING = "mb-2 font-heading text-xl font-bold text-ink";
 
+/** An inline text link — same underline treatment as the footer's own links (Layout.astro). */
+export const LINK =
+  "underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent";
+
 /**
  * A single pile's card — used identically by Sheet.tsx's read-only sheet
  * and ConfigViewer.tsx's editable chart, which is why they have to look

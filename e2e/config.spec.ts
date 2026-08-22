@@ -51,6 +51,33 @@ test("each chart card exposes an h3 heading that tracks the pile name", async ({
   await expect(heading).toHaveAccessibleName("Renamed Pile");
 });
 
+test("a cited row's card shows the source as a link, read-only", async ({ page }) => {
+  await goto(page);
+
+  const config = await downloadedConfig(page);
+  expect(config.chart[0].reference_name).toBe("");
+  config.chart[0].reference_name = "Which?";
+  config.chart[0].reference_link = "https://example.com/wash-guide";
+
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+
+  const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
+  const link = firstCard.getByRole("link", { name: "Which?" });
+  await expect(link).toHaveAttribute("href", "https://example.com/wash-guide");
+  await expect(link).toHaveAttribute("target", "_blank");
+  await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+
+  // Every other card, still uncited, shows nothing new.
+  await expect(page.locator('[data-testid="chart-cards"] > article').nth(1)).not.toContainText(
+    "SOURCE",
+  );
+});
+
 function pileNames(page: Page) {
   return page
     .locator('[data-testid="chart-cards"] input[name="clothing_type"]')
