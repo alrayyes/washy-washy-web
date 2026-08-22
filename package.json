@@ -23,7 +23,7 @@
     "prepare": "lefthook install",
     "prose:sync": "bun run scripts/install-vale.ts && .tools/vale sync",
     "test": "bun test test/",
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
+    "typecheck": "astro sync && tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
   },
   "dependencies": {
     "@astrojs/react": "6.0.4",

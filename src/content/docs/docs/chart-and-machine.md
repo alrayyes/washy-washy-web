@@ -47,7 +47,7 @@ tells you to turn the dial somewhere it doesn't go.
 
 `machine.washer` lists the dial's labels in physical order, plus the
 temperatures, spin speeds and option buttons the display offers.
-`machine.iron` lists the thermostat's positions, coolest first. Copy every
+`machine.iron` lists the thermostat's positions, from coolest to hottest. Copy every
 label exactly as printed in front of you, in whatever language that is —
 nothing here ever translates a fascia label, because a chart you have to
 translate back while standing at the machine is worse than no chart.
