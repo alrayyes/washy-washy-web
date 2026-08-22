@@ -1,3 +1,9 @@
+## [1.11.1](https://github.com/alrayyes/washy-washy-web/compare/v1.11.0...v1.11.1) (2026-08-22)
+
+### Bug Fixes
+
+* chart card mixes washing and ironing content out of order ([#84](https://github.com/alrayyes/washy-washy-web/issues/84)) ([d9ac164](https://github.com/alrayyes/washy-washy-web/commit/d9ac16421df66fe24858e561707d28853dd8a1ef)), closes [#83](https://github.com/alrayyes/washy-washy-web/issues/83)
+
 ## [1.11.0](https://github.com/alrayyes/washy-washy-web/compare/v1.10.1...v1.11.0) (2026-08-22)
 
 ### Features
