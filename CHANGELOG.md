@@ -1,3 +1,9 @@
+## [1.12.3](https://github.com/alrayyes/washy-washy-web/compare/v1.12.2...v1.12.3) (2026-08-22)
+
+### Bug Fixes
+
+* contrast pass - muted-on-panel misses AA ([#92](https://github.com/alrayyes/washy-washy-web/issues/92)) ([a3e6407](https://github.com/alrayyes/washy-washy-web/commit/a3e64075dd04f70d41fa4460bcd1576f273b7326)), closes [#57](https://github.com/alrayyes/washy-washy-web/issues/57)
+
 ## [1.12.2](https://github.com/alrayyes/washy-washy-web/compare/v1.12.1...v1.12.2) (2026-08-22)
 
 ### Bug Fixes
