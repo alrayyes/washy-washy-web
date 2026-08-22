@@ -152,18 +152,25 @@ function ProseField({
 
 /**
  * The clickable version of Sheet.tsx's read-only `ChipRow` — same look
- * (selected: filled accent, unselected: outlined), but every chip is a
- * button that sets the field to its own value, single-select.
+ * (selected: filled accent, unselected: outlined), single-select. A real
+ * `<input type="radio">` per chip, visually hidden behind its `<label>` —
+ * the browser gives roving tabindex and arrow-key movement for free, which
+ * a `role="radio"` button would have to reimplement (and Biome's
+ * `useSemanticElements` rejects that reimplementation outright).
  */
 function ChipSelectRow({
   label,
-  name,
+  field,
+  groupName,
   values,
   selected,
   onSelect,
 }: {
   label: string;
-  name: string;
+  /** Stable across rows — used only for the data-testid, so e2e locators don't care which card. */
+  field: string;
+  /** Unique per row — the native radio `name`, which groups by DOM name across the whole page regardless of React component boundaries. */
+  groupName: string;
   values: readonly string[];
   selected: string;
   onSelect: (value: string) => void;
@@ -173,16 +180,21 @@ function ChipSelectRow({
       <span className="w-14 shrink-0 pt-0.5 text-xs text-body">{label}</span>
       <div className="flex flex-wrap gap-1" role="radiogroup" aria-label={label}>
         {values.map((value) => (
-          <button
+          <label
             key={value}
-            type="button"
-            data-testid={`chip-${name}-${value}`}
-            aria-pressed={value === selected}
-            className={`${CHIP_BUTTON} ${value === selected ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-            onClick={() => onSelect(value)}
+            className={`relative ${CHIP_BUTTON} has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-offset-1 ${value === selected ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
           >
+            <input
+              type="radio"
+              name={groupName}
+              value={value}
+              checked={value === selected}
+              onChange={() => onSelect(value)}
+              className="absolute inset-0 cursor-pointer opacity-0"
+              data-testid={`chip-${field}-${value}`}
+            />
             {value}
-          </button>
+          </label>
         ))}
       </div>
     </div>
@@ -408,14 +420,16 @@ function ChartCards({
               <div className="flex flex-1 flex-col justify-center">
                 <ChipSelectRow
                   label="Temp"
-                  name="temperature"
+                  field="temperature"
+                  groupName={`temperature-${index}`}
                   values={washer.temperatures}
                   selected={row.temperature}
                   onSelect={(value) => set("temperature", value)}
                 />
                 <ChipSelectRow
                   label="Spin rpm"
-                  name="spin"
+                  field="spin"
+                  groupName={`spin-${index}`}
                   values={washer.spins}
                   selected={row.spin}
                   onSelect={(value) => set("spin", value)}
@@ -587,6 +601,10 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<(typeof COLUMNS)[number] | "">("");
+  const sortOptions: { value: (typeof COLUMNS)[number] | ""; label: string }[] = [
+    { value: "", label: "Chart order" },
+    ...SORT_FIELDS,
+  ];
   // Same hydration marker SheetViewer exposes, and for the same reason: the
   // E2E suite needs a way to know React has attached before it interacts.
   const [hydrated, setHydrated] = useState(false);
@@ -726,24 +744,21 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className={FIELD_LABEL}>Sort by</span>
           <div className="flex flex-wrap gap-1" role="radiogroup" aria-label="Sort by">
-            <button
-              type="button"
-              aria-pressed={sortField === ""}
-              className={`${CHIP_BUTTON} ${sortField === "" ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-              onClick={() => setSortField("")}
-            >
-              Chart order
-            </button>
-            {SORT_FIELDS.map((field) => (
-              <button
-                key={field.value}
-                type="button"
-                aria-pressed={sortField === field.value}
-                className={`${CHIP_BUTTON} ${sortField === field.value ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-                onClick={() => setSortField(field.value)}
+            {sortOptions.map((option) => (
+              <label
+                key={option.value}
+                className={`relative ${CHIP_BUTTON} has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-offset-1 ${sortField === option.value ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
               >
-                {field.label}
-              </button>
+                <input
+                  type="radio"
+                  name="sort-by"
+                  value={option.value}
+                  checked={sortField === option.value}
+                  onChange={() => setSortField(option.value)}
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                />
+                {option.label}
+              </label>
             ))}
           </div>
         </div>
