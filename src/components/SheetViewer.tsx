@@ -32,9 +32,11 @@ const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no"
 /**
  * A tap-to-open "?" next to a field label — `title` alone is a hover-only
  * tooltip, which a phone (this site's main device) can't reach. Closes on
- * blur so it doesn't linger once the visitor's moved on.
+ * blur so it doesn't linger once the visitor's moved on. Always a sibling
+ * of the field's own `<label>`, never nested inside it — a `<button>`
+ * inside a `<label>` is invalid HTML and unreliable with assistive tech.
  */
-function HelpBubble({ text }: { text: string }) {
+function HelpBubble({ id, text }: { id: string; text: string }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -44,19 +46,19 @@ function HelpBubble({ text }: { text: string }) {
         className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-[0.6rem] font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label="What does this do?"
         aria-expanded={open}
-        onClick={(event) => {
-          // Inside a <label>: without this, the click also activates the
-          // field the label wraps (opening the select, focusing the input).
-          event.preventDefault();
-          event.stopPropagation();
-          setOpen((value) => !value);
-        }}
+        aria-controls={id}
+        aria-describedby={open ? id : undefined}
+        onClick={() => setOpen((value) => !value)}
         onBlur={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setOpen(false);
+        }}
       >
         ?
       </button>
       {open && (
         <span
+          id={id}
           role="tooltip"
           className="absolute top-full left-0 z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-white p-2 text-xs font-normal text-body shadow-md"
         >
@@ -192,12 +194,16 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
       <fieldset className="rounded-lg border border-hairline bg-panel p-4">
         <legend className="px-1 text-sm font-semibold text-ink">Filter the chart</legend>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-          <label className="flex-1">
+          <div className="flex-1">
             <span className={FIELD_LABEL}>
-              Cut
-              <HelpBubble text="Which parts of the chart to show: everything, washing only, or ironing only." />
+              <label htmlFor="filter-cut">Cut</label>
+              <HelpBubble
+                id="filter-cut-help"
+                text="Which parts of the chart to show: everything, washing only, or ironing only."
+              />
             </span>
             <select
+              id="filter-cut"
               className={FIELD_INPUT}
               value={cut}
               onChange={(event) => setCut(event.target.value as Variant)}
@@ -208,22 +214,24 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                 </option>
               ))}
             </select>
-          </label>
-          <label className="flex-1">
+          </div>
+          <div className="flex-1">
             <span className={FIELD_LABEL}>
-              Pile
+              <label htmlFor="filter-pile">Pile</label>
               <HelpBubble
+                id="filter-pile-help"
                 text={'Type part of a pile’s name, like "towels", to show just that card.'}
               />
             </span>
             <input
+              id="filter-pile"
               className={FIELD_INPUT}
               type="search"
               placeholder="Search by pile name…"
               value={pileQuery}
               onChange={(event) => setPileQuery(event.target.value)}
             />
-          </label>
+          </div>
         </div>
       </fieldset>
 

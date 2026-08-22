@@ -83,6 +83,30 @@ test("pile search narrows the cards, and a non-match says so", async ({ page }) 
   await expect(cards).toHaveCount(0);
 });
 
+test("a filter's help bubble announces its text without opening the field", async ({ page }) => {
+  await goto(page);
+
+  const cutSelect = page.locator("#filter-cut");
+  const helpButton = page.getByRole("button", { name: "What does this do?" }).first();
+
+  await expect(helpButton).toHaveAttribute("aria-expanded", "false");
+  await helpButton.click();
+
+  // Clicking the bubble doesn't also open/focus the field it sits beside —
+  // the button is a sibling of the <label> now, not nested inside it.
+  await expect(cutSelect).not.toBeFocused();
+  await expect(helpButton).toHaveAttribute("aria-expanded", "true");
+
+  const controlsId = await helpButton.getAttribute("aria-controls");
+  const describedById = await helpButton.getAttribute("aria-describedby");
+  expect(controlsId).toBeTruthy();
+  expect(describedById).toBe(controlsId);
+
+  const tooltip = page.locator(`#${controlsId}`);
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toHaveAttribute("role", "tooltip");
+});
+
 test("the download button generates a PDF only when clicked, not before", async ({ page }) => {
   await goto(page);
 
