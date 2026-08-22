@@ -1,4 +1,5 @@
 import {
+  formatTemperature,
   type Machine,
   type ResolvedInstruction,
   resolve,
@@ -7,7 +8,13 @@ import {
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { readCustomConfig } from "../lib/customConfig";
-import { filterByPile } from "../lib/filter";
+import {
+  type AdvancedFilters,
+  emptyAdvancedFilters,
+  filterAdvanced,
+  filterByPile,
+  hasActiveAdvancedFilters,
+} from "../lib/filter";
 import { slug } from "../lib/slug";
 import { readFilters, writeFilters } from "../lib/storage";
 import { ALERT, BUTTON_PRIMARY, FIELD_LABEL } from "../lib/styles";
@@ -100,6 +107,7 @@ interface Props {
 export default function SheetViewer({ items: bundledItems, machine: bundledMachine }: Props) {
   const [cut, setCut] = useState<Variant>("full");
   const [pileQuery, setPileQuery] = useState("");
+  const [advanced, setAdvanced] = useState<AdvancedFilters>(emptyAdvancedFilters);
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [downloadDropped, setDownloadDropped] = useState<string[]>([]);
@@ -125,14 +133,26 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     // silently blend with (or lose to) whatever's already in this
     // browser's storage.
     const fromUrl = readUrlFilters(window.location.search);
-    if (fromUrl.cut !== undefined || fromUrl.pileQuery !== undefined) {
+    if (Object.keys(fromUrl).length > 0) {
       setCut(fromUrl.cut ?? "full");
       setPileQuery(fromUrl.pileQuery ?? "");
+      setAdvanced({
+        program: fromUrl.program ?? "",
+        temperature: fromUrl.temperature ?? "",
+        spin: fromUrl.spin ?? "",
+        detergentQuery: fromUrl.detergentQuery ?? "",
+      });
     } else {
       const saved = readFilters();
       if (saved) {
         setCut(saved.cut);
         setPileQuery(saved.pileQuery);
+        setAdvanced({
+          program: saved.program,
+          temperature: saved.temperature,
+          spin: saved.spin,
+          detergentQuery: saved.detergentQuery,
+        });
       }
     }
     const config = readCustomConfig();
@@ -149,12 +169,15 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     // above would immediately be overwritten by writing back the still-
     // default state from this same effect.
     if (!restored.current) return;
-    writeFilters({ cut, pileQuery });
-    writeUrlFilters({ cut, pileQuery });
-  }, [cut, pileQuery]);
+    writeFilters({ cut, pileQuery, ...advanced });
+    writeUrlFilters({ cut, pileQuery, ...advanced });
+  }, [cut, pileQuery, advanced]);
 
   const sourceItems = customItems ?? bundledItems;
-  const filtered = useMemo(() => filterByPile(sourceItems, pileQuery), [sourceItems, pileQuery]);
+  const filtered = useMemo(
+    () => filterAdvanced(filterByPile(sourceItems, pileQuery), advanced),
+    [sourceItems, pileQuery, advanced],
+  );
 
   function savePdf(pdf: Uint8Array, filename: string) {
     // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
@@ -254,6 +277,104 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             />
           </div>
         </div>
+
+        {/* A plain, uncontrolled <details> — closed on every page load with
+        no state or effect needed for it: nothing here ever sets `open`,
+        so hydration always starts from the same closed markup the server
+        rendered (#8). Only the *values* inside persist across visits, not
+        whether this was left open. */}
+        <details className="mt-3">
+          <summary className="cursor-pointer text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            Advanced
+          </summary>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-program">Programme</label>
+                <HelpBubble id="filter-program-help" text="Show only piles using this programme." />
+              </span>
+              <select
+                id="filter-program"
+                className={FIELD_INPUT}
+                value={advanced.program}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, program: event.target.value }))
+                }
+              >
+                <option value="">Any programme</option>
+                {activeMachine.washer.programs.map((program) => (
+                  <option key={program} value={program}>
+                    {program}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-temperature">Temperature</label>
+                <HelpBubble
+                  id="filter-temperature-help"
+                  text="Show only piles washed at this temperature."
+                />
+              </span>
+              <select
+                id="filter-temperature"
+                className={FIELD_INPUT}
+                value={advanced.temperature}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, temperature: event.target.value }))
+                }
+              >
+                <option value="">Any temperature</option>
+                {activeMachine.washer.temperatures.map((temperature) => (
+                  <option key={temperature} value={temperature}>
+                    {formatTemperature(temperature)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-spin">Spin</label>
+                <HelpBubble id="filter-spin-help" text="Show only piles spun at this speed." />
+              </span>
+              <select
+                id="filter-spin"
+                className={FIELD_INPUT}
+                value={advanced.spin}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, spin: event.target.value }))
+                }
+              >
+                <option value="">Any spin</option>
+                {activeMachine.washer.spins.map((spin) => (
+                  <option key={spin} value={spin}>
+                    {spin === "0" ? "no spin" : `${spin} rpm`}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-detergent">Detergent</label>
+                <HelpBubble
+                  id="filter-detergent-help"
+                  text='Type part of a detergent note, like "powder", to show only piles that mention it.'
+                />
+              </span>
+              <input
+                id="filter-detergent"
+                className={FIELD_INPUT}
+                type="search"
+                placeholder="Search by detergent…"
+                value={advanced.detergentQuery}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, detergentQuery: event.target.value }))
+                }
+              />
+            </div>
+          </div>
+        </details>
       </fieldset>
 
       <p className="text-sm text-body">
@@ -272,7 +393,11 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
       {filtered.length === 0 ? (
         <p className="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
-          No pile matches “{pileQuery}”. Try a different search.
+          {pileQuery !== "" && hasActiveAdvancedFilters(advanced)
+            ? `No pile matches “${pileQuery}” with those advanced filters. Try loosening one.`
+            : pileQuery !== ""
+              ? `No pile matches “${pileQuery}”. Try a different search.`
+              : "No pile matches those advanced filters. Try loosening one."}
         </p>
       ) : (
         <>

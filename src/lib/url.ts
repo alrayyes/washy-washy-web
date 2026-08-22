@@ -22,8 +22,16 @@ export function readUrlFilters(search: string): Partial<StoredFilters> {
   const params = new URLSearchParams(search);
   const cut = params.get("cut");
   const pile = params.get("pile");
+  const program = params.get("program");
+  const temperature = params.get("temperature");
+  const spin = params.get("spin");
+  const detergent = params.get("detergent");
   const filters: Partial<StoredFilters> = {};
   if (isVariant(cut)) filters.cut = cut;
   if (pile !== null) filters.pileQuery = pile;
+  if (program !== null) filters.program = program;
+  if (temperature !== null) filters.temperature = temperature;
+  if (spin !== null) filters.spin = spin;
+  if (detergent !== null) filters.detergentQuery = detergent;
   return filters;
 }
