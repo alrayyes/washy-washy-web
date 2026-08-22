@@ -1,0 +1,30 @@
+# dependencies (bun install)
+node_modules
+
+# output
+dist
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.cache
+*.tsbuildinfo
+
+# Astro's own build cache
+.astro
+
+# wrangler's local state — auth, deploy history
+.wrangler
+
+# Playwright's own run output
+test-results
+playwright-report
+blob-report
+
+# lhci's own run output
+.lighthouseci
