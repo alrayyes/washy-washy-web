@@ -44,6 +44,13 @@ interface Props {
   machine: Machine;
 }
 
+/** Every field is a plain string (`Row`'s shape), so alphabetical sort just works. */
+const SORT_FIELDS: { value: (typeof COLUMNS)[number]; label: string }[] = [
+  { value: "clothing_type", label: "Pile" },
+  { value: "detergent", label: "Detergent" },
+  { value: "notes", label: "Notes" },
+];
+
 /** Matches Sheet.tsx's `SectionHeading` exactly. */
 function SectionHeading({ children }: { children: string }) {
   return (
@@ -594,6 +601,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   const [customInstructions, setCustomInstructions] = useState<Instruction[] | null>(null);
   const [draftRows, setDraftRows] = useState<Row[]>(() => rowsFromInstructions(bundledItems));
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<(typeof COLUMNS)[number] | "">("");
   // Same hydration marker SheetViewer exposes, and for the same reason: the
   // E2E suite needs a way to know React has attached before it interacts.
   const [hydrated, setHydrated] = useState(false);
@@ -617,6 +625,21 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   function handleCellChange(index: number, key: (typeof COLUMNS)[number], value: string) {
     setDraftRows((rows) => rows.map((row, i) => (i === index ? { ...row, [key]: value } : row)));
   }
+
+  // A view-level reorder, not a mutation of draftRows itself: "no sort
+  // chosen" has to mean "back to chart order," and an edit made mid-sort has
+  // to land on the same row it was made on. Sorting the row's own index
+  // rather than the row keeps ChartCards' onChange(index, ...) contract
+  // pointed at draftRows regardless of what order the cards are drawn in.
+  const sortedIndices = useMemo(() => {
+    const indices = draftRows.map((_, i) => i);
+    if (!sortField) return indices;
+    return indices.sort((a, b) => draftRows[a][sortField].localeCompare(draftRows[b][sortField]));
+  }, [draftRows, sortField]);
+  const displayRows = useMemo(
+    () => sortedIndices.map((i) => draftRows[i]),
+    [sortedIndices, draftRows],
+  );
 
   function handleSave() {
     try {
@@ -651,7 +674,29 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
           Every field is editable. Save checks each row against the machine above, the same way an
           upload does — an unknown value is called out by row and column, not silently accepted.
         </p>
-        <ChartCards rows={draftRows} machine={machine} onChange={handleCellChange} />
+        <div className="mb-3 flex items-center gap-2">
+          <label htmlFor="sort-by" className={FIELD_LABEL}>
+            Sort by
+          </label>
+          <select
+            id="sort-by"
+            className={TEXT_INPUT}
+            value={sortField}
+            onChange={(event) => setSortField(event.target.value as (typeof COLUMNS)[number] | "")}
+          >
+            <option value="">Chart order</option>
+            {SORT_FIELDS.map((field) => (
+              <option key={field.value} value={field.value}>
+                {field.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <ChartCards
+          rows={displayRows}
+          machine={machine}
+          onChange={(index, key, value) => handleCellChange(sortedIndices[index], key, value)}
+        />
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <button type="button" className={BUTTON_PRIMARY} onClick={handleSave}>
             Save changes
