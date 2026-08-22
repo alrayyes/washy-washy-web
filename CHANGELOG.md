@@ -1,3 +1,9 @@
+## [1.12.0](https://github.com/alrayyes/washy-washy-web/compare/v1.11.3...v1.12.0) (2026-08-22)
+
+### Features
+
+* skip-to-content link ([#89](https://github.com/alrayyes/washy-washy-web/issues/89)) ([99c684d](https://github.com/alrayyes/washy-washy-web/commit/99c684d611f76111d8163a6dcba47ec164a66a12)), closes [#54](https://github.com/alrayyes/washy-washy-web/issues/54)
+
 ## [1.11.3](https://github.com/alrayyes/washy-washy-web/compare/v1.11.2...v1.11.3) (2026-08-22)
 
 ### Bug Fixes
