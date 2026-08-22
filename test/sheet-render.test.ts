@@ -3,7 +3,6 @@ import {
   cardGroups,
   ironGroups,
   ironSettingKeys,
-  parseInstructions,
   type ResolvedInstruction,
   resolve,
   type Variant,
@@ -12,11 +11,10 @@ import {
 } from "@washy-washy/core";
 import { renderToStaticMarkup } from "react-dom/server";
 import Sheet, { ironCardKey, sheetGroups } from "../src/components/Sheet";
-import { DIST_MACHINE, loadMachine } from "./support/loadMachine";
+import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
-const machine = await loadMachine(DIST_MACHINE);
-const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-const items = resolve(parseInstructions(csv, machine));
+const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
+const items = resolve(instructions);
 
 function render(variant: Variant, chart: ResolvedInstruction[] = items): string {
   return renderToStaticMarkup(Sheet({ items: chart, machine, variant }));
