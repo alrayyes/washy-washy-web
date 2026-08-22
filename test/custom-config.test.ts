@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { chartToJson, type Instruction, parseInstructions } from "@washy-washy/core";
-import { clearCustomChart, readCustomChart, writeCustomChart } from "../src/lib/customChart";
+import { type Config, configToJson, parseInstructions } from "@washy-washy/core";
+import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../src/lib/customConfig";
 import { DIST_MACHINE, loadMachine } from "./support/loadMachine";
 
 /** `bun:test` has no `localStorage` global — a browser API — so stand one in. */
@@ -30,41 +30,38 @@ afterEach(() => {
 
 const machine = await loadMachine(DIST_MACHINE);
 const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-const instructions: Instruction[] = parseInstructions(csv, machine);
+const config: Config = { machine, chart: parseInstructions(csv, machine) };
 
-describe("readCustomChart / writeCustomChart / clearCustomChart", () => {
-  test("round-trips what was written back to the same instructions", () => {
-    writeCustomChart(instructions);
+describe("readCustomConfig / writeCustomConfig / clearCustomConfig", () => {
+  test("round-trips what was written back to the same config", () => {
+    writeCustomConfig(config);
 
-    expect(readCustomChart(machine)).toEqual(instructions);
+    expect(readCustomConfig()).toEqual(config);
   });
 
   test("returns null when nothing has been uploaded yet", () => {
-    expect(readCustomChart(machine)).toBeNull();
+    expect(readCustomConfig()).toBeNull();
   });
 
-  test("falls back to null for a chart that no longer fits the machine", () => {
-    localStorage.setItem(
-      "washy-washy:chart",
-      JSON.stringify([
-        { ...JSON.parse(chartToJson(instructions))[0], program: "Not a real programme" },
-      ]),
-    );
+  test("falls back to null for a chart that no longer fits the stored machine", () => {
+    const broken = JSON.parse(configToJson(config));
+    broken.chart[0].program = "Not a real programme";
+    localStorage.setItem("washy-washy:config", JSON.stringify(broken));
 
-    expect(readCustomChart(machine)).toBeNull();
+    expect(readCustomConfig()).toBeNull();
   });
 
   test("falls back to null for a value that isn't valid JSON", () => {
-    localStorage.setItem("washy-washy:chart", "not json");
+    localStorage.setItem("washy-washy:config", "not json");
 
-    expect(readCustomChart(machine)).toBeNull();
+    expect(readCustomConfig()).toBeNull();
   });
 
-  test("clear removes a previously uploaded chart", () => {
-    writeCustomChart(instructions);
+  test("clear removes a previously stored config", () => {
+    writeCustomConfig(config);
 
-    clearCustomChart();
+    clearCustomConfig();
 
-    expect(readCustomChart(machine)).toBeNull();
+    expect(readCustomConfig()).toBeNull();
   });
 });

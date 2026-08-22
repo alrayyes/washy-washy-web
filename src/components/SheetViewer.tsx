@@ -1,7 +1,4 @@
 import {
-  chartFromJson,
-  chartToJson,
-  type Instruction,
   type Machine,
   type ResolvedInstruction,
   resolve,
@@ -9,7 +6,7 @@ import {
   variants,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { clearCustomChart, readCustomChart, writeCustomChart } from "../lib/customChart";
+import { readCustomConfig } from "../lib/customConfig";
 import { filterByPile } from "../lib/filter";
 import { readFilters, writeFilters } from "../lib/storage";
 import { readUrlFilters } from "../lib/url";
@@ -29,8 +26,6 @@ const FIELD_INPUT =
   "mt-1 block w-full min-w-0 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
 const BUTTON_PRIMARY =
   "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
-const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
 
 /**
@@ -84,13 +79,16 @@ interface Props {
  * `renderPhone` the CLI uses — is only ever generated when the download
  * button is clicked, not on every filter change.
  */
-export default function SheetViewer({ items: bundledItems, machine }: Props) {
+export default function SheetViewer({ items: bundledItems, machine: bundledMachine }: Props) {
   const [cut, setCut] = useState<Variant>("full");
   const [pileQuery, setPileQuery] = useState("");
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
-  const [customInstructions, setCustomInstructions] = useState<Instruction[] | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  // Machine and chart together — whatever was last uploaded or edited on
+  // the config page (customConfig.ts). null means "nothing active,
+  // showing the bundled example," the same as before.
+  const [activeMachine, setActiveMachine] = useState<Machine>(bundledMachine);
+  const [customItems, setCustomItems] = useState<ResolvedInstruction[] | null>(null);
   // Read by the E2E suite (`[data-hydrated="true"]`), which otherwise has no
   // way to tell that React has attached its listeners: a `selectOption` or
   // `fill` fired at the plain server-rendered HTML still "succeeds" — it
@@ -118,10 +116,14 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
         setPileQuery(saved.pileQuery);
       }
     }
-    setCustomInstructions(readCustomChart(machine));
+    const config = readCustomConfig();
+    if (config) {
+      setActiveMachine(config.machine);
+      setCustomItems(resolve(config.chart));
+    }
     restored.current = true;
     setHydrated(true);
-  }, [machine]);
+  }, []);
 
   useEffect(() => {
     // Skipped on the mount render: without this, restoring a saved filter
@@ -132,15 +134,8 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
     writeUrlFilters({ cut, pileQuery });
   }, [cut, pileQuery]);
 
-  const sourceItems = useMemo(
-    () => (customInstructions ? resolve(customInstructions) : bundledItems),
-    [customInstructions, bundledItems],
-  );
+  const sourceItems = customItems ?? bundledItems;
   const filtered = useMemo(() => filterByPile(sourceItems, pileQuery), [sourceItems, pileQuery]);
-  const downloadHref = useMemo(
-    () => `data:application/json;charset=utf-8,${encodeURIComponent(chartToJson(sourceItems))}`,
-    [sourceItems],
-  );
 
   async function handleDownload() {
     setDownloading(true);
@@ -150,7 +145,7 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
       // and pdf-lib, which nothing needs until this click — a static import
       // would ship both in the page's main chunk regardless.
       const { renderPhone } = await import("@washy-washy/pdf");
-      const { pdf } = await renderPhone(filtered, machine, cut);
+      const { pdf } = await renderPhone(filtered, activeMachine, cut);
       // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
       // Uint8Array is typed over the wider ArrayBufferLike (which also
       // covers SharedArrayBuffer) — pdf is always a fresh copy from
@@ -168,27 +163,6 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
     } finally {
       setDownloading(false);
     }
-  }
-
-  async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
-
-    try {
-      const parsed = chartFromJson(await file.text(), machine);
-      setCustomInstructions(parsed);
-      writeCustomChart(parsed);
-      setUploadError(null);
-    } catch (reason) {
-      setUploadError(reason instanceof Error ? reason.message : String(reason));
-    }
-  }
-
-  function handleClear() {
-    clearCustomChart();
-    setCustomInstructions(null);
-    setUploadError(null);
   }
 
   return (
@@ -231,46 +205,19 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
         </div>
       </fieldset>
 
-      <fieldset className="rounded-lg border border-hairline bg-panel p-4">
-        <legend className="px-1 text-sm font-semibold text-ink">Your own chart</legend>
-        <p className="text-sm text-body">
-          {customInstructions
-            ? "Showing your uploaded chart."
-            : "Showing the bundled example chart. It's a generic laundry chart, not your own."}
-        </p>
-        <p className="mt-1 text-xs text-muted">
-          To use your own: download the chart below as JSON, edit the rows in a text editor, and
-          upload it back. Each row is checked against your machine — an unknown programme,
-          temperature or spin is called out by row and column, not silently accepted.
-        </p>
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <label className="flex-1 sm:flex-none">
-            <span className={FIELD_LABEL}>
-              Upload a chart (JSON)
-              <HelpBubble text="Replace the bundled example with your own chart, downloaded from here and edited as JSON." />
-            </span>
-            <input
-              className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
-              type="file"
-              accept="application/json,.json"
-              onChange={handleUpload}
-            />
-          </label>
-          <a className={BUTTON_SECONDARY} href={downloadHref} download="washing-instructions.json">
-            Download this chart as JSON
-          </a>
-          {customInstructions && (
-            <button className={BUTTON_SECONDARY} type="button" onClick={handleClear}>
-              Use the bundled example instead
-            </button>
-          )}
-        </div>
-        {uploadError && (
-          <p className={`${ALERT} mt-3`} role="alert">
-            Could not use that file: {uploadError}
-          </p>
-        )}
-      </fieldset>
+      <p className="text-sm text-body">
+        {customItems
+          ? "Showing your own config."
+          : "Showing the bundled example chart. It's a generic laundry chart, not your own."}{" "}
+        Upload, download or edit your own on the{" "}
+        <a
+          href="/config"
+          className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+        >
+          config page
+        </a>
+        .
+      </p>
 
       {filtered.length === 0 ? (
         <p className="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
@@ -293,7 +240,7 @@ export default function SheetViewer({ items: bundledItems, machine }: Props) {
               Could not generate the PDF: {downloadError}
             </p>
           )}
-          <Sheet items={filtered} machine={machine} variant={cut} />
+          <Sheet items={filtered} machine={activeMachine} variant={cut} />
         </>
       )}
     </div>

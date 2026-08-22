@@ -1,16 +1,23 @@
 import {
   type COLUMNS,
-  chartToJson,
+  type Config,
   colourGroups,
+  configFromJson,
+  configToJson,
   type Instruction,
+  type Iron,
+  type IronSetting,
   instructionsFromRows,
   type Machine,
   mixTags,
+  parseMachine,
   type Row,
   rowsFromInstructions,
+  type Washer,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
-import { readCustomChart, writeCustomChart } from "../lib/customChart";
+import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../lib/customConfig";
+import { slug } from "../lib/slug";
 import { colour } from "../lib/theme";
 import { IronDial, ProgramDial } from "./dials";
 
@@ -18,8 +25,6 @@ const SECTION = "mb-6";
 const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const CARD = "rounded-lg border border-hairline bg-panel p-4";
 const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const CHIP_LIST = "mt-1 flex flex-wrap gap-1";
-const CHIP = "rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body";
 const TEXT_INPUT =
   "w-full min-w-[8rem] rounded border border-transparent bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none";
 const BUTTON_PRIMARY =
@@ -60,85 +65,224 @@ function SectionHeading({ children }: { children: string }) {
   );
 }
 
-function Field({
+/** Comma-separated, in order — matches how a dial's positions read naturally, and lets a visitor add/remove/reorder all at once instead of one item at a time. */
+function splitComma(value: string): string[] {
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
+}
+
+function EditableField({
   label,
-  children,
-  span,
+  id,
+  value,
+  hint,
+  onChange,
 }: {
   label: string;
-  children: React.ReactNode;
-  span?: boolean;
+  id: string;
+  value: string;
+  hint?: string;
+  onChange: (value: string) => void;
 }) {
   return (
-    <div className={span ? "col-span-2" : undefined}>
-      <p className={FIELD_LABEL}>{label}</p>
-      {children}
+    <div>
+      <label htmlFor={id} className={FIELD_LABEL}>
+        {label}
+      </label>
+      <input
+        id={id}
+        className={`${TEXT_INPUT} border-line`}
+        type="text"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        aria-describedby={hint ? `${id}-hint` : undefined}
+      />
+      {hint && (
+        <p id={`${id}-hint`} className="mt-0.5 text-[0.65rem] text-muted">
+          {hint}
+        </p>
+      )}
     </div>
   );
 }
 
-function ChipList({ values }: { values: readonly string[] }) {
-  return (
-    <div className={CHIP_LIST}>
-      {values.map((value) => (
-        <span key={value} className={CHIP}>
-          {value}
-        </span>
-      ))}
-    </div>
-  );
-}
+function WasherEditor({
+  washer,
+  onChange,
+}: {
+  washer: Washer;
+  onChange: (washer: Washer) => void;
+}) {
+  function set<K extends keyof Washer>(key: K, value: Washer[K]) {
+    onChange({ ...washer, [key]: value });
+  }
 
-function WasherCard({ washer }: { washer: Machine["washer"] }) {
   return (
     <div className={CARD}>
-      <p className="text-base font-bold text-ink">
-        {washer.name} · {washer.capacity}
-      </p>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <EditableField
+          label="Name"
+          id="washer-name"
+          value={washer.name}
+          onChange={(v) => set("name", v)}
+        />
+        <EditableField
+          label="Capacity"
+          id="washer-capacity"
+          value={washer.capacity}
+          onChange={(v) => set("capacity", v)}
+        />
+      </div>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Programmes">
-          <ChipList values={washer.programs} />
-        </Field>
-        <Field label="Temperatures">
-          <ChipList values={washer.temperatures} />
-        </Field>
-        <Field label="Spin speeds">
-          <ChipList values={washer.spins} />
-        </Field>
-        <Field label="Buttons">
-          <ChipList values={washer.options} />
-        </Field>
+        <EditableField
+          label="Programmes"
+          id="washer-programs"
+          hint="Comma-separated, in dial order starting from twelve o'clock."
+          value={washer.programs.join(", ")}
+          onChange={(v) => set("programs", splitComma(v))}
+        />
+        <EditableField
+          label="Temperatures"
+          id="washer-temperatures"
+          hint="Comma-separated."
+          value={washer.temperatures.join(", ")}
+          onChange={(v) => set("temperatures", splitComma(v))}
+        />
+        <EditableField
+          label="Spin speeds"
+          id="washer-spins"
+          hint="Comma-separated."
+          value={washer.spins.join(", ")}
+          onChange={(v) => set("spins", splitComma(v))}
+        />
+        <EditableField
+          label="Buttons"
+          id="washer-options"
+          hint="Comma-separated."
+          value={washer.options.join(", ")}
+          onChange={(v) => set("options", splitComma(v))}
+        />
       </div>
     </div>
   );
 }
 
-function IronCard({ iron }: { iron: Machine["iron"] }) {
+function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => void }) {
+  function setSetting(index: number, patch: Partial<IronSetting>) {
+    onChange({
+      ...iron,
+      settings: iron.settings.map((setting, i) =>
+        i === index
+          ? { ...setting, ...patch, key: patch.label ? slug(patch.label) : setting.key }
+          : setting,
+      ),
+    });
+  }
+
+  function addSetting() {
+    onChange({
+      ...iron,
+      settings: [
+        ...iron.settings,
+        {
+          key: `setting-${iron.settings.length + 1}`,
+          dots: "•",
+          label: "New setting",
+          detail: "",
+          steam: false,
+        },
+      ],
+    });
+  }
+
+  function removeSetting(index: number) {
+    onChange({ ...iron, settings: iron.settings.filter((_, i) => i !== index) });
+  }
+
   return (
     <div className={CARD}>
-      <p className="text-base font-bold text-ink">{iron.name}</p>
+      <EditableField
+        label="Name"
+        id="iron-name"
+        value={iron.name}
+        onChange={(v) => onChange({ ...iron, name: v })}
+      />
       <div className="mt-3 overflow-x-auto">
-        <table className="w-full min-w-[28rem] text-left text-sm">
+        <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">
               <th className="py-1 pr-3 font-semibold">Setting</th>
               <th className="py-1 pr-3 font-semibold">Dots</th>
               <th className="py-1 pr-3 font-semibold">Detail</th>
-              <th className="py-1 font-semibold">Steam</th>
+              <th className="py-1 pr-3 font-semibold">Steam</th>
+              <th className="py-1 font-semibold">
+                <span className="sr-only">Remove</span>
+              </th>
             </tr>
           </thead>
           <tbody>
-            {iron.settings.map((setting) => (
+            {iron.settings.map((setting, index) => (
               <tr key={setting.key} className="border-b border-hairline last:border-0">
-                <td className="py-1 pr-3 font-medium text-ink">{setting.label}</td>
-                <td className="py-1 pr-3 text-body">{setting.dots}</td>
-                <td className="py-1 pr-3 text-body">{setting.detail}</td>
-                <td className="py-1 text-body">{setting.steam ? "Yes" : "No"}</td>
+                <td className="py-1 pr-3">
+                  <input
+                    className={`${TEXT_INPUT} border-line`}
+                    aria-label={`Setting ${index + 1} label`}
+                    type="text"
+                    value={setting.label}
+                    onChange={(event) => setSetting(index, { label: event.target.value })}
+                  />
+                </td>
+                <td className="py-1 pr-3">
+                  <input
+                    className={`${TEXT_INPUT} w-16 border-line`}
+                    aria-label={`Setting ${index + 1} dots`}
+                    type="text"
+                    value={setting.dots}
+                    onChange={(event) => setSetting(index, { dots: event.target.value })}
+                  />
+                </td>
+                <td className="py-1 pr-3">
+                  <input
+                    className={`${TEXT_INPUT} border-line`}
+                    aria-label={`Setting ${index + 1} detail`}
+                    type="text"
+                    value={setting.detail}
+                    onChange={(event) => setSetting(index, { detail: event.target.value })}
+                  />
+                </td>
+                <td className="py-1 pr-3">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    aria-label={`Setting ${index + 1} makes steam`}
+                    checked={setting.steam}
+                    onChange={(event) => setSetting(index, { steam: event.target.checked })}
+                  />
+                </td>
+                <td className="py-1">
+                  <button
+                    type="button"
+                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    onClick={() => removeSetting(index)}
+                    aria-label={`Remove setting ${index + 1}`}
+                  >
+                    Remove
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <button
+        type="button"
+        className="mt-2 rounded border border-line px-2 py-1 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        onClick={addSetting}
+      >
+        + Add setting
+      </button>
     </div>
   );
 }
@@ -589,37 +733,50 @@ function ChartCards({
  * config — machine and chart — in one structured place, rather than
  * reconstructed by eye from the rendered cards.
  *
- * Only the chart is editable. Editing the machine itself is out of scope
- * here (#83) — nothing in the site supports uploading or editing a machine
- * yet, so it's always the one this page was built with.
- *
- * Reads the same uploaded-chart restoration `SheetViewer` does
- * (`customChart.ts`), so a chart uploaded (or edited, here) on either page
- * shows up on both.
+ * The one place a visitor manages the whole config: uploads, downloads
+ * and edits it here, machine and chart together as `@washy-washy/core`'s
+ * `Config` (`customConfig.ts`) — the index page only ever displays
+ * whatever's active, it carries no upload/download UI of its own.
  */
 export default function ConfigViewer({ items: bundledItems, machine }: Props) {
-  const [customInstructions, setCustomInstructions] = useState<Instruction[] | null>(null);
+  const [customConfig, setCustomConfig] = useState<Config | null>(null);
+  const [draftWasher, setDraftWasher] = useState<Washer>(machine.washer);
+  const [draftIron, setDraftIron] = useState<Iron>(machine.iron);
   const [draftRows, setDraftRows] = useState<Row[]>(() => rowsFromInstructions(bundledItems));
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<(typeof COLUMNS)[number] | "">("");
   // Same hydration marker SheetViewer exposes, and for the same reason: the
   // E2E suite needs a way to know React has attached before it interacts.
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const restored = readCustomChart(machine);
-    setCustomInstructions(restored);
-    setDraftRows(rowsFromInstructions(restored ?? bundledItems));
+    const restored = readCustomConfig();
+    setCustomConfig(restored);
+    setDraftWasher(restored?.machine.washer ?? machine.washer);
+    setDraftIron(restored?.machine.iron ?? machine.iron);
+    setDraftRows(rowsFromInstructions(restored?.chart ?? bundledItems));
     setHydrated(true);
-    // machine and bundledItems only, not draftRows/customInstructions:
+    // machine and bundledItems only, not the draft/customConfig state:
     // this restores once, the same as SheetViewer's mount effect — running
     // it again on every render would stomp an in-progress edit.
   }, [machine, bundledItems]);
 
-  const activeItems = customInstructions ?? bundledItems;
+  // The machine chart rows are edited and validated against — live, not
+  // just the bundled one — so adding a programme above makes it pickable
+  // in a chart row's chips immediately, before Save.
+  const draftMachine = useMemo<Machine>(
+    () => ({ washer: draftWasher, iron: draftIron }),
+    [draftWasher, draftIron],
+  );
+
+  const activeConfig = useMemo<Config>(
+    () => customConfig ?? { machine, chart: bundledItems },
+    [customConfig, machine, bundledItems],
+  );
   const downloadHref = useMemo(
-    () => `data:application/json;charset=utf-8,${encodeURIComponent(chartToJson(activeItems))}`,
-    [activeItems],
+    () => `data:application/json;charset=utf-8,${encodeURIComponent(configToJson(activeConfig))}`,
+    [activeConfig],
   );
 
   function handleCellChange(index: number, key: (typeof COLUMNS)[number], value: string) {
@@ -643,28 +800,97 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
 
   function handleSave() {
     try {
-      const parsed = instructionsFromRows(draftRows, machine);
-      setCustomInstructions(parsed);
-      writeCustomChart(parsed);
+      // Machine and chart validated together, in that order — a machine
+      // edit that breaks the chart (a removed programme a row still uses)
+      // is what instructionsFromRows catches next, so the one error names
+      // whichever half is actually wrong.
+      const candidateMachine = parseMachine(draftMachine);
+      const parsedChart = instructionsFromRows(draftRows, candidateMachine);
+      const config: Config = { machine: candidateMachine, chart: parsedChart };
+      setCustomConfig(config);
+      writeCustomConfig(config);
       setSaveError(null);
     } catch (reason) {
       setSaveError(reason instanceof Error ? reason.message : String(reason));
     }
   }
 
+  function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    file
+      .text()
+      .then((text) => {
+        const config = configFromJson(text);
+        setCustomConfig(config);
+        setDraftWasher(config.machine.washer);
+        setDraftIron(config.machine.iron);
+        setDraftRows(rowsFromInstructions(config.chart));
+        writeCustomConfig(config);
+        setUploadError(null);
+      })
+      .catch((reason) => {
+        setUploadError(reason instanceof Error ? reason.message : String(reason));
+      });
+  }
+
+  function handleClear() {
+    clearCustomConfig();
+    setCustomConfig(null);
+    setDraftWasher(machine.washer);
+    setDraftIron(machine.iron);
+    setDraftRows(rowsFromInstructions(bundledItems));
+    setSaveError(null);
+    setUploadError(null);
+  }
+
   return (
     <div data-hydrated={hydrated}>
-      <p className="mb-6 text-sm text-body">
-        {customInstructions
-          ? "Showing your uploaded chart."
-          : "Showing the bundled example chart. It's a generic laundry chart, not your own."}
+      <p className="mb-1 text-sm text-body">
+        {customConfig
+          ? "Showing your own config."
+          : "Showing the bundled example config. It's a generic laundry chart and washing machine, not your own."}
       </p>
+      <p className="mb-6 text-xs text-muted">
+        Upload, download or edit below — changes apply across the whole site once saved, and persist
+        in this browser until you clear them.
+      </p>
+
+      <section className={SECTION}>
+        <h2 className={SECTION_HEADING}>Your config</h2>
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <label className="flex-1 sm:flex-none">
+            <span className={FIELD_LABEL}>Upload a config (JSON)</span>
+            <input
+              className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
+              type="file"
+              accept="application/json,.json"
+              onChange={handleUpload}
+            />
+          </label>
+          <a className={BUTTON_SECONDARY} href={downloadHref} download="washy-washy.json">
+            Download this config as JSON
+          </a>
+          {customConfig && (
+            <button className={BUTTON_SECONDARY} type="button" onClick={handleClear}>
+              Use the bundled example instead
+            </button>
+          )}
+        </div>
+        {uploadError && (
+          <p className={`${ALERT} mt-3`} role="alert">
+            Could not use that file: {uploadError}
+          </p>
+        )}
+      </section>
 
       <section className={SECTION}>
         <h2 className={SECTION_HEADING}>Machine</h2>
         <div className="flex flex-col gap-4">
-          <WasherCard washer={machine.washer} />
-          <IronCard iron={machine.iron} />
+          <WasherEditor washer={draftWasher} onChange={setDraftWasher} />
+          <IronEditor iron={draftIron} onChange={setDraftIron} />
         </div>
       </section>
 
@@ -694,16 +920,13 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
         </div>
         <ChartCards
           rows={displayRows}
-          machine={machine}
+          machine={draftMachine}
           onChange={(index, key, value) => handleCellChange(sortedIndices[index], key, value)}
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <button type="button" className={BUTTON_PRIMARY} onClick={handleSave}>
             Save changes
           </button>
-          <a className={BUTTON_SECONDARY} href={downloadHref} download="washing-instructions.json">
-            Download this chart as JSON
-          </a>
         </div>
         {saveError && (
           <p className={`${ALERT} mt-3`} role="alert">

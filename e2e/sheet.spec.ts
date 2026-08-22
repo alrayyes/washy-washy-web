@@ -1,8 +1,8 @@
 import { expect, type Page, test } from "@playwright/test";
 
 /**
- * The real user journeys `test/web-*.test.ts` can't reach: those exercise
- * pure logic and static markup (`renderToStaticMarkup`), never an actual
+ * The real user journeys `test/*.test.ts` can't reach: those exercise pure
+ * logic and static markup (`renderToStaticMarkup`), never an actual
  * browser, an actual click, or actual `localStorage`. This is the outer,
  * end-to-end layer that was missing — see #67.
  */
@@ -18,6 +18,30 @@ import { expect, type Page, test } from "@playwright/test";
 async function goto(page: Page, path = "/") {
   await page.goto(path);
   await page.waitForSelector('[data-hydrated="true"]');
+}
+
+/**
+ * Uploads a config through the config page — the only place a chart or
+ * machine can be replaced now (#11) — then returns to the given index path.
+ */
+async function uploadConfig(page: Page, config: unknown, indexPath = "/") {
+  await goto(page, "/config");
+  await page.setInputFiles('input[type="file"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+  await goto(page, indexPath);
+}
+
+/** The config page's own download link — the current active config, as `{ machine, chart }`. */
+async function downloadedConfig(page: Page) {
+  await goto(page, "/config");
+  const href = await page.locator('a[download="washy-washy.json"]').getAttribute("href");
+  return JSON.parse(
+    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
+  );
 }
 
 test("shows the bundled chart as a real page, not an embedded PDF", async ({ page }) => {
@@ -71,83 +95,24 @@ test("the download button generates a PDF only when clicked, not before", async 
   expect(path).not.toBeNull();
 });
 
-test("uploading a chart, downloading it back out, and clearing it round-trip", async ({ page }) => {
-  await goto(page);
+test("an uploaded config (from the config page) shows here too", async ({ page }) => {
+  const config = await downloadedConfig(page);
+  config.chart[0].clothing_type = "E2E Custom Pile";
 
-  // Download the active (bundled) chart, edit one pile's name, and
-  // re-upload it — the same round trip a household member editing their
-  // chart externally would do.
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  rows[0].clothing_type = "E2E Custom Pile";
+  await uploadConfig(page, config);
 
-  await page.setInputFiles('input[type="file"]', {
-    name: "chart.json",
-    mimeType: "application/json",
-    buffer: Buffer.from(JSON.stringify(rows, null, 2)),
-  });
-
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
   await page.fill('input[type="search"]', "E2E Custom Pile");
   await expect(page.locator("article")).toHaveCount(1);
   await expect(page.locator("article h3").first()).toContainText("E2E Custom Pile");
-
-  // Upload something invalid: the error shows, and the just-uploaded chart
-  // stays active rather than silently reverting.
-  await page.setInputFiles('input[type="file"]', {
-    name: "broken.json",
-    mimeType: "application/json",
-    buffer: Buffer.from("{not valid json"),
-  });
-  await expect(page.getByRole("alert")).toContainText("Could not use that file");
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
-
-  await page.getByRole("button", { name: /Use the bundled example instead/ }).click();
-  await expect(page.getByText("Showing the bundled example chart.")).toBeVisible();
 });
 
-test("an uploaded chart with a value the machine doesn't have names the row and column", async ({
-  page,
-}) => {
-  await goto(page);
+test("filters and an uploaded config both survive a reload", async ({ page }) => {
+  const config = await downloadedConfig(page);
+  config.chart[0].clothing_type = "Persisted E2E Pile";
 
-  // Valid JSON, but a temperature the bundled machine can't be set to — the
-  // kind of typo a household member editing the chart by hand would make.
-  // #72: this should name exactly what's wrong, not just "invalid chart".
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  rows[0].temperature = "99";
-
-  await page.setInputFiles('input[type="file"]', {
-    name: "chart.json",
-    mimeType: "application/json",
-    buffer: Buffer.from(JSON.stringify(rows, null, 2)),
-  });
-
-  await expect(page.getByRole("alert")).toContainText(/row \d+, column "temperature"/);
-  await expect(page.getByRole("alert")).toContainText("99");
-  // The bad upload never took: still the bundled chart, not a half-applied one.
-  await expect(page.getByText("Showing the bundled example chart.")).toBeVisible();
-});
-
-test("filters and an uploaded chart both survive a reload", async ({ page }) => {
-  await goto(page);
-
+  await uploadConfig(page, config);
   await page.locator("fieldset select").selectOption("wash");
-  const href = await page.locator('a[download="washing-instructions.json"]').getAttribute("href");
-  const rows = JSON.parse(
-    decodeURIComponent(href?.replace("data:application/json;charset=utf-8,", "") ?? ""),
-  );
-  rows[0].clothing_type = "Persisted E2E Pile";
-  await page.setInputFiles('input[type="file"]', {
-    name: "chart.json",
-    mimeType: "application/json",
-    buffer: Buffer.from(JSON.stringify(rows, null, 2)),
-  });
   await page.fill('input[type="search"]', "Persisted E2E Pile");
   await expect(page.locator("article")).toHaveCount(1);
 
@@ -156,7 +121,7 @@ test("filters and an uploaded chart both survive a reload", async ({ page }) => 
 
   await expect(page.locator("fieldset select")).toHaveValue("wash");
   await expect(page.locator('input[type="search"]')).toHaveValue("Persisted E2E Pile");
-  await expect(page.getByText("Showing your uploaded chart.")).toBeVisible();
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
   await expect(page.locator("article")).toHaveCount(1);
   await expect(page.locator("article h3").first()).toContainText("Persisted E2E Pile");
 });
