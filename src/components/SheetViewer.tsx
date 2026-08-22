@@ -87,6 +87,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   const [pileQuery, setPileQuery] = useState("");
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [downloadDropped, setDownloadDropped] = useState<string[]>([]);
   // Machine and chart together — whatever was last uploaded or edited on
   // the config page (customConfig.ts). null means "nothing active,
   // showing the bundled example," the same as before.
@@ -158,13 +159,15 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   async function handleDownload() {
     setDownloading(true);
     setDownloadError(null);
+    setDownloadDropped([]);
     try {
       // Dynamic, not static: @washy-washy/pdf pulls in @react-pdf/renderer
       // and pdf-lib, which nothing needs until this click — a static import
       // would ship both in the page's main chunk regardless.
       const { renderPhone } = await import("@washy-washy/pdf");
-      const { pdf } = await renderPhone(filtered, activeMachine, cut);
+      const { pdf, dropped } = await renderPhone(filtered, activeMachine, cut);
       savePdf(pdf, `${STEM}-phone${SUFFIX[cut]}.pdf`);
+      setDownloadDropped(dropped);
     } catch (reason) {
       setDownloadError(reason instanceof Error ? reason.message : String(reason));
     } finally {
@@ -174,11 +177,14 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
   // Passed to Sheet -> Card as callbacks (Sheet.tsx can't touch window/
   // document/navigator itself — see the comment on CardActions there).
-  async function handleDownloadCard(group: ResolvedInstruction[]) {
+  // Returns `dropped` (characters the PDF's font couldn't render) so
+  // CardActions can surface it the same way handleDownload does above.
+  async function handleDownloadCard(group: ResolvedInstruction[]): Promise<string[]> {
     const { renderPhone } = await import("@washy-washy/pdf");
-    const { pdf } = await renderPhone(group, activeMachine, cut);
+    const { pdf, dropped } = await renderPhone(group, activeMachine, cut);
     const names = [...new Set(group.map((member) => slug(member.clothingType)))];
     savePdf(pdf, `${names.join("-")}.pdf`);
+    return dropped;
   }
 
   async function handleShareCard(group: ResolvedInstruction[]) {
@@ -268,6 +274,11 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
           {downloadError && (
             <p className={ALERT} role="alert">
               Could not generate the PDF: {downloadError}
+            </p>
+          )}
+          {downloadDropped.length > 0 && (
+            <p className="text-xs text-muted" role="status">
+              Couldn't render in the PDF: {downloadDropped.join(" ")}
             </p>
           )}
           <Sheet
