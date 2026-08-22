@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/alrayyes/washy-washy-web/compare/v1.4.0...v1.5.0) (2026-08-22)
+
+### Features
+
+* add a dedicated machine editor page ([#31](https://github.com/alrayyes/washy-washy-web/issues/31)) ([09c70d7](https://github.com/alrayyes/washy-washy-web/commit/09c70d714640fea730bece04e24fffa01694cf49)), closes [#30](https://github.com/alrayyes/washy-washy-web/issues/30)
+
 ## [1.4.0](https://github.com/alrayyes/washy-washy-web/compare/v1.3.0...v1.4.0) (2026-08-22)
 
 ### Features
