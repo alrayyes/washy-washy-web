@@ -59,9 +59,7 @@ const SORT_FIELDS: { value: (typeof COLUMNS)[number]; label: string }[] = [
 /** Matches Sheet.tsx's `SectionHeading` exactly. */
 function SectionHeading({ children }: { children: string }) {
   return (
-    <p className="mb-1 text-[0.7rem] font-bold tracking-wide text-muted">
-      {children.toUpperCase()}
-    </p>
+    <p className="mb-1 text-xs font-bold tracking-wide text-muted">{children.toUpperCase()}</p>
   );
 }
 
@@ -315,7 +313,7 @@ function DurationField({
           }}
         />
       </div>
-      <p id={hintId} className={invalid ? "text-[0.6rem] text-no" : "sr-only"}>
+      <p id={hintId} className={invalid ? "text-xs text-no" : "sr-only"}>
         {invalid ? "Use H:MM, like 2:30" : "Format: H:MM, like 2:30"}
       </p>
     </div>
@@ -340,7 +338,7 @@ function EditableSplitField({
 
   return (
     <div className="mt-2">
-      <p id={labelId} className="text-[0.6rem] font-bold tracking-wide text-muted">
+      <p id={labelId} className="text-xs font-bold tracking-wide text-muted">
         {label.toUpperCase()}
       </p>
       <ProseField value={value} name={name} onChange={onChange} ariaLabelledBy={labelId} />
@@ -438,7 +436,7 @@ function ChartCards({
                     </option>
                   ))}
                 </select>
-                <p className="text-[0.6rem] text-body">
+                <p className="text-xs text-body">
                   {position} clockwise from {off}
                 </p>
               </div>
@@ -550,7 +548,7 @@ function ChartCards({
             />
 
             <div className="mt-2">
-              <p className="text-[0.6rem] font-bold tracking-wide text-muted">COLOUR GROUP</p>
+              <p className="text-xs font-bold tracking-wide text-muted">COLOUR GROUP</p>
               <div className="mt-1 flex flex-wrap gap-1">
                 {colourGroups.map((group) => (
                   <button
@@ -570,7 +568,7 @@ function ChartCards({
             </div>
 
             <div className="mt-2">
-              <p className="text-[0.6rem] font-bold tracking-wide text-muted">MIX TAGS</p>
+              <p className="text-xs font-bold tracking-wide text-muted">MIX TAGS</p>
               <div className="mt-1 flex flex-wrap gap-1">
                 {mixTags.map((tag) => {
                   const selected = splitPipe(row.mix_tags);

@@ -96,7 +96,7 @@ function StringListEditor({
   return (
     <div data-testid={`list-editor-${slug(label)}`}>
       <h3 className={FIELD_LABEL}>{label}</h3>
-      {hint && <p className="mt-0.5 mb-1 text-[0.65rem] text-muted">{hint}</p>}
+      {hint && <p className="mt-0.5 mb-1 text-xs text-muted">{hint}</p>}
       <ul className="flex flex-col gap-1">
         {values.map((value, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: a freeform string list has no id of its own, and a value alone isn't guaranteed unique
