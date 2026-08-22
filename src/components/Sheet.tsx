@@ -330,6 +330,8 @@ function CardActions({
   const [error, setError] = useState<string | null>(null);
   const [dropped, setDropped] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
+  const [shareStatus, setShareStatus] = useState("");
+  const [shareError, setShareError] = useState<string | null>(null);
 
   async function handleDownload() {
     setDownloading(true);
@@ -345,9 +347,22 @@ function CardActions({
   }
 
   async function handleShare() {
-    await onShare(group);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setShareError(null);
+    try {
+      await onShare(group);
+      setCopied(true);
+      // The button's own label swap ("Copy link" -> "Copied!") is the
+      // visible feedback — whether assistive tech announces a label
+      // change on the focused control is implementation-defined, so
+      // this sr-only region carries the actual announcement (#55).
+      setShareStatus("Copied!");
+      setTimeout(() => {
+        setCopied(false);
+        setShareStatus("");
+      }, 2000);
+    } catch (reason) {
+      setShareError(reason instanceof Error ? reason.message : String(reason));
+    }
   }
 
   return (
@@ -365,6 +380,14 @@ function CardActions({
           {downloading ? "Preparing…" : "Download"}
         </button>
       </div>
+      <p aria-live="polite" role="status" className="sr-only">
+        {shareStatus}
+      </p>
+      {shareError && (
+        <p className="text-right text-xs text-no" role="alert">
+          Could not copy the link: {shareError}
+        </p>
+      )}
       {error && (
         <p className="text-right text-xs text-no" role="alert">
           Could not generate the PDF: {error}
