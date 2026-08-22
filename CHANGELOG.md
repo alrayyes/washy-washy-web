@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/alrayyes/washy-washy-web/compare/v1.1.0...v1.2.0) (2026-08-22)
+
+### Features
+
+* config page owns everything — machine editing, combined upload ([#25](https://github.com/alrayyes/washy-washy-web/issues/25)) ([ca1a4be](https://github.com/alrayyes/washy-washy-web/commit/ca1a4be9462520dcf2f73058cd8776f2516c3908)), closes [#11](https://github.com/alrayyes/washy-washy-web/issues/11) [#24](https://github.com/alrayyes/washy-washy-web/issues/24)
+
 ## [1.1.0](https://github.com/alrayyes/washy-washy-web/compare/v1.0.0...v1.1.0) (2026-08-22)
 
 ### Features
