@@ -160,6 +160,10 @@ test('a single card\'s "Copy link" copies a URL that opens straight to it', asyn
 
   await card.getByRole("button", { name: /Copy link/ }).click();
   await expect(card.getByRole("button", { name: /Copied!/ })).toBeVisible();
+  // The visible label swap alone isn't reliably announced by assistive
+  // tech on a focused control, so a dedicated live region carries the
+  // actual confirmation (#55).
+  await expect(card.getByRole("status")).toHaveText("Copied!");
 
   const copied = await page.evaluate(() => navigator.clipboard.readText());
   const url = new URL(copied);
@@ -169,6 +173,26 @@ test('a single card\'s "Copy link" copies a URL that opens straight to it', asyn
   const headings = await page.locator("article h3").allInnerTexts();
   expect(headings.length).toBeGreaterThan(0);
   for (const h of headings) expect(h.toLowerCase()).toContain((pileName as string).toLowerCase());
+});
+
+test("a failed copy is announced as an alert, not just logged", async ({ page }) => {
+  // Forced rather than relying on an unglanted clipboard-write permission
+  // to reject on its own — that's environment-dependent, this isn't.
+  // Exercises a path this button previously had no handling for at all
+  // (#55).
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: () => Promise.reject(new Error("denied")) },
+    });
+  });
+  await goto(page);
+
+  const card = page.locator("article").first();
+  await card.getByRole("button", { name: /Copy link/ }).click();
+
+  await expect(card.getByRole("alert")).toContainText("Could not copy the link");
+  // The button never claims success it didn't have.
+  await expect(card.getByRole("button", { name: /Copy link/ })).toBeVisible();
 });
 
 test("an uploaded config (from the config page) shows here too", async ({ page }) => {
