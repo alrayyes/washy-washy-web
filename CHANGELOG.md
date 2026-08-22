@@ -1,3 +1,9 @@
+## [1.8.5](https://github.com/alrayyes/washy-washy-web/compare/v1.8.4...v1.8.5) (2026-08-22)
+
+### Bug Fixes
+
+* clarify why some pile rows in "Loads" are bold ([#72](https://github.com/alrayyes/washy-washy-web/issues/72)) ([c763745](https://github.com/alrayyes/washy-washy-web/commit/c7637456687e078f51afdb8f327a35e8d87191c1)), closes [#71](https://github.com/alrayyes/washy-washy-web/issues/71)
+
 ## [1.8.4](https://github.com/alrayyes/washy-washy-web/compare/v1.8.3...v1.8.4) (2026-08-22)
 
 ### Bug Fixes
