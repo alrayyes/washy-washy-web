@@ -1,0 +1,19 @@
+# This repo's unit tests (bun:test) cover pure logic — chart/machine
+# parsing, filtering, URL/storage round-trips. DOM-interaction UI code
+# (click handlers touching window/document/navigator/Blob) is covered by
+# the e2e suite instead, which Codecov has no visibility into — bun's
+# coverage instrumentation only runs under `bun test`.
+#
+# A patch that's mostly UI glue will always show low unit-test patch
+# coverage, not because it's untested, but because its tests live in a
+# different suite. Coverage stays informational rather than a blocking
+# status check for exactly that reason: the number is still useful to
+# look at, it just isn't the whole picture on its own.
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
