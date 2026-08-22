@@ -1,3 +1,9 @@
+## [1.11.0](https://github.com/alrayyes/washy-washy-web/compare/v1.10.1...v1.11.0) (2026-08-22)
+
+### Features
+
+* persistent "Upload config" control in the site header ([#81](https://github.com/alrayyes/washy-washy-web/issues/81)) ([6938320](https://github.com/alrayyes/washy-washy-web/commit/6938320f1247b8944d7627c0bb5dd7884d592dec)), closes [#80](https://github.com/alrayyes/washy-washy-web/issues/80)
+
 ## [1.10.1](https://github.com/alrayyes/washy-washy-web/compare/v1.10.0...v1.10.1) (2026-08-22)
 
 ### Bug Fixes
