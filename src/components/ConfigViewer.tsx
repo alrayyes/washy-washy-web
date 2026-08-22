@@ -27,6 +27,7 @@ import {
   CHART_CARD,
   CHART_CARD_HEADER,
   FIELD_LABEL,
+  LINK,
   SECTION_HEADING,
   TEXT_INPUT,
 } from "../lib/styles";
@@ -340,6 +341,31 @@ function EditableSplitField({
 }
 
 /**
+ * Where a washing instruction came from, when the row cites one — read
+ * only, same as `Sheet.tsx`'s `ReferenceField` (#79): this card is an
+ * editor for every other field, but citing a source isn't something a
+ * visitor fills in here, only something an uploaded chart can carry.
+ */
+function ReferenceLink({ name, link }: { name: string; link: string }) {
+  if (name === "") return null;
+
+  return (
+    <div className="mt-2">
+      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      <p className="text-sm leading-relaxed text-body">
+        {link !== "" ? (
+          <a href={link} target="_blank" rel="noopener noreferrer" className={LINK}>
+            {name}
+          </a>
+        ) : (
+          name
+        )}
+      </p>
+    </div>
+  );
+}
+
+/**
  * One card per pile, drawn to look like — and, since this is the same
  * data, double as an editor for — `Sheet.tsx`'s read-only card: the same
  * dial, the same chip rows for the values the machine constrains, the
@@ -594,6 +620,7 @@ function ChartCards({
               rowId={index}
               onChange={(value) => set("notes", value)}
             />
+            <ReferenceLink name={row.reference_name} link={row.reference_link} />
           </article>
         );
       })}

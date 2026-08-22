@@ -271,6 +271,32 @@ test("an uploaded config (from the config page) shows here too", async ({ page }
   await expect(page.locator("article h3").first()).toContainText("E2E Custom Pile");
 });
 
+test("a row's cited source shows as a link that opens safely, and stays hidden when nothing cites one", async ({
+  page,
+}) => {
+  const config = await downloadedConfig(page);
+  expect(config.chart[0].reference_name).toBe("");
+  expect(config.chart[1].reference_name).toBe("");
+
+  config.chart[0].clothing_type = "E2E Cited Pile";
+  config.chart[0].reference_name = "Which?";
+  config.chart[0].reference_link = "https://example.com/wash-guide";
+  config.chart[1].clothing_type = "E2E Uncited Pile";
+
+  await uploadConfig(page, config);
+
+  await page.fill("#filter-pile", "E2E Uncited Pile");
+  await expect(page.locator("article").first()).not.toContainText("SOURCE");
+
+  await page.fill("#filter-pile", "E2E Cited Pile");
+  const card = page.locator("article").first();
+  await expect(card).toContainText("SOURCE");
+  const link = card.getByRole("link", { name: "Which?" });
+  await expect(link).toHaveAttribute("href", "https://example.com/wash-guide");
+  await expect(link).toHaveAttribute("target", "_blank");
+  await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+});
+
 test("the header's upload control works from any page, not just /config", async ({ page }) => {
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "Header Upload Pile";
