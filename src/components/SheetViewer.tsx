@@ -43,7 +43,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
     <span className="relative inline-block normal-case">
       <button
         type="button"
-        className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-[0.6rem] font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-xs font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label="What does this do?"
         aria-expanded={open}
         aria-controls={id}

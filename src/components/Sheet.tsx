@@ -39,9 +39,7 @@ function sheetGroups(
 
 function SectionHeading({ children }: { children: string }) {
   return (
-    <p className="mb-1 text-[0.7rem] font-bold tracking-wide text-muted">
-      {children.toUpperCase()}
-    </p>
+    <p className="mb-1 text-xs font-bold tracking-wide text-muted">{children.toUpperCase()}</p>
   );
 }
 
@@ -83,7 +81,7 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
               <span className="flex-1 text-sm text-body">
                 {group.map((item) => item.clothingType).join("  +  ")}
                 {group.length > 1 && (
-                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-[0.6rem] font-bold tracking-wide text-accent">
+                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-xs font-bold tracking-wide text-accent">
                     TOGETHER
                   </span>
                 )}
@@ -111,9 +109,7 @@ function Legend({ machine, variant }: { machine: Machine; variant: Variant }) {
         ) : (
           <ProgramDial program={example} washer={washer} size={54} />
         )}
-        <p className="mt-1 text-[0.65rem] text-body">
-          {variant === "iron" ? "thermostat" : "programme"}
-        </p>
+        <p className="mt-1 text-xs text-body">{variant === "iron" ? "thermostat" : "programme"}</p>
       </div>
       <p className="text-sm leading-relaxed text-body">
         {variant === "iron" ? (
@@ -178,7 +174,7 @@ function ControlPanel({ item, machine }: { item: ResolvedInstruction; machine: M
       <div className="w-20 shrink-0 text-center">
         <ProgramDial program={item.program} washer={washer} size={78} />
         <p className="mt-1 text-xs font-bold text-ink">{item.program}</p>
-        <p className="text-[0.6rem] text-body">
+        <p className="text-xs text-body">
           {position} clockwise from {off}
         </p>
       </div>
@@ -267,7 +263,7 @@ function SplitField({
 
   return (
     <div className="mt-2">
-      <p className="text-[0.6rem] font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
+      <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <Prose items={items} pick={pick} emphasis={emphasis} />
     </div>
   );
@@ -284,7 +280,7 @@ function Field({
 }) {
   return (
     <div className="mt-2">
-      <p className="text-[0.6rem] font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
+      <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <p className={`text-sm leading-relaxed ${emphasis ? "font-bold text-ink" : "text-body"}`}>
         {value}
       </p>
