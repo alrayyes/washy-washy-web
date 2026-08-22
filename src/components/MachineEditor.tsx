@@ -253,7 +253,13 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         onChange={(v) => onChange({ ...iron, name: v })}
       />
       <h3 className={`${FIELD_LABEL} mt-3`}>Settings</h3>
-      <div className="mt-1 overflow-x-auto">
+      {/* contain-layout (#47): overflow-x-auto alone correctly scrolls the
+      table within its own bounds — confirmed, this wrapper's own box was
+      already the right width — but a <table> wider than its ancestor
+      still leaks into document.documentElement.scrollWidth regardless,
+      forcing the whole page to scroll horizontally. contain: layout
+      stops that leak without changing the scroll behaviour itself. */}
+      <div className="mt-1 overflow-x-auto contain-layout">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">

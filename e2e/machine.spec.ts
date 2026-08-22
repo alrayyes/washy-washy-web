@@ -102,3 +102,26 @@ test("resetting to the bundled machine preserves the active chart", async ({ pag
     page.locator('[data-testid="chart-cards"] > article').first().locator('textarea[name="notes"]'),
   ).toHaveValue("Preserved E2E note");
 });
+
+test("the iron settings table doesn't force horizontal scroll at 320px or 375px", async ({
+  page,
+}) => {
+  for (const width of [320, 375]) {
+    await page.setViewportSize({ width, height: 800 });
+    await goto(page);
+
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+        ),
+      )
+      .toBe(true);
+
+    // The table itself still scrolls within its own bounded container —
+    // this isn't meant to make the table narrower, just to stop it
+    // widening the page (#47).
+    const wrapper = page.locator("main .overflow-x-auto");
+    await expect.poll(() => wrapper.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+  }
+});
