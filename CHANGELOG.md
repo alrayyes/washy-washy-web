@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/alrayyes/washy-washy-web/compare/v1.5.0...v1.6.0) (2026-08-22)
+
+### Features
+
+* give the nav and footer a real design ([#33](https://github.com/alrayyes/washy-washy-web/issues/33)) ([8839e05](https://github.com/alrayyes/washy-washy-web/commit/8839e05ccc439df1936422b9fa43030fc8a6fc60)), closes [#32](https://github.com/alrayyes/washy-washy-web/issues/32)
+
 ## [1.5.0](https://github.com/alrayyes/washy-washy-web/compare/v1.4.0...v1.5.0) (2026-08-22)
 
 ### Features
