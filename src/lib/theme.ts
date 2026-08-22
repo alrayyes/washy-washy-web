@@ -19,4 +19,6 @@ export const colour = {
   steamSoft: "#eaf2fa",
   yes: "#15803d",
   no: "#b91c1c",
+  /** The dial's knob face — not a named CSS token, only ever used here. */
+  knob: "#e8e8ea",
 } as const;

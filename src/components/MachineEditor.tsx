@@ -13,17 +13,17 @@ import {
 import { useEffect, useState } from "react";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import { slug } from "../lib/slug";
-import { TEXT_INPUT } from "../lib/styles";
+import {
+  ALERT,
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  CARD,
+  FIELD_LABEL,
+  TEXT_INPUT,
+} from "../lib/styles";
 
 const SECTION = "mb-6";
 const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
-const CARD = "rounded-lg border border-hairline bg-panel p-4";
-const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
 const ITEM_BUTTON =
   "rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
 
