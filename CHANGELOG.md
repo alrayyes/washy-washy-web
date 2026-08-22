@@ -1,3 +1,15 @@
+## [1.8.2](https://github.com/alrayyes/washy-washy-web/compare/v1.8.1...v1.8.2) (2026-08-22)
+
+### Bug Fixes
+
+* the filter help bubble is a button inside a label, and its tooltip is never announced ([#64](https://github.com/alrayyes/washy-washy-web/issues/64)) ([3370dc3](https://github.com/alrayyes/washy-washy-web/commit/3370dc3602b20590c162ee0744cdbf8131c66e50)), closes [#50](https://github.com/alrayyes/washy-washy-web/issues/50)
+
+## [1.8.1](https://github.com/alrayyes/washy-washy-web/compare/v1.8.0...v1.8.1) (2026-08-22)
+
+### Bug Fixes
+
+* nav overflows horizontally at 320px viewport width ([#48](https://github.com/alrayyes/washy-washy-web/issues/48)) ([ac06a37](https://github.com/alrayyes/washy-washy-web/commit/ac06a37c3576e77589bd9a7a534e998e7dd61804)), closes [#46](https://github.com/alrayyes/washy-washy-web/issues/46)
+
 ## [1.8.0](https://github.com/alrayyes/washy-washy-web/compare/v1.7.1...v1.8.0) (2026-08-22)
 
 ### Features
