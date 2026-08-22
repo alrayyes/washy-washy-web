@@ -1,3 +1,9 @@
+## [1.18.0](https://github.com/alrayyes/washy-washy-web/compare/v1.17.0...v1.18.0) (2026-08-22)
+
+### Features
+
+* stack the iron settings table as cards below sm: ([#102](https://github.com/alrayyes/washy-washy-web/issues/102)) ([#107](https://github.com/alrayyes/washy-washy-web/issues/107)) ([4fb5117](https://github.com/alrayyes/washy-washy-web/commit/4fb511781c8ef01222f5cc0b7eee12fe67a69ddf))
+
 ## [1.17.0](https://github.com/alrayyes/washy-washy-web/compare/v1.16.0...v1.17.0) (2026-08-22)
 
 ### Features
