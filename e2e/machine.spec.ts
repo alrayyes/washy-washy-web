@@ -103,7 +103,7 @@ test("resetting to the bundled machine preserves the active chart", async ({ pag
   ).toHaveValue("Preserved E2E note");
 });
 
-test("the iron settings table doesn't force horizontal scroll at 320px or 375px", async ({
+test("below sm: the iron settings render as cards, not the table, and never force horizontal scroll", async ({
   page,
 }) => {
   for (const width of [320, 375]) {
@@ -118,10 +118,50 @@ test("the iron settings table doesn't force horizontal scroll at 320px or 375px"
       )
       .toBe(true);
 
-    // The table itself still scrolls within its own bounded container —
-    // this isn't meant to make the table narrower, just to stop it
-    // widening the page (#47).
-    const wrapper = page.locator("main .overflow-x-auto");
-    await expect.poll(() => wrapper.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    await expect(page.getByTestId("iron-settings-table")).toBeHidden();
+    await expect(page.getByTestId("iron-settings-cards")).toBeVisible();
+    await expectNoA11yViolations(page);
   }
+});
+
+test("at sm: and above the iron settings render as the table, cards hidden", async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 800 });
+  await goto(page);
+
+  await expect(page.getByTestId("iron-settings-table")).toBeVisible();
+  await expect(page.getByTestId("iron-settings-cards")).toBeHidden();
+
+  // The table itself still scrolls within its own bounded container if
+  // it's ever wider than its ancestor — this isn't meant to make the
+  // table narrower, just to stop it widening the page (#47).
+  const wrapper = page.getByTestId("iron-settings-table");
+  await expect
+    .poll(() => wrapper.evaluate((el) => el.scrollWidth <= el.clientWidth + 1))
+    .toBe(true);
+});
+
+test("editing an iron setting through the mobile card layout behaves identically to the table", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 800 });
+  await goto(page);
+
+  const cards = page.getByTestId("iron-settings-cards");
+  await cards.getByLabel("Setting 1 label").fill("E2E Mobile Setting");
+  await cards.getByLabel("Setting 1 makes steam").check();
+
+  await page.getByRole("button", { name: /Save changes/ }).click();
+  await expect(page.getByText("Showing your own machine.")).toBeVisible();
+
+  // Same state the table's Save would have written — persists to the
+  // same localStorage config, so a reload shows it back through the
+  // very card layout that wrote it.
+  await page.reload();
+  await page.waitForSelector('[data-hydrated="true"]');
+  await expect(page.getByTestId("iron-settings-cards").getByLabel("Setting 1 label")).toHaveValue(
+    "E2E Mobile Setting",
+  );
+  await expect(
+    page.getByTestId("iron-settings-cards").getByLabel("Setting 1 makes steam"),
+  ).toBeChecked();
 });
