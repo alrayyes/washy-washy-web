@@ -5,19 +5,14 @@ import {
   configFromJson,
   configToJson,
   type Instruction,
-  type Iron,
-  type IronSetting,
   instructionsFromRows,
   type Machine,
   mixTags,
-  parseMachine,
   type Row,
   rowsFromInstructions,
-  type Washer,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
 import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../lib/customConfig";
-import { slug } from "../lib/slug";
 import { colour } from "../lib/theme";
 import { IronDial, ProgramDial } from "./dials";
 
@@ -65,224 +60,59 @@ function SectionHeading({ children }: { children: string }) {
   );
 }
 
-/** Comma-separated, in order — matches how a dial's positions read naturally, and lets a visitor add/remove/reorder all at once instead of one item at a time. */
-function splitComma(value: string): string[] {
-  return value
-    .split(",")
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0);
-}
-
-function EditableField({
-  label,
-  id,
-  value,
-  hint,
-  onChange,
-}: {
-  label: string;
-  id: string;
-  value: string;
-  hint?: string;
-  onChange: (value: string) => void;
-}) {
+function ChipList({ values }: { values: readonly string[] }) {
   return (
-    <div>
-      <label htmlFor={id} className={FIELD_LABEL}>
-        {label}
-      </label>
-      <input
-        id={id}
-        className={`${TEXT_INPUT} border-line`}
-        type="text"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        aria-describedby={hint ? `${id}-hint` : undefined}
-      />
-      {hint && (
-        <p id={`${id}-hint`} className="mt-0.5 text-[0.65rem] text-muted">
-          {hint}
-        </p>
-      )}
+    <div className="mt-1 flex flex-wrap gap-1">
+      {values.map((value) => (
+        <span
+          key={value}
+          className="rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body"
+        >
+          {value}
+        </span>
+      ))}
     </div>
   );
 }
 
-function WasherEditor({
-  washer,
-  onChange,
-}: {
-  washer: Washer;
-  onChange: (washer: Washer) => void;
-}) {
-  function set<K extends keyof Washer>(key: K, value: Washer[K]) {
-    onChange({ ...washer, [key]: value });
-  }
+/**
+ * Read-only — editing lives on its own page (#30), reached via the link
+ * below, so machine setup isn't lost among fifteen-per-pile chart cards.
+ */
+function MachineSummary({ machine }: { machine: Machine }) {
+  const { washer, iron } = machine;
 
   return (
     <div className={CARD}>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <EditableField
-          label="Name"
-          id="washer-name"
-          value={washer.name}
-          onChange={(v) => set("name", v)}
-        />
-        <EditableField
-          label="Capacity"
-          id="washer-capacity"
-          value={washer.capacity}
-          onChange={(v) => set("capacity", v)}
-        />
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-base font-bold text-ink">
+          {washer.name} · {washer.capacity} · {iron.name}
+        </p>
+        <a
+          href="/config/machine"
+          className="shrink-0 rounded border border-line bg-white px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        >
+          Edit machine →
+        </a>
       </div>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <EditableField
-          label="Programmes"
-          id="washer-programs"
-          hint="Comma-separated, in dial order starting from twelve o'clock."
-          value={washer.programs.join(", ")}
-          onChange={(v) => set("programs", splitComma(v))}
-        />
-        <EditableField
-          label="Temperatures"
-          id="washer-temperatures"
-          hint="Comma-separated."
-          value={washer.temperatures.join(", ")}
-          onChange={(v) => set("temperatures", splitComma(v))}
-        />
-        <EditableField
-          label="Spin speeds"
-          id="washer-spins"
-          hint="Comma-separated."
-          value={washer.spins.join(", ")}
-          onChange={(v) => set("spins", splitComma(v))}
-        />
-        <EditableField
-          label="Buttons"
-          id="washer-options"
-          hint="Comma-separated."
-          value={washer.options.join(", ")}
-          onChange={(v) => set("options", splitComma(v))}
-        />
+        <div>
+          <p className={FIELD_LABEL}>Programmes</p>
+          <ChipList values={washer.programs} />
+        </div>
+        <div>
+          <p className={FIELD_LABEL}>Temperatures</p>
+          <ChipList values={washer.temperatures} />
+        </div>
+        <div>
+          <p className={FIELD_LABEL}>Spin speeds</p>
+          <ChipList values={washer.spins} />
+        </div>
+        <div>
+          <p className={FIELD_LABEL}>Iron settings</p>
+          <ChipList values={iron.settings.map((setting) => setting.label)} />
+        </div>
       </div>
-    </div>
-  );
-}
-
-function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => void }) {
-  function setSetting(index: number, patch: Partial<IronSetting>) {
-    onChange({
-      ...iron,
-      settings: iron.settings.map((setting, i) =>
-        i === index
-          ? { ...setting, ...patch, key: patch.label ? slug(patch.label) : setting.key }
-          : setting,
-      ),
-    });
-  }
-
-  function addSetting() {
-    onChange({
-      ...iron,
-      settings: [
-        ...iron.settings,
-        {
-          key: `setting-${iron.settings.length + 1}`,
-          dots: "•",
-          label: "New setting",
-          detail: "",
-          steam: false,
-        },
-      ],
-    });
-  }
-
-  function removeSetting(index: number) {
-    onChange({ ...iron, settings: iron.settings.filter((_, i) => i !== index) });
-  }
-
-  return (
-    <div className={CARD}>
-      <EditableField
-        label="Name"
-        id="iron-name"
-        value={iron.name}
-        onChange={(v) => onChange({ ...iron, name: v })}
-      />
-      <div className="mt-3 overflow-x-auto">
-        <table className="w-full min-w-[32rem] text-left text-sm">
-          <thead>
-            <tr className="border-b border-hairline text-xs text-body uppercase">
-              <th className="py-1 pr-3 font-semibold">Setting</th>
-              <th className="py-1 pr-3 font-semibold">Dots</th>
-              <th className="py-1 pr-3 font-semibold">Detail</th>
-              <th className="py-1 pr-3 font-semibold">Steam</th>
-              <th className="py-1 font-semibold">
-                <span className="sr-only">Remove</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {iron.settings.map((setting, index) => (
-              <tr key={setting.key} className="border-b border-hairline last:border-0">
-                <td className="py-1 pr-3">
-                  <input
-                    className={`${TEXT_INPUT} border-line`}
-                    aria-label={`Setting ${index + 1} label`}
-                    type="text"
-                    value={setting.label}
-                    onChange={(event) => setSetting(index, { label: event.target.value })}
-                  />
-                </td>
-                <td className="py-1 pr-3">
-                  <input
-                    className={`${TEXT_INPUT} w-16 border-line`}
-                    aria-label={`Setting ${index + 1} dots`}
-                    type="text"
-                    value={setting.dots}
-                    onChange={(event) => setSetting(index, { dots: event.target.value })}
-                  />
-                </td>
-                <td className="py-1 pr-3">
-                  <input
-                    className={`${TEXT_INPUT} border-line`}
-                    aria-label={`Setting ${index + 1} detail`}
-                    type="text"
-                    value={setting.detail}
-                    onChange={(event) => setSetting(index, { detail: event.target.value })}
-                  />
-                </td>
-                <td className="py-1 pr-3">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4"
-                    aria-label={`Setting ${index + 1} makes steam`}
-                    checked={setting.steam}
-                    onChange={(event) => setSetting(index, { steam: event.target.checked })}
-                  />
-                </td>
-                <td className="py-1">
-                  <button
-                    type="button"
-                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                    onClick={() => removeSetting(index)}
-                    aria-label={`Remove setting ${index + 1}`}
-                  >
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <button
-        type="button"
-        className="mt-2 rounded border border-line px-2 py-1 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        onClick={addSetting}
-      >
-        + Add setting
-      </button>
     </div>
   );
 }
@@ -740,8 +570,6 @@ function ChartCards({
  */
 export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   const [customConfig, setCustomConfig] = useState<Config | null>(null);
-  const [draftWasher, setDraftWasher] = useState<Washer>(machine.washer);
-  const [draftIron, setDraftIron] = useState<Iron>(machine.iron);
   const [draftRows, setDraftRows] = useState<Row[]>(() => rowsFromInstructions(bundledItems));
   const [saveError, setSaveError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -753,22 +581,12 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   useEffect(() => {
     const restored = readCustomConfig();
     setCustomConfig(restored);
-    setDraftWasher(restored?.machine.washer ?? machine.washer);
-    setDraftIron(restored?.machine.iron ?? machine.iron);
     setDraftRows(rowsFromInstructions(restored?.chart ?? bundledItems));
     setHydrated(true);
-    // machine and bundledItems only, not the draft/customConfig state:
-    // this restores once, the same as SheetViewer's mount effect — running
-    // it again on every render would stomp an in-progress edit.
-  }, [machine, bundledItems]);
-
-  // The machine chart rows are edited and validated against — live, not
-  // just the bundled one — so adding a programme above makes it pickable
-  // in a chart row's chips immediately, before Save.
-  const draftMachine = useMemo<Machine>(
-    () => ({ washer: draftWasher, iron: draftIron }),
-    [draftWasher, draftIron],
-  );
+    // bundledItems only, not the draft/customConfig state: this restores
+    // once, the same as SheetViewer's mount effect — running it again on
+    // every render would stomp an in-progress edit.
+  }, [bundledItems]);
 
   const activeConfig = useMemo<Config>(
     () => customConfig ?? { machine, chart: bundledItems },
@@ -800,13 +618,12 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
 
   function handleSave() {
     try {
-      // Machine and chart validated together, in that order — a machine
-      // edit that breaks the chart (a removed programme a row still uses)
-      // is what instructionsFromRows catches next, so the one error names
-      // whichever half is actually wrong.
-      const candidateMachine = parseMachine(draftMachine);
-      const parsedChart = instructionsFromRows(draftRows, candidateMachine);
-      const config: Config = { machine: candidateMachine, chart: parsedChart };
+      // Against the active machine — read-only here, editable on its own
+      // page (#30) — so an edit that no longer fits (an unknown programme,
+      // temperature or spin) is called out by row and column, not silently
+      // accepted.
+      const parsedChart = instructionsFromRows(draftRows, activeConfig.machine);
+      const config: Config = { machine: activeConfig.machine, chart: parsedChart };
       setCustomConfig(config);
       writeCustomConfig(config);
       setSaveError(null);
@@ -825,8 +642,6 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
       .then((text) => {
         const config = configFromJson(text);
         setCustomConfig(config);
-        setDraftWasher(config.machine.washer);
-        setDraftIron(config.machine.iron);
         setDraftRows(rowsFromInstructions(config.chart));
         writeCustomConfig(config);
         setUploadError(null);
@@ -839,8 +654,6 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   function handleClear() {
     clearCustomConfig();
     setCustomConfig(null);
-    setDraftWasher(machine.washer);
-    setDraftIron(machine.iron);
     setDraftRows(rowsFromInstructions(bundledItems));
     setSaveError(null);
     setUploadError(null);
@@ -888,10 +701,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
 
       <section className={SECTION}>
         <h2 className={SECTION_HEADING}>Machine</h2>
-        <div className="flex flex-col gap-4">
-          <WasherEditor washer={draftWasher} onChange={setDraftWasher} />
-          <IronEditor iron={draftIron} onChange={setDraftIron} />
-        </div>
+        <MachineSummary machine={activeConfig.machine} />
       </section>
 
       <section className={SECTION}>
@@ -920,7 +730,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
         </div>
         <ChartCards
           rows={displayRows}
-          machine={draftMachine}
+          machine={activeConfig.machine}
           onChange={(index, key, value) => handleCellChange(sortedIndices[index], key, value)}
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">

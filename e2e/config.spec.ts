@@ -17,14 +17,17 @@ async function downloadedConfig(page: Page) {
   );
 }
 
-test("shows the machine's washer and iron settings, not a raw JSON dump", async ({ page }) => {
+test("shows a read-only machine summary, with a link to edit it", async ({ page }) => {
   await goto(page);
 
-  await expect(page.locator("#washer-name")).toHaveValue(/Generic front loader/);
-  await expect(page.locator("#iron-name")).toHaveValue(/Generic steam iron/);
+  await expect(page.getByText(/Generic front loader/)).toBeVisible();
+  await expect(page.getByText(/Generic steam iron/)).toBeVisible();
   // A raw dump would read as one giant blob of braces and quotes; a
   // structured page has program names as their own visible list items.
   await expect(page.locator("pre")).toHaveCount(0);
+
+  const editLink = page.getByRole("link", { name: /Edit machine/ });
+  await expect(editLink).toHaveAttribute("href", "/config/machine");
 });
 
 test("shows every pile in the bundled chart", async ({ page }) => {
@@ -125,22 +128,6 @@ test("an invalid edit names the row and column, and isn't applied", async ({ pag
   await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
 });
 
-test("an edit that breaks the chart's validity against the machine is called out", async ({
-  page,
-}) => {
-  await goto(page);
-
-  // The bundled chart's first row uses "Cottons" (data/washing-instructions.csv.dist)
-  // — drop it from the washer, keeping enough other programmes that this is
-  // a row-level mismatch, not the machine itself failing to parse.
-  await page.getByLabel("Programmes").fill("Off, Synthetics");
-  await page.getByRole("button", { name: /Save changes/ }).click();
-
-  await expect(page.getByRole("alert")).toContainText(/row \d+, column "program"/);
-  // The bad edit never took: still the bundled config, not a half-applied one.
-  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
-});
-
 test("chips and pills all apply and download correctly", async ({ page }) => {
   await goto(page);
 
@@ -217,31 +204,6 @@ test("downloading the config from the config page reflects an edit", async ({ pa
 
   const config = await downloadedConfig(page);
   expect(config.chart[0].notes).toBe("Download E2E note");
-});
-
-test("editing the washer applies live, before Save, and downloads with the config", async ({
-  page,
-}) => {
-  await goto(page);
-
-  const card = page.locator('[data-testid="chart-cards"] > article').first();
-  await expect(card.locator('[data-testid="chip-temperature-99"]')).toHaveCount(0);
-
-  // Add a temperature the bundled machine doesn't have, appended rather
-  // than replacing the list wholesale — some other row in the chart may
-  // use a temperature this test doesn't otherwise know about. A chart
-  // card's chips read the draft machine live, not just the bundled one,
-  // so the new chip should appear before Save is even clicked.
-  const temperatureField = page.locator("#washer-temperatures");
-  await temperatureField.fill(`${await temperatureField.inputValue()}, 99`);
-  await expect(card.locator('[data-testid="chip-temperature-99"]')).toBeVisible();
-
-  await page.locator("#washer-name").fill("E2E Custom Washer");
-  await page.getByRole("button", { name: /Save changes/ }).click();
-
-  const config = await downloadedConfig(page);
-  expect(config.machine.washer.name).toBe("E2E Custom Washer");
-  expect(config.machine.washer.temperatures).toContain("99");
 });
 
 test("uploading a config, downloading it back out, and clearing it round-trip", async ({
