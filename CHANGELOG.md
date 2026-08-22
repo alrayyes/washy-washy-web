@@ -1,3 +1,9 @@
+## [1.10.1](https://github.com/alrayyes/washy-washy-web/compare/v1.10.0...v1.10.1) (2026-08-22)
+
+### Bug Fixes
+
+* config-page cards lose their headings ([#78](https://github.com/alrayyes/washy-washy-web/issues/78)) ([3427901](https://github.com/alrayyes/washy-washy-web/commit/34279018042ca5c61e7ba11d13493241527be05b)), closes [#51](https://github.com/alrayyes/washy-washy-web/issues/51)
+
 ## [1.10.0](https://github.com/alrayyes/washy-washy-web/compare/v1.9.0...v1.10.0) (2026-08-22)
 
 ### Features
