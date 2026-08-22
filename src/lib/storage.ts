@@ -1,8 +1,9 @@
 import { type Variant, variants } from "@washy-washy/core/browser";
+import type { AdvancedFilters } from "./filter";
 
 const KEY = "washy-washy:filters";
 
-export interface StoredFilters {
+export interface StoredFilters extends AdvancedFilters {
   cut: Variant;
   pileQuery: string;
 }
@@ -11,8 +12,13 @@ function isVariant(value: unknown): value is Variant {
   return typeof value === "string" && (variants as readonly string[]).includes(value);
 }
 
+/** A field this repo added after `cut`/`pileQuery` shipped — a value stored before #8 won't have it, so it falls back to "no filter" rather than being rejected outright. */
+function readOptionalString(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
 /**
- * The last cut/pile filter, read back for a returning visit.
+ * The last cut/pile/advanced filter, read back for a returning visit.
  *
  * Wrapped in a `try`, not just an availability check: private browsing can
  * throw on `localStorage` itself rather than leaving it `undefined`, a full
@@ -27,14 +33,22 @@ export function readFilters(): StoredFilters | null {
     if (raw === null) return null;
     const parsed: unknown = JSON.parse(raw);
     if (
-      typeof parsed === "object" &&
-      parsed !== null &&
-      isVariant((parsed as Record<string, unknown>).cut) &&
-      typeof (parsed as Record<string, unknown>).pileQuery === "string"
+      typeof parsed !== "object" ||
+      parsed === null ||
+      !isVariant((parsed as Record<string, unknown>).cut) ||
+      typeof (parsed as Record<string, unknown>).pileQuery !== "string"
     ) {
-      return parsed as StoredFilters;
+      return null;
     }
-    return null;
+    const record = parsed as Record<string, unknown>;
+    return {
+      cut: record.cut as Variant,
+      pileQuery: record.pileQuery as string,
+      program: readOptionalString(record.program),
+      temperature: readOptionalString(record.temperature),
+      spin: readOptionalString(record.spin),
+      detergentQuery: readOptionalString(record.detergentQuery),
+    };
   } catch {
     return null;
   }
