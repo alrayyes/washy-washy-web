@@ -25,7 +25,7 @@ const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
 const CARD = "rounded-lg border border-hairline bg-panel p-4";
 const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
 const TEXT_INPUT =
-  "w-full min-w-[8rem] rounded border border-transparent bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none";
+  "w-full min-w-[8rem] rounded border border-transparent bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 const BUTTON_PRIMARY =
   "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 const BUTTON_SECONDARY =
@@ -407,7 +407,7 @@ function ChartCards({
               <div className="w-20 shrink-0 text-center">
                 <ProgramDial program={row.program} washer={washer} size={78} />
                 <select
-                  className="mt-1 w-full rounded border border-transparent bg-transparent px-0 text-center text-xs font-bold text-ink hover:border-line focus:border-accent focus:bg-white focus:outline-none"
+                  className="mt-1 w-full rounded border border-transparent bg-transparent px-0 text-center text-xs font-bold text-ink hover:border-line focus:border-accent focus:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   name="program"
                   aria-label="Programme"
                   value={row.program}
