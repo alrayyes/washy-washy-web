@@ -19,6 +19,10 @@ const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
 // needs the room, varies.
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
+// Astro's directory build format gives static pages a trailing-slash
+// pathname ("/config/"), so this is a prefix check, not `path === "/config"`
+// — and Machine gets its own link now, so Washing loads must exclude it.
+const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent";
 const NAV_LINK_ACTIVE = "text-accent";
 const NAV_LINK_INACTIVE = "text-body";
@@ -65,8 +69,8 @@ const NAV_LINK_INACTIVE = "text-body";
         aria-label="Site"
       >
         {/* The right padding clears the "Fork me on GitHub" corner ribbon
-        (.gh-ribbon in global.css) — without it, "Config" sits under the
-        ribbon's diagonal strip at both viewport sizes. */}
+        (.gh-ribbon in global.css) — without it, the last link sits under
+        the ribbon's diagonal strip at both viewport sizes. */}
         <a
           href="/"
           aria-current={path === "/" ? "page" : undefined}
@@ -76,10 +80,17 @@ const NAV_LINK_INACTIVE = "text-body";
         </a>
         <a
           href="/config"
-          aria-current={path.startsWith("/config") ? "page" : undefined}
-          class={`${NAV_LINK} ${path.startsWith("/config") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+          aria-current={isWashingLoads ? "page" : undefined}
+          class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
         >
-          Config
+          Washing loads
+        </a>
+        <a
+          href="/config/machine"
+          aria-current={path.startsWith("/config/machine") ? "page" : undefined}
+          class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        >
+          Machine
         </a>
       </nav>
     </header>

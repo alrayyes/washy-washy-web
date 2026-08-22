@@ -430,7 +430,7 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
           href="/config"
           className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
         >
-          the config page
+          the washing loads page
         </a>{" "}
         reads.
       </p>

@@ -73,19 +73,36 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
   expect(names).toContain("Zzz Edited Pile");
 });
 
-test("the nav reaches both pages, in both directions", async ({ page }) => {
+test("the nav reaches all three pages, each marking only itself active", async ({ page }) => {
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
   const nav = page.getByRole("navigation", { name: "Site" });
 
   await expect(nav.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
-  await expect(nav.getByRole("link", { name: "Config" })).not.toHaveAttribute("aria-current");
+  await expect(nav.getByRole("link", { name: "Washing loads" })).not.toHaveAttribute(
+    "aria-current",
+  );
+  await expect(nav.getByRole("link", { name: "Machine" })).not.toHaveAttribute("aria-current");
 
-  await nav.getByRole("link", { name: "Config" }).click();
+  await nav.getByRole("link", { name: "Washing loads" }).click();
   await expect(page).toHaveURL(/\/config\/?$/);
   await page.waitForSelector('[data-hydrated="true"]');
-  await expect(nav.getByRole("link", { name: "Config" })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Washing loads" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   await expect(nav.getByRole("link", { name: "Home" })).not.toHaveAttribute("aria-current");
+  await expect(nav.getByRole("link", { name: "Machine" })).not.toHaveAttribute("aria-current");
+
+  await nav.getByRole("link", { name: "Machine" }).click();
+  await expect(page).toHaveURL(/\/config\/machine\/?$/);
+  await page.waitForSelector('[data-hydrated="true"]');
+  await expect(nav.getByRole("link", { name: "Machine" })).toHaveAttribute("aria-current", "page");
+  // Nested under /config, but Machine has its own link now — Washing
+  // loads shouldn't also claim to be the current page.
+  await expect(nav.getByRole("link", { name: "Washing loads" })).not.toHaveAttribute(
+    "aria-current",
+  );
 
   await nav.getByRole("link", { name: "Home" }).click();
   await expect(page).toHaveURL(/\/$/);
