@@ -202,6 +202,53 @@ test("an invalid edit names the row and column, and isn't applied", async ({ pag
   await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
 });
 
+test("an invalid duration is flagged inline and blocks save", async ({ page }) => {
+  await goto(page);
+
+  const durationInput = page
+    .locator('[data-testid="chart-cards"] > article')
+    .first()
+    .getByRole("textbox", { name: "Duration" });
+  await durationInput.fill("abc");
+
+  await expect(durationInput).toHaveAttribute("aria-invalid", "true");
+  const hintId = await durationInput.getAttribute("aria-describedby");
+  await expect(page.locator(`#${hintId}`)).toBeVisible();
+  await expect(page.locator(`#${hintId}`)).toContainText(/H:MM/);
+
+  await page.getByRole("button", { name: /Save changes/ }).click();
+  await expect(page.getByRole("alert")).toContainText(/row \d+, column "duration"/);
+  await expect(page.getByRole("alert")).toContainText(/H:MM/);
+  // The bad edit never took: still the bundled config, not a half-applied one.
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("a valid duration round-trips through save and reload, ~ prefix included", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const durationInput = page
+    .locator('[data-testid="chart-cards"] > article')
+    .first()
+    .getByRole("textbox", { name: "Duration" });
+  await durationInput.fill("2:30");
+  await expect(durationInput).toHaveAttribute("aria-invalid", "false");
+  await page.getByRole("button", { name: /Save changes/ }).click();
+
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+  const chart = (await downloadedConfig(page)).chart;
+  expect(chart[0].duration).toBe("~2:30");
+
+  await page.reload();
+  await page.waitForSelector('[data-hydrated="true"]');
+  await expect(
+    page.locator('[data-testid="chart-cards"] > article').first().getByRole("textbox", {
+      name: "Duration",
+    }),
+  ).toHaveValue("2:30");
+});
+
 test("chips and pills all apply and download correctly", async ({ page }) => {
   await goto(page);
 
