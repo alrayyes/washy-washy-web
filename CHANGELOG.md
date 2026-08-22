@@ -1,3 +1,9 @@
+## [1.13.0](https://github.com/alrayyes/washy-washy-web/compare/v1.12.4...v1.13.0) (2026-08-22)
+
+### Features
+
+* dark mode via prefers-color-scheme ([#98](https://github.com/alrayyes/washy-washy-web/issues/98)) ([56d1bb5](https://github.com/alrayyes/washy-washy-web/commit/56d1bb52ab034ab4fea2b88c6ffce4202fc0c8df)), closes [#60](https://github.com/alrayyes/washy-washy-web/issues/60) [#62](https://github.com/alrayyes/washy-washy-web/issues/62)
+
 ## [1.12.4](https://github.com/alrayyes/washy-washy-web/compare/v1.12.3...v1.12.4) (2026-08-22)
 
 ### Bug Fixes
