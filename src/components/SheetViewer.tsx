@@ -36,19 +36,39 @@ const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no"
  * of the field's own `<label>`, never nested inside it — a `<button>`
  * inside a `<label>` is invalid HTML and unreliable with assistive tech.
  */
+// w-48 in px, plus a little slack for the box's own border/shadow — the
+// threshold this file's open handler checks available space against
+// before deciding whether the tooltip needs to open from the right
+// edge instead of the left (#59).
+const TOOLTIP_WIDTH = 208;
+
 function HelpBubble({ id, text }: { id: string; text: string }) {
   const [open, setOpen] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  function toggleOpen() {
+    setOpen((value) => {
+      const next = !value;
+      if (next && buttonRef.current) {
+        const { left } = buttonRef.current.getBoundingClientRect();
+        setAlignRight(window.innerWidth - left < TOOLTIP_WIDTH);
+      }
+      return next;
+    });
+  }
 
   return (
     <span className="relative inline-block normal-case">
       <button
+        ref={buttonRef}
         type="button"
         className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-xs font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label="What does this do?"
         aria-expanded={open}
         aria-controls={id}
         aria-describedby={open ? id : undefined}
-        onClick={() => setOpen((value) => !value)}
+        onClick={toggleOpen}
         onBlur={() => setOpen(false)}
         onKeyDown={(event) => {
           if (event.key === "Escape") setOpen(false);
@@ -60,7 +80,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
         <span
           id={id}
           role="tooltip"
-          className="absolute top-full left-0 z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-white p-2 text-xs font-normal text-body shadow-md"
+          className={`absolute top-full z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-white p-2 text-xs font-normal text-body shadow-md ${alignRight ? "right-0" : "left-0"}`}
         >
           {text}
         </span>

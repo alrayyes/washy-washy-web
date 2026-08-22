@@ -111,6 +111,29 @@ test("a filter's help bubble announces its text without opening the field", asyn
   await expect(tooltip).toHaveAttribute("role", "tooltip");
 });
 
+test("every help bubble stays inside a 320px viewport when opened", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await goto(page);
+
+  const buttons = page.getByRole("button", { name: "What does this do?" });
+  const count = await buttons.count();
+  for (let i = 0; i < count; i++) {
+    const button = buttons.nth(i);
+    await button.click();
+    const id = await button.getAttribute("aria-controls");
+    const tooltip = page.locator(`#${id}`);
+    const box = await tooltip.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box?.x).toBeGreaterThanOrEqual(0);
+    expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(320);
+    await button.click();
+  }
+
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual(320);
+});
+
 test("the download button generates a PDF only when clicked, not before", async ({ page }) => {
   await goto(page);
 
