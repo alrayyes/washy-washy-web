@@ -1,3 +1,9 @@
+## [1.17.0](https://github.com/alrayyes/washy-washy-web/compare/v1.16.0...v1.17.0) (2026-08-22)
+
+### Features
+
+* surface an instruction's referenceName/referenceLink on the sheet ([#79](https://github.com/alrayyes/washy-washy-web/issues/79)) ([#106](https://github.com/alrayyes/washy-washy-web/issues/106)) ([ce295e3](https://github.com/alrayyes/washy-washy-web/commit/ce295e3a234187e37783a88f45677af068b084a4))
+
 ## [1.16.0](https://github.com/alrayyes/washy-washy-web/compare/v1.15.0...v1.16.0) (2026-08-22)
 
 ### Features
