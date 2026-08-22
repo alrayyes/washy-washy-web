@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/alrayyes/washy-washy-web/compare/v1.2.0...v1.3.0) (2026-08-22)
+
+### Features
+
+* add link-preview meta tags ([#28](https://github.com/alrayyes/washy-washy-web/issues/28)) ([19c97d8](https://github.com/alrayyes/washy-washy-web/commit/19c97d89385aa0e745ee62550ec35fbc9986039f)), closes [#26](https://github.com/alrayyes/washy-washy-web/issues/26)
+
 ## [1.2.0](https://github.com/alrayyes/washy-washy-web/compare/v1.1.0...v1.2.0) (2026-08-22)
 
 ### Features
