@@ -22,7 +22,7 @@ export default defineConfig({
     starlight({
       title: "Washy washy docs",
       description:
-        "How to install and use the washy-washy CLI, and how the web app's filters, uploads and persisted state work.",
+        "How to use washy-washy: the web app's filters, uploads and persisted state, the chart and machine file format, and generating a config with AI.",
       social: [
         { icon: "github", label: "GitHub", href: "https://github.com/alrayyes/washy-washy" },
       ],
@@ -31,7 +31,6 @@ export default defineConfig({
       },
       sidebar: [
         { label: "Overview", link: "/docs/" },
-        { label: "Install and run the CLI", link: "/docs/installing/" },
         { label: "The chart and machine files", link: "/docs/chart-and-machine/" },
         { label: "Using the web app", link: "/docs/web-app/" },
         { label: "Generate a config with AI", link: "/docs/ai-prompt/" },

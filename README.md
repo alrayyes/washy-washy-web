@@ -26,10 +26,10 @@ from the page.
   preview
 
 See [`/docs`](https://washy-washy.ryankes.eu/docs/) for a proper docs site
-covering both this app and [the CLI](https://github.com/alrayyes/washy-washy-cli)
-— installation, the chart and machine file formats, the web app's filters and
-persisted state, and a prompt for generating a config from photos of your
-appliances with an AI chat tool.
+covering this app — the chart and machine file formats, the web app's filters
+and persisted state, and a prompt for generating a config from photos of your
+appliances with an AI chat tool. [The CLI](https://github.com/alrayyes/washy-washy-cli)
+has its own README for installing and running it.
 
 ## Installation
 
