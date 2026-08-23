@@ -14,7 +14,8 @@ const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
 // Astro's directory build format gives static pages a trailing-slash
 // pathname ("/config/"), so this is a prefix check, not `path === "/config"`
-// — and Machine gets its own link now, so Washing loads must exclude it.
+// — and /config/machine ("Washer & iron") gets its own link now, so
+// Washing loads must exclude it.
 const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
 const isDocs = path.startsWith("/docs");
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
@@ -64,7 +65,7 @@ const NAV_LINK_INACTIVE = "text-body";
         aria-current={path.startsWith("/config/machine") ? "page" : undefined}
         class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Machine
+        Washer &amp; iron
       </a>
       <a
         href="/docs/"
