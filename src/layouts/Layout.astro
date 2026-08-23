@@ -26,6 +26,7 @@ const path = Astro.url.pathname;
 // pathname ("/config/"), so this is a prefix check, not `path === "/config"`
 // — and Machine gets its own link now, so Washing loads must exclude it.
 const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
+const isDocs = path.startsWith("/docs");
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
 const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";
@@ -122,6 +123,13 @@ const NAV_LINK_INACTIVE = "text-body";
           >
             Machine
           </a>
+          <a
+            href="/docs/"
+            aria-current={isDocs ? "page" : undefined}
+            class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+          >
+            Docs
+          </a>
         </nav>
         <HeaderUpload client:load />
         <ThemeToggle client:load />
@@ -151,12 +159,6 @@ const NAV_LINK_INACTIVE = "text-body";
             class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
           >
             Washy washy on GitHub
-          </a>
-          <a
-            href="/docs/"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-          >
-            Docs
           </a>
           <a
             href="/disclaimer"

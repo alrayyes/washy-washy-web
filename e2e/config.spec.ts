@@ -143,7 +143,9 @@ test("sort-by is a real radiogroup: arrow keys move selection via native radio b
   await expect(chartOrder).toBeChecked();
 });
 
-test("the nav reaches all three pages, each marking only itself active", async ({ page }) => {
+test("the nav reaches the app's own three pages, each marking only itself active, and Docs starts inactive", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
   const nav = page.getByRole("navigation", { name: "Site" });
@@ -153,6 +155,7 @@ test("the nav reaches all three pages, each marking only itself active", async (
     "aria-current",
   );
   await expect(nav.getByRole("link", { name: "Machine" })).not.toHaveAttribute("aria-current");
+  await expect(nav.getByRole("link", { name: "Docs" })).not.toHaveAttribute("aria-current");
 
   await nav.getByRole("link", { name: "Washing loads" }).click();
   await expect(page).toHaveURL(/\/config\/?$/);
@@ -173,6 +176,13 @@ test("the nav reaches all three pages, each marking only itself active", async (
   await expect(nav.getByRole("link", { name: "Washing loads" })).not.toHaveAttribute(
     "aria-current",
   );
+
+  // Docs isn't clicked through here the way the other three are: /docs is
+  // a separate Starlight-rendered site that doesn't share this layout (or
+  // this nav) at all yet (#114), so there's nothing on that page to assert
+  // aria-current against. e2e/docs.spec.ts covers the link itself reaching
+  // /docs; this test only needs the initial "not active from Home" check
+  // above, which already exercises isDocs's false branch.
 
   await nav.getByRole("link", { name: "Home" }).click();
   await expect(page).toHaveURL(/\/$/);
