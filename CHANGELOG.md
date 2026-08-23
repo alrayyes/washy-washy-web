@@ -1,3 +1,9 @@
+## [1.24.0](https://github.com/alrayyes/washy-washy-web/compare/v1.23.0...v1.24.0) (2026-08-23)
+
+### Features
+
+* adopt renderCard for the per-card download ([#129](https://github.com/alrayyes/washy-washy-web/issues/129)) ([0fd5c9c](https://github.com/alrayyes/washy-washy-web/commit/0fd5c9c550ff2d5e69e183ecaf338e1b5b15e4c8))
+
 ## [1.23.0](https://github.com/alrayyes/washy-washy-web/compare/v1.22.0...v1.23.0) (2026-08-23)
 
 ### Features
