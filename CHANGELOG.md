@@ -1,3 +1,9 @@
+## [1.26.0](https://github.com/alrayyes/washy-washy-web/compare/v1.25.0...v1.26.0) (2026-08-23)
+
+### Features
+
+* capture light and dark docs screenshots, toggled by theme ([#131](https://github.com/alrayyes/washy-washy-web/issues/131)) ([9bd0ded](https://github.com/alrayyes/washy-washy-web/commit/9bd0dedfe3d759e8f6bb3e0e98706cbea3120dc6)), closes [114/#126](https://github.com/114/washy-washy-web/issues/126) [#132](https://github.com/alrayyes/washy-washy-web/issues/132)
+
 ## [1.25.0](https://github.com/alrayyes/washy-washy-web/compare/v1.24.0...v1.25.0) (2026-08-23)
 
 ### Features
