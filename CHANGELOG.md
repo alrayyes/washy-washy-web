@@ -1,3 +1,9 @@
+## [1.20.1](https://github.com/alrayyes/washy-washy-web/compare/v1.20.0...v1.20.1) (2026-08-23)
+
+### Bug Fixes
+
+* centre the footer's content ([#120](https://github.com/alrayyes/washy-washy-web/issues/120)) ([72d1aba](https://github.com/alrayyes/washy-washy-web/commit/72d1abaf7348e87dfca518c61e0841965821c05f)), closes [#70](https://github.com/alrayyes/washy-washy-web/issues/70)
+
 ## [1.20.0](https://github.com/alrayyes/washy-washy-web/compare/v1.19.0...v1.20.0) (2026-08-23)
 
 ### Features
