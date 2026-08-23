@@ -1,0 +1,24 @@
+---
+/**
+ * Overrides Starlight's default mobile "on this page" bar, which is
+ * `position: fixed` pinned at an offset derived from `--sl-nav-height` —
+ * same reasoning as this directory's MobileMenuToggle.astro: that offset
+ * only means something when the header above it is also fixed, which
+ * ours no longer is (#114, full parity). Renders in normal flow instead.
+ */
+import Default from "@astrojs/starlight/components/MobileTableOfContents.astro";
+---
+
+<div class="site-mobile-toc">
+  <Default />
+</div>
+
+<style>
+  /* Wins over the original's `@layer starlight.core` rule without
+     needing !important — an unlayered rule always beats any named
+     layer, regardless of specificity, and this block isn't in one. */
+  .site-mobile-toc :global(nav) {
+    position: static;
+    border-top: none;
+  }
+</style>

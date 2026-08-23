@@ -1,0 +1,13 @@
+---
+/**
+ * Overrides Starlight's own header with the site's, via astro.config.mjs's
+ * starlight({ components: { Header: ... } }) — so /docs reads as part of
+ * washy-washy rather than a separate site bolted on next to it (#114).
+ * Starlight's own header content (SiteTitle, Search, LanguageSelect,
+ * SocialIcons, ThemeSelect) is fully replaced, deliberately including
+ * search — the end-user docs don't need it (user decision, 2026-08-23).
+ */
+import SiteHeader from "../SiteHeader.astro";
+---
+
+<SiteHeader />

@@ -29,6 +29,42 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/alrayyes/washy-washy-web/edit/main/",
       },
+      // The site's own header and page frame, not Starlight's — so
+      // /docs reads as part of washy-washy rather than a separate site
+      // bolted on next to it (#114). Starlight itself stays exactly as
+      // the docs engine; only its chrome components are swapped, via its
+      // own documented override mechanism. Starlight's own "Footer" is
+      // deliberately NOT overridden — that's the per-page EditLink/
+      // LastUpdated/Pagination strip inside the article, not the
+      // site-wide footer (which PageFrame's override already appends);
+      // overriding it too would show two copyright footers stacked. Its
+      // optional "Built with Starlight" credit link is off by default
+      // (`credits: false`) and never enabled here, so nothing Starlight-
+      // branded reaches a visitor either way.
+      components: {
+        Header: "./src/components/starlight/Header.astro",
+        PageFrame: "./src/components/starlight/PageFrame.astro",
+        // Both fix the same problem as PageFrame above: Starlight's
+        // defaults are `position: fixed` at an offset derived from
+        // `--sl-nav-height`, which only makes sense below a header
+        // that's also fixed at that height — ours isn't (#114).
+        MobileMenuToggle: "./src/components/starlight/MobileMenuToggle.astro",
+        MobileTableOfContents: "./src/components/starlight/MobileTableOfContents.astro",
+        // Starlight ships its own independent dark/light system (a
+        // separate localStorage key, a second theme-select control) —
+        // these two replace it with the site's own, so there's one
+        // theme source of truth on every page, docs included.
+        ThemeProvider: "./src/components/starlight/ThemeProvider.astro",
+        ThemeSelect: "./src/components/starlight/ThemeSelect.astro",
+      },
+      // Loads Tailwind (and this site's own colour/theme variables) on
+      // docs pages too, since SiteHeader/SiteFooter above are styled with
+      // Tailwind utility classes same as everywhere else (#114).
+      customCss: ["./src/styles/global.css"],
+      // No search trigger in SiteHeader (#114, user decision) — skips
+      // building a pagefind index nothing queries, rather than shipping
+      // unused search assets in dist/.
+      pagefind: false,
       sidebar: [
         { label: "Overview", link: "/docs/" },
         { label: "The chart and machine files", link: "/docs/chart-and-machine/" },

@@ -1,0 +1,13 @@
+---
+/**
+ * Overrides Starlight's own theme bootstrap script with one reading this
+ * site's own storage key (`washy-washy:theme`, via SiteHeader's
+ * ThemeToggle) instead of Starlight's separate `starlight-theme` — one
+ * theme source of truth on every page, docs included (#114). See
+ * DOCS_THEME_BOOTSTRAP_SCRIPT's own comment for why this one always
+ * resolves and sets `data-theme` explicitly, unlike THEME_BOOTSTRAP_SCRIPT.
+ */
+import { DOCS_THEME_BOOTSTRAP_SCRIPT } from "../../lib/themePreference";
+---
+
+<script is:inline set:html={DOCS_THEME_BOOTSTRAP_SCRIPT} />

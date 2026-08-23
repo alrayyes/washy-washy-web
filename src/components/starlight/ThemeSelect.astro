@@ -1,0 +1,10 @@
+---
+/**
+ * Overrides Starlight's own theme picker with nothing — the site already
+ * has one (SiteHeader's ThemeToggle, via the ThemeProvider override
+ * below), and Starlight's own picker is a second, independent control
+ * with its own separate storage key (`starlight-theme`), unsynchronised
+ * with ours. Two theme controls that can silently disagree is worse than
+ * one (#114).
+ */
+---

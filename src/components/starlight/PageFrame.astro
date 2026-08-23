@@ -1,0 +1,120 @@
+---
+/**
+ * Overrides Starlight's own page frame so /docs pages behave exactly like
+ * the rest of the site: the header scrolls away with the page instead of
+ * staying pinned, and the sidebar scrolls with the content at desktop
+ * widths instead of staying fixed — full parity, not just matching
+ * colours (#114). The default PageFrame keeps both header and sidebar
+ * `position: fixed`, sized off a `--sl-nav-height` custom property; ours
+ * removes that entirely rather than trying to fit our own (variable-
+ * height, sometimes two-row) header into a fixed-height box.
+ *
+ * The mobile hamburger menu (`MobileMenuToggle`, `Sidebar`'s own content)
+ * is untouched — reused verbatim from Starlight, still a full-screen
+ * overlay when open, just anchored to the top of the viewport instead of
+ * below a fixed header that no longer exists.
+ */
+import MobileMenuToggle from "virtual:starlight/components/MobileMenuToggle";
+import SiteFooter from "../SiteFooter.astro";
+import SiteHeader from "../SiteHeader.astro";
+
+const { hasSidebar } = Astro.locals.starlightRoute;
+---
+
+<div class="page">
+  <SiteHeader />
+  <div class="content-frame">
+    {
+      hasSidebar && (
+        <nav
+          class="sidebar print:hidden"
+          aria-label={Astro.locals.t("sidebarNav.accessibleLabel")}
+        >
+          <MobileMenuToggle />
+          <div id="starlight__sidebar" class="sidebar-pane">
+            <div class="sidebar-content sl-flex">
+              <slot name="sidebar" />
+            </div>
+          </div>
+        </nav>
+      )
+    }
+    <div class="main-frame">
+      <slot />
+    </div>
+  </div>
+  <SiteFooter />
+</div>
+
+<style>
+  @layer starlight.core {
+    .page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .content-frame {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Mobile: the same full-screen toggle overlay Starlight ships, just
+       anchored to the viewport's own top (`inset: 0`) rather than below a
+       fixed header — there's no fixed header here to dodge. */
+    .sidebar-pane {
+      visibility: var(--sl-sidebar-visibility, hidden);
+      position: fixed;
+      z-index: var(--sl-z-index-menu);
+      inset: 0;
+      width: 100%;
+      background-color: var(--sl-color-black);
+      overflow-y: auto;
+      scrollbar-gutter: stable;
+    }
+
+    :global([aria-expanded="true"]) ~ .sidebar-pane {
+      --sl-sidebar-visibility: visible;
+    }
+
+    .sidebar-content {
+      height: 100%;
+      min-height: max-content;
+      padding: 1rem var(--sl-sidebar-pad-x) 0;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    @media (min-width: 50rem) {
+      .content-frame {
+        flex-direction: row;
+      }
+
+      /* Desktop: back in normal flow, side-by-side with .main-frame — no
+         more position: fixed, so it scrolls away with the rest of the
+         page instead of staying pinned while a long doc scrolls under
+         it. */
+      .sidebar-pane {
+        visibility: visible;
+        position: static;
+        z-index: auto;
+        inset: auto;
+        width: var(--sl-sidebar-width);
+        flex-shrink: 0;
+        background-color: var(--sl-color-bg-sidebar);
+        border-inline-end: 1px solid var(--sl-color-hairline-shade);
+        overflow-y: visible;
+      }
+
+      .sidebar-content {
+        height: auto;
+      }
+
+      .main-frame {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+  }
+</style>

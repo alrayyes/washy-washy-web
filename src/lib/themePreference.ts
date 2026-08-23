@@ -50,3 +50,29 @@ export const THEME_BOOTSTRAP_SCRIPT = `(function () {
     }
   } catch (e) {}
 })();`;
+
+/**
+ * Same key, same explicit-choice logic as THEME_BOOTSTRAP_SCRIPT above,
+ * but always resolves and sets `data-theme` — falling back to
+ * `prefers-color-scheme` when nothing's stored, rather than leaving the
+ * attribute untouched. Everywhere else, leaving it unset is correct:
+ * `color-scheme: light dark` plus `light-dark()` in global.css already
+ * follow the OS on their own. Starlight's docs pages need the explicit
+ * fallback too, though — `Page.astro` hardcodes `data-theme="dark"` at
+ * the server-render step (its own since-removed ThemeProvider was always
+ * meant to correct that client-side before paint), and Starlight's own
+ * internal styles (the sidebar, code blocks, admonitions, …) read that
+ * attribute directly with no media-query fallback of their own — left
+ * uncorrected, a light-OS-preference first-time visitor would see
+ * Starlight's own chrome stuck in dark mode while this site's own
+ * light-dark() colours correctly followed the OS (#114).
+ */
+export const DOCS_THEME_BOOTSTRAP_SCRIPT = `(function () {
+  try {
+    var stored = localStorage.getItem(${JSON.stringify(KEY)});
+    var theme = stored === "light" || stored === "dark"
+      ? stored
+      : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = theme;
+  } catch (e) {}
+})();`;
