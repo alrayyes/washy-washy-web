@@ -67,13 +67,30 @@ URL off.
 Next to the PDF download buttons sits **Share this
 view**, which sends the current page URL as-is — filters and all, since the
 address bar already carries them as query parameters (see Filters above), so
-there's nothing extra to package up. It tries the browser's native share
-sheet first (`navigator.share` — Messages, WhatsApp, AirDrop, whatever the OS
-offers), falling back to copying the URL to the clipboard — showing
-"Copied!" the same way a card's own Copy link button does — only when that
-API isn't available, or when it's available but genuinely fails. Cancelling
-the share sheet is neither: it's just declining that one method, so nothing
-else happens and nothing gets copied behind your back.
+there's nothing extra to package up.
+
+If you've got a custom machine or chart active (see
+[Bundled vs. active config](#bundled-vs-active-config)), the link also
+carries that whole setup, appended as a compressed `#config=` fragment.
+Whoever opens it gets your exact machine and chart, not just your filters —
+even in a browser that's never touched your `localStorage`. Nothing here
+touches a server either: a fragment is never sent over the network, so the
+link itself is still the entire transfer, the same as an uploaded config
+file. Once the page has read and saved it, it clears the fragment from the
+address bar — reload or share again from there and you get the site's
+normal short URL, not the one-time link. A link that's been corrupted or
+hand-edited shows the same row/column-scoped error an invalid config upload
+does, and the page falls back to whatever was already active rather than
+breaking. When nothing custom is active, the link is unchanged from
+before — filters only.
+
+It tries the browser's native share sheet first (`navigator.share` —
+Messages, WhatsApp, AirDrop, whatever the OS offers), falling back to
+copying the URL to the clipboard — showing "Copied!" the same way a card's
+own Copy link button does — only when that API isn't available, or when
+it's available but genuinely fails. Cancelling the share sheet is neither:
+it's just declining that one method, so nothing else happens and nothing
+gets copied behind your back.
 
 ## PDF export
 

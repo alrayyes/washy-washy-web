@@ -378,6 +378,70 @@ test("Share falls back to the clipboard when the native share sheet itself fails
   await expect(page.getByRole("alert")).toContainText("Could not share this view");
 });
 
+test("with a custom config active, Share carries the whole machine/chart in the link — a fresh browser opening it sees the exact same setup", async ({
+  page,
+  context,
+  browser,
+}) => {
+  const config = await downloadedConfig(page);
+  config.chart[0].notes = "E2E shared-config note";
+
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
+  });
+  await uploadConfig(page, config);
+
+  await page.getByTestId("share-sheet").click();
+  await expect(page.getByTestId("share-sheet")).toHaveText("Copied!");
+  const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
+  expect(sharedUrl).toContain("#config=");
+
+  // A brand-new browser context — no localStorage, no cookies, nothing
+  // shared with the browser that generated the link — is the actual
+  // claim here: "no server involved" means the link itself carries
+  // everything, not just a pointer into storage the recipient happens to
+  // already have.
+  const freshContext = await browser.newContext();
+  const freshPage = await freshContext.newPage();
+  await freshPage.goto(sharedUrl);
+  await freshPage.waitForSelector('[data-hydrated="true"]');
+
+  await expect(freshPage.getByText("Showing your own config.")).toBeVisible();
+  await expect(freshPage.locator("main").getByText("E2E shared-config note")).toBeVisible();
+  // Consumed: the (long) hash is gone from the address bar once the
+  // config's been read and persisted, so a reload or a re-share doesn't
+  // keep carrying it.
+  expect(await freshPage.evaluate(() => window.location.hash)).toBe("");
+  await freshContext.close();
+});
+
+test("with no custom config active, Share carries only filter state — no #config= hash for the bundled example", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
+  });
+  await goto(page);
+
+  await page.getByTestId("share-sheet").click();
+  const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
+
+  expect(sharedUrl).not.toContain("#config=");
+});
+
+test("a corrupted #config= hash is called out and falls back gracefully, without crashing the page", async ({
+  page,
+}) => {
+  await page.goto("/#config=not-valid-base64url-gzip-at-all");
+  await page.waitForSelector('[data-hydrated="true"]');
+
+  await expect(page.getByRole("alert")).toContainText("Could not open the shared config");
+  await expect(page.getByText(/Showing the bundled example chart/)).toBeVisible();
+});
+
 test("an uploaded config (from the config page) shows here too", async ({ page }) => {
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "E2E Custom Pile";

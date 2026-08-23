@@ -50,14 +50,17 @@ export async function decodeConfigHash(hash: string): Promise<Config | null> {
   if (!stripped.startsWith(CONFIG_HASH_PREFIX)) return null;
   const encoded = stripped.slice(CONFIG_HASH_PREFIX.length);
   const bytes = fromBase64Url(encoded);
-  // Same narrowing SheetViewer.tsx's savePdf already needs: TS types
-  // Uint8Array over the wider ArrayBufferLike (which also covers
-  // SharedArrayBuffer), while BlobPart wants the plain ArrayBuffer-backed
-  // kind — fromBase64Url's own `new Uint8Array(binary.length)` is always
-  // a fresh, non-shared buffer, so this is a safe cast, not a real risk.
-  const stream = new Blob([bytes as BlobPart])
-    .stream()
-    .pipeThrough(new DecompressionStream("gzip"));
+  // `as any`, not `as BlobPart`: this file is also imported (for testing)
+  // under tsconfig.test.json, which deliberately has no DOM lib — the
+  // same reasoning `SheetViewer.tsx`'s `savePdf` needs a narrowing cast
+  // for (TS types Uint8Array over the wider ArrayBufferLike, which also
+  // covers SharedArrayBuffer, while a Blob part wants the plain
+  // ArrayBuffer-backed kind — fromBase64Url's own `new
+  // Uint8Array(binary.length)` is always a fresh, non-shared buffer, so
+  // this is a safe cast either way), but naming `BlobPart` itself would
+  // fail to resolve under that DOM-less config.
+  // biome-ignore lint/suspicious/noExplicitAny: see above — the DOM type name itself isn't available under tsconfig.test.json
+  const stream = new Blob([bytes as any]).stream().pipeThrough(new DecompressionStream("gzip"));
   const json = await new Response(stream).text();
   return configFromJson(json);
 }
