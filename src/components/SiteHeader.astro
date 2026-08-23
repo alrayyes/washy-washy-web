@@ -1,0 +1,80 @@
+---
+/**
+ * The site's own header — extracted out of Layout.astro so a Starlight
+ * override component (src/components/starlight/Header.astro) can render
+ * the exact same header on /docs pages instead of Starlight's own (#114).
+ * Self-contained: reads Astro.url.pathname itself rather than taking a
+ * `path` prop, so both call sites stay trivial one-liners.
+ */
+import HeaderUpload from "./HeaderUpload";
+import Logo from "./Logo.astro";
+import ThemeToggle from "./ThemeToggle";
+
+const CHROME_WIDTH = "max-w-[90rem]";
+const path = Astro.url.pathname;
+// Astro's directory build format gives static pages a trailing-slash
+// pathname ("/config/"), so this is a prefix check, not `path === "/config"`
+// — and Machine gets its own link now, so Washing loads must exclude it.
+const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
+const isDocs = path.startsWith("/docs");
+const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
+const NAV_LINK_ACTIVE = "text-accent-text";
+const NAV_LINK_INACTIVE = "text-body";
+---
+
+<header
+  class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
+>
+  <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
+    <Logo size={32} />
+    <span class="font-heading text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
+  </a>
+  <div class="flex w-full flex-wrap items-center gap-3 md:w-auto md:flex-nowrap md:pr-32">
+    {/* `w-full` below `md` forces this whole group onto its own row
+    unconditionally (not just "wrap if it doesn't fit") — otherwise
+    there's a range of widths just under `md` where everything happens
+    to fit on the logo's row with no reserved space, and the last item
+    sits under the ribbon, or the nav links wrap awkwardly next to the
+    upload button. On its own row, the group starts from the left edge,
+    clear of the ribbon without needing padding. At `md` and up,
+    `w-auto` puts it back on the logo's row, where `pr-32` clears the
+    "Fork me on GitHub" ribbon (.gh-ribbon in global.css) instead
+    (#46) — applied to this wrapper, not `nav` itself, since the
+    upload control (#80) and the theme toggle (#111) are the trailing
+    elements now, not `nav`. The breakpoint moved from `sm` to `md`
+    when the upload button (#80) made the group wider than three nav
+    links alone needed. */}
+    <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
+      <a
+        href="/"
+        aria-current={path === "/" ? "page" : undefined}
+        class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+      >
+        Home
+      </a>
+      <a
+        href="/config"
+        aria-current={isWashingLoads ? "page" : undefined}
+        class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+      >
+        Washing loads
+      </a>
+      <a
+        href="/config/machine"
+        aria-current={path.startsWith("/config/machine") ? "page" : undefined}
+        class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+      >
+        Machine
+      </a>
+      <a
+        href="/docs/"
+        aria-current={isDocs ? "page" : undefined}
+        class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+      >
+        Docs
+      </a>
+    </nav>
+    <HeaderUpload client:load />
+    <ThemeToggle client:load />
+  </div>
+</header>

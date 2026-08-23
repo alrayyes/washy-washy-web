@@ -1,7 +1,6 @@
 ---
-import HeaderUpload from "../components/HeaderUpload";
-import Logo from "../components/Logo.astro";
-import ThemeToggle from "../components/ThemeToggle";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
 import { THEME_BOOTSTRAP_SCRIPT } from "../lib/themePreference";
 import "../styles/global.css";
 
@@ -16,20 +15,6 @@ const { title, description, wide = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL("/og-image.png", Astro.site);
 const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
-// The header and footer stay at the widest page's width on every page —
-// fixed regardless of `wide`, so switching between a narrow and a wide page
-// never shifts the nav links sideways. Only <main>, whose content actually
-// needs the room, varies.
-const CHROME_WIDTH = "max-w-[90rem]";
-const path = Astro.url.pathname;
-// Astro's directory build format gives static pages a trailing-slash
-// pathname ("/config/"), so this is a prefix check, not `path === "/config"`
-// — and Machine gets its own link now, so Washing loads must exclude it.
-const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
-const isDocs = path.startsWith("/docs");
-const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
-const NAV_LINK_ACTIVE = "text-accent-text";
-const NAV_LINK_INACTIVE = "text-body";
 ---
 
 <!doctype html>
@@ -79,111 +64,10 @@ const NAV_LINK_INACTIVE = "text-body";
         Fork me on GitHub
       </a>
     </div>
-    <header
-      class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
-    >
-      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
-        <Logo size={32} />
-        <span class="font-heading text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
-      </a>
-      <div class="flex w-full flex-wrap items-center gap-3 md:w-auto md:flex-nowrap md:pr-32">
-        {/* `w-full` below `md` forces this whole group onto its own row
-        unconditionally (not just "wrap if it doesn't fit") — otherwise
-        there's a range of widths just under `md` where everything happens
-        to fit on the logo's row with no reserved space, and the last item
-        sits under the ribbon, or the nav links wrap awkwardly next to the
-        upload button. On its own row, the group starts from the left edge,
-        clear of the ribbon without needing padding. At `md` and up,
-        `w-auto` puts it back on the logo's row, where `pr-32` clears the
-        "Fork me on GitHub" ribbon (.gh-ribbon in global.css) instead
-        (#46) — applied to this wrapper, not `nav` itself, since the
-        upload control (#80) and the theme toggle (#111) are the trailing
-        elements now, not `nav`. The breakpoint moved from `sm` to `md`
-        when the upload button (#80) made the group wider than three nav
-        links alone needed. */}
-        <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
-          <a
-            href="/"
-            aria-current={path === "/" ? "page" : undefined}
-            class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-          >
-            Home
-          </a>
-          <a
-            href="/config"
-            aria-current={isWashingLoads ? "page" : undefined}
-            class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-          >
-            Washing loads
-          </a>
-          <a
-            href="/config/machine"
-            aria-current={path.startsWith("/config/machine") ? "page" : undefined}
-            class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-          >
-            Machine
-          </a>
-          <a
-            href="/docs/"
-            aria-current={isDocs ? "page" : undefined}
-            class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-          >
-            Docs
-          </a>
-        </nav>
-        <HeaderUpload client:load />
-        <ThemeToggle client:load />
-      </div>
-    </header>
+    <SiteHeader />
     <main id="main" tabindex="-1" class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
       <slot />
     </main>
-    <footer
-      class={`mx-auto ${CHROME_WIDTH} border-t border-hairline px-4 py-8 text-sm text-muted sm:px-6`}
-    >
-      {/* Centred, not left-aligned like the header's own logo+nav row —
-      this content has no left anchor of its own since #70 dropped the
-      footer's brand mark, so pinning it to the left edge of the full
-      chrome-width bar just reads as debris on anything wider than a
-      phone. A centred link row plus a centred, width-capped paragraph
-      below it is the common shape for a footer with nothing more than
-      links and a copyright line (no multi-column sitemap to anchor
-      left) — Tailwind UI's own "Simple with links" footer template
-      earns its name doing exactly this, and it's the shape most
-      minimal/single-page sites converge on for the same reason (#115).
-      */}
-      <div class="flex flex-col items-center gap-2 text-center">
-        <div class="flex flex-wrap justify-center gap-x-4 gap-y-1">
-          <a
-            href="https://github.com/alrayyes/washy-washy"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-          >
-            Washy washy on GitHub
-          </a>
-          <a
-            href="/disclaimer"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-          >
-            Disclaimer
-          </a>
-          <a
-            href="/privacy"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-          >
-            Privacy policy
-          </a>
-        </div>
-        <p class="max-w-md text-xs text-muted">
-          {"© 2026 Ryan Kes. Licensed under the "}<a
-            href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-          >
-            GPL-3.0-or-later
-          </a>{
-            " — provided as-is, with no warranty of any kind (see the licence, sections 15–16). Always check a garment's own care label; this chart reflects one household's settings, not a manufacturer's guarantee."
-          }
-        </p>
-      </div>
-    </footer>
+    <SiteFooter />
   </body>
 </html>

@@ -111,6 +111,26 @@
 }
 
 /**
+ * Restores an underline on Starlight's own markdown-content links
+ * (`.sl-markdown-content a`, in Starlight's own `markdown.css`) —
+ * Starlight's rule only ever set the link's colour, relying on the
+ * browser's native `<a>` underline for the rest, same as it always had
+ * to since Tailwind wasn't loaded on docs pages before this file became
+ * their `customCss` too (#114). Tailwind's own reset removes that native
+ * underline (`a { text-decoration: inherit }`), which left prose links
+ * distinguished by colour alone — axe's `link-in-text-block` rule
+ * correctly flagged that as failing (2.04:1 contrast, under the 3:1 a
+ * colour-only distinction needs). Matches this site's own `LINK` style
+ * constant's underline treatment (`styles.ts`) rather than inventing a
+ * second one.
+ */
+.sl-markdown-content a:not(:where(.not-content *)) {
+  text-decoration: underline;
+  text-decoration-color: var(--color-hairline);
+  text-underline-offset: 2px;
+}
+
+/**
  * The "fork me on GitHub" corner ribbon. Hand-rolled rather than pulling in
  * github-fork-ribbon-css for twenty lines of CSS — one dependency to pin
  * and audit for a fixed diagonal box. Absolutely positioned (not fixed), so
