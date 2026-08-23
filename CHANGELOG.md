@@ -1,3 +1,9 @@
+## [1.19.0](https://github.com/alrayyes/washy-washy-web/compare/v1.18.1...v1.19.0) (2026-08-23)
+
+### Features
+
+* manual dark/light mode toggle ([#117](https://github.com/alrayyes/washy-washy-web/issues/117)) ([27237dc](https://github.com/alrayyes/washy-washy-web/commit/27237dc8b82605314656e10429171a405083cc93))
+
 ## [1.18.1](https://github.com/alrayyes/washy-washy-web/compare/v1.18.0...v1.18.1) (2026-08-23)
 
 ### Bug Fixes
