@@ -1,3 +1,9 @@
+## [1.23.0](https://github.com/alrayyes/washy-washy-web/compare/v1.22.0...v1.23.0) (2026-08-23)
+
+### Features
+
+* docs pages share the site's header, footer and theme system ([#126](https://github.com/alrayyes/washy-washy-web/issues/126)) ([4f432a3](https://github.com/alrayyes/washy-washy-web/commit/4f432a3f14573241fa88d12afa97f77fe0df890b))
+
 ## [1.22.0](https://github.com/alrayyes/washy-washy-web/compare/v1.21.0...v1.22.0) (2026-08-23)
 
 ### Features
