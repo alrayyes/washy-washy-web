@@ -128,6 +128,81 @@ test("the Advanced disclosure is closed by default and filters combine with pile
   await expect(page.locator("#filter-pile")).toHaveValue("sock");
 });
 
+test("every Advanced option offered, picked alone, still shows at least one pile", async ({
+  page,
+}) => {
+  await goto(page);
+  await page.getByText("Advanced", { exact: true }).click();
+
+  for (const id of ["#filter-program", "#filter-temperature", "#filter-spin"]) {
+    const select = page.locator(id);
+    const values = await select
+      .locator("option")
+      .evaluateAll((options) =>
+        options
+          .map((option) => (option as HTMLOptionElement).value)
+          .filter((value) => value !== ""),
+      );
+    // The machine's own capability list (#118's bug) can, and for the
+    // bundled example does, name a value no pile actually uses — an empty
+    // list here would silently pass this test for the wrong reason.
+    expect(values.length).toBeGreaterThan(0);
+
+    for (const value of values) {
+      await select.selectOption(value);
+      await expect(page.locator("article")).not.toHaveCount(0);
+      await expect(page.getByText(/No pile matches/)).toHaveCount(0);
+    }
+    await select.selectOption("");
+  }
+});
+
+test("picking a Programme narrows Temperature and Spin live, and every option they still offer works", async ({
+  page,
+}) => {
+  await goto(page);
+  await page.getByText("Advanced", { exact: true }).click();
+
+  const programSelect = page.locator("#filter-program");
+  const programValues = await programSelect
+    .locator("option")
+    .evaluateAll((options) =>
+      options.map((option) => (option as HTMLOptionElement).value).filter((value) => value !== ""),
+    );
+  await programSelect.selectOption(programValues[0] as string);
+
+  for (const id of ["#filter-temperature", "#filter-spin"]) {
+    const select = page.locator(id);
+    const values = await select
+      .locator("option")
+      .evaluateAll((options) =>
+        options
+          .map((option) => (option as HTMLOptionElement).value)
+          .filter((value) => value !== ""),
+      );
+    for (const value of values) {
+      await select.selectOption(value);
+      await expect(page.locator("article")).not.toHaveCount(0);
+      await select.selectOption("");
+    }
+  }
+});
+
+test("a detergent search matching nothing disables every Advanced select, and the panel still passes accessibility", async ({
+  page,
+}) => {
+  await goto(page);
+  await page.getByText("Advanced", { exact: true }).click();
+
+  await page.fill("#filter-detergent", "zzznonexistentdetergentzzz");
+
+  await expect(page.locator("#filter-program")).toBeDisabled();
+  await expect(page.locator("#filter-temperature")).toBeDisabled();
+  await expect(page.locator("#filter-spin")).toBeDisabled();
+
+  await expectNoA11yViolations(page);
+});
+
 test("a filter's help bubble announces its text without opening the field", async ({ page }) => {
   await goto(page);
 
