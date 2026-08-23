@@ -1,3 +1,9 @@
+## [1.18.1](https://github.com/alrayyes/washy-washy-web/compare/v1.18.0...v1.18.1) (2026-08-23)
+
+### Bug Fixes
+
+* remove the duplicate Washy washy link from the footer ([#70](https://github.com/alrayyes/washy-washy-web/issues/70)) ([af3d3c8](https://github.com/alrayyes/washy-washy-web/commit/af3d3c885a8596c4cf855284af43b91fefacaab3))
+
 ## [1.18.0](https://github.com/alrayyes/washy-washy-web/compare/v1.17.0...v1.18.0) (2026-08-22)
 
 ### Features
