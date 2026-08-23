@@ -39,6 +39,45 @@ test("shows every pile in the bundled chart", async ({ page }) => {
   await expect(rows).not.toHaveCount(0);
 });
 
+test("each chart card exposes an h3 heading that tracks the pile name", async ({ page }) => {
+  await goto(page);
+
+  const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
+  const heading = firstCard.getByRole("heading", { level: 3 });
+
+  await expect(heading).toHaveAccessibleName("White");
+
+  await firstCard.locator('input[name="clothing_type"]').fill("Renamed Pile");
+  await expect(heading).toHaveAccessibleName("Renamed Pile");
+});
+
+test("a cited row's card shows the source as a link, read-only", async ({ page }) => {
+  await goto(page);
+
+  const config = await downloadedConfig(page);
+  expect(config.chart[0].reference_name).toBe("");
+  config.chart[0].reference_name = "Which?";
+  config.chart[0].reference_link = "https://example.com/wash-guide";
+
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
+    name: "washy-washy.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(config, null, 2)),
+  });
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+
+  const firstCard = page.locator('[data-testid="chart-cards"] > article').first();
+  const link = firstCard.getByRole("link", { name: "Which?" });
+  await expect(link).toHaveAttribute("href", "https://example.com/wash-guide");
+  await expect(link).toHaveAttribute("target", "_blank");
+  await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+
+  // Every other card, still uncited, shows nothing new.
+  await expect(page.locator('[data-testid="chart-cards"] > article').nth(1)).not.toContainText(
+    "SOURCE",
+  );
+});
+
 function pileNames(page: Page) {
   return page
     .locator('[data-testid="chart-cards"] input[name="clothing_type"]')
@@ -65,7 +104,7 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
 
   await page
     .getByRole("radiogroup", { name: "Sort by" })
-    .getByRole("button", { name: "Pile" })
+    .getByRole("radio", { name: "Pile" })
     .click();
 
   const names = await pileNames(page);
@@ -73,6 +112,35 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
   // Sorting reorders the cards, it doesn't reset them — the edit above is
   // still there, now wherever "Zzz Edited Pile" alphabetizes to.
   expect(names).toContain("Zzz Edited Pile");
+});
+
+test("sort-by is a real radiogroup: arrow keys move selection via native radio behaviour", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const group = page.getByRole("radiogroup", { name: "Sort by" });
+  const chartOrder = group.getByRole("radio", { name: "Chart order" });
+  const pile = group.getByRole("radio", { name: "Pile" });
+
+  await expect(chartOrder).toBeChecked();
+  await expect(pile).not.toBeChecked();
+
+  // Real <input type="radio"> elements sharing a name: the browser handles
+  // roving tabindex and arrow-key movement natively — nothing here is this
+  // app's own code to re-verify, just that wiring onChange to setSortField
+  // actually reorders the chart when the browser moves the selection.
+  await chartOrder.focus();
+  await page.keyboard.press("ArrowRight");
+
+  await expect(pile).toBeChecked();
+  await expect(chartOrder).not.toBeChecked();
+
+  const names = await pileNames(page);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+
+  await page.keyboard.press("ArrowLeft");
+  await expect(chartOrder).toBeChecked();
 });
 
 test("the nav reaches all three pages, each marking only itself active", async ({ page }) => {
@@ -108,6 +176,52 @@ test("the nav reaches all three pages, each marking only itself active", async (
 
   await nav.getByRole("link", { name: "Home" }).click();
   await expect(page).toHaveURL(/\/$/);
+});
+
+test("the footer's legal links reach real pages with the site's own chrome", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForSelector('[data-hydrated="true"]');
+
+  await page.getByRole("link", { name: "Disclaimer" }).click();
+  await expect(page).toHaveURL(/\/disclaimer\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Disclaimer" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
+  // Scoped to <main> — the footer's own small print repeats this exact
+  // phrase on every page, including this one.
+  await expect(page.locator("main").getByText(/not a manufacturer's guarantee/)).toBeVisible();
+
+  await page.goto("/");
+  await page.getByRole("link", { name: "Privacy policy" }).click();
+  await expect(page).toHaveURL(/\/privacy\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Privacy policy" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
+  await expect(page.locator("main").getByText(/no cookies, no analytics/)).toBeVisible();
+});
+
+test("a skip-to-content link is the first tab stop on every page, and lands focus on main", async ({
+  page,
+}) => {
+  for (const path of ["/", "/config", "/config/machine"]) {
+    await page.goto(path);
+    await page.waitForSelector('[data-hydrated="true"]');
+
+    // Visually hidden until it holds focus — this is the check for that,
+    // not just that it exists in the DOM. `sr-only`'s `clip: rect(0,0,0,0)`
+    // still gives Playwright's toBeVisible() a non-empty 1x1px box (the
+    // same reason the chip radios needed opacity instead of sr-only, #49),
+    // so the bounding box's size is the real signal here, not toBeVisible.
+    const skipLink = page.getByRole("link", { name: "Skip to content" });
+    const hiddenBox = await skipLink.boundingBox();
+    expect(hiddenBox?.width).toBeLessThanOrEqual(1);
+
+    await page.keyboard.press("Tab");
+    await expect(skipLink).toBeFocused();
+    const visibleBox = await skipLink.boundingBox();
+    expect(visibleBox?.width).toBeGreaterThan(1);
+
+    await skipLink.press("Enter");
+    await expect(page.locator("main")).toBeFocused();
+  }
 });
 
 test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ page }) => {
@@ -159,6 +273,53 @@ test("an invalid edit names the row and column, and isn't applied", async ({ pag
   await expect(page.getByRole("alert")).toContainText("must not be empty");
   // The bad edit never took: still the bundled config, not a half-applied one.
   await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("an invalid duration is flagged inline and blocks save", async ({ page }) => {
+  await goto(page);
+
+  const durationInput = page
+    .locator('[data-testid="chart-cards"] > article')
+    .first()
+    .getByRole("textbox", { name: "Duration" });
+  await durationInput.fill("abc");
+
+  await expect(durationInput).toHaveAttribute("aria-invalid", "true");
+  const hintId = await durationInput.getAttribute("aria-describedby");
+  await expect(page.locator(`#${hintId}`)).toBeVisible();
+  await expect(page.locator(`#${hintId}`)).toContainText(/H:MM/);
+
+  await page.getByRole("button", { name: /Save changes/ }).click();
+  await expect(page.getByRole("alert")).toContainText(/row \d+, column "duration"/);
+  await expect(page.getByRole("alert")).toContainText(/H:MM/);
+  // The bad edit never took: still the bundled config, not a half-applied one.
+  await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("a valid duration round-trips through save and reload, ~ prefix included", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const durationInput = page
+    .locator('[data-testid="chart-cards"] > article')
+    .first()
+    .getByRole("textbox", { name: "Duration" });
+  await durationInput.fill("2:30");
+  await expect(durationInput).toHaveAttribute("aria-invalid", "false");
+  await page.getByRole("button", { name: /Save changes/ }).click();
+
+  await expect(page.getByText("Showing your own config.")).toBeVisible();
+  const chart = (await downloadedConfig(page)).chart;
+  expect(chart[0].duration).toBe("~2:30");
+
+  await page.reload();
+  await page.waitForSelector('[data-hydrated="true"]');
+  await expect(
+    page.locator('[data-testid="chart-cards"] > article').first().getByRole("textbox", {
+      name: "Duration",
+    }),
+  ).toHaveValue("2:30");
 });
 
 test("chips and pills all apply and download correctly", async ({ page }) => {
@@ -250,7 +411,7 @@ test("uploading a config, downloading it back out, and clearing it round-trip", 
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "E2E Custom Pile";
 
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "washy-washy.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(config, null, 2)),
@@ -266,7 +427,7 @@ test("uploading a config, downloading it back out, and clearing it round-trip", 
 
   // Upload something invalid: the error shows, and the just-uploaded
   // config stays active rather than silently reverting.
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "broken.json",
     mimeType: "application/json",
     buffer: Buffer.from("{not valid json"),
@@ -289,7 +450,7 @@ test("an uploaded config with a value the machine doesn't have names the row and
   const config = await downloadedConfig(page);
   config.chart[0].temperature = "99";
 
-  await page.setInputFiles('input[type="file"]', {
+  await page.setInputFiles('[data-testid="page-upload-input"]', {
     name: "washy-washy.json",
     mimeType: "application/json",
     buffer: Buffer.from(JSON.stringify(config, null, 2)),

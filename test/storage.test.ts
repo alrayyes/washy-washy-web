@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { emptyAdvancedFilters } from "../src/lib/filter";
 import { readFilters, writeFilters } from "../src/lib/storage";
 
 /**
@@ -49,9 +50,26 @@ describe("readFilters / writeFilters", () => {
   test("round-trips whatever was last written", () => {
     stub(new MemoryStorage());
 
-    writeFilters({ cut: "wash", pileQuery: "sock" });
+    writeFilters({ cut: "wash", pileQuery: "sock", ...emptyAdvancedFilters, program: "Cottons" });
 
-    expect(readFilters()).toEqual({ cut: "wash", pileQuery: "sock" });
+    expect(readFilters()).toEqual({
+      cut: "wash",
+      pileQuery: "sock",
+      ...emptyAdvancedFilters,
+      program: "Cottons",
+    });
+  });
+
+  test("defaults the advanced fields to empty when reading a value stored before #8 added them", () => {
+    const storage = new MemoryStorage();
+    storage.setItem("washy-washy:filters", JSON.stringify({ cut: "iron", pileQuery: "towel" }));
+    stub(storage);
+
+    expect(readFilters()).toEqual({
+      cut: "iron",
+      pileQuery: "towel",
+      ...emptyAdvancedFilters,
+    });
   });
 
   test("returns null when nothing has been stored yet", () => {
@@ -79,7 +97,9 @@ describe("readFilters / writeFilters", () => {
   test("degrades to not remembering when storage itself throws", () => {
     stub(new ThrowingStorage());
 
-    expect(() => writeFilters({ cut: "full", pileQuery: "" })).not.toThrow();
+    expect(() =>
+      writeFilters({ cut: "full", pileQuery: "", ...emptyAdvancedFilters }),
+    ).not.toThrow();
     expect(readFilters()).toBeNull();
   });
 });

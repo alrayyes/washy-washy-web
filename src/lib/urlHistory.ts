@@ -17,6 +17,10 @@ export function writeUrlFilters(filters: StoredFilters): void {
   const params = new URLSearchParams();
   if (filters.cut !== "full") params.set("cut", filters.cut);
   if (filters.pileQuery !== "") params.set("pile", filters.pileQuery);
+  if (filters.program !== "") params.set("program", filters.program);
+  if (filters.temperature !== "") params.set("temperature", filters.temperature);
+  if (filters.spin !== "") params.set("spin", filters.spin);
+  if (filters.detergentQuery !== "") params.set("detergent", filters.detergentQuery);
   const query = params.toString();
   const url = `${window.location.pathname}${query ? `?${query}` : ""}`;
   window.history.replaceState(null, "", url);

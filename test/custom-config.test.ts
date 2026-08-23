@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { type Config, configToJson, parseInstructions } from "@washy-washy/core";
+import { configToJson } from "@washy-washy/core";
 import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../src/lib/customConfig";
-import { DIST_MACHINE, loadMachine } from "./support/loadMachine";
+import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 /** `bun:test` has no `localStorage` global — a browser API — so stand one in. */
 class MemoryStorage implements Pick<Storage, "getItem" | "setItem" | "removeItem"> {
@@ -28,9 +28,7 @@ afterEach(() => {
   (globalThis as { localStorage?: typeof localStorage }).localStorage = original as never;
 });
 
-const machine = await loadMachine(DIST_MACHINE);
-const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-const config: Config = { machine, chart: parseInstructions(csv, machine) };
+const config = await loadConfig(DIST_CONFIG);
 
 describe("readCustomConfig / writeCustomConfig / clearCustomConfig", () => {
   test("round-trips what was written back to the same config", () => {

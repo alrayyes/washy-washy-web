@@ -1,23 +1,22 @@
 ---
-// The committed chart, never the gitignored one a household keeps for
+// The committed config, never the gitignored one a household keeps for
 // itself — this is only the starting point a visitor can replace with
-// their own upload (SheetViewer, customChart.ts). Vite resolves both
+// their own upload (SheetViewer, customConfig.ts). Vite resolves this
 // statically at build time, unlike a path built from import.meta.url,
 // which breaks once Rollup relocates this page's chunk.
-import machineSource from "../../data/machine.json.dist?raw";
-import csvSource from "../../data/washing-instructions.csv.dist?raw";
+import configSource from "../../data/washy-washy.json.dist?raw";
 import SheetViewer from "../components/SheetViewer";
 import Layout from "../layouts/Layout.astro";
 import { buildChart } from "../lib/chart";
 
-const { items, machine } = buildChart(csvSource, machineSource);
+const { items, machine } = buildChart(configSource);
 ---
 
 <Layout
   title="Washy washy"
   description="A phone-friendly laundry chart: programme, temperature and spin for every pile, what can share a drum, and where the iron's thermostat goes."
 >
-  <h1 class="mb-2 text-2xl font-bold text-ink sm:text-3xl">Your laundry chart</h1>
+  <h1 class="mb-2 font-heading text-3xl font-bold text-ink sm:text-4xl">Your laundry chart</h1>
   <p class="mb-6 text-base text-body">
     Turns a laundry chart into a phone-friendly sheet: which programme, temperature and spin for
     each pile, what can share a drum, and where the iron's thermostat goes. Add this page to your

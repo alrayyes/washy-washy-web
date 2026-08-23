@@ -2,41 +2,43 @@ import {
   type COLUMNS,
   type Config,
   colourGroups,
-  configFromJson,
   configToJson,
   type Instruction,
   instructionsFromRows,
   type Machine,
   mixTags,
   type Row,
+  RowError,
   rowsFromInstructions,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
-import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../lib/customConfig";
-import { colour } from "../lib/theme";
+import {
+  clearCustomConfig,
+  readCustomConfig,
+  uploadConfigFile,
+  writeCustomConfig,
+} from "../lib/customConfig";
+import { isValidDuration } from "../lib/duration";
+import {
+  ALERT,
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  CARD,
+  CHART_CARD,
+  CHART_CARD_HEADER,
+  FIELD_LABEL,
+  LINK,
+  SECTION_HEADING,
+  TEXT_INPUT,
+} from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
+import SectionHeading from "./SectionHeading";
 
 const SECTION = "mb-6";
-const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
-const CARD = "rounded-lg border border-hairline bg-panel p-4";
-const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const TEXT_INPUT =
-  "w-full min-w-[8rem] rounded border border-transparent bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
-
-// Matches Sheet.tsx's read-only card exactly (CARD_CLASS/CARD_HEADER_CLASS
-// there) — white, not the gray `CARD` panel above, which is this page's own
-// machine-summary boxes, a different thing.
-const CHART_CARD = "rounded-lg border border-line p-4";
-const CHART_CARD_HEADER = "mb-3 flex items-center justify-between gap-2 border-b border-ink pb-1.5";
 const SUB_PANEL = "rounded-md border border-hairline bg-panel p-3";
 const CHIP_BUTTON = "rounded border px-1.5 py-0.5 text-xs";
 const CHIP_BUTTON_ON = "border-accent bg-accent font-bold text-white";
-const CHIP_BUTTON_OFF = "border-hairline bg-white text-muted hover:border-line";
+const CHIP_BUTTON_OFF = "border-hairline bg-surface text-muted hover:border-line";
 const PILL_BUTTON = "rounded px-1.5 py-0.5 text-xs font-bold text-white";
 
 interface Props {
@@ -51,22 +53,13 @@ const SORT_FIELDS: { value: (typeof COLUMNS)[number]; label: string }[] = [
   { value: "notes", label: "Notes" },
 ];
 
-/** Matches Sheet.tsx's `SectionHeading` exactly. */
-function SectionHeading({ children }: { children: string }) {
-  return (
-    <p className="mb-1 text-[0.7rem] font-bold tracking-wide text-muted">
-      {children.toUpperCase()}
-    </p>
-  );
-}
-
 function ChipList({ values }: { values: readonly string[] }) {
   return (
     <div className="mt-1 flex flex-wrap gap-1">
       {values.map((value) => (
         <span
           key={value}
-          className="rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body"
+          className="rounded border border-line bg-surface px-1.5 py-0.5 text-xs text-body"
         >
           {value}
         </span>
@@ -90,7 +83,7 @@ function MachineSummary({ machine }: { machine: Machine }) {
         </p>
         <a
           href="/config/machine"
-          className="shrink-0 rounded border border-line bg-white px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="shrink-0 rounded border border-line bg-surface px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Edit machine →
         </a>
@@ -152,18 +145,25 @@ function ProseField({
 
 /**
  * The clickable version of Sheet.tsx's read-only `ChipRow` — same look
- * (selected: filled accent, unselected: outlined), but every chip is a
- * button that sets the field to its own value, single-select.
+ * (selected: filled accent, unselected: outlined), single-select. A real
+ * `<input type="radio">` per chip, visually hidden behind its `<label>` —
+ * the browser gives roving tabindex and arrow-key movement for free, which
+ * a `role="radio"` button would have to reimplement (and Biome's
+ * `useSemanticElements` rejects that reimplementation outright).
  */
 function ChipSelectRow({
   label,
-  name,
+  field,
+  groupName,
   values,
   selected,
   onSelect,
 }: {
   label: string;
-  name: string;
+  /** Stable across rows — used only for the data-testid, so e2e locators don't care which card. */
+  field: string;
+  /** Unique per row — the native radio `name`, which groups by DOM name across the whole page regardless of React component boundaries. */
+  groupName: string;
   values: readonly string[];
   selected: string;
   onSelect: (value: string) => void;
@@ -173,16 +173,21 @@ function ChipSelectRow({
       <span className="w-14 shrink-0 pt-0.5 text-xs text-body">{label}</span>
       <div className="flex flex-wrap gap-1" role="radiogroup" aria-label={label}>
         {values.map((value) => (
-          <button
+          <label
             key={value}
-            type="button"
-            data-testid={`chip-${name}-${value}`}
-            aria-pressed={value === selected}
-            className={`${CHIP_BUTTON} ${value === selected ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-            onClick={() => onSelect(value)}
+            className={`relative ${CHIP_BUTTON} has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-offset-1 ${value === selected ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
           >
+            <input
+              type="radio"
+              name={groupName}
+              value={value}
+              checked={value === selected}
+              onChange={() => onSelect(value)}
+              className="absolute inset-0 cursor-pointer opacity-0"
+              data-testid={`chip-${field}-${value}`}
+            />
             {value}
-          </button>
+          </label>
         ))}
       </div>
     </div>
@@ -243,8 +248,7 @@ function PillToggle({
       type="button"
       data-testid={`toggle-${name}`}
       aria-pressed={on}
-      className={PILL_BUTTON}
-      style={{ backgroundColor: on ? colour.yes : colour.no }}
+      className={`${PILL_BUTTON} ${on ? "bg-yes" : "bg-no"}`}
       onClick={onClick}
     >
       {on ? onLabel : offLabel}
@@ -260,30 +264,47 @@ function PillToggle({
 function DurationField({
   value,
   name,
+  rowId,
   onChange,
 }: {
   value: string;
   name: string;
+  /** Makes the hint's id unique across every card's own copy of this field. */
+  rowId: number;
   onChange: (value: string) => void;
 }) {
+  const stripped = value.replace(/^~/, "");
+  const invalid = stripped !== "" && !isValidDuration(stripped);
+  const hintId = `${name}-format-hint-${rowId}`;
+
   return (
-    <div className="flex items-center gap-1">
-      <span aria-hidden="true" className="text-body">
-        ~
-      </span>
-      <input
-        className={`${TEXT_INPUT} w-16`}
-        type="text"
-        inputMode="numeric"
-        name={name}
-        aria-label="Duration"
-        placeholder="2:30"
-        value={value.replace(/^~/, "")}
-        onChange={(event) => {
-          const stripped = event.target.value.replace(/^~/, "");
-          onChange(stripped ? `~${stripped}` : "");
-        }}
-      />
+    <div className="flex flex-col items-end gap-0.5">
+      <div className="flex items-center gap-1">
+        <span aria-hidden="true" className="text-body">
+          ~
+        </span>
+        <input
+          className={`${TEXT_INPUT} w-16 ${invalid ? "border-no focus:border-no" : ""}`}
+          type="text"
+          // "numeric" requests a digits-only keypad on some Android
+          // keyboards, with no ":" key — the one separator this format
+          // needs (#53).
+          inputMode="text"
+          name={name}
+          aria-label="Duration"
+          aria-invalid={invalid}
+          aria-describedby={hintId}
+          placeholder="2:30"
+          value={stripped}
+          onChange={(event) => {
+            const next = event.target.value.replace(/^~/, "");
+            onChange(next ? `~${next}` : "");
+          }}
+        />
+      </div>
+      <p id={hintId} className={invalid ? "text-xs text-no-text" : "sr-only"}>
+        {invalid ? "Use H:MM, like 2:30" : "Format: H:MM, like 2:30"}
+      </p>
     </div>
   );
 }
@@ -306,10 +327,40 @@ function EditableSplitField({
 
   return (
     <div className="mt-2">
-      <p id={labelId} className="text-[0.6rem] font-bold tracking-wide text-muted">
+      {/* Not <SectionHeading> (#94): needs its own id for
+      ProseField's aria-labelledby (#66), which the component doesn't
+      take — and same as Sheet.tsx's SplitField/Field, ProseField's
+      textarea carries no mt-* to collapse SectionHeading's mb-1
+      against, so it would add a real 4px gap regardless. */}
+      <p id={labelId} className="text-xs font-bold tracking-wide text-muted">
         {label.toUpperCase()}
       </p>
       <ProseField value={value} name={name} onChange={onChange} ariaLabelledBy={labelId} />
+    </div>
+  );
+}
+
+/**
+ * Where a washing instruction came from, when the row cites one — read
+ * only, same as `Sheet.tsx`'s `ReferenceField` (#79): this card is an
+ * editor for every other field, but citing a source isn't something a
+ * visitor fills in here, only something an uploaded chart can carry.
+ */
+function ReferenceLink({ name, link }: { name: string; link: string }) {
+  if (name === "") return null;
+
+  return (
+    <div className="mt-2">
+      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      <p className="text-sm leading-relaxed text-body">
+        {link !== "" ? (
+          <a href={link} target="_blank" rel="noopener noreferrer" className={LINK}>
+            {name}
+          </a>
+        ) : (
+          name
+        )}
+      </p>
     </div>
   );
 }
@@ -356,17 +407,20 @@ function ChartCards({
             className={CHART_CARD}
           >
             <div className={CHART_CARD_HEADER}>
-              <input
-                className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
-                type="text"
-                name="clothing_type"
-                aria-label="Pile"
-                value={row.clothing_type}
-                onChange={(event) => set("clothing_type", event.target.value)}
-              />
+              <h3 className="min-w-0 flex-1">
+                <input
+                  className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
+                  type="text"
+                  name="clothing_type"
+                  aria-label="Pile"
+                  value={row.clothing_type}
+                  onChange={(event) => set("clothing_type", event.target.value)}
+                />
+              </h3>
               <DurationField
                 value={row.duration}
                 name="duration"
+                rowId={index}
                 onChange={(value) => set("duration", value)}
               />
             </div>
@@ -389,7 +443,7 @@ function ChartCards({
               <div className="w-20 shrink-0 text-center">
                 <ProgramDial program={row.program} washer={washer} size={78} />
                 <select
-                  className="mt-1 w-full rounded border border-transparent bg-transparent px-0 text-center text-xs font-bold text-ink hover:border-line focus:border-accent focus:bg-white focus:outline-none"
+                  className="mt-1 w-full rounded border border-line bg-transparent px-0 text-center text-xs font-bold text-ink focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   name="program"
                   aria-label="Programme"
                   value={row.program}
@@ -401,21 +455,23 @@ function ChartCards({
                     </option>
                   ))}
                 </select>
-                <p className="text-[0.6rem] text-body">
+                <p className="text-xs text-body">
                   {position} clockwise from {off}
                 </p>
               </div>
               <div className="flex flex-1 flex-col justify-center">
                 <ChipSelectRow
                   label="Temp"
-                  name="temperature"
+                  field="temperature"
+                  groupName={`temperature-${index}`}
                   values={washer.temperatures}
                   selected={row.temperature}
                   onSelect={(value) => set("temperature", value)}
                 />
                 <ChipSelectRow
                   label="Spin rpm"
-                  name="spin"
+                  field="spin"
+                  groupName={`spin-${index}`}
                   values={washer.spins}
                   selected={row.spin}
                   onSelect={(value) => set("spin", value)}
@@ -511,7 +567,7 @@ function ChartCards({
             />
 
             <div className="mt-2">
-              <p className="text-[0.6rem] font-bold tracking-wide text-muted">COLOUR GROUP</p>
+              <SectionHeading>Colour group</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {colourGroups.map((group) => (
                   <button
@@ -531,7 +587,7 @@ function ChartCards({
             </div>
 
             <div className="mt-2">
-              <p className="text-[0.6rem] font-bold tracking-wide text-muted">MIX TAGS</p>
+              <SectionHeading>Mix tags</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {mixTags.map((tag) => {
                   const selected = splitPipe(row.mix_tags);
@@ -564,6 +620,7 @@ function ChartCards({
               rowId={index}
               onChange={(value) => set("notes", value)}
             />
+            <ReferenceLink name={row.reference_name} link={row.reference_link} />
           </article>
         );
       })}
@@ -587,6 +644,10 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<(typeof COLUMNS)[number] | "">("");
+  const sortOptions: { value: (typeof COLUMNS)[number] | ""; label: string }[] = [
+    { value: "", label: "Chart order" },
+    ...SORT_FIELDS,
+  ];
   // Same hydration marker SheetViewer exposes, and for the same reason: the
   // E2E suite needs a way to know React has attached before it interacts.
   const [hydrated, setHydrated] = useState(false);
@@ -631,6 +692,16 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
 
   function handleSave() {
     try {
+      // instructionsFromRows doesn't validate duration at all — it's free
+      // text as far as @washy-washy/core is concerned — so this page owns
+      // that check itself, in the same row/column shape RowError already
+      // uses (#53).
+      draftRows.forEach((row, index) => {
+        const stripped = row.duration.replace(/^~/, "");
+        if (!isValidDuration(stripped)) {
+          throw new RowError(index + 2, "duration", `must match H:MM, found "${row.duration}"`);
+        }
+      });
       // Against the active machine — read-only here, editable on its own
       // page (#30) — so an edit that no longer fits (an unknown programme,
       // temperature or spin) is called out by row and column, not silently
@@ -650,13 +721,10 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
     event.target.value = "";
     if (!file) return;
 
-    file
-      .text()
-      .then((text) => {
-        const config = configFromJson(text);
+    uploadConfigFile(file)
+      .then((config) => {
         setCustomConfig(config);
         setDraftRows(rowsFromInstructions(config.chart));
-        writeCustomConfig(config);
         setUploadError(null);
       })
       .catch((reason) => {
@@ -693,6 +761,7 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
               className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
               type="file"
               accept="application/json,.json"
+              data-testid="page-upload-input"
               onChange={handleUpload}
             />
           </label>
@@ -726,24 +795,21 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className={FIELD_LABEL}>Sort by</span>
           <div className="flex flex-wrap gap-1" role="radiogroup" aria-label="Sort by">
-            <button
-              type="button"
-              aria-pressed={sortField === ""}
-              className={`${CHIP_BUTTON} ${sortField === "" ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-              onClick={() => setSortField("")}
-            >
-              Chart order
-            </button>
-            {SORT_FIELDS.map((field) => (
-              <button
-                key={field.value}
-                type="button"
-                aria-pressed={sortField === field.value}
-                className={`${CHIP_BUTTON} ${sortField === field.value ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
-                onClick={() => setSortField(field.value)}
+            {sortOptions.map((option) => (
+              <label
+                key={option.value}
+                className={`relative ${CHIP_BUTTON} has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-offset-1 ${sortField === option.value ? CHIP_BUTTON_ON : CHIP_BUTTON_OFF}`}
               >
-                {field.label}
-              </button>
+                <input
+                  type="radio"
+                  name="sort-by"
+                  value={option.value}
+                  checked={sortField === option.value}
+                  onChange={() => setSortField(option.value)}
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                />
+                {option.label}
+              </label>
             ))}
           </div>
         </div>

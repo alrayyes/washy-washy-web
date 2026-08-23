@@ -1,13 +1,12 @@
 ---
 // Same static import pattern as index.astro — see that file's comment on
 // why Vite's `?raw` import is used over a runtime file read.
-import machineSource from "../../../data/machine.json.dist?raw";
-import csvSource from "../../../data/washing-instructions.csv.dist?raw";
+import configSource from "../../../data/washy-washy.json.dist?raw";
 import MachineEditor from "../../components/MachineEditor";
 import Layout from "../../layouts/Layout.astro";
 import { buildChart } from "../../lib/chart";
 
-const { items, machine } = buildChart(csvSource, machineSource);
+const { items, machine } = buildChart(configSource);
 ---
 
 <Layout
@@ -15,6 +14,6 @@ const { items, machine } = buildChart(csvSource, machineSource);
   description="The washing machine and iron's settings — programmes, temperatures, spins, and the iron's thermostat."
   wide
 >
-  <h1 class="mb-6 text-2xl font-bold text-ink sm:text-3xl">Machine</h1>
+  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">Machine</h1>
   <MachineEditor client:load items={items} machine={machine} />
 </Layout>

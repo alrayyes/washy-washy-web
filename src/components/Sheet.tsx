@@ -13,8 +13,9 @@ import {
   washGroups,
 } from "@washy-washy/core/browser";
 import { useState } from "react";
-import { colour } from "../lib/theme";
+import { CHART_CARD, CHART_CARD_HEADER, LINK } from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
+import SectionHeading from "./SectionHeading";
 
 const SUBTITLE: Record<Variant, string> = {
   full: "Scroll for the pile you are holding.",
@@ -37,14 +38,6 @@ function sheetGroups(
   return cardGroups(items);
 }
 
-function SectionHeading({ children }: { children: string }) {
-  return (
-    <p className="mb-1 text-[0.7rem] font-bold tracking-wide text-muted">
-      {children.toUpperCase()}
-    </p>
-  );
-}
-
 function Masthead({ machine, subtitle }: { machine: Machine; subtitle: string }) {
   return (
     <header className="mb-4">
@@ -63,6 +56,10 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
   return (
     <section className="mb-4">
       <SectionHeading>Loads — one line, one wash</SectionHeading>
+      <p className="mb-2 text-xs text-muted">
+        A TOGETHER badge means every pile on that line shares one wash — put them in the machine at
+        once.
+      </p>
       <div className="rounded-md border border-hairline px-3">
         {groups.map((group, index) => {
           const first = group[0] as ResolvedInstruction;
@@ -73,16 +70,16 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
                 index === groups.length - 1 ? "" : "border-b border-hairline"
               }`}
             >
-              <span className="w-18 shrink-0 text-xs font-bold text-accent">
+              <span className="w-18 shrink-0 text-xs font-bold text-accent-text">
                 {first.program} {formatTemperature(first.temperature)}
               </span>
-              <span
-                className={`flex-1 text-sm ${
-                  group.length > 1 ? "font-bold text-ink" : "text-body"
-                }`}
-              >
+              <span className="flex-1 text-sm text-body">
                 {group.map((item) => item.clothingType).join("  +  ")}
-                {group.length === 1 ? "   (on its own)" : ""}
+                {group.length > 1 && (
+                  <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-xs font-bold tracking-wide text-accent-text">
+                    TOGETHER
+                  </span>
+                )}
               </span>
               <span className="shrink-0 text-xs text-muted">{durationsOf(group)}</span>
             </div>
@@ -107,9 +104,7 @@ function Legend({ machine, variant }: { machine: Machine; variant: Variant }) {
         ) : (
           <ProgramDial program={example} washer={washer} size={54} />
         )}
-        <p className="mt-1 text-[0.65rem] text-body">
-          {variant === "iron" ? "thermostat" : "programme"}
-        </p>
+        <p className="mt-1 text-xs text-body">{variant === "iron" ? "thermostat" : "programme"}</p>
       </div>
       <p className="text-sm leading-relaxed text-body">
         {variant === "iron" ? (
@@ -152,7 +147,7 @@ function ChipRow({
               className={`rounded border px-1.5 py-0.5 text-xs ${
                 on
                   ? "border-accent bg-accent font-bold text-white"
-                  : "border-hairline bg-white text-muted"
+                  : "border-hairline bg-surface text-muted"
               }`}
             >
               {value}
@@ -174,7 +169,7 @@ function ControlPanel({ item, machine }: { item: ResolvedInstruction; machine: M
       <div className="w-20 shrink-0 text-center">
         <ProgramDial program={item.program} washer={washer} size={78} />
         <p className="mt-1 text-xs font-bold text-ink">{item.program}</p>
-        <p className="text-[0.6rem] text-body">
+        <p className="text-xs text-body">
           {position} clockwise from {off}
         </p>
       </div>
@@ -263,8 +258,44 @@ function SplitField({
 
   return (
     <div className="mt-2">
-      <p className="text-[0.6rem] font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
+      {/* Not <SectionHeading> (#94): its own mb-1 has no margin to
+      collapse with here — Prose's <p> carries no mt-* — so it would add
+      a real 4px gap that isn't there today. */}
+      <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <Prose items={items} pick={pick} emphasis={emphasis} />
+    </div>
+  );
+}
+
+/**
+ * Where a washing instruction came from, when a row cites one — a
+ * manufacturer's own guidance, a care label, a trade source. Hidden
+ * entirely when nothing in the group cites anything (#79); a group can
+ * mix cited and uncited members, so each cited member gets its own line
+ * rather than picking one to speak for the whole card.
+ */
+function ReferenceField({ items }: { items: ResolvedInstruction[] }) {
+  const cited = items.filter((item) => item.referenceName !== "");
+  if (cited.length === 0) return null;
+
+  return (
+    <div className="mt-2">
+      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      {cited.map((item, index) => (
+        <p
+          key={item.clothingType}
+          className={`text-sm leading-relaxed text-body ${index === 0 ? "" : "mt-0.5"}`}
+        >
+          {items.length > 1 && <span className="font-bold text-ink">{item.clothingType}: </span>}
+          {item.referenceLink !== "" ? (
+            <a href={item.referenceLink} target="_blank" rel="noopener noreferrer" className={LINK}>
+              {item.referenceName}
+            </a>
+          ) : (
+            item.referenceName
+          )}
+        </p>
+      ))}
     </div>
   );
 }
@@ -280,7 +311,8 @@ function Field({
 }) {
   return (
     <div className="mt-2">
-      <p className="text-[0.6rem] font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
+      {/* Not <SectionHeading> — same reason as SplitField above (#94). */}
+      <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
       <p className={`text-sm leading-relaxed ${emphasis ? "font-bold text-ink" : "text-body"}`}>
         {value}
       </p>
@@ -291,18 +323,15 @@ function Field({
 function SoftenerBadge({ on }: { on: boolean }) {
   return (
     <span
-      className="rounded px-1.5 py-0.5 text-xs font-bold text-white"
-      style={{ backgroundColor: on ? colour.yes : colour.no }}
+      className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${on ? "bg-yes" : "bg-no"}`}
     >
       {on ? "SOFTENER OK" : "NO SOFTENER"}
     </span>
   );
 }
 
-const CARD_CLASS = "rounded-lg border border-line p-4";
-const CARD_HEADER_CLASS = "mb-3 flex items-center justify-between gap-2 border-b border-ink pb-1.5";
 const CARD_ACTION =
-  "rounded border border-line bg-white px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
+  "rounded border border-line bg-surface px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
 
 /**
  * Download and share for a single card — the pile(s) it draws, not the
@@ -319,18 +348,22 @@ function CardActions({
   onShare,
 }: {
   group: ResolvedInstruction[];
-  onDownload: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownload: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShare: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dropped, setDropped] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
+  const [shareStatus, setShareStatus] = useState("");
+  const [shareError, setShareError] = useState<string | null>(null);
 
   async function handleDownload() {
     setDownloading(true);
     setError(null);
+    setDropped([]);
     try {
-      await onDownload(group);
+      setDropped(await onDownload(group));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason));
     } finally {
@@ -339,9 +372,22 @@ function CardActions({
   }
 
   async function handleShare() {
-    await onShare(group);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setShareError(null);
+    try {
+      await onShare(group);
+      setCopied(true);
+      // The button's own label swap ("Copy link" -> "Copied!") is the
+      // visible feedback — whether assistive tech announces a label
+      // change on the focused control is implementation-defined, so
+      // this sr-only region carries the actual announcement (#55).
+      setShareStatus("Copied!");
+      setTimeout(() => {
+        setCopied(false);
+        setShareStatus("");
+      }, 2000);
+    } catch (reason) {
+      setShareError(reason instanceof Error ? reason.message : String(reason));
+    }
   }
 
   return (
@@ -359,9 +405,22 @@ function CardActions({
           {downloading ? "Preparing…" : "Download"}
         </button>
       </div>
+      <p aria-live="polite" role="status" className="sr-only">
+        {shareStatus}
+      </p>
+      {shareError && (
+        <p className="text-right text-xs text-no-text" role="alert">
+          Could not copy the link: {shareError}
+        </p>
+      )}
       {error && (
-        <p className="text-right text-xs text-no" role="alert">
+        <p className="text-right text-xs text-no-text" role="alert">
           Could not generate the PDF: {error}
+        </p>
+      )}
+      {dropped.length > 0 && (
+        <p className="text-right text-xs text-muted" role="status">
+          Couldn't render in the PDF: {dropped.join(" ")}
         </p>
       )}
     </div>
@@ -380,7 +439,7 @@ function Card({
   index: number;
   variant: Variant;
   machine: Machine;
-  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
   const item = group[0] as ResolvedInstruction;
@@ -392,19 +451,20 @@ function Card({
   );
 
   return (
-    <article className={CARD_CLASS}>
-      <div className={CARD_HEADER_CLASS}>
+    <article className={CHART_CARD}>
+      <div className={CHART_CARD_HEADER}>
         <h3 className="text-base font-bold text-ink">
           {index}. {heading}
         </h3>
         <div className="flex shrink-0 items-center gap-2">
-          <span className="text-xs font-bold text-accent">{durationsOf(group)}</span>
+          <span className="text-xs font-bold text-accent-text">{durationsOf(group)}</span>
           {onDownloadCard && onShareCard && (
             <CardActions group={group} onDownload={onDownloadCard} onShare={onShareCard} />
           )}
         </div>
       </div>
 
+      <SectionHeading>Wash</SectionHeading>
       <div className="mb-3 flex items-center gap-2">
         <SoftenerBadge on={item.fabricSoftener} />
         <span className="text-xs font-bold text-ink">
@@ -416,15 +476,6 @@ function Card({
       <ControlPanel item={item} machine={machine} />
 
       <SplitField label="Detergent" items={group} pick={(member) => member.detergent} />
-
-      {variant !== "wash" && (
-        <div className="mt-3">
-          <SectionHeading>Iron</SectionHeading>
-          <IronPanel items={group} machine={machine} />
-        </div>
-      )}
-
-      <SplitField label="Drying" items={group} pick={(member) => member.drying} />
       <Field
         label="Wash together with"
         value={
@@ -438,7 +489,17 @@ function Card({
         }
         emphasis
       />
+      <SplitField label="Drying" items={group} pick={(member) => member.drying} />
+
+      {variant !== "wash" && (
+        <div className="mt-3">
+          <SectionHeading>Iron</SectionHeading>
+          <IronPanel items={group} machine={machine} />
+        </div>
+      )}
+
       <SplitField label="Notes" items={group} pick={(member) => member.notes} />
+      <ReferenceField items={group} />
     </article>
   );
 }
@@ -456,8 +517,8 @@ function IronCard({
   const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined;
 
   return (
-    <article className={CARD_CLASS}>
-      <div className={CARD_HEADER_CLASS}>
+    <article className={CHART_CARD}>
+      <div className={CHART_CARD_HEADER}>
         <h3 className="text-base font-bold text-ink">
           {index}. {setting ? `${setting.label} — ${setting.detail}` : "Do not iron"}
         </h3>
@@ -510,7 +571,7 @@ interface Props {
    * thermostat setting, not by pile — no single "this card's pile" to
    * name) simply doesn't get the actions row at all.
    */
-  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }
 

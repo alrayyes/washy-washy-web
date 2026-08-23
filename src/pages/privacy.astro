@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Washy washy — privacy policy"
+  description="No account, cookies, analytics or tracking. An uploaded config or chart edit stays in your own browser and is never sent anywhere."
+>
+  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">Privacy policy</h1>
+
+  <div class="flex flex-col gap-4 text-base text-body">
+    <p>
+      Washy washy has no account, no cookies, no analytics and no tracking scripts of any kind.
+      There is nothing here watching what you do on the site.
+    </p>
+    <p>
+      Uploading your own config, or editing the chart or machine settings, saves that data only in
+      your own browser's storage (<code class="text-sm text-ink">localStorage</code>). It never
+      leaves your device — not to a server, not to us, not to anyone. Clearing your browser's site
+      data for washy washy removes it completely.
+    </p>
+    <p>
+      The site itself is static — plain files with no backend — served by{" "}
+      <a
+        href="https://www.cloudflare.com/products/cloudflare-workers/"
+        class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+      >
+        Cloudflare Workers
+      </a>. Like any web host, Cloudflare's own infrastructure sees the ordinary HTTP request
+      metadata involved in serving a page — your IP address, browser, the page requested — the
+      same as any site you visit. Washy washy itself has no access to that, and doesn't ask
+      Cloudflare or anyone else for it.
+    </p>
+  </div>
+</Layout>

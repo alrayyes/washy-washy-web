@@ -3,7 +3,6 @@ import {
   cardGroups,
   ironGroups,
   ironSettingKeys,
-  parseInstructions,
   type ResolvedInstruction,
   resolve,
   type Variant,
@@ -12,11 +11,10 @@ import {
 } from "@washy-washy/core";
 import { renderToStaticMarkup } from "react-dom/server";
 import Sheet, { ironCardKey, sheetGroups } from "../src/components/Sheet";
-import { DIST_MACHINE, loadMachine } from "./support/loadMachine";
+import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
-const machine = await loadMachine(DIST_MACHINE);
-const csv = await Bun.file("data/washing-instructions.csv.dist").text();
-const items = resolve(parseInstructions(csv, machine));
+const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
+const items = resolve(instructions);
 
 function render(variant: Variant, chart: ResolvedInstruction[] = items): string {
   return renderToStaticMarkup(Sheet({ items: chart, machine, variant }));
@@ -69,6 +67,29 @@ describe("Sheet", () => {
     const html = render("full", neverIroned);
 
     expect(html).toContain("Do not iron");
+  });
+
+  test("a cited row shows its source as a safe off-site link", () => {
+    const cited = {
+      ...(items[0] as ResolvedInstruction),
+      referenceName: "Which?",
+      referenceLink: "https://example.com/wash-guide",
+    };
+
+    const html = render("full", [cited]);
+
+    expect(html).toContain("SOURCE");
+    expect(html).toContain('href="https://example.com/wash-guide"');
+    expect(html).toContain(">Which?<");
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+
+  test("no row citing a source means no SOURCE field at all", () => {
+    const uncited = items[0] as ResolvedInstruction;
+    expect(uncited.referenceName).toBe("");
+
+    expect(render("full", [uncited])).not.toContain("SOURCE");
   });
 });
 

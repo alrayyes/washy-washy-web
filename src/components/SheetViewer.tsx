@@ -1,4 +1,5 @@
 import {
+  formatTemperature,
   type Machine,
   type ResolvedInstruction,
   resolve,
@@ -7,9 +8,16 @@ import {
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { readCustomConfig } from "../lib/customConfig";
-import { filterByPile } from "../lib/filter";
+import {
+  type AdvancedFilters,
+  emptyAdvancedFilters,
+  filterAdvanced,
+  filterByPile,
+  hasActiveAdvancedFilters,
+} from "../lib/filter";
 import { slug } from "../lib/slug";
 import { readFilters, writeFilters } from "../lib/storage";
+import { ALERT, BUTTON_PRIMARY, FIELD_LABEL } from "../lib/styles";
 import { readUrlFilters } from "../lib/url";
 import { writeUrlFilters } from "../lib/urlHistory";
 import Sheet from "./Sheet";
@@ -20,14 +28,8 @@ const CUT_LABEL: Record<Variant, string> = {
   iron: "Ironing only",
 };
 
-// text-body, not text-muted: muted-on-panel is 4.39:1, just under WCAG AA's
-// 4.5:1 for this text's size and weight.
-const FIELD_LABEL = "block text-xs font-semibold tracking-wide text-body uppercase";
 const FIELD_INPUT =
-  "mt-1 block w-full min-w-0 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
+  "mt-1 block w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
 
 /**
  * A tap-to-open "?" next to a field label — `title` alone is a hover-only
@@ -36,19 +38,39 @@ const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no"
  * of the field's own `<label>`, never nested inside it — a `<button>`
  * inside a `<label>` is invalid HTML and unreliable with assistive tech.
  */
+// w-48 in px, plus a little slack for the box's own border/shadow — the
+// threshold this file's open handler checks available space against
+// before deciding whether the tooltip needs to open from the right
+// edge instead of the left (#59).
+const TOOLTIP_WIDTH = 208;
+
 function HelpBubble({ id, text }: { id: string; text: string }) {
   const [open, setOpen] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  function toggleOpen() {
+    setOpen((value) => {
+      const next = !value;
+      if (next && buttonRef.current) {
+        const { left } = buttonRef.current.getBoundingClientRect();
+        setAlignRight(window.innerWidth - left < TOOLTIP_WIDTH);
+      }
+      return next;
+    });
+  }
 
   return (
     <span className="relative inline-block normal-case">
       <button
+        ref={buttonRef}
         type="button"
-        className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-[0.6rem] font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-xs font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label="What does this do?"
         aria-expanded={open}
         aria-controls={id}
         aria-describedby={open ? id : undefined}
-        onClick={() => setOpen((value) => !value)}
+        onClick={toggleOpen}
         onBlur={() => setOpen(false)}
         onKeyDown={(event) => {
           if (event.key === "Escape") setOpen(false);
@@ -60,7 +82,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
         <span
           id={id}
           role="tooltip"
-          className="absolute top-full left-0 z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-white p-2 text-xs font-normal text-body shadow-md"
+          className={`absolute top-full z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-surface p-2 text-xs font-normal text-body shadow-md ${alignRight ? "right-0" : "left-0"}`}
         >
           {text}
         </span>
@@ -85,8 +107,10 @@ interface Props {
 export default function SheetViewer({ items: bundledItems, machine: bundledMachine }: Props) {
   const [cut, setCut] = useState<Variant>("full");
   const [pileQuery, setPileQuery] = useState("");
+  const [advanced, setAdvanced] = useState<AdvancedFilters>(emptyAdvancedFilters);
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+  const [downloadDropped, setDownloadDropped] = useState<string[]>([]);
   // Machine and chart together — whatever was last uploaded or edited on
   // the config page (customConfig.ts). null means "nothing active,
   // showing the bundled example," the same as before.
@@ -109,14 +133,26 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     // silently blend with (or lose to) whatever's already in this
     // browser's storage.
     const fromUrl = readUrlFilters(window.location.search);
-    if (fromUrl.cut !== undefined || fromUrl.pileQuery !== undefined) {
+    if (Object.keys(fromUrl).length > 0) {
       setCut(fromUrl.cut ?? "full");
       setPileQuery(fromUrl.pileQuery ?? "");
+      setAdvanced({
+        program: fromUrl.program ?? "",
+        temperature: fromUrl.temperature ?? "",
+        spin: fromUrl.spin ?? "",
+        detergentQuery: fromUrl.detergentQuery ?? "",
+      });
     } else {
       const saved = readFilters();
       if (saved) {
         setCut(saved.cut);
         setPileQuery(saved.pileQuery);
+        setAdvanced({
+          program: saved.program,
+          temperature: saved.temperature,
+          spin: saved.spin,
+          detergentQuery: saved.detergentQuery,
+        });
       }
     }
     const config = readCustomConfig();
@@ -133,12 +169,15 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     // above would immediately be overwritten by writing back the still-
     // default state from this same effect.
     if (!restored.current) return;
-    writeFilters({ cut, pileQuery });
-    writeUrlFilters({ cut, pileQuery });
-  }, [cut, pileQuery]);
+    writeFilters({ cut, pileQuery, ...advanced });
+    writeUrlFilters({ cut, pileQuery, ...advanced });
+  }, [cut, pileQuery, advanced]);
 
   const sourceItems = customItems ?? bundledItems;
-  const filtered = useMemo(() => filterByPile(sourceItems, pileQuery), [sourceItems, pileQuery]);
+  const filtered = useMemo(
+    () => filterAdvanced(filterByPile(sourceItems, pileQuery), advanced),
+    [sourceItems, pileQuery, advanced],
+  );
 
   function savePdf(pdf: Uint8Array, filename: string) {
     // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
@@ -158,13 +197,15 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   async function handleDownload() {
     setDownloading(true);
     setDownloadError(null);
+    setDownloadDropped([]);
     try {
       // Dynamic, not static: @washy-washy/pdf pulls in @react-pdf/renderer
       // and pdf-lib, which nothing needs until this click — a static import
       // would ship both in the page's main chunk regardless.
       const { renderPhone } = await import("@washy-washy/pdf");
-      const { pdf } = await renderPhone(filtered, activeMachine, cut);
+      const { pdf, dropped } = await renderPhone(filtered, activeMachine, cut);
       savePdf(pdf, `${STEM}-phone${SUFFIX[cut]}.pdf`);
+      setDownloadDropped(dropped);
     } catch (reason) {
       setDownloadError(reason instanceof Error ? reason.message : String(reason));
     } finally {
@@ -174,11 +215,14 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
   // Passed to Sheet -> Card as callbacks (Sheet.tsx can't touch window/
   // document/navigator itself — see the comment on CardActions there).
-  async function handleDownloadCard(group: ResolvedInstruction[]) {
+  // Returns `dropped` (characters the PDF's font couldn't render) so
+  // CardActions can surface it the same way handleDownload does above.
+  async function handleDownloadCard(group: ResolvedInstruction[]): Promise<string[]> {
     const { renderPhone } = await import("@washy-washy/pdf");
-    const { pdf } = await renderPhone(group, activeMachine, cut);
+    const { pdf, dropped } = await renderPhone(group, activeMachine, cut);
     const names = [...new Set(group.map((member) => slug(member.clothingType)))];
     savePdf(pdf, `${names.join("-")}.pdf`);
+    return dropped;
   }
 
   async function handleShareCard(group: ResolvedInstruction[]) {
@@ -195,7 +239,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         <legend className="px-1 text-sm font-semibold text-ink">Filter the chart</legend>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <span className={FIELD_LABEL}>
+            <span className={`block ${FIELD_LABEL}`}>
               <label htmlFor="filter-cut">Cut</label>
               <HelpBubble
                 id="filter-cut-help"
@@ -216,7 +260,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             </select>
           </div>
           <div className="flex-1">
-            <span className={FIELD_LABEL}>
+            <span className={`block ${FIELD_LABEL}`}>
               <label htmlFor="filter-pile">Pile</label>
               <HelpBubble
                 id="filter-pile-help"
@@ -233,6 +277,104 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             />
           </div>
         </div>
+
+        {/* A plain, uncontrolled <details> — closed on every page load with
+        no state or effect needed for it: nothing here ever sets `open`,
+        so hydration always starts from the same closed markup the server
+        rendered (#8). Only the *values* inside persist across visits, not
+        whether this was left open. */}
+        <details className="mt-3">
+          <summary className="cursor-pointer text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+            Advanced
+          </summary>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-program">Programme</label>
+                <HelpBubble id="filter-program-help" text="Show only piles using this programme." />
+              </span>
+              <select
+                id="filter-program"
+                className={FIELD_INPUT}
+                value={advanced.program}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, program: event.target.value }))
+                }
+              >
+                <option value="">Any programme</option>
+                {activeMachine.washer.programs.map((program) => (
+                  <option key={program} value={program}>
+                    {program}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-temperature">Temperature</label>
+                <HelpBubble
+                  id="filter-temperature-help"
+                  text="Show only piles washed at this temperature."
+                />
+              </span>
+              <select
+                id="filter-temperature"
+                className={FIELD_INPUT}
+                value={advanced.temperature}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, temperature: event.target.value }))
+                }
+              >
+                <option value="">Any temperature</option>
+                {activeMachine.washer.temperatures.map((temperature) => (
+                  <option key={temperature} value={temperature}>
+                    {formatTemperature(temperature)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-spin">Spin</label>
+                <HelpBubble id="filter-spin-help" text="Show only piles spun at this speed." />
+              </span>
+              <select
+                id="filter-spin"
+                className={FIELD_INPUT}
+                value={advanced.spin}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, spin: event.target.value }))
+                }
+              >
+                <option value="">Any spin</option>
+                {activeMachine.washer.spins.map((spin) => (
+                  <option key={spin} value={spin}>
+                    {spin === "0" ? "no spin" : `${spin} rpm`}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <span className={`block ${FIELD_LABEL}`}>
+                <label htmlFor="filter-detergent">Detergent</label>
+                <HelpBubble
+                  id="filter-detergent-help"
+                  text='Type part of a detergent note, like "powder", to show only piles that mention it.'
+                />
+              </span>
+              <input
+                id="filter-detergent"
+                className={FIELD_INPUT}
+                type="search"
+                placeholder="Search by detergent…"
+                value={advanced.detergentQuery}
+                onChange={(event) =>
+                  setAdvanced((current) => ({ ...current, detergentQuery: event.target.value }))
+                }
+              />
+            </div>
+          </div>
+        </details>
       </fieldset>
 
       <p className="text-sm text-body">
@@ -242,7 +384,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         Upload, download or edit your own on the{" "}
         <a
           href="/config"
-          className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+          className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
           washing loads page
         </a>
@@ -251,7 +393,11 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
       {filtered.length === 0 ? (
         <p className="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
-          No pile matches “{pileQuery}”. Try a different search.
+          {pileQuery !== "" && hasActiveAdvancedFilters(advanced)
+            ? `No pile matches “${pileQuery}” with those advanced filters. Try loosening one.`
+            : pileQuery !== ""
+              ? `No pile matches “${pileQuery}”. Try a different search.`
+              : "No pile matches those advanced filters. Try loosening one."}
         </p>
       ) : (
         <>
@@ -268,6 +414,11 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
           {downloadError && (
             <p className={ALERT} role="alert">
               Could not generate the PDF: {downloadError}
+            </p>
+          )}
+          {downloadDropped.length > 0 && (
+            <p className="text-xs text-muted" role="status">
+              Couldn't render in the PDF: {downloadDropped.join(" ")}
             </p>
           )}
           <Sheet

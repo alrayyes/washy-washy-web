@@ -13,20 +13,19 @@ import {
 import { useEffect, useState } from "react";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import { slug } from "../lib/slug";
+import {
+  ALERT,
+  BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
+  CARD,
+  FIELD_LABEL,
+  SECTION_HEADING,
+  TEXT_INPUT,
+} from "../lib/styles";
 
 const SECTION = "mb-6";
-const SECTION_HEADING = "mb-2 text-lg font-bold text-ink";
-const CARD = "rounded-lg border border-hairline bg-panel p-4";
-const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body uppercase";
-const TEXT_INPUT =
-  "w-full min-w-[8rem] rounded border border-line bg-transparent px-1 py-0.5 text-body hover:border-line focus:border-accent focus:bg-white focus:outline-none";
-const BUTTON_PRIMARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const BUTTON_SECONDARY =
-  "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
-const ALERT = "rounded-md border border-no/30 bg-no/5 px-3 py-2 text-sm text-no";
 const ITEM_BUTTON =
-  "rounded border border-line bg-white px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
+  "rounded border border-line bg-surface px-1.5 py-0.5 text-xs text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-40";
 
 function EditableField({
   label,
@@ -96,13 +95,15 @@ function StringListEditor({
 
   return (
     <div data-testid={`list-editor-${slug(label)}`}>
-      <p className={FIELD_LABEL}>{label}</p>
-      {hint && <p className="mt-0.5 mb-1 text-[0.65rem] text-muted">{hint}</p>}
+      <h3 className={FIELD_LABEL}>{label}</h3>
+      {/* text-body, not text-muted: muted-on-panel is 4.40:1, just under
+      WCAG AA's 4.5:1 (#57) — see the same note in SheetViewer.tsx. */}
+      {hint && <p className="mt-0.5 mb-1 text-xs text-body">{hint}</p>}
       <ul className="flex flex-col gap-1">
         {values.map((value, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: a freeform string list has no id of its own, and a value alone isn't guaranteed unique
           <li key={`${value}-${index}`} className="flex items-center gap-1">
-            <span className="flex-1 rounded border border-hairline bg-white px-2 py-1 text-sm text-ink">
+            <span className="flex-1 rounded border border-hairline bg-surface px-2 py-1 text-sm text-ink">
               {value}
             </span>
             <button
@@ -192,7 +193,7 @@ function WasherEditor({
           onChange={(v) => set("programs", v)}
         />
         <StringListEditor
-          label="Temperatures"
+          label="Temperatures (°C)"
           values={washer.temperatures}
           onChange={(v) => set("temperatures", v)}
         />
@@ -251,7 +252,22 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         value={iron.name}
         onChange={(v) => onChange({ ...iron, name: v })}
       />
-      <div className="mt-3 overflow-x-auto">
+      <h3 className={`${FIELD_LABEL} mt-3`}>Settings</h3>
+      {/* contain-layout (#47): overflow-x-auto alone correctly scrolls the
+      table within its own bounds — confirmed, this wrapper's own box was
+      already the right width — but a <table> wider than its ancestor
+      still leaks into document.documentElement.scrollWidth regardless,
+      forcing the whole page to scroll horizontally. contain: layout
+      stops that leak without changing the scroll behaviour itself.
+      Below sm: this table is hidden entirely (#102) in favour of the
+      stacked cards below — dragging sideways through a 512px table on
+      a phone is worse than the scroll this already fixed. Both copies
+      share one data-testid-scoped locator each so a test never has to
+      guess which markup is actually on screen at a given viewport. */}
+      <div
+        data-testid="iron-settings-table"
+        className="mt-1 hidden overflow-x-auto contain-layout sm:block"
+      >
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">
@@ -306,7 +322,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 <td className="py-1">
                   <button
                     type="button"
-                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     onClick={() => removeSetting(index)}
                     aria-label={`Remove setting ${index + 1}`}
                   >
@@ -317,6 +333,69 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* The same fields and the same handlers as the table above, stacked
+      instead of laid out sideways (#102) — a rendering change only, so
+      this reuses setSetting/removeSetting rather than any state of its
+      own. Hidden from sm: up, where the table takes over. */}
+      <div data-testid="iron-settings-cards" className="mt-1 flex flex-col gap-3 sm:hidden">
+        {iron.settings.map((setting, index) => (
+          <div key={setting.key} className="rounded-md border border-hairline p-3">
+            <div className="flex flex-col gap-2">
+              <div>
+                <span className={FIELD_LABEL}>Setting</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} label`}
+                  type="text"
+                  value={setting.label}
+                  onChange={(event) => setSetting(index, { label: event.target.value })}
+                />
+              </div>
+              <div>
+                <span className={FIELD_LABEL}>Dots</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} dots`}
+                  type="text"
+                  value={setting.dots}
+                  onChange={(event) => setSetting(index, { dots: event.target.value })}
+                />
+              </div>
+              <div>
+                <span className={FIELD_LABEL}>Detail</span>
+                <input
+                  className={`${TEXT_INPUT} mt-1`}
+                  aria-label={`Setting ${index + 1} detail`}
+                  type="text"
+                  value={setting.detail}
+                  onChange={(event) => setSetting(index, { detail: event.target.value })}
+                />
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="flex items-center gap-2 text-sm text-body">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    aria-label={`Setting ${index + 1} makes steam`}
+                    checked={setting.steam}
+                    onChange={(event) => setSetting(index, { steam: event.target.checked })}
+                  />
+                  Steam
+                </span>
+                <button
+                  type="button"
+                  className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  onClick={() => removeSetting(index)}
+                  aria-label={`Remove setting ${index + 1}`}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <button
         type="button"
@@ -428,7 +507,7 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
         Changes apply across the whole site once saved — the same config{" "}
         <a
           href="/config"
-          className="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+          className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
           the washing loads page
         </a>{" "}

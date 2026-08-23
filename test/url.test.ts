@@ -25,4 +25,23 @@ describe("readUrlFilters", () => {
   test("decodes a URL-encoded pile search", () => {
     expect(readUrlFilters("?pile=white%20socks")).toEqual({ pileQuery: "white socks" });
   });
+
+  test("reads the advanced fields alongside cut and pile", () => {
+    expect(
+      readUrlFilters(
+        "?cut=wash&pile=towels&program=Cottons&temperature=60&spin=1200&detergent=powder",
+      ),
+    ).toEqual({
+      cut: "wash",
+      pileQuery: "towels",
+      program: "Cottons",
+      temperature: "60",
+      spin: "1200",
+      detergentQuery: "powder",
+    });
+  });
+
+  test("reads a bare advanced field with nothing else present", () => {
+    expect(readUrlFilters("?program=Cottons")).toEqual({ program: "Cottons" });
+  });
 });

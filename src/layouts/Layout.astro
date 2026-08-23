@@ -1,4 +1,5 @@
 ---
+import HeaderUpload from "../components/HeaderUpload";
 import Logo from "../components/Logo.astro";
 import "../styles/global.css";
 
@@ -23,8 +24,8 @@ const path = Astro.url.pathname;
 // pathname ("/config/"), so this is a prefix check, not `path === "/config"`
 // — and Machine gets its own link now, so Washing loads must exclude it.
 const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
-const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent";
-const NAV_LINK_ACTIVE = "text-accent";
+const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
+const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";
 ---
 
@@ -34,6 +35,10 @@ const NAV_LINK_INACTIVE = "text-body";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {/* Belt-and-braces alongside global.css's `color-scheme: light dark`
+    (#62) — declared in two places because the AC named both, and this
+    one is readable before the stylesheet loads. */}
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
@@ -51,71 +56,102 @@ const NAV_LINK_INACTIVE = "text-body";
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
   </head>
-  <body class="bg-white text-body antialiased">
+  <body class="bg-base text-body antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg"
+    >
+      Skip to content
+    </a>
     <div class="gh-ribbon">
       <a href="https://github.com/alrayyes/washy-washy" target="_blank" rel="noopener noreferrer">
         Fork me on GitHub
       </a>
     </div>
     <header
-      class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:flex-nowrap sm:px-6`}
+      class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
     >
-      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent">
+      <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
         <Logo size={32} />
-        <span class="text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
+        <span class="font-heading text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
       </a>
-      <nav
-        class="flex w-full items-center gap-3 text-sm font-semibold sm:w-auto sm:pr-32"
-        aria-label="Site"
-      >
-        {/* `w-full` below `sm` forces nav onto its own row unconditionally
-        (not just "wrap if it doesn't fit") — otherwise there's a range of
-        widths just under `sm` where three links happen to fit on the logo's
-        row with no reserved space, and the last one sits under the ribbon.
-        On its own row, nav starts from the left edge, clear of the ribbon
-        without needing padding. At `sm` and up, `w-auto` puts nav back on
-        the logo's row, where `pr-32` clears the "Fork me on GitHub" ribbon
-        (.gh-ribbon in global.css) instead (#46). */}
-        <a
-          href="/"
-          aria-current={path === "/" ? "page" : undefined}
-          class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-        >
-          Home
-        </a>
-        <a
-          href="/config"
-          aria-current={isWashingLoads ? "page" : undefined}
-          class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-        >
-          Washing loads
-        </a>
-        <a
-          href="/config/machine"
-          aria-current={path.startsWith("/config/machine") ? "page" : undefined}
-          class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
-        >
-          Machine
-        </a>
-      </nav>
+      <div class="flex w-full flex-wrap items-center gap-3 md:w-auto md:flex-nowrap md:pr-32">
+        {/* `w-full` below `md` forces this whole group onto its own row
+        unconditionally (not just "wrap if it doesn't fit") — otherwise
+        there's a range of widths just under `md` where everything happens
+        to fit on the logo's row with no reserved space, and the last item
+        sits under the ribbon, or the nav links wrap awkwardly next to the
+        upload button. On its own row, the group starts from the left edge,
+        clear of the ribbon without needing padding. At `md` and up,
+        `w-auto` puts it back on the logo's row, where `pr-32` clears the
+        "Fork me on GitHub" ribbon (.gh-ribbon in global.css) instead
+        (#46) — applied to this wrapper, not `nav` itself, since the
+        upload control (#80) is now the trailing element. The breakpoint
+        moved from `sm` to `md` when the upload button (#80) made the group
+        wider than three nav links alone needed. */}
+        <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
+          <a
+            href="/"
+            aria-current={path === "/" ? "page" : undefined}
+            class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+          >
+            Home
+          </a>
+          <a
+            href="/config"
+            aria-current={isWashingLoads ? "page" : undefined}
+            class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+          >
+            Washing loads
+          </a>
+          <a
+            href="/config/machine"
+            aria-current={path.startsWith("/config/machine") ? "page" : undefined}
+            class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+          >
+            Machine
+          </a>
+        </nav>
+        <HeaderUpload client:load />
+      </div>
     </header>
-    <main class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
+    <main id="main" tabindex="-1" class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>
       <slot />
     </main>
     <footer
       class={`mx-auto ${CHROME_WIDTH} border-t border-hairline px-4 py-8 text-sm text-muted sm:px-6`}
     >
       <div class="flex flex-col gap-2">
-        <a
-          href="https://github.com/alrayyes/washy-washy"
-          class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
-        >
-          Washy washy on GitHub
-        </a>
+        <div class="flex flex-wrap gap-x-4 gap-y-1">
+          <a
+            href="https://github.com/alrayyes/washy-washy"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+          >
+            Washy washy on GitHub
+          </a>
+          <a
+            href="/docs/"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+          >
+            Docs
+          </a>
+          <a
+            href="/disclaimer"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+          >
+            Disclaimer
+          </a>
+          <a
+            href="/privacy"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+          >
+            Privacy policy
+          </a>
+        </div>
         <p class="max-w-md text-xs text-muted">
           {"© 2026 Ryan Kes. Licensed under the "}<a
             href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
-            class="underline decoration-hairline underline-offset-2 hover:text-accent hover:decoration-accent"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
           >
             GPL-3.0-or-later
           </a>{

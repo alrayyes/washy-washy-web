@@ -1,3 +1,129 @@
+## [1.18.0](https://github.com/alrayyes/washy-washy-web/compare/v1.17.0...v1.18.0) (2026-08-22)
+
+### Features
+
+* stack the iron settings table as cards below sm: ([#102](https://github.com/alrayyes/washy-washy-web/issues/102)) ([#107](https://github.com/alrayyes/washy-washy-web/issues/107)) ([4fb5117](https://github.com/alrayyes/washy-washy-web/commit/4fb511781c8ef01222f5cc0b7eee12fe67a69ddf))
+
+## [1.17.0](https://github.com/alrayyes/washy-washy-web/compare/v1.16.0...v1.17.0) (2026-08-22)
+
+### Features
+
+* surface an instruction's referenceName/referenceLink on the sheet ([#79](https://github.com/alrayyes/washy-washy-web/issues/79)) ([#106](https://github.com/alrayyes/washy-washy-web/issues/106)) ([ce295e3](https://github.com/alrayyes/washy-washy-web/commit/ce295e3a234187e37783a88f45677af068b084a4))
+
+## [1.16.0](https://github.com/alrayyes/washy-washy-web/compare/v1.15.0...v1.16.0) (2026-08-22)
+
+### Features
+
+* add a Starlight docs site at /docs ([#104](https://github.com/alrayyes/washy-washy-web/issues/104)) ([eec852e](https://github.com/alrayyes/washy-washy-web/commit/eec852ed31cee05ee4679bd66c283db90d5ea8f6)), closes [#12](https://github.com/alrayyes/washy-washy-web/issues/12)
+
+## [1.15.0](https://github.com/alrayyes/washy-washy-web/compare/v1.14.1...v1.15.0) (2026-08-22)
+
+### Features
+
+* advanced filters on the main page (detergent, programme, temperature, spin) ([#103](https://github.com/alrayyes/washy-washy-web/issues/103)) ([5599e1e](https://github.com/alrayyes/washy-washy-web/commit/5599e1e0810a5417eab4433069d3585e1939e44e)), closes [#8](https://github.com/alrayyes/washy-washy-web/issues/8)
+
+## [1.14.1](https://github.com/alrayyes/washy-washy-web/compare/v1.14.0...v1.14.1) (2026-08-22)
+
+### Bug Fixes
+
+* the iron settings table forces horizontal scroll on mobile ([#101](https://github.com/alrayyes/washy-washy-web/issues/101)) ([bd8f2a4](https://github.com/alrayyes/washy-washy-web/commit/bd8f2a49783836ccbaf9c548d36095a93b479830)), closes [#47](https://github.com/alrayyes/washy-washy-web/issues/47)
+
+## [1.14.0](https://github.com/alrayyes/washy-washy-web/compare/v1.13.0...v1.14.0) (2026-08-22)
+
+### Features
+
+* a proper font pairing and a heading-size pass ([#100](https://github.com/alrayyes/washy-washy-web/issues/100)) ([c1904c4](https://github.com/alrayyes/washy-washy-web/commit/c1904c4ab81668a5c62bbc7167e412309831c580)), closes [#60](https://github.com/alrayyes/washy-washy-web/issues/60) [#56](https://github.com/alrayyes/washy-washy-web/issues/56) [#42](https://github.com/alrayyes/washy-washy-web/issues/42)
+
+## [1.13.0](https://github.com/alrayyes/washy-washy-web/compare/v1.12.4...v1.13.0) (2026-08-22)
+
+### Features
+
+* dark mode via prefers-color-scheme ([#98](https://github.com/alrayyes/washy-washy-web/issues/98)) ([56d1bb5](https://github.com/alrayyes/washy-washy-web/commit/56d1bb52ab034ab4fea2b88c6ffce4202fc0c8df)), closes [#60](https://github.com/alrayyes/washy-washy-web/issues/60) [#62](https://github.com/alrayyes/washy-washy-web/issues/62)
+
+## [1.12.4](https://github.com/alrayyes/washy-washy-web/compare/v1.12.3...v1.12.4) (2026-08-22)
+
+### Bug Fixes
+
+* help tooltip can overflow narrow viewports ([#93](https://github.com/alrayyes/washy-washy-web/issues/93)) ([28fa51e](https://github.com/alrayyes/washy-washy-web/commit/28fa51ea2c2cab2af73269c592ee1f46465fd708)), closes [#59](https://github.com/alrayyes/washy-washy-web/issues/59)
+
+## [1.12.3](https://github.com/alrayyes/washy-washy-web/compare/v1.12.2...v1.12.3) (2026-08-22)
+
+### Bug Fixes
+
+* contrast pass - muted-on-panel misses AA ([#92](https://github.com/alrayyes/washy-washy-web/issues/92)) ([a3e6407](https://github.com/alrayyes/washy-washy-web/commit/a3e64075dd04f70d41fa4460bcd1576f273b7326)), closes [#57](https://github.com/alrayyes/washy-washy-web/issues/57)
+
+## [1.12.2](https://github.com/alrayyes/washy-washy-web/compare/v1.12.1...v1.12.2) (2026-08-22)
+
+### Bug Fixes
+
+* raise the micro-type floor (9.6px labels, 10px mobile ribbon) ([#91](https://github.com/alrayyes/washy-washy-web/issues/91)) ([8f68e83](https://github.com/alrayyes/washy-washy-web/commit/8f68e83775738a2f95e8c9807b39eeee7e8f6eab)), closes [#56](https://github.com/alrayyes/washy-washy-web/issues/56) [#42](https://github.com/alrayyes/washy-washy-web/issues/42) [#56](https://github.com/alrayyes/washy-washy-web/issues/56)
+
+## [1.12.1](https://github.com/alrayyes/washy-washy-web/compare/v1.12.0...v1.12.1) (2026-08-22)
+
+### Bug Fixes
+
+* copy-link confirmation is silent for screen readers ([#90](https://github.com/alrayyes/washy-washy-web/issues/90)) ([b093e4f](https://github.com/alrayyes/washy-washy-web/commit/b093e4fad337e707f986c2e5792f7f76f61ef80c)), closes [#55](https://github.com/alrayyes/washy-washy-web/issues/55)
+
+## [1.12.0](https://github.com/alrayyes/washy-washy-web/compare/v1.11.3...v1.12.0) (2026-08-22)
+
+### Features
+
+* skip-to-content link ([#89](https://github.com/alrayyes/washy-washy-web/issues/89)) ([99c684d](https://github.com/alrayyes/washy-washy-web/commit/99c684d611f76111d8163a6dcba47ec164a66a12)), closes [#54](https://github.com/alrayyes/washy-washy-web/issues/54)
+
+## [1.11.3](https://github.com/alrayyes/washy-washy-web/compare/v1.11.2...v1.11.3) (2026-08-22)
+
+### Bug Fixes
+
+* validate the duration field's H:MM shape, allow typing a colon ([#87](https://github.com/alrayyes/washy-washy-web/issues/87)) ([0658348](https://github.com/alrayyes/washy-washy-web/commit/06583489f3278a0c58c54ae680c0367c2f4d5619)), closes [#53](https://github.com/alrayyes/washy-washy-web/issues/53)
+
+## [1.11.2](https://github.com/alrayyes/washy-washy-web/compare/v1.11.1...v1.11.2) (2026-08-22)
+
+### Bug Fixes
+
+* give text fields keyboard focus a real ring, not a 1px border change ([#86](https://github.com/alrayyes/washy-washy-web/issues/86)) ([69514a4](https://github.com/alrayyes/washy-washy-web/commit/69514a41d84dfeb0f5e155f7c2de438413de5b89)), closes [#52](https://github.com/alrayyes/washy-washy-web/issues/52)
+
+## [1.11.1](https://github.com/alrayyes/washy-washy-web/compare/v1.11.0...v1.11.1) (2026-08-22)
+
+### Bug Fixes
+
+* chart card mixes washing and ironing content out of order ([#84](https://github.com/alrayyes/washy-washy-web/issues/84)) ([d9ac164](https://github.com/alrayyes/washy-washy-web/commit/d9ac16421df66fe24858e561707d28853dd8a1ef)), closes [#83](https://github.com/alrayyes/washy-washy-web/issues/83)
+
+## [1.11.0](https://github.com/alrayyes/washy-washy-web/compare/v1.10.1...v1.11.0) (2026-08-22)
+
+### Features
+
+* persistent "Upload config" control in the site header ([#81](https://github.com/alrayyes/washy-washy-web/issues/81)) ([6938320](https://github.com/alrayyes/washy-washy-web/commit/6938320f1247b8944d7627c0bb5dd7884d592dec)), closes [#80](https://github.com/alrayyes/washy-washy-web/issues/80)
+
+## [1.10.1](https://github.com/alrayyes/washy-washy-web/compare/v1.10.0...v1.10.1) (2026-08-22)
+
+### Bug Fixes
+
+* config-page cards lose their headings ([#78](https://github.com/alrayyes/washy-washy-web/issues/78)) ([3427901](https://github.com/alrayyes/washy-washy-web/commit/34279018042ca5c61e7ba11d13493241527be05b)), closes [#51](https://github.com/alrayyes/washy-washy-web/issues/51)
+
+## [1.10.0](https://github.com/alrayyes/washy-washy-web/compare/v1.9.0...v1.10.0) (2026-08-22)
+
+### Features
+
+* add Linen to the bundled washing chart ([#76](https://github.com/alrayyes/washy-washy-web/issues/76)) ([82db3e1](https://github.com/alrayyes/washy-washy-web/commit/82db3e1c36c45cf883a60a5b8452dca8c7110b28)), closes [#75](https://github.com/alrayyes/washy-washy-web/issues/75)
+
+## [1.9.0](https://github.com/alrayyes/washy-washy-web/compare/v1.8.5...v1.9.0) (2026-08-22)
+
+### Features
+
+* label the machine page's temperature list with its unit ([#73](https://github.com/alrayyes/washy-washy-web/issues/73)) ([0a9c9d6](https://github.com/alrayyes/washy-washy-web/commit/0a9c9d6adb2f60abc72c5326e6b98453fdd93402))
+
+## [1.8.5](https://github.com/alrayyes/washy-washy-web/compare/v1.8.4...v1.8.5) (2026-08-22)
+
+### Bug Fixes
+
+* clarify why some pile rows in "Loads" are bold ([#72](https://github.com/alrayyes/washy-washy-web/issues/72)) ([c763745](https://github.com/alrayyes/washy-washy-web/commit/c7637456687e078f51afdb8f327a35e8d87191c1)), closes [#71](https://github.com/alrayyes/washy-washy-web/issues/71)
+
+## [1.8.4](https://github.com/alrayyes/washy-washy-web/compare/v1.8.3...v1.8.4) (2026-08-22)
+
+### Bug Fixes
+
+* chip selectors claim radiogroup semantics they don't implement ([#69](https://github.com/alrayyes/washy-washy-web/issues/69)) ([de1688b](https://github.com/alrayyes/washy-washy-web/commit/de1688b5b51c5e3da26be2eb212858c70f5eec64)), closes [#49](https://github.com/alrayyes/washy-washy-web/issues/49)
+
 ## [1.8.3](https://github.com/alrayyes/washy-washy-web/compare/v1.8.2...v1.8.3) (2026-08-22)
 
 ### Bug Fixes
