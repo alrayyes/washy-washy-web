@@ -7,7 +7,8 @@ import {
   variants,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { readCustomConfig } from "../lib/customConfig";
+import { CONFIG_HASH_PREFIX, decodeConfigHash, encodeConfigHash } from "../lib/configShare";
+import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import {
   type AdvancedFilters,
   emptyAdvancedFilters,
@@ -117,6 +118,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   const [printDownloadDropped, setPrintDownloadDropped] = useState<string[]>([]);
   const [shareStatus, setShareStatus] = useState("");
   const [shareError, setShareError] = useState<string | null>(null);
+  const [configHashError, setConfigHashError] = useState<string | null>(null);
   // Machine and chart together — whatever was last uploaded or edited on
   // the config page (customConfig.ts). null means "nothing active,
   // showing the bundled example," the same as before.
@@ -161,13 +163,45 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         });
       }
     }
-    const config = readCustomConfig();
-    if (config) {
-      setActiveMachine(config.machine);
-      setCustomItems(resolve(config.chart));
+    // A #config=... hash wins over whatever's already saved — same
+    // "what was shared is what shows" reasoning the URL filter state
+    // above already follows. Async (gzip via CompressionStream), so the
+    // rest of this effect's own restoration runs first, synchronously,
+    // and this only overrides it if the hash actually decodes.
+    async function restoreConfigFromHash(): Promise<boolean> {
+      const hash = window.location.hash;
+      if (!hash.startsWith(`#${CONFIG_HASH_PREFIX}`)) return false;
+      try {
+        const config = await decodeConfigHash(hash);
+        if (!config) return false;
+        setActiveMachine(config.machine);
+        setCustomItems(resolve(config.chart));
+        // Persists the same way an upload does — "becomes the active
+        // config for that visit" means more than just this one render.
+        writeCustomConfig(config);
+        // Consumed: clears the (long) hash from the address bar so a
+        // reload doesn't re-decode it, and so what the visitor bookmarks
+        // or re-shares from here on is the short canonical URL, not the
+        // one-time link they arrived on.
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+        return true;
+      } catch (reason) {
+        setConfigHashError(reason instanceof Error ? reason.message : String(reason));
+        return false;
+      }
     }
-    restored.current = true;
-    setHydrated(true);
+
+    restoreConfigFromHash().then((restoredFromHash) => {
+      if (!restoredFromHash) {
+        const config = readCustomConfig();
+        if (config) {
+          setActiveMachine(config.machine);
+          setCustomItems(resolve(config.chart));
+        }
+      }
+      restored.current = true;
+      setHydrated(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -279,10 +313,21 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
    * own comment in `styles.ts`), falling back to the clipboard — same as
    * `handleShareCard` above always does, just without a share sheet to
    * try first (#112).
+   *
+   * When a custom machine/chart is active, the link also carries the
+   * whole config, compressed, as a #config=... hash — "the exact state of
+   * the site" someone can open cold, not just the filters against
+   * whatever they already had loaded (#123). Re-reads storage rather than
+   * using `customItems`'s already-resolved state: the raw Config (with
+   * its unresolved chart) is what needs re-encoding, and storage is the
+   * one place that's still kept in that shape.
    */
   async function handleShareSheet() {
     setShareError(null);
-    const url = window.location.href;
+    const config = readCustomConfig();
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = config ? await encodeConfigHash(config) : "";
+    const url = shareUrl.toString();
 
     if (navigator.share) {
       try {
@@ -452,6 +497,12 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         </details>
       </fieldset>
 
+      {configHashError && (
+        <p className={ALERT} role="alert">
+          Could not open the shared config: {configHashError}. Showing what was already active
+          instead.
+        </p>
+      )}
       <p className="text-sm text-body">
         {customItems
           ? "Showing your own config."
