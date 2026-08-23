@@ -10,9 +10,12 @@ async function goto(page: Page) {
   await page.waitForSelector('[data-hydrated="true"]');
 }
 
-test("shows the bundled washer and iron settings", async ({ page }) => {
+test("shows the bundled washer and iron settings, under a heading that says what the page is for", async ({
+  page,
+}) => {
   await goto(page);
 
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Washer & iron settings");
   await expect(page.locator("#washer-name")).toHaveValue(/Generic front loader/);
   await expect(page.locator("#iron-name")).toHaveValue(/Generic steam iron/);
   await expectNoA11yViolations(page);
@@ -76,6 +79,31 @@ test("editing the washer and saving applies across the site", async ({ page }) =
   await page.goto("/config");
   await page.waitForSelector('[data-hydrated="true"]');
   await expect(page.getByText("E2E Custom Washer")).toBeVisible();
+});
+
+test("downloading the config from the washer & iron page reflects a saved edit, not a draft", async ({
+  page,
+}) => {
+  await goto(page);
+
+  await page.locator("#washer-name").fill("E2E Download Washer");
+
+  // Not saved yet — the download link has to reflect the last saved
+  // config, not this in-progress draft (#130).
+  const draftHref = await page.locator('a[download="washy-washy.json"]').getAttribute("href");
+  const draftConfig = JSON.parse(
+    decodeURIComponent(draftHref?.replace("data:application/json;charset=utf-8,", "") ?? ""),
+  );
+  expect(draftConfig.machine.washer.name).not.toBe("E2E Download Washer");
+
+  await page.getByRole("button", { name: /Save changes/ }).click();
+  await expect(page.getByText("Showing your own machine.")).toBeVisible();
+
+  const savedHref = await page.locator('a[download="washy-washy.json"]').getAttribute("href");
+  const savedConfig = JSON.parse(
+    decodeURIComponent(savedHref?.replace("data:application/json;charset=utf-8,", "") ?? ""),
+  );
+  expect(savedConfig.machine.washer.name).toBe("E2E Download Washer");
 });
 
 test("resetting to the bundled machine preserves the active chart", async ({ page }) => {

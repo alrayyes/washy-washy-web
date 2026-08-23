@@ -154,7 +154,9 @@ test("the nav reaches the app's own three pages, each marking only itself active
   await expect(nav.getByRole("link", { name: "Washing loads" })).not.toHaveAttribute(
     "aria-current",
   );
-  await expect(nav.getByRole("link", { name: "Machine" })).not.toHaveAttribute("aria-current");
+  await expect(nav.getByRole("link", { name: "Washer & iron" })).not.toHaveAttribute(
+    "aria-current",
+  );
   await expect(nav.getByRole("link", { name: "Docs" })).not.toHaveAttribute("aria-current");
 
   await nav.getByRole("link", { name: "Washing loads" }).click();
@@ -165,12 +167,17 @@ test("the nav reaches the app's own three pages, each marking only itself active
     "page",
   );
   await expect(nav.getByRole("link", { name: "Home" })).not.toHaveAttribute("aria-current");
-  await expect(nav.getByRole("link", { name: "Machine" })).not.toHaveAttribute("aria-current");
+  await expect(nav.getByRole("link", { name: "Washer & iron" })).not.toHaveAttribute(
+    "aria-current",
+  );
 
-  await nav.getByRole("link", { name: "Machine" }).click();
+  await nav.getByRole("link", { name: "Washer & iron" }).click();
   await expect(page).toHaveURL(/\/config\/machine\/?$/);
   await page.waitForSelector('[data-hydrated="true"]');
-  await expect(nav.getByRole("link", { name: "Machine" })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Washer & iron" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   // Nested under /config, but Machine has its own link now — Washing
   // loads shouldn't also claim to be the current page.
   await expect(nav.getByRole("link", { name: "Washing loads" })).not.toHaveAttribute(

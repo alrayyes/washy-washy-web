@@ -1,6 +1,7 @@
 import {
   type Config,
   configFromJson,
+  configToJson,
   type Instruction,
   type Iron,
   type IronSetting,
@@ -10,7 +11,7 @@ import {
   rowsFromInstructions,
   type Washer,
 } from "@washy-washy/core/browser";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import { slug } from "../lib/slug";
 import {
@@ -446,6 +447,13 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
   // compares the machine itself, not just whether any customConfig exists.
   const machineIsCustom =
     customConfig != null && JSON.stringify(customConfig.machine) !== JSON.stringify(bundledMachine);
+  // The saved config, same as /config's own download link — not the
+  // draft: an in-progress, unsaved edit isn't what "download my config"
+  // means here any more than it does there (#130).
+  const downloadHref = useMemo(() => {
+    const config: Config = customConfig ?? { machine: bundledMachine, chart: bundledItems };
+    return `data:application/json;charset=utf-8,${encodeURIComponent(configToJson(config))}`;
+  }, [customConfig, bundledMachine, bundledItems]);
 
   function handleSave() {
     try {
@@ -525,6 +533,9 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
               onChange={handleUpload}
             />
           </label>
+          <a className={BUTTON_SECONDARY} href={downloadHref} download="washy-washy.json">
+            Download current config
+          </a>
           {machineIsCustom && (
             <button className={BUTTON_SECONDARY} type="button" onClick={handleResetMachine}>
               Use the bundled machine instead

@@ -39,7 +39,7 @@ test("a docs page has the same header and footer chrome as the rest of the site"
   const nav = page.getByRole("navigation", { name: "Site" });
   await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Washing loads" })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Machine" })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Washer & iron" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Docs" })).toHaveAttribute("aria-current", "page");
   // Role-based lookup is ambiguous here: a file <input> carries an
   // implicit "button" role too, alongside the real <button> (#80).
