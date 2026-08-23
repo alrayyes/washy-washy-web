@@ -44,6 +44,24 @@ that OS setting on every page and every future visit — until you click it
 again. It's a two-state toggle, not a picker: there's no separate "back to
 system" option.
 
+## Keyboard navigation
+
+The site also responds to a handful of vim-style shortcuts, mounted once in
+the header so they work on every page — these docs included:
+
+- `j` and `k` scroll the page down and up.
+- `g` `g` (press `g` twice) jumps to the top.
+- `G` (shift-g) jumps to the bottom.
+- `/` focuses the page's own search field — the pile search on the front
+  page, for example — without typing a slash into it.
+- `?` (shift-?) opens a help overlay listing all of these; `Esc` or a click
+  outside it closes it again.
+
+The same overlay also opens from the `?` button in the header, for anyone
+using a mouse or a screen reader instead of the keyboard. None of these
+shortcuts fire while you're typing into a text field, a textarea, a select
+or anything else editable — normal typing always wins.
+
 ## Filters
 
 The front page filters by which cut you want (full chart, washing only,
