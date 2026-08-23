@@ -52,6 +52,13 @@ ironing only) and by a free-text pile search, plus an "Advanced" disclosure
 spin, and a detergent search. All of them narrow the same list; a pile has
 to match every active filter to show.
 
+The programme, temperature and spin selects only ever offer values that
+would still leave at least one pile showing, given the pile search and
+whatever else you've already picked in Advanced — so you can't pick a
+combination that lands you on an empty chart. The lists update live as you
+change other filters, and if a field has nothing left that could match, it
+disables itself instead of showing empty options.
+
 Filters persist in `localStorage` between visits, the same way a config
 does. A filtered view is also shareable: the address bar carries `cut`,
 `pile`, `program`, `temperature`, `spin` and `detergent` as query
@@ -77,7 +84,7 @@ even in a browser that's never touched your `localStorage`. Nothing here
 touches a server either: a fragment is never sent over the network, so the
 link itself is still the entire transfer, the same as an uploaded config
 file. Once the page has read and saved it, it clears the fragment from the
-address bar — reload or share again from there and you get the site's
+address bar — reload or share again from there, and you get the site's
 normal short URL, not the one-time link. A link that's been corrupted or
 hand-edited shows the same row/column-scoped error an invalid config upload
 does, and the page falls back to whatever was already active rather than
