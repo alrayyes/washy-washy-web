@@ -259,6 +259,92 @@ test("a failed copy is announced as an alert, not just logged", async ({ page })
   await expect(card.getByRole("button", { name: /Copy link/ })).toBeVisible();
 });
 
+test("the page's own Share copies the current URL, filter state included, when there's no native share sheet", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  // Chromium in a headless/CI context has no navigator.share of its own —
+  // forced explicitly rather than relying on that, the same reasoning as
+  // "a failed copy is announced..." below forcing navigator.clipboard.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
+  });
+  await goto(page);
+  await page.selectOption("#filter-cut", "wash");
+
+  await page.getByTestId("share-sheet").click();
+  await expect(page.getByTestId("share-sheet")).toHaveText("Copied!");
+  await expect(page.getByTestId("share-sheet-status")).toHaveText("Copied!");
+
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  expect(copied).toBe(page.url());
+  expect(new URL(copied).searchParams.get("cut")).toBe("wash");
+});
+
+test("the page's own Share tries the native share sheet first, and never touches the clipboard when it's used", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.addInitScript(() => {
+    (window as unknown as { __shared: unknown[] }).__shared = [];
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      value: (data: unknown) => {
+        (window as unknown as { __shared: unknown[] }).__shared.push(data);
+        return Promise.resolve();
+      },
+    });
+  });
+  await goto(page);
+
+  await page.getByTestId("share-sheet").click();
+
+  const shared = await page.evaluate(() => (window as unknown as { __shared: unknown[] }).__shared);
+  expect(shared).toEqual([{ url: page.url() }]);
+  // The native share sheet already gave its own confirmation UI — this
+  // button never claims "Copied!" for a share it didn't make.
+  await expect(page.getByTestId("share-sheet")).toHaveText("Share this view");
+  await expect(page.evaluate(() => navigator.clipboard.readText().catch(() => ""))).resolves.toBe(
+    "",
+  );
+});
+
+test("cancelling the native share sheet isn't treated as a failure", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      value: () => Promise.reject(new DOMException("cancelled", "AbortError")),
+    });
+  });
+  await goto(page);
+
+  await page.getByTestId("share-sheet").click();
+
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByTestId("share-sheet")).toHaveText("Share this view");
+});
+
+test("Share falls back to the clipboard when the native share sheet itself fails, and alerts only if that fails too", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      value: () => Promise.reject(new Error("no share target")),
+    });
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: () => Promise.reject(new Error("denied")) },
+    });
+  });
+  await goto(page);
+
+  await page.getByTestId("share-sheet").click();
+
+  await expect(page.getByRole("alert")).toContainText("Could not share this view");
+});
+
 test("an uploaded config (from the config page) shows here too", async ({ page }) => {
   const config = await downloadedConfig(page);
   config.chart[0].clothing_type = "E2E Custom Pile";
