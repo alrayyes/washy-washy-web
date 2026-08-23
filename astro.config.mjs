@@ -6,6 +6,14 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { readUmamiConfig } from "./src/lib/analytics.ts";
+
+// process.env here, not import.meta.env: this file runs as plain Node,
+// before Vite's own module graph (and its import.meta.env handling)
+// exists — Cloudflare's build environment still sets real process env
+// vars, so this reads them the same way Layout.astro's import.meta.env
+// does at the Vite-processed layer (#134).
+const umami = readUmamiConfig(process.env);
 
 export default defineConfig({
   site: "https://washy-washy.ryankes.eu",
@@ -65,6 +73,20 @@ export default defineConfig({
       // building a pagefind index nothing queries, rather than shipping
       // unused search assets in dist/.
       pagefind: false,
+      // Same opt-in Umami toggle Layout.astro carries for the rest of
+      // the site — /docs is covered too (#134), one script either way.
+      head: umami
+        ? [
+            {
+              tag: "script",
+              attrs: {
+                defer: true,
+                src: umami.scriptUrl,
+                "data-website-id": umami.websiteId,
+              },
+            },
+          ]
+        : [],
       sidebar: [
         { label: "Overview", link: "/docs/" },
         { label: "The chart and machine files", link: "/docs/chart-and-machine/" },

@@ -1,6 +1,7 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import { readUmamiConfig } from "../lib/analytics";
 import { THEME_BOOTSTRAP_SCRIPT } from "../lib/themePreference";
 import "../styles/global.css";
 
@@ -15,6 +16,7 @@ const { title, description, wide = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL("/og-image.png", Astro.site);
 const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
+const umami = readUmamiConfig(import.meta.env);
 ---
 
 <!doctype html>
@@ -51,6 +53,16 @@ const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+
+    {/* Opt-in only — absent unless both PUBLIC_UMAMI_SCRIPT_URL and
+    PUBLIC_UMAMI_WEBSITE_ID are set at build time (analytics.ts). Umami
+    itself is cookieless by default, so this needs no extra consent
+    gating beyond that (#134). */}
+    {
+      umami && (
+        <script is:inline defer src={umami.scriptUrl} data-website-id={umami.websiteId} />
+      )
+    }
   </head>
   <body class="bg-base text-body antialiased">
     <a
