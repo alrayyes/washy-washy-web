@@ -28,8 +28,10 @@
       "markdownlint",
       "npm",
       "subpath",
+      "toolchain",
       "typecheck",
       "typechecks",
+      "vendored",
       "washy",
       "washy-washy-cli",
       "wrangler"

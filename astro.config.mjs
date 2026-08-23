@@ -92,6 +92,21 @@ export default defineConfig({
         { label: "The chart and machine files", link: "/docs/chart-and-machine/" },
         { label: "Using the web app", link: "/docs/web-app/" },
         { label: "Generate a config with AI", link: "/docs/ai-prompt/" },
+        {
+          // A separate, clearly-labelled group rather than a second
+          // sidebar scoped to /dev-docs — Starlight doesn't scope sidebar
+          // visibility per top-level path without a plugin, and the
+          // AC this satisfies (#125) is about page *content* staying
+          // end-user-only, not about a labelled cross-link to a
+          // different section being visible from the /docs sidebar too.
+          label: "Contributor docs",
+          items: [
+            { label: "Overview", link: "/dev-docs/" },
+            { label: "Architecture", link: "/dev-docs/architecture/" },
+            { label: "Package relationships", link: "/dev-docs/packages/" },
+            { label: "Island hydration", link: "/dev-docs/hydration/" },
+          ],
+        },
       ],
     }),
   ],
