@@ -300,16 +300,32 @@ test("the page's own Share copies the current URL, filter state included, when t
 
 test("the page's own Share tries the native share sheet first, and never touches the clipboard when it's used", async ({
   page,
-  context,
 }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  // Stubs both share and clipboard.writeText to record calls, rather than
+  // granting real clipboard permissions and reading the OS clipboard back
+  // — the real clipboard is a resource shared across whatever else is
+  // running in parallel on the same machine, including other Playwright
+  // workers running a *different* test that also writes to it, which
+  // made this specific assertion flaky under full-suite parallel load
+  // (#128) even though the feature itself was never broken.
   await page.addInitScript(() => {
-    (window as unknown as { __shared: unknown[] }).__shared = [];
+    (window as unknown as { __shared: unknown[]; __clipboardWrites: unknown[] }).__shared = [];
+    (window as unknown as { __shared: unknown[]; __clipboardWrites: unknown[] }).__clipboardWrites =
+      [];
     Object.defineProperty(navigator, "share", {
       configurable: true,
       value: (data: unknown) => {
         (window as unknown as { __shared: unknown[] }).__shared.push(data);
         return Promise.resolve();
+      },
+    });
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: (text: string) => {
+          (window as unknown as { __clipboardWrites: unknown[] }).__clipboardWrites.push(text);
+          return Promise.resolve();
+        },
       },
     });
   });
@@ -322,9 +338,10 @@ test("the page's own Share tries the native share sheet first, and never touches
   // The native share sheet already gave its own confirmation UI — this
   // button never claims "Copied!" for a share it didn't make.
   await expect(page.getByTestId("share-sheet")).toHaveText("Share this view");
-  await expect(page.evaluate(() => navigator.clipboard.readText().catch(() => ""))).resolves.toBe(
-    "",
+  const clipboardWrites = await page.evaluate(
+    () => (window as unknown as { __clipboardWrites: unknown[] }).__clipboardWrites,
   );
+  expect(clipboardWrites).toEqual([]);
 });
 
 test("cancelling the native share sheet isn't treated as a failure", async ({ page }) => {
