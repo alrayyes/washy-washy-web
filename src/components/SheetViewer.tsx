@@ -249,9 +249,15 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   // Phone-only, deliberately: renderPrint always draws a reference table
   // plus every pile's own card, never one pile in isolation, so there's no
   // per-card equivalent to offer here (#122).
+  //
+  // renderCard, not renderPhone with a one-group slice: the latter drew
+  // the whole phone-sheet chrome (loads table, legend) around the single
+  // card, and tripped react-pdf's "Node of type VIEW can't wrap between
+  // pages" warning doing it. renderCard is the dedicated single-card
+  // layout `@washy-washy/pdf` added for exactly this (#77).
   async function handleDownloadCard(group: ResolvedInstruction[]): Promise<string[]> {
-    const { renderPhone } = await import("@washy-washy/pdf");
-    const { pdf, dropped } = await renderPhone(group, activeMachine, cut);
+    const { renderCard } = await import("@washy-washy/pdf");
+    const { pdf, dropped } = await renderCard(group, activeMachine, cut);
     const names = [...new Set(group.map((member) => slug(member.clothingType)))];
     savePdf(pdf, `${names.join("-")}.pdf`);
     return dropped;
