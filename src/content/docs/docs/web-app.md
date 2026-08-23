@@ -62,7 +62,7 @@ URL off.
 
 ## Share
 
-Next to the "Download this sheet as a PDF" button sits **Share this
+Next to the PDF download buttons sits **Share this
 view**, which sends the current page URL as-is — filters and all, since the
 address bar already carries them as query parameters (see Filters above), so
 there's nothing extra to package up. It tries the browser's native share
@@ -75,13 +75,21 @@ else happens and nothing gets copied behind your back.
 
 ## PDF export
 
-The front page's "Download this sheet as a PDF" button renders the same
-phone PDF the CLI's `bun run generate` writes, using the same
-[`@washy-washy/pdf`](https://github.com/alrayyes/washy-washy-pdf) the CLI
-does — but client-side, and only for whatever's currently filtered onto the
-page. A single card also has its own **Download** button, for one pile at
-a time rather than the whole chart. Neither one generates anything until
-you click it; filtering the page never triggers a render in the background.
+The front page has two download buttons, both scoped to whatever's currently
+filtered onto the page and rendered client-side with the same
+[`@washy-washy/pdf`](https://github.com/alrayyes/washy-washy-pdf) the CLI's
+`bun run generate` uses. Neither generates anything until you click it —
+filtering the page never triggers a render in the background.
+
+- **Download for phone** writes the same narrow, single scrolling page the
+  CLI produces — meant for reading off your phone next to the machine.
+- **Download to print** writes an A4 sheet instead: a reference table plus
+  one detail card per pile, meant to be printed and stuck up.
+
+A single card also has its own **Download** button, for one pile at a time.
+It's phone format only — the print layout always draws the whole reference
+table plus every pile's card, so there's no way to scope it down to just one
+pile the way the phone format can.
 
 ![A single card's own Download and Copy link buttons](/docs/media/sheet-pdf-download.png)
 

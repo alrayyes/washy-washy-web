@@ -175,14 +175,30 @@ test("every help bubble stays inside a 320px viewport when opened", async ({ pag
     .toBeLessThanOrEqual(320);
 });
 
-test("the download button generates a PDF only when clicked, not before", async ({ page }) => {
+test("the phone download button generates a PDF only when clicked, not before", async ({
+  page,
+}) => {
   await goto(page);
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: /Download this sheet as a PDF/ }).click();
+  await page.getByTestId("download-phone").click();
   const download = await downloadPromise;
 
   expect(download.suggestedFilename()).toBe("washing-instructions-phone.pdf");
+  const path = await download.path();
+  expect(path).not.toBeNull();
+});
+
+test("the print download button generates the A4 reference sheet, not the phone one", async ({
+  page,
+}) => {
+  await goto(page);
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByTestId("download-print").click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toBe("washing-instructions-print.pdf");
   const path = await download.path();
   expect(path).not.toBeNull();
 });
