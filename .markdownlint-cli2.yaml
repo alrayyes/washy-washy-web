@@ -27,10 +27,12 @@ ignores:
   # release job without passing through any hook. Linting it means failing a
   # run over prose no human chose and no human can fix in place.
   - "CHANGELOG.md"
-  # Playwright's own error-context.md dumps, written into a linked worktree's
-  # gitignored test-results/ during a local e2e run. .gitignore already
-  # excludes test-results anywhere in the tree, but that doesn't reach past
-  # a nested worktree's own .git boundary the way this glob does — hit for
-  # real when a worktree under .claude/worktrees/ had a stale run sitting in
-  # it (#111).
+  # Playwright's own error-context.md dumps, written into test-results/
+  # during a local e2e run. .gitignore already excludes test-results
+  # anywhere in the tree, which is enough for the main worktree itself
+  # (hit for real from a leftover run here, #130) — but doesn't reach
+  # past a nested worktree's own .git boundary, which is what the
+  # explicit .claude/worktrees/** entry below is for (#111).
+  - "**/test-results/**"
+  - "**/playwright-report/**"
   - ".claude/worktrees/**"
