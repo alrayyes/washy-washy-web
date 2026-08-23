@@ -111,6 +111,38 @@
 }
 
 /**
+ * A docs screenshot (`scripts/capture-docs-media.ts`) ships as a light and
+ * a dark PNG, toggled the same way every colour above is — `@media
+ * (prefers-color-scheme: dark)` for the OS default, `:root[data-theme]`
+ * overriding either way — rather than `light-dark()`, which only resolves
+ * CSS property values, not which of two `<img>` elements is in the render
+ * tree (#127). `display: none` removes the hidden one from the
+ * accessibility tree too, so identical alt text on both never
+ * double-announces.
+ */
+.theme-shot[data-variant="dark"] {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-shot[data-variant="light"] {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .theme-shot[data-variant="dark"] {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .theme-shot[data-variant="light"] {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-shot[data-variant="dark"] {
+  display: block;
+}
+
+/**
  * Restores an underline on Starlight's own markdown-content links
  * (`.sl-markdown-content a`, in Starlight's own `markdown.css`) —
  * Starlight's rule only ever set the link's colour, relying on the

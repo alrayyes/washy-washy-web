@@ -17,6 +17,15 @@ config:
   MD049: false
   MD050: false
 
+  # A theme-matched docs screenshot is a light/dark pair of <img>, toggled
+  # by CSS (global.css's .theme-shot rules, #127) — plain ![]() syntax has
+  # no way to attach the class/data attribute that needs. Scoped to img
+  # rather than a blanket MD033: false, so any other raw HTML still gets
+  # flagged.
+  MD033:
+    allowed_elements:
+      - img
+
 globs:
   - "**/*.md"
 
