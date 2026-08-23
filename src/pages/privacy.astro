@@ -1,18 +1,38 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { readUmamiConfig } from "../lib/analytics";
+
+const umami = readUmamiConfig(import.meta.env);
+const description = umami
+  ? "No account, no cookies. Page-view analytics via Umami, a privacy-respecting tool with nothing that identifies you. An uploaded config or chart edit stays in your own browser and is never sent anywhere."
+  : "No account, cookies, analytics or tracking. An uploaded config or chart edit stays in your own browser and is never sent anywhere.";
 ---
 
-<Layout
-  title="Washy washy — privacy policy"
-  description="No account, cookies, analytics or tracking. An uploaded config or chart edit stays in your own browser and is never sent anywhere."
->
+<Layout title="Washy washy — privacy policy" description={description}>
   <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">Privacy policy</h1>
 
   <div class="flex flex-col gap-4 text-base text-body">
-    <p>
-      Washy washy has no account, no cookies, no analytics and no tracking scripts of any kind.
-      There is nothing here watching what you do on the site.
-    </p>
+    {
+      umami ? (
+        <p>
+          Washy washy has no account and sets no cookies. It does use{" "}
+          <a
+            href="https://umami.is/"
+            class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+          >
+            Umami
+          </a>
+          , a privacy-respecting analytics tool, to see how the site gets used — which pages, how
+          many visits. Umami doesn't use cookies, doesn't track you across other sites, and
+          doesn't collect anything that identifies you personally.
+        </p>
+      ) : (
+        <p>
+          Washy washy has no account, no cookies, no analytics and no tracking scripts of any
+          kind. There is nothing here watching what you do on the site.
+        </p>
+      )
+    }
     <p>
       Uploading your own config, or editing the chart or machine settings, saves that data only in
       your own browser's storage (<code class="text-sm text-ink">localStorage</code>). It never

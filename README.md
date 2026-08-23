@@ -53,6 +53,18 @@ bun run build      # static build to dist/
 bun run test:e2e   # Playwright, against a real astro build
 ```
 
+## Configuration
+
+Optional, both unset by default:
+
+- `PUBLIC_UMAMI_SCRIPT_URL` and `PUBLIC_UMAMI_WEBSITE_ID` — enable
+  [Umami](https://umami.is/) page-view analytics (self-hosted or Umami
+  Cloud, either works — point `PUBLIC_UMAMI_SCRIPT_URL` at whichever
+  instance's own `script.js`). Set both as Cloudflare Workers build
+  environment variables to enable in production; leaving either unset
+  disables tracking entirely, and the `/privacy` page's own text adjusts
+  to match at build time either way.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
