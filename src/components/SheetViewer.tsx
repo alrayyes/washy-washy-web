@@ -11,7 +11,9 @@ import { CONFIG_HASH_PREFIX, decodeConfigHash, encodeConfigHash } from "../lib/c
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import {
   type AdvancedFilters,
+  computeFacets,
   emptyAdvancedFilters,
+  facetOptions,
   filterAdvanced,
   filterByPile,
   hasActiveAdvancedFilters,
@@ -218,6 +220,25 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     () => filterAdvanced(filterByPile(sourceItems, pileQuery), advanced),
     [sourceItems, pileQuery, advanced],
   );
+  // Which Programme/Temperature/Spin values could still narrow the chart to
+  // something, given the pile search and whatever else is already picked —
+  // the active machine's own capability list can (and for the bundled
+  // example, does) name a value no pile actually uses (#118).
+  const facets = useMemo(
+    () => computeFacets(sourceItems, pileQuery, advanced),
+    [sourceItems, pileQuery, advanced],
+  );
+  const programOptions = facetOptions(
+    activeMachine.washer.programs,
+    facets.programs,
+    advanced.program,
+  );
+  const temperatureOptions = facetOptions(
+    activeMachine.washer.temperatures,
+    facets.temperatures,
+    advanced.temperature,
+  );
+  const spinOptions = facetOptions(activeMachine.washer.spins, facets.spins, advanced.spin);
 
   function savePdf(pdf: Uint8Array, filename: string) {
     // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
@@ -417,12 +438,13 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                 id="filter-program"
                 className={FIELD_INPUT}
                 value={advanced.program}
+                disabled={programOptions.length === 0}
                 onChange={(event) =>
                   setAdvanced((current) => ({ ...current, program: event.target.value }))
                 }
               >
                 <option value="">Any programme</option>
-                {activeMachine.washer.programs.map((program) => (
+                {programOptions.map((program) => (
                   <option key={program} value={program}>
                     {program}
                   </option>
@@ -441,12 +463,13 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                 id="filter-temperature"
                 className={FIELD_INPUT}
                 value={advanced.temperature}
+                disabled={temperatureOptions.length === 0}
                 onChange={(event) =>
                   setAdvanced((current) => ({ ...current, temperature: event.target.value }))
                 }
               >
                 <option value="">Any temperature</option>
-                {activeMachine.washer.temperatures.map((temperature) => (
+                {temperatureOptions.map((temperature) => (
                   <option key={temperature} value={temperature}>
                     {formatTemperature(temperature)}
                   </option>
@@ -462,12 +485,13 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                 id="filter-spin"
                 className={FIELD_INPUT}
                 value={advanced.spin}
+                disabled={spinOptions.length === 0}
                 onChange={(event) =>
                   setAdvanced((current) => ({ ...current, spin: event.target.value }))
                 }
               >
                 <option value="">Any spin</option>
-                {activeMachine.washer.spins.map((spin) => (
+                {spinOptions.map((spin) => (
                   <option key={spin} value={spin}>
                     {spin === "0" ? "no spin" : `${spin} rpm`}
                   </option>

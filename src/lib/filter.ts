@@ -62,3 +62,57 @@ export function filterAdvanced(
     return true;
   });
 }
+
+/** The select-backing values each of the three exact-match Advanced fields can still take. */
+export interface AdvancedFacets {
+  programs: string[];
+  temperatures: string[];
+  spins: string[];
+}
+
+type ExactField = "program" | "temperature" | "spin";
+
+/**
+ * Which values of `program`/`temperature`/`spin` would still narrow the
+ * chart to at least one pile, given the pile search and every OTHER active
+ * Advanced field — never a field's own current selection, so switching
+ * between two still-valid values in the same select stays possible without
+ * the box narrowing to just the current pick (#118). The machine's own
+ * capability list can (and does, for the bundled example) name a value no
+ * pile actually uses, or a combination that's individually valid per field
+ * but empty together with another already-selected filter — this is what
+ * keeps a select from ever offering one of those.
+ */
+export function computeFacets(
+  items: ResolvedInstruction[],
+  pileQuery: string,
+  filters: AdvancedFilters,
+): AdvancedFacets {
+  const pileFiltered = filterByPile(items, pileQuery);
+
+  function valuesFor(field: ExactField): string[] {
+    const withoutField = filterAdvanced(pileFiltered, { ...filters, [field]: "" });
+    return Array.from(new Set(withoutField.map((item) => item[field])));
+  }
+
+  return {
+    programs: valuesFor("program"),
+    temperatures: valuesFor("temperature"),
+    spins: valuesFor("spin"),
+  };
+}
+
+/**
+ * A field's own `<select>` options: the machine's full declared list,
+ * narrowed to whichever values `computeFacets` says can still match — kept
+ * in the machine's own order, so the list doesn't reshuffle as filters
+ * change — plus the field's current selection even where a later filter
+ * change dropped it from that set, so a choice that just became a dead end
+ * stays visibly selected rather than silently disappearing from the box.
+ */
+export function facetOptions(machineValues: string[], facet: string[], current: string): string[] {
+  const allowed = new Set(facet);
+  const options = machineValues.filter((value) => allowed.has(value));
+  if (current !== "" && !options.includes(current)) options.push(current);
+  return options;
+}
