@@ -1,3 +1,10 @@
+## [1.28.0](https://github.com/alrayyes/washy-washy-web/compare/v1.27.1...v1.28.0) (2026-08-23)
+
+### Features
+
+* advanced filter selects only offer options that can still match ([#138](https://github.com/alrayyes/washy-washy-web/issues/138)) ([c7465db](https://github.com/alrayyes/washy-washy-web/commit/c7465dbf7d569d02d1faeab753006546149e265c)), closes [#118](https://github.com/alrayyes/washy-washy-web/issues/118)
+* share a custom machine/chart via a link, no server involved ([#137](https://github.com/alrayyes/washy-washy-web/issues/137)) ([0ae7d21](https://github.com/alrayyes/washy-washy-web/commit/0ae7d213474e0ad40b747f77d4307ca9c1f9d44c)), closes [#112](https://github.com/alrayyes/washy-washy-web/issues/112)
+
 ## [1.27.1](https://github.com/alrayyes/washy-washy-web/compare/v1.27.0...v1.27.1) (2026-08-23)
 
 ### Bug Fixes
