@@ -55,10 +55,23 @@ Filters persist in `localStorage` between visits, the same way a config
 does. A filtered view is also shareable: the address bar carries `cut`,
 `pile`, `program`, `temperature`, `spin` and `detergent` as query
 parameters, and a URL carrying any of them wins outright over whatever was
-saved from a previous visit — copying the link is the whole sharing
-mechanism, no separate "share" button needed.
+saved from a previous visit — see Share below for the button that hands that
+URL off.
 
 ![The Advanced filters open, with washing-only selected](/docs/media/sheet-filters.png)
+
+## Share
+
+Next to the "Download this sheet as a PDF" button sits **Share this
+view**, which sends the current page URL as-is — filters and all, since the
+address bar already carries them as query parameters (see Filters above), so
+there's nothing extra to package up. It tries the browser's native share
+sheet first (`navigator.share` — Messages, WhatsApp, AirDrop, whatever the OS
+offers), falling back to copying the URL to the clipboard — showing
+"Copied!" the same way a card's own Copy link button does — only when that
+API isn't available, or when it's available but genuinely fails. Cancelling
+the share sheet is neither: it's just declining that one method, so nothing
+else happens and nothing gets copied behind your back.
 
 ## PDF export
 
@@ -73,5 +86,5 @@ you click it; filtering the page never triggers a render in the background.
 ![A single card's own Download and Copy link buttons](/docs/media/sheet-pdf-download.png)
 
 **Copy link**, next to a card's download button, puts that filtered view's
-URL on your clipboard — the same share mechanism as the page-level filters
-above, scoped to one card.
+URL on your clipboard — the same clipboard fallback the page-level Share
+button above uses, scoped to one card.
