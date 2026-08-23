@@ -1,3 +1,9 @@
+## [1.22.0](https://github.com/alrayyes/washy-washy-web/compare/v1.21.0...v1.22.0) (2026-08-23)
+
+### Features
+
+* print (A4) PDF export alongside the phone export ([#124](https://github.com/alrayyes/washy-washy-web/issues/124)) ([68071d2](https://github.com/alrayyes/washy-washy-web/commit/68071d20c2d48ae8388a908ea3b779225852f783))
+
 ## [1.21.0](https://github.com/alrayyes/washy-washy-web/compare/v1.20.1...v1.21.0) (2026-08-23)
 
 ### Features

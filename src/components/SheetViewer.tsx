@@ -97,20 +97,24 @@ interface Props {
 }
 
 /**
- * The in-browser answer to `bun run generate`'s phone PDF: the same chart,
- * drawn as a real page (`Sheet`) rather than an embedded PDF, filtered by
- * cut and pile instead of a filename suffix, and optionally over a chart
- * you uploaded instead of the bundled example. The PDF itself — the same
- * `renderPhone` the CLI uses — is only ever generated when the download
- * button is clicked, not on every filter change.
+ * The in-browser answer to `bun run generate`'s PDFs: the same chart, drawn
+ * as a real page (`Sheet`) rather than an embedded PDF, filtered by cut and
+ * pile instead of a filename suffix, and optionally over a chart you
+ * uploaded instead of the bundled example. The PDFs themselves — the same
+ * `renderPhone`/`renderPrint` the CLI uses — are only ever generated when
+ * one of the two download buttons is clicked, not on every filter change
+ * (#122).
  */
 export default function SheetViewer({ items: bundledItems, machine: bundledMachine }: Props) {
   const [cut, setCut] = useState<Variant>("full");
   const [pileQuery, setPileQuery] = useState("");
   const [advanced, setAdvanced] = useState<AdvancedFilters>(emptyAdvancedFilters);
-  const [downloading, setDownloading] = useState(false);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
-  const [downloadDropped, setDownloadDropped] = useState<string[]>([]);
+  const [downloadingPhone, setDownloadingPhone] = useState(false);
+  const [phoneDownloadError, setPhoneDownloadError] = useState<string | null>(null);
+  const [phoneDownloadDropped, setPhoneDownloadDropped] = useState<string[]>([]);
+  const [downloadingPrint, setDownloadingPrint] = useState(false);
+  const [printDownloadError, setPrintDownloadError] = useState<string | null>(null);
+  const [printDownloadDropped, setPrintDownloadDropped] = useState<string[]>([]);
   const [shareStatus, setShareStatus] = useState("");
   const [shareError, setShareError] = useState<string | null>(null);
   // Machine and chart together — whatever was last uploaded or edited on
@@ -196,10 +200,10 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  async function handleDownload() {
-    setDownloading(true);
-    setDownloadError(null);
-    setDownloadDropped([]);
+  async function handleDownloadPhone() {
+    setDownloadingPhone(true);
+    setPhoneDownloadError(null);
+    setPhoneDownloadDropped([]);
     try {
       // Dynamic, not static: @washy-washy/pdf pulls in @react-pdf/renderer
       // and pdf-lib, which nothing needs until this click — a static import
@@ -207,18 +211,44 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
       const { renderPhone } = await import("@washy-washy/pdf");
       const { pdf, dropped } = await renderPhone(filtered, activeMachine, cut);
       savePdf(pdf, `${STEM}-phone${SUFFIX[cut]}.pdf`);
-      setDownloadDropped(dropped);
+      setPhoneDownloadDropped(dropped);
     } catch (reason) {
-      setDownloadError(reason instanceof Error ? reason.message : String(reason));
+      setPhoneDownloadError(reason instanceof Error ? reason.message : String(reason));
     } finally {
-      setDownloading(false);
+      setDownloadingPhone(false);
+    }
+  }
+
+  /**
+   * `renderPrint`'s A4 reference table + one detail card per pile, the
+   * same content `bun run generate`'s print PDF has always had — just not
+   * reachable from the web app until now (#122). Bisects table/type
+   * density itself, the same way `renderPhone` bisects height; nothing
+   * here needs to know that.
+   */
+  async function handleDownloadPrint() {
+    setDownloadingPrint(true);
+    setPrintDownloadError(null);
+    setPrintDownloadDropped([]);
+    try {
+      const { renderPrint } = await import("@washy-washy/pdf");
+      const { pdf, dropped } = await renderPrint(filtered, activeMachine, cut);
+      savePdf(pdf, `${STEM}-print${SUFFIX[cut]}.pdf`);
+      setPrintDownloadDropped(dropped);
+    } catch (reason) {
+      setPrintDownloadError(reason instanceof Error ? reason.message : String(reason));
+    } finally {
+      setDownloadingPrint(false);
     }
   }
 
   // Passed to Sheet -> Card as callbacks (Sheet.tsx can't touch window/
   // document/navigator itself — see the comment on CardActions there).
   // Returns `dropped` (characters the PDF's font couldn't render) so
-  // CardActions can surface it the same way handleDownload does above.
+  // CardActions can surface it the same way handleDownloadPhone does above.
+  // Phone-only, deliberately: renderPrint always draws a reference table
+  // plus every pile's own card, never one pile in isolation, so there's no
+  // per-card equivalent to offer here (#122).
   async function handleDownloadCard(group: ResolvedInstruction[]): Promise<string[]> {
     const { renderPhone } = await import("@washy-washy/pdf");
     const { pdf, dropped } = await renderPhone(group, activeMachine, cut);
@@ -444,10 +474,20 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             <button
               className={BUTTON_PRIMARY}
               type="button"
-              onClick={handleDownload}
-              disabled={downloading}
+              data-testid="download-phone"
+              onClick={handleDownloadPhone}
+              disabled={downloadingPhone}
             >
-              {downloading ? "Preparing PDF…" : "Download this sheet as a PDF"}
+              {downloadingPhone ? "Preparing PDF…" : "Download for phone"}
+            </button>
+            <button
+              className={BUTTON_PRIMARY}
+              type="button"
+              data-testid="download-print"
+              onClick={handleDownloadPrint}
+              disabled={downloadingPrint}
+            >
+              {downloadingPrint ? "Preparing PDF…" : "Download to print"}
             </button>
             <button
               className={BUTTON_SECONDARY}
@@ -466,14 +506,24 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
               Could not share this view: {shareError}
             </p>
           )}
-          {downloadError && (
+          {phoneDownloadError && (
             <p className={ALERT} role="alert">
-              Could not generate the PDF: {downloadError}
+              Could not generate the phone PDF: {phoneDownloadError}
             </p>
           )}
-          {downloadDropped.length > 0 && (
+          {phoneDownloadDropped.length > 0 && (
             <p className="text-xs text-muted" role="status">
-              Couldn't render in the PDF: {downloadDropped.join(" ")}
+              Couldn't render in the phone PDF: {phoneDownloadDropped.join(" ")}
+            </p>
+          )}
+          {printDownloadError && (
+            <p className={ALERT} role="alert">
+              Could not generate the print PDF: {printDownloadError}
+            </p>
+          )}
+          {printDownloadDropped.length > 0 && (
+            <p className="text-xs text-muted" role="status">
+              Couldn't render in the print PDF: {printDownloadDropped.join(" ")}
             </p>
           )}
           <Sheet
