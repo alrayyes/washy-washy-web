@@ -61,7 +61,8 @@ The web app's own [`/config/machine`](https://washy-washy.ryankes.eu/config/mach
 editor writes this same shape — reordering the programme list there does
 exactly what reordering the JSON array would:
 
-![The machine editor's spin speeds, buttons and iron settings table](/docs/media/machine-editor.png)
+<img class="theme-shot" data-variant="light" src="/docs/media/machine-editor-light.png" alt="The machine editor's spin speeds, buttons and iron settings table" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/machine-editor-dark.png" alt="The machine editor's spin speeds, buttons and iron settings table" />
 
 ```json
 {

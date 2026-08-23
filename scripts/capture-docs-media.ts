@@ -1,9 +1,11 @@
 /**
- * Captures the screenshots embedded in the /docs pages. Not wired into CI —
- * run it by hand (`bun run docs:media`) after a UI change that makes one of
- * the shots stale, and commit the result the same way `og-image.png` and
- * `favicon.svg` are hand-maintained static assets rather than generated per
- * build.
+ * Captures the screenshots embedded in the /docs pages, one light and one
+ * dark variant of each — /docs shares the site's own theme system (#114),
+ * so a single light-only shot is wrong, not just stale, once a reader's in
+ * dark mode. Not wired into CI — run it by hand (`bun run docs:media`)
+ * after a UI change that makes one of the shots stale, and commit the
+ * result the same way `og-image.png` and `favicon.svg` are hand-maintained
+ * static assets rather than generated per build.
  *
  * Builds and serves via `scripts/serve-dist.ts`, the same static file server
  * `playwright.config.ts` uses for the e2e suite — `astro preview`/`astro
@@ -37,23 +39,58 @@ async function waitForHydration(page: Page) {
   await page.waitForSelector('[data-hydrated="true"]');
 }
 
-async function shoot(
-  browser: Browser,
-  path: string,
-  viewport: { width: number; height: number },
-  file: string,
-  act?: (page: Page) => Promise<void>,
-) {
-  const page = await browser.newPage({ viewport });
-  await page.goto(`${BASE_URL}${path}`);
-  await waitForHydration(page);
-  if (act) await act(page);
-  await page.screenshot({ path: new URL(file, MEDIA_DIR).pathname });
-  await page.close();
+interface Shot {
+  path: string;
+  viewport: { width: number; height: number };
+  file: string;
+  act?: (page: Page) => Promise<void>;
 }
 
 const PHONE = { width: 390, height: 844 };
 const DESKTOP = { width: 1280, height: 800 };
+
+const SHOTS: Shot[] = [
+  { path: "/", viewport: PHONE, file: "sheet-overview.png" },
+  {
+    path: "/",
+    viewport: PHONE,
+    file: "sheet-filters.png",
+    act: async (page) => {
+      await page.selectOption("#filter-cut", "wash");
+      await page.locator("summary", { hasText: "Advanced" }).click();
+    },
+  },
+  {
+    path: "/",
+    viewport: PHONE,
+    file: "sheet-pdf-download.png",
+    act: async (page) => {
+      const card = page.locator("article").first();
+      await card.getByRole("button", { name: /Download/ }).scrollIntoViewIfNeeded();
+    },
+  },
+  { path: "/config", viewport: DESKTOP, file: "config-chart-cards.png" },
+  {
+    path: "/config/machine",
+    viewport: DESKTOP,
+    file: "machine-editor.png",
+    act: async (page) => {
+      await page.getByRole("heading", { name: "Iron" }).scrollIntoViewIfNeeded();
+    },
+  },
+];
+
+const COLOR_SCHEMES = ["light", "dark"] as const;
+
+async function shoot(browser: Browser, shot: Shot, colorScheme: (typeof COLOR_SCHEMES)[number]) {
+  const page = await browser.newPage({ viewport: shot.viewport, colorScheme });
+  await page.goto(`${BASE_URL}${shot.path}`);
+  await waitForHydration(page);
+  if (shot.act) await shot.act(page);
+  const stem = shot.file.replace(/\.png$/, "");
+  await page.screenshot({ path: new URL(`${stem}-${colorScheme}.png`, MEDIA_DIR).pathname });
+  await page.close();
+}
 
 async function main() {
   await mkdir(MEDIA_DIR, { recursive: true });
@@ -73,23 +110,11 @@ async function main() {
 
     const browser = await chromium.launch();
     try {
-      await shoot(browser, "/", PHONE, "sheet-overview.png");
-
-      await shoot(browser, "/", PHONE, "sheet-filters.png", async (page) => {
-        await page.selectOption("#filter-cut", "wash");
-        await page.locator("summary", { hasText: "Advanced" }).click();
-      });
-
-      await shoot(browser, "/", PHONE, "sheet-pdf-download.png", async (page) => {
-        const card = page.locator("article").first();
-        await card.getByRole("button", { name: /Download/ }).scrollIntoViewIfNeeded();
-      });
-
-      await shoot(browser, "/config", DESKTOP, "config-chart-cards.png");
-
-      await shoot(browser, "/config/machine", DESKTOP, "machine-editor.png", async (page) => {
-        await page.getByRole("heading", { name: "Iron" }).scrollIntoViewIfNeeded();
-      });
+      for (const shot of SHOTS) {
+        for (const colorScheme of COLOR_SCHEMES) {
+          await shoot(browser, shot, colorScheme);
+        }
+      }
     } finally {
       await browser.close();
     }

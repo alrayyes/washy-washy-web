@@ -10,7 +10,8 @@ reads the same chart and machine description and renders it as a PDF instead
 — this site covers the web app only; the CLI has its own README for
 installing and running it.
 
-![The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF](/docs/media/sheet-overview.png)
+<img class="theme-shot" data-variant="light" src="/docs/media/sheet-overview-light.png" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-overview-dark.png" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
 
 Start with whichever matches what you're trying to do:
 

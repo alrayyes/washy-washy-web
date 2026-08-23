@@ -31,7 +31,8 @@ different browser or a cleared site data starts back at the bundled example.
 the round trip for editing a copy elsewhere, or handing your config to
 someone else.
 
-![The config page: read-only machine summary, upload/download controls, and every pile as an editable card](/docs/media/config-chart-cards.png)
+<img class="theme-shot" data-variant="light" src="/docs/media/config-chart-cards-light.png" alt="The config page: read-only machine summary, upload/download controls, and every pile as an editable card" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/config-chart-cards-dark.png" alt="The config page: read-only machine summary, upload/download controls, and every pile as an editable card" />
 
 ## Theme toggle
 
@@ -58,7 +59,8 @@ parameters, and a URL carrying any of them wins outright over whatever was
 saved from a previous visit — see Share below for the button that hands that
 URL off.
 
-![The Advanced filters open, with washing-only selected](/docs/media/sheet-filters.png)
+<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="The Advanced filters open, with washing-only selected" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="The Advanced filters open, with washing-only selected" />
 
 ## Share
 
@@ -91,7 +93,8 @@ It's phone format only — the print layout always draws the whole reference
 table plus every pile's card, so there's no way to scope it down to just one
 pile the way the phone format can.
 
-![A single card's own Download and Copy link buttons](/docs/media/sheet-pdf-download.png)
+<img class="theme-shot" data-variant="light" src="/docs/media/sheet-pdf-download-light.png" alt="A single card's own Download and Copy link buttons" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-pdf-download-dark.png" alt="A single card's own Download and Copy link buttons" />
 
 **Copy link**, next to a card's download button, puts that filtered view's
 URL on your clipboard — the same clipboard fallback the page-level Share
