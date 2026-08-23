@@ -11,6 +11,7 @@
     "check": "astro check",
     "deploy": "wrangler deploy",
     "deploy:version": "wrangler versions upload",
+    "docs:media": "bun scripts/capture-docs-media.ts",
     "test:e2e": "playwright test",
     "lighthouse": "lhci autorun",
     "format": "prettier --write .",

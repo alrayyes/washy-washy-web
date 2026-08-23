@@ -9,6 +9,8 @@ PDF from the [CLI](https://github.com/alrayyes/washy-washy-cli). Both read
 the same chart and the same description of your appliances, so a rule change
 in one shows up in the other.
 
+![The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF](/docs/media/sheet-overview.png)
+
 Start with whichever matches what you're trying to do:
 
 - **[Install and run the CLI](/docs/installing/)** — generate the phone and

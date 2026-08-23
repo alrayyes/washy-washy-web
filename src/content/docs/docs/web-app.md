@@ -31,6 +31,8 @@ different browser or a cleared site data starts back at the bundled example.
 the round trip for editing a copy elsewhere, or handing your config to
 someone else.
 
+![The config page: read-only machine summary, upload/download controls, and every pile as an editable card](/docs/media/config-chart-cards.png)
+
 ## Filters
 
 The front page filters by which cut you want (full chart, washing only,
@@ -45,3 +47,21 @@ does. A filtered view is also shareable: the address bar carries `cut`,
 parameters, and a URL carrying any of them wins outright over whatever was
 saved from a previous visit — copying the link is the whole sharing
 mechanism, no separate "share" button needed.
+
+![The Advanced filters open, with washing-only selected](/docs/media/sheet-filters.png)
+
+## PDF export
+
+The front page's "Download this sheet as a PDF" button renders the same
+phone PDF the CLI's `bun run generate` writes, using the same
+[`@washy-washy/pdf`](https://github.com/alrayyes/washy-washy-pdf) the CLI
+does — but client-side, and only for whatever's currently filtered onto the
+page. A single card also has its own **Download** button, for one pile at
+a time rather than the whole chart. Neither one generates anything until
+you click it; filtering the page never triggers a render in the background.
+
+![A single card's own Download and Copy link buttons](/docs/media/sheet-pdf-download.png)
+
+**Copy link**, next to a card's download button, puts that filtered view's
+URL on your clipboard — the same share mechanism as the page-level filters
+above, scoped to one card.

@@ -57,6 +57,12 @@ position, drawn at twelve o'clock, and every other tick's angle comes from
 where it sits in the list. Leaving one out doesn't just remove it — it moves
 every tick after it.
 
+The web app's own [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
+editor writes this same shape — reordering the programme list there does
+exactly what reordering the JSON array would:
+
+![The machine editor's spin speeds, buttons and iron settings table](/docs/media/machine-editor.png)
+
 ```json
 {
   "washer": {
