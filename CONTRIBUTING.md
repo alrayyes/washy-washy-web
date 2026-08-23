@@ -8,6 +8,35 @@
 bun install
 ```
 
+## Architecture
+
+Static Astro site (`output: "static"`), deployed to Cloudflare Workers as
+static assets with no Worker script and no server-side code
+(`wrangler.jsonc`) — everything client-side, including the active chart,
+machine config and every filter, lives in the visitor's own `localStorage`
+and never reaches a server.
+
+- The sheet viewer, config editor and machine editor are React islands
+  (`client:load`) inside otherwise-static Astro pages. Each sets
+  `data-hydrated="true"` once its listeners are attached — the e2e suite
+  waits on that flag rather than racing hydration, and any Playwright script
+  driving the page (`scripts/capture-docs-media.ts` included) should do the
+  same.
+- `/docs` is [Starlight](https://starlight.astro.build/), mounted at a
+  subpath alongside the app's own pages rather than owning the site root —
+  its content lives one directory deeper than Starlight's own default
+  (`src/content/docs/docs/`, not `src/content/docs/`) specifically so pages
+  land under `/docs/...` (see `astro.config.mjs`).
+- `scripts/serve-dist.ts` stands in for `astro preview`/`astro dev` in both
+  the e2e suite and `scripts/capture-docs-media.ts`: both daemonize and exit
+  immediately once up, which reads as a crash to anything expecting a
+  foreground server. It's also the more honest test — a plain static file
+  server is what Cloudflare actually serves.
+- `@washy-washy/pdf` is dynamically imported only when a download button is
+  clicked (`SheetViewer.tsx`'s `handleDownload`/`handleDownloadCard`), never
+  on page load or a filter change — filtering never triggers a render nobody
+  asked for.
+
 ## Building and testing
 
 ```sh
@@ -17,6 +46,7 @@ bun run typecheck    # tsc --noEmit, everything else
 bun run test          # bun:test, unit tests under test/
 bun run test:e2e     # Playwright, against a real astro build
 bun run lighthouse   # Category-score gates, see lighthouserc.cjs
+bun run docs:media   # Regenerate the /docs page screenshots; commit the result by hand
 ```
 
 ## Linting and hooks
