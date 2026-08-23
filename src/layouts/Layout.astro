@@ -1,6 +1,8 @@
 ---
 import HeaderUpload from "../components/HeaderUpload";
 import Logo from "../components/Logo.astro";
+import ThemeToggle from "../components/ThemeToggle";
+import { THEME_BOOTSTRAP_SCRIPT } from "../lib/themePreference";
 import "../styles/global.css";
 
 interface Props {
@@ -32,6 +34,14 @@ const NAV_LINK_INACTIVE = "text-body";
 <!doctype html>
 <html lang="en">
   <head>
+    {/* First thing in <head>, ahead of even <meta charset>, so a stored
+    explicit light/dark choice applies before the browser paints anything
+    — global.css's light-dark() values already resolve correctly off
+    `color-scheme` alone for a first-time visitor (#62), this only matters
+    for a returning one whose choice would otherwise flash the other mode
+    for a frame (#111). is:inline keeps Astro from bundling/hashing it, so
+    it stays exactly this — no import, no async fetch. */}
+    <script is:inline set:html={THEME_BOOTSTRAP_SCRIPT} />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
@@ -86,9 +96,10 @@ const NAV_LINK_INACTIVE = "text-body";
         `w-auto` puts it back on the logo's row, where `pr-32` clears the
         "Fork me on GitHub" ribbon (.gh-ribbon in global.css) instead
         (#46) — applied to this wrapper, not `nav` itself, since the
-        upload control (#80) is now the trailing element. The breakpoint
-        moved from `sm` to `md` when the upload button (#80) made the group
-        wider than three nav links alone needed. */}
+        upload control (#80) and the theme toggle (#111) are the trailing
+        elements now, not `nav`. The breakpoint moved from `sm` to `md`
+        when the upload button (#80) made the group wider than three nav
+        links alone needed. */}
         <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
           <a
             href="/"
@@ -113,6 +124,7 @@ const NAV_LINK_INACTIVE = "text-body";
           </a>
         </nav>
         <HeaderUpload client:load />
+        <ThemeToggle client:load />
       </div>
     </header>
     <main id="main" tabindex="-1" class={`mx-auto ${WIDTH} px-4 py-6 sm:px-6 sm:py-10`}>

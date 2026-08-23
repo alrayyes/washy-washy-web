@@ -33,6 +33,16 @@ someone else.
 
 ![The config page: read-only machine summary, upload/download controls, and every pile as an editable card](/docs/media/config-chart-cards.png)
 
+## Theme toggle
+
+The header also has a light/dark toggle, next to "Upload config" on every
+page. Left alone, the site follows your OS or browser's
+`prefers-color-scheme` setting, same as before this existed. Clicking it sets
+an explicit choice instead, stored in `localStorage`, which then overrides
+that OS setting on every page and every future visit — until you click it
+again. It's a two-state toggle, not a picker: there's no separate "back to
+system" option.
+
 ## Filters
 
 The front page filters by which cut you want (full chart, washing only,

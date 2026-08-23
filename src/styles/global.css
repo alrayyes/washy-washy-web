@@ -29,41 +29,51 @@
      grotesk for contrast against the body copy, applied via font-heading
      (#42). */
   --font-heading: "Space Grotesk Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --color-ink: #18181b;
-  --color-body: #3f3f46;
+  /* Every colour that differs between modes is `light-dark(light, dark)`
+     rather than a light value here plus a second block overriding it
+     under `@media (prefers-color-scheme: dark)` — the old approach needed
+     a *third* copy of every value to let an explicit toggle override the
+     OS (attribute-selector specificity beats a media query, but only by
+     restating the values again). `light-dark()` reads off the inherited
+     `color-scheme` instead: `light dark` below defers to the OS, and
+     `:root[data-theme]` further down forces one branch — one definition
+     per colour, not three (#111). Still gated on `color-scheme: light
+     dark` at the bottom of this block, same as before (#62). */
+  --color-ink: light-dark(#18181b, #fafafa);
+  --color-body: light-dark(#3f3f46, #d4d4d8);
   /* Text on white: 4.83:1, passes WCAG AA. Text on panel or
      accent-soft: 4.40:1 / 4.18:1, just under AA's 4.5:1 — use
      text-body there instead, not this one (#57). */
-  --color-muted: #71717a;
+  --color-muted: light-dark(#71717a, #a1a1aa);
   /* Never meets WCAG AA as text on any background this app uses
      (2.3-2.6:1 on white/panel) — decorative only (dials.tsx's tick
      marks), never text (#57). */
-  --color-faint: #a1a1aa;
-  --color-line: #d4d4d8;
-  --color-hairline: #e4e4e7;
+  --color-faint: light-dark(#a1a1aa, #52525b);
+  --color-line: light-dark(#d4d4d8, #3f3f46);
+  --color-hairline: light-dark(#e4e4e7, #27272a);
   /* The page's own background — Layout.astro's <body> (#62; previously
      a literal bg-white, which a dark redefinition here can't reach). */
-  --color-base: #ffffff;
+  --color-base: light-dark(#ffffff, #09090b);
   /* A control that should read as the brightest surface in the page —
      an input, a button, a tooltip — sitting on top of a panel or the
      page background (#62; previously literal bg-white at every one of
      its ~12 call sites, for the same reason as --color-base above). */
-  --color-surface: #ffffff;
-  --color-panel: #f4f4f5;
+  --color-surface: light-dark(#ffffff, #27272a);
+  --color-panel: light-dark(#f4f4f5, #18181b);
   /* Bosch fascia red — the dial arc and the pointer. Solid fills only
      (bg-accent + text-white, border-accent rings): white-on-it and the
      3:1 non-text bar for rings both hold in both modes without this
      needing to change, so it doesn't (#62). */
   --color-accent: #d1132b;
-  --color-accent-soft: #fdeaed;
+  --color-accent-soft: light-dark(#fdeaed, #3b0d13);
   /* accent's own hue used AS text directly on the page — light mode:
      identical to --color-accent (already 5.47:1+ on white). Dark mode
      needs a lighter value than the fill colour above, or plain accent
      text would sit at ~3.2-3.6:1 against a dark background, under
      AA's 4.5:1 (#62). */
-  --color-accent-text: #d1132b;
+  --color-accent-text: light-dark(#d1132b, #f75b6e);
   --color-steam: #9ec5e8;
-  --color-steam-soft: #eaf2fa;
+  --color-steam-soft: light-dark(#eaf2fa, #0f2436);
   /* Fill only (bg-yes + text-white) — no plain-text usage exists, so,
      unlike no below, it doesn't need a text-specific counterpart. */
   --color-yes: #15803d;
@@ -71,39 +81,33 @@
   /* Same split as --color-accent-text, same reason: no/30-opacity
      borders and no/5-opacity tints (ALERT) stay on the fill value
      unchanged; plain error text uses this one (#62). */
-  --color-no-text: #b91c1c;
+  --color-no-text: light-dark(#b91c1c, #f87171);
 }
 
 /* Dial-only — no bg-knob/text-knob utility needs it, so it doesn't need
    to be a @theme entry, just a plain custom property theme.ts can read. */
 :root {
-  --color-knob: #e8e8ea;
+  --color-knob: light-dark(#e8e8ea, #3f3f46);
 }
 
 :root {
   /* Tells the browser both schemes are genuinely supported, so native
      form controls and scrollbars follow prefers-color-scheme too,
-     without a second dark: declaration anywhere (#62). */
+     without a second dark: declaration anywhere (#62) — and is what
+     every `light-dark()` value above resolves against. The explicit
+     toggle (`ThemeToggle.tsx`) narrows this to a single scheme by
+     setting `data-theme` on this element; `themePreference.ts`'s inline
+     bootstrap script does the same before first paint so there's no
+     flash (#111). */
   color-scheme: light dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-ink: #fafafa;
-    --color-body: #d4d4d8;
-    --color-muted: #a1a1aa;
-    --color-faint: #52525b;
-    --color-line: #3f3f46;
-    --color-hairline: #27272a;
-    --color-base: #09090b;
-    --color-surface: #27272a;
-    --color-panel: #18181b;
-    --color-accent-soft: #3b0d13;
-    --color-accent-text: #f75b6e;
-    --color-steam-soft: #0f2436;
-    --color-no-text: #f87171;
-    --color-knob: #3f3f46;
-  }
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /**
