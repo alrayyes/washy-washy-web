@@ -1,3 +1,9 @@
+## [1.27.1](https://github.com/alrayyes/washy-washy-web/compare/v1.27.0...v1.27.1) (2026-08-23)
+
+### Bug Fixes
+
+* stop reading the real clipboard in the share-sheet-used test ([#136](https://github.com/alrayyes/washy-washy-web/issues/136)) ([16e75ee](https://github.com/alrayyes/washy-washy-web/commit/16e75ee3b37e9497f747c63577a806c435b72847))
+
 ## [1.27.0](https://github.com/alrayyes/washy-washy-web/compare/v1.26.0...v1.27.0) (2026-08-23)
 
 ### Features
