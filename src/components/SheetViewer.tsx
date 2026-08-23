@@ -17,7 +17,7 @@ import {
 } from "../lib/filter";
 import { slug } from "../lib/slug";
 import { readFilters, writeFilters } from "../lib/storage";
-import { ALERT, BUTTON_PRIMARY, FIELD_LABEL } from "../lib/styles";
+import { ALERT, BUTTON_PRIMARY, BUTTON_SECONDARY, FIELD_LABEL } from "../lib/styles";
 import { readUrlFilters } from "../lib/url";
 import { writeUrlFilters } from "../lib/urlHistory";
 import Sheet from "./Sheet";
@@ -111,6 +111,8 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [downloadDropped, setDownloadDropped] = useState<string[]>([]);
+  const [shareStatus, setShareStatus] = useState("");
+  const [shareError, setShareError] = useState<string | null>(null);
   // Machine and chart together — whatever was last uploaded or edited on
   // the config page (customConfig.ts). null means "nothing active,
   // showing the bundled example," the same as before.
@@ -231,6 +233,43 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
     url.searchParams.set("cut", cut);
     url.searchParams.set("pile", (group[0] as ResolvedInstruction).clothingType);
     await navigator.clipboard.writeText(url.toString());
+  }
+
+  /**
+   * The whole page's own share button — `window.location.href` as-is,
+   * filter state and all, since `urlHistory.ts` already keeps the address
+   * bar in sync with every filter change live. Tries the native share
+   * sheet first (mobile is this site's primary device, per `TEXT_INPUT`'s
+   * own comment in `styles.ts`), falling back to the clipboard — same as
+   * `handleShareCard` above always does, just without a share sheet to
+   * try first (#112).
+   */
+  async function handleShareSheet() {
+    setShareError(null);
+    const url = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ url });
+        return;
+      } catch (reason) {
+        // The visitor closed the share sheet without picking anything —
+        // not a failure, nothing to report or fall back for.
+        if (reason instanceof Error && reason.name === "AbortError") return;
+        // Any other share failure (no target app, a permissions policy)
+        // still has the clipboard to fall through to below, rather than
+        // failing outright over a share mechanism that was only ever a
+        // convenience.
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareStatus("Copied!");
+      setTimeout(() => setShareStatus(""), 2000);
+    } catch (reason) {
+      setShareError(reason instanceof Error ? reason.message : String(reason));
+    }
   }
 
   return (
@@ -410,7 +449,23 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             >
               {downloading ? "Preparing PDF…" : "Download this sheet as a PDF"}
             </button>
+            <button
+              className={BUTTON_SECONDARY}
+              type="button"
+              data-testid="share-sheet"
+              onClick={handleShareSheet}
+            >
+              {shareStatus === "Copied!" ? "Copied!" : "Share this view"}
+            </button>
           </div>
+          <p aria-live="polite" role="status" data-testid="share-sheet-status" className="sr-only">
+            {shareStatus}
+          </p>
+          {shareError && (
+            <p className={ALERT} role="alert">
+              Could not share this view: {shareError}
+            </p>
+          )}
           {downloadError && (
             <p className={ALERT} role="alert">
               Could not generate the PDF: {downloadError}

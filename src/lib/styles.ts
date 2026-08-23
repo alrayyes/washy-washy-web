@@ -33,7 +33,7 @@ export const FIELD_LABEL = "text-xs font-semibold tracking-wide text-body upperc
 export const BUTTON_PRIMARY =
   "inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
-/** The secondary button (Download config, Reset, …) — MachineEditor.tsx and ConfigViewer.tsx only; SheetViewer.tsx has no use for it. */
+/** The secondary button (Download config, Reset, Share this view, …). */
 export const BUTTON_SECONDARY =
   "inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 
