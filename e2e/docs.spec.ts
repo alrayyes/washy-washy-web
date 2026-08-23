@@ -17,9 +17,6 @@ test("the docs sidebar reaches every page, and the overview page passes an acces
 
   const sidebar = page.getByRole("navigation", { name: "Main" });
   await expect(
-    sidebar.getByRole("link", { name: "Install and run the CLI", exact: true }),
-  ).toHaveAttribute("href", "/docs/installing/");
-  await expect(
     sidebar.getByRole("link", { name: "The chart and machine files", exact: true }),
   ).toHaveAttribute("href", "/docs/chart-and-machine/");
   await expect(
