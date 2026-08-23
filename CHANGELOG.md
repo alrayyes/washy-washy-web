@@ -1,3 +1,9 @@
+## [1.27.0](https://github.com/alrayyes/washy-washy-web/compare/v1.26.0...v1.27.0) (2026-08-23)
+
+### Features
+
+* optional Umami analytics, toggled at deploy time ([#135](https://github.com/alrayyes/washy-washy-web/issues/135)) ([0fe376e](https://github.com/alrayyes/washy-washy-web/commit/0fe376e4a5a171093512aea8b489de89edbb4bff))
+
 ## [1.26.0](https://github.com/alrayyes/washy-washy-web/compare/v1.25.0...v1.26.0) (2026-08-23)
 
 ### Features
