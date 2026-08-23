@@ -75,7 +75,10 @@ const SHOTS: Shot[] = [
     viewport: DESKTOP,
     file: "machine-editor.png",
     act: async (page) => {
-      await page.getByRole("heading", { name: "Iron" }).scrollIntoViewIfNeeded();
+      // exact: true — the page's own <h1> ("Washer & iron settings", #132)
+      // contains "iron" too, and a substring match on "Iron" alone hits
+      // both, ambiguously.
+      await page.getByRole("heading", { name: "Iron", exact: true }).scrollIntoViewIfNeeded();
     },
   },
 ];
