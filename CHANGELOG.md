@@ -1,3 +1,9 @@
+## [1.25.0](https://github.com/alrayyes/washy-washy-web/compare/v1.24.0...v1.25.0) (2026-08-23)
+
+### Features
+
+* rename the Machine page, and let it download its config ([#132](https://github.com/alrayyes/washy-washy-web/issues/132)) ([03a36d6](https://github.com/alrayyes/washy-washy-web/commit/03a36d6cc162279a5427c5af64da767a4bedbd21))
+
 ## [1.24.0](https://github.com/alrayyes/washy-washy-web/compare/v1.23.0...v1.24.0) (2026-08-23)
 
 ### Features
