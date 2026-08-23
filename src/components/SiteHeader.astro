@@ -7,6 +7,7 @@
  * `path` prop, so both call sites stay trivial one-liners.
  */
 import HeaderUpload from "./HeaderUpload";
+import KeyboardNav from "./KeyboardNav";
 import Logo from "./Logo.astro";
 import ThemeToggle from "./ThemeToggle";
 
@@ -77,5 +78,6 @@ const NAV_LINK_INACTIVE = "text-body";
     </nav>
     <HeaderUpload client:load />
     <ThemeToggle client:load />
+    <KeyboardNav client:load />
   </div>
 </header>
