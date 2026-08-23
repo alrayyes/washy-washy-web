@@ -1,3 +1,9 @@
+## [1.29.0](https://github.com/alrayyes/washy-washy-web/compare/v1.28.0...v1.29.0) (2026-08-23)
+
+### Features
+
+* vim-style keyboard navigation, with a shift-? help overlay ([#140](https://github.com/alrayyes/washy-washy-web/issues/140)) ([49447ca](https://github.com/alrayyes/washy-washy-web/commit/49447ca59baf35a15b28a9272149b27340c1c649)), closes [#133](https://github.com/alrayyes/washy-washy-web/issues/133)
+
 ## [1.28.0](https://github.com/alrayyes/washy-washy-web/compare/v1.27.1...v1.28.0) (2026-08-23)
 
 ### Features
