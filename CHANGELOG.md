@@ -1,3 +1,9 @@
+## [1.21.0](https://github.com/alrayyes/washy-washy-web/compare/v1.20.1...v1.21.0) (2026-08-23)
+
+### Features
+
+* share button for the current page state ([#121](https://github.com/alrayyes/washy-washy-web/issues/121)) ([cc5266c](https://github.com/alrayyes/washy-washy-web/commit/cc5266cefd45981cd2b58047aead85648fc8aa78))
+
 ## [1.20.1](https://github.com/alrayyes/washy-washy-web/compare/v1.20.0...v1.20.1) (2026-08-23)
 
 ### Bug Fixes
