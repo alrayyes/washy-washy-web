@@ -18,6 +18,15 @@ const umami = readUmamiConfig(process.env);
 export default defineConfig({
   site: "https://washy-washy.ryankes.eu",
   output: "static",
+  // No Astro `i18n` config here on purpose: Starlight (below) introspects
+  // the root i18n config at build time and validates every locale through
+  // `Intl.Locale`/`Intl.DisplayNames` — which rejects "jive"'s BCP-47
+  // private-use tag outright, and Starlight also refuses to run with both
+  // a root i18n config and its own `locales` option set (confirmed live,
+  // both throw). Routing, `lang` attributes and hreflang alternates for
+  // the three per-locale pages (#143) are hand-rolled in src/i18n/locales.ts
+  // instead, which keeps this decoupled from Starlight's own (English-only
+  // for now, #144) i18n entirely.
   integrations: [
     // The sheet viewer (#44) is a React island — the same @react-pdf/renderer
     // components src/documents.tsx uses, running client-side.
@@ -28,6 +37,13 @@ export default defineConfig({
     // the documented way to run Starlight at a subpath alongside an
     // existing app's own pages (#12).
     starlight({
+      locales: {
+        root: { label: "English", lang: "en" },
+        ja: { label: "日本語", lang: "ja" },
+        de: { label: "Deutsch", lang: "de" },
+        es: { label: "Español", lang: "es" },
+        fr: { label: "Français", lang: "fr" },
+      },
       title: "Washy washy docs",
       description:
         "How to use washy-washy: the web app's filters, uploads and persisted state, the chart and machine file format, and generating a config with AI.",
@@ -64,6 +80,10 @@ export default defineConfig({
         // theme source of truth on every page, docs included.
         ThemeProvider: "./src/components/starlight/ThemeProvider.astro",
         ThemeSelect: "./src/components/starlight/ThemeSelect.astro",
+        // Same redundancy as ThemeSelect above, now that Starlight has its
+        // own locales too (#143/#144) — SiteHeader's LanguageSwitcher
+        // already covers every page, docs included.
+        LanguageSelect: "./src/components/starlight/LanguageSelect.astro",
       },
       // Loads Tailwind (and this site's own colour/theme variables) on
       // docs pages too, since SiteHeader/SiteFooter above are styled with
@@ -87,25 +107,46 @@ export default defineConfig({
             },
           ]
         : [],
+      // Every `label` below carries its own `translations` (#144 follow-up)
+      // — Starlight's sidebar and its auto-generated Prev/Next pagination
+      // both read from these same entries, so one translation covers both
+      // the left-hand menu and the "link-title" under the Previous/Next
+      // buttons.
       sidebar: [
-        { label: "Overview", link: "/docs/" },
-        { label: "The chart and machine files", link: "/docs/chart-and-machine/" },
-        { label: "Using the web app", link: "/docs/web-app/" },
-        { label: "Generate a config with AI", link: "/docs/ai-prompt/" },
         {
-          // A separate, clearly-labelled group rather than a second
-          // sidebar scoped to /dev-docs — Starlight doesn't scope sidebar
-          // visibility per top-level path without a plugin, and the
-          // AC this satisfies (#125) is about page *content* staying
-          // end-user-only, not about a labelled cross-link to a
-          // different section being visible from the /docs sidebar too.
-          label: "Contributor docs",
-          items: [
-            { label: "Overview", link: "/dev-docs/" },
-            { label: "Architecture", link: "/dev-docs/architecture/" },
-            { label: "Package relationships", link: "/dev-docs/packages/" },
-            { label: "Island hydration", link: "/dev-docs/hydration/" },
-          ],
+          label: "Overview",
+          translations: { ja: "概要", de: "Überblick", es: "Resumen", fr: "Aperçu" },
+          link: "/docs/",
+        },
+        {
+          label: "The chart and machine files",
+          translations: {
+            ja: "チャートと洗濯機のファイル",
+            de: "Die Wäsche- und Maschinendateien",
+            es: "Los archivos de guía y máquina",
+            fr: "Les fichiers de grille et de machine",
+          },
+          link: "/docs/chart-and-machine/",
+        },
+        {
+          label: "Using the web app",
+          translations: {
+            ja: "ウェブアプリを使う",
+            de: "Die Web-App nutzen",
+            es: "Usar la aplicación web",
+            fr: "Utiliser l'application web",
+          },
+          link: "/docs/web-app/",
+        },
+        {
+          label: "Generate a config with AI",
+          translations: {
+            ja: "AIでconfigを生成",
+            de: "Konfiguration mit KI erstellen",
+            es: "Generar una configuración con IA",
+            fr: "Générer une configuration avec l'IA",
+          },
+          link: "/docs/ai-prompt/",
         },
       ],
     }),

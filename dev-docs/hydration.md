@@ -1,7 +1,4 @@
----
-title: Island hydration
-description: The data-hydrated convention every React island and every Playwright test relies on, and the race it exists to avoid.
----
+# Island hydration
 
 `SheetViewer`, `ConfigViewer` and `MachineEditor` are all `client:load`
 islands: Astro server-renders their initial markup (the bundled example

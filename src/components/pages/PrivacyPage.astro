@@ -1,0 +1,22 @@
+---
+import { localeFromPath } from "../../i18n/locales";
+import { richText } from "../../i18n/richText";
+import { translator } from "../../i18n/ui";
+import Layout from "../../layouts/Layout.astro";
+import { readUmamiConfig } from "../../lib/analytics";
+
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const umami = readUmamiConfig(import.meta.env);
+const description = umami ? t("privacy.descriptionUmami") : t("privacy.descriptionNoUmami");
+---
+
+<Layout title={t("privacy.title")} description={description} translationKey="privacy">
+  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">{t("privacy.h1")}</h1>
+
+  <div class="flex flex-col gap-4 text-base text-body">
+    <p set:html={richText(umami ? t("privacy.pUmami") : t("privacy.pNoUmami"))} />
+    <p set:html={richText(t("privacy.pStorage"))} />
+    <p set:html={richText(t("privacy.pHosting"))} />
+  </div>
+</Layout>

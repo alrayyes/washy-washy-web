@@ -1,27 +1,5 @@
 ---
-// The committed config, never the gitignored one a household keeps for
-// itself — this is only the starting point a visitor can replace with
-// their own upload (SheetViewer, customConfig.ts). Vite resolves this
-// statically at build time, unlike a path built from import.meta.url,
-// which breaks once Rollup relocates this page's chunk.
-import configSource from "../../data/washy-washy.json.dist?raw";
-import SheetViewer from "../components/SheetViewer";
-import Layout from "../layouts/Layout.astro";
-import { buildChart } from "../lib/chart";
-
-const { items, machine } = buildChart(configSource);
+import HomePage from "../components/pages/HomePage.astro";
 ---
 
-<Layout
-  title="Washy washy"
-  description="A phone-friendly laundry chart: programme, temperature and spin for every pile, what can share a drum, and where the iron's thermostat goes."
->
-  <h1 class="mb-2 font-heading text-3xl font-bold text-ink sm:text-4xl">Your laundry chart</h1>
-  <p class="mb-6 text-base text-body">
-    Turns a laundry chart into a phone-friendly sheet: which programme, temperature and spin for
-    each pile, what can share a drum, and where the iron's thermostat goes. Add this page to your
-    phone's home screen — Safari's Share menu or Chrome's <em>⋮</em> menu both have an "Add to
-    Home Screen" option — and it opens like an app, no address bar, right by the machine.
-  </p>
-  <SheetViewer client:load items={items} machine={machine} />
-</Layout>
+<HomePage />

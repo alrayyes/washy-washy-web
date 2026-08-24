@@ -1,5 +1,11 @@
 import { useRef, useState } from "react";
+import type { Locale } from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import { uploadConfigFile } from "../lib/customConfig";
+
+interface Props {
+  locale: Locale;
+}
 
 /**
  * A global "Upload config" control, visible in the header on every page —
@@ -14,7 +20,8 @@ import { uploadConfigFile } from "../lib/customConfig";
  * a config change made anywhere else, the same as saving on one page has
  * always required a reload to show on another.
  */
-export default function HeaderUpload() {
+export default function HeaderUpload({ locale }: Props) {
+  const t = translator(locale);
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,13 +46,13 @@ export default function HeaderUpload() {
         className="inline-flex min-h-9 items-center justify-center rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         onClick={() => inputRef.current?.click()}
       >
-        Upload config
+        {t("upload.uploadConfig")}
       </button>
       <input
         ref={inputRef}
         type="file"
         accept="application/json,.json"
-        aria-label="Upload config"
+        aria-label={t("upload.uploadConfig")}
         className="sr-only"
         data-testid="header-upload-input"
         onChange={handleChange}
@@ -55,7 +62,7 @@ export default function HeaderUpload() {
           role="alert"
           className="absolute top-full right-0 z-10 mt-1 w-56 rounded-md border border-no/30 bg-no/5 p-2 text-xs text-no-text shadow-md"
         >
-          Could not use that file: {error}
+          {t("common.couldNotUseFile", { error })}
         </p>
       )}
     </div>

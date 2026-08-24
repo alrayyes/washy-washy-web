@@ -1,7 +1,4 @@
----
-title: Architecture
-description: The static-site shape, where React islands sit inside it, and how the two Starlight surfaces coexist in one Astro project.
----
+# Architecture
 
 Washy washy web is a static [Astro](https://astro.build/) site (`output:
 "static"`), deployed to Cloudflare Workers as static assets — `wrangler.jsonc`
@@ -22,8 +19,8 @@ genuinely interactive parts mounted as React islands (`client:load`):
 `KeyboardNav`. An island hydrates independently of the rest of the page, and
 each one that has meaningful client-side state to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see
-[Island hydration](/dev-docs/hydration/) for why that convention exists and
-what depends on it.
+[Island hydration](hydration.md) for why that convention exists and what
+depends on it.
 
 `src/lib/` holds the plain-function logic behind those islands —
 `filter.ts`'s facet computation, `configShare.ts`'s hash encode/decode,
@@ -33,28 +30,30 @@ test`, no DOM). `src/hooks/` holds shared React hooks where more than one
 component would otherwise duplicate the same `useEffect` — currently just
 `useKeyboardNav`, which `KeyboardNav.tsx` wires into visible UI.
 
-## Two Starlight surfaces, one Astro project
+## One Starlight surface, one Astro project
 
-Both `/docs` (end-user) and `/dev-docs` (this site) are
-[Starlight](https://starlight.astro.build/), configured once in
-`astro.config.mjs` — Astro only supports a single `starlight()` integration
-per project, so this isn't two separate Starlight instances, it's one
-instance with content under two top-level directories:
-`src/content/docs/docs/*` → `/docs/...`, `src/content/docs/dev-docs/*` →
-`/dev-docs/...` (both one level deeper than Starlight's own default
-`src/content/docs/*`, specifically so neither owns the site root).
+`/docs` (`src/content/docs/docs/*`) is the only
+[Starlight](https://starlight.astro.build/) content in this project — one
+level deeper than Starlight's own default `src/content/docs/*`, specifically
+so it doesn't own the site root. It's translated into five languages
+(`src/i18n/locales.ts`'s `DOCS_LOCALES`, #144), so its own chrome and
+sidebar carry per-locale `translations` (`astro.config.mjs`).
 
-They share the same chrome, deliberately: `src/components/starlight/*.astro`
-overrides Starlight's default header, page frame and theme handling with
-this site's own (`SiteHeader`, `SiteFooter`, the site's own theme toggle) —
-originally built for `/docs` alone, so a visitor there sees the same site
-they were just using rather than a bolted-on docs tool, and left
-unconditional for `/dev-docs` too rather than branching per path. The
-alternative (Starlight's own stock chrome for `/dev-docs`, for its search
-box) would have meant two independent theme systems on the same site again —
-exactly what those overrides exist to prevent. See the comments in
-`src/components/starlight/ThemeProvider.astro` and `ThemeSelect.astro` for
-the specifics, and issue #114 for the original full-parity decision.
+This document tree used to be a second Starlight surface at `/dev-docs`,
+sharing that same instance (Astro only supports one `starlight()`
+integration per project). It moved back out to plain repo markdown once
+`/docs` picked up full translation coverage — an untranslated corner of an
+otherwise-translated site read as broken rather than intentional, and this
+content has no real audience that needs it live on the deployed domain
+rather than readable straight from the repo.
+
+`src/components/starlight/*.astro` overrides Starlight's default header,
+page frame and theme handling with this site's own (`SiteHeader`,
+`SiteFooter`, the site's own theme toggle), so a `/docs` visitor sees the
+same site they were just using rather than a bolted-on docs tool. See the
+comments in `src/components/starlight/ThemeProvider.astro` and
+`ThemeSelect.astro` for the specifics, and issue #114 for the original
+full-parity decision.
 
 ## Everything else client-side
 

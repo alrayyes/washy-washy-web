@@ -1,4 +1,5 @@
 ---
+import { DOCS_FALLBACK_RESTORE_SCRIPT } from "../i18n/localePreference";
 /**
  * The site's own header — extracted out of Layout.astro so a Starlight
  * override component (src/components/starlight/Header.astro) can render
@@ -6,19 +7,42 @@
  * Self-contained: reads Astro.url.pathname itself rather than taking a
  * `path` prop, so both call sites stay trivial one-liners.
  */
+import {
+  DEFAULT_LOCALE,
+  docsHref,
+  localeFromPath,
+  matchDocsSlug,
+  matchTranslatedPage,
+  relativeLocaleUrl,
+} from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import HeaderUpload from "./HeaderUpload";
 import KeyboardNav from "./KeyboardNav";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
 import ThemeToggle from "./ThemeToggle";
 
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
-// Astro's directory build format gives static pages a trailing-slash
-// pathname ("/config/"), so this is a prefix check, not `path === "/config"`
-// — and /config/machine ("Washer & iron") gets its own link now, so
-// Washing loads must exclude it.
-const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
-const isDocs = path.startsWith("/docs");
+const locale = localeFromPath(path);
+const t = translator(locale);
+const homeHref = relativeLocaleUrl(locale, "/");
+const configHref = relativeLocaleUrl(locale, "/config");
+const machineHref = relativeLocaleUrl(locale, "/config/machine");
+const normalize = (value: string) => value.replace(/\/+$/, "") || "/";
+const isHome = normalize(path) === normalize(homeHref);
+const currentPage = matchTranslatedPage(path);
+const isWashingLoads = currentPage === "config";
+const isMachine = currentPage === "machine";
+// /docs is Starlight's own i18n system, not the TRANSLATED_PAGES table
+// above (see locales.ts's DOCS_LOCALES) — still the same "/xx/" prefix
+// convention, so a plain prefix-stripped check works the same way.
+const isDocs = path.replace(/^\/(ja|de|es|fr|jive)(?=\/|$)/, "").startsWith("/docs");
+// True only on the one page a locale like jive can't have its own version
+// of: /docs resolved to English because Starlight has nothing else to
+// serve it (see docsHref). Everywhere else this is false and nothing below
+// changes — a genuine English visit to /docs is never touched.
+const restoreLocale = matchDocsSlug(path) !== null && locale === DEFAULT_LOCALE;
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
 const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";
@@ -27,7 +51,11 @@ const NAV_LINK_INACTIVE = "text-body";
 <header
   class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
 >
-  <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
+  <a
+    href={homeHref}
+    data-restore-locale={restoreLocale ? "" : undefined}
+    class="flex items-center gap-2 text-ink hover:text-accent-text"
+  >
     <Logo size={32} />
     <span class="font-heading text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
   </a>
@@ -48,36 +76,41 @@ const NAV_LINK_INACTIVE = "text-body";
     links alone needed. */}
     <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
       <a
-        href="/"
-        aria-current={path === "/" ? "page" : undefined}
-        class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        href={homeHref}
+        data-restore-locale={restoreLocale ? "" : undefined}
+        aria-current={isHome ? "page" : undefined}
+        class={`${NAV_LINK} ${isHome ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Home
+        {t("nav.home")}
       </a>
       <a
-        href="/config"
+        href={configHref}
+        data-restore-locale={restoreLocale ? "" : undefined}
         aria-current={isWashingLoads ? "page" : undefined}
         class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Washing loads
+        {t("nav.washingLoads")}
       </a>
       <a
-        href="/config/machine"
-        aria-current={path.startsWith("/config/machine") ? "page" : undefined}
-        class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        href={machineHref}
+        data-restore-locale={restoreLocale ? "" : undefined}
+        aria-current={isMachine ? "page" : undefined}
+        class={`${NAV_LINK} ${isMachine ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Washer &amp; iron
+        {t("nav.washerIron")}
       </a>
       <a
-        href="/docs/"
+        href={docsHref(locale)}
         aria-current={isDocs ? "page" : undefined}
         class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Docs
+        {t("nav.docs")}
       </a>
     </nav>
-    <HeaderUpload client:load />
-    <ThemeToggle client:load />
-    <KeyboardNav client:load />
+    <LanguageSwitcher />
+    <HeaderUpload client:load locale={locale} />
+    <ThemeToggle client:load locale={locale} />
+    <KeyboardNav client:load locale={locale} />
   </div>
 </header>
+{restoreLocale && <script is:inline set:html={DOCS_FALLBACK_RESTORE_SCRIPT} />}

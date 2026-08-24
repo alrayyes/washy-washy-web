@@ -1,0 +1,22 @@
+---
+import { configSourceFor } from "../../i18n/configSource";
+import { localeFromPath } from "../../i18n/locales";
+import { translator } from "../../i18n/ui";
+import Layout from "../../layouts/Layout.astro";
+import { buildChart } from "../../lib/chart";
+import ConfigViewer from "../ConfigViewer";
+
+const locale = localeFromPath(Astro.url.pathname);
+const { items, machine } = buildChart(configSourceFor(locale));
+const t = translator(locale);
+---
+
+<Layout
+  title={t("page.config.title")}
+  description={t("page.config.description")}
+  translationKey="config"
+  wide
+>
+  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">{t("page.config.h1")}</h1>
+  <ConfigViewer client:load items={items} machine={machine} locale={locale} />
+</Layout>

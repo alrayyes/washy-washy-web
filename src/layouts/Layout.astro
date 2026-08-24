@@ -1,6 +1,18 @@
 ---
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import WarningBanner from "../components/WarningBanner";
+import { localePreferenceScript } from "../i18n/localePreference";
+import {
+  absoluteLocaleUrl,
+  DEFAULT_LOCALE,
+  LOCALE_META,
+  LOCALES,
+  localeFromPath,
+  pagePath,
+  type TranslatedPage,
+} from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import { readUmamiConfig } from "../lib/analytics";
 import { THEME_BOOTSTRAP_SCRIPT } from "../lib/themePreference";
 import "../styles/global.css";
@@ -10,18 +22,41 @@ interface Props {
   description: string;
   /** The config page's chart table needs real width to avoid scrolling every row. */
   wide?: boolean;
+  /** Set on the three pages that exist per-locale (#143) — adds hreflang alternates. */
+  translationKey?: TranslatedPage;
 }
 
-const { title, description, wide = false } = Astro.props;
+const { title, description, wide = false, translationKey } = Astro.props;
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL("/og-image.png", Astro.site);
 const WIDTH = wide ? "max-w-[90rem]" : "max-w-3xl";
 const umami = readUmamiConfig(import.meta.env);
+const site = Astro.site ?? new URL(Astro.url.origin);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={LOCALE_META[locale].htmlLang}>
   <head>
+    {
+      translationKey && (
+        <>
+          {LOCALES.map((altLocale) => (
+            <link
+              rel="alternate"
+              hreflang={LOCALE_META[altLocale].htmlLang}
+              href={absoluteLocaleUrl(site, altLocale, pagePath(translationKey))}
+            />
+          ))}
+          <link
+            rel="alternate"
+            hreflang="x-default"
+            href={absoluteLocaleUrl(site, DEFAULT_LOCALE, pagePath(translationKey))}
+          />
+        </>
+      )
+    }
     {/* First thing in <head>, ahead of even <meta charset>, so a stored
     explicit light/dark choice applies before the browser paints anything
     — global.css's light-dark() values already resolve correctly off
@@ -69,11 +104,27 @@ const umami = readUmamiConfig(import.meta.env);
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg"
     >
-      Skip to content
+      {t("skip.toContent")}
     </a>
+    {/* So a visit to any of these pages — not just one reached through the
+    language switcher — keeps localePreference.ts's stored value true, for
+    the nav-restore script SiteHeader.astro/SiteFooter.astro run on the
+    `/docs` locale-fallback page (never this one, so nothing here
+    overwrites it right back). */}
+    <script is:inline set:html={localePreferenceScript(locale)} />
+    {
+      locale !== DEFAULT_LOCALE && (
+        <WarningBanner
+          client:load
+          locale={locale}
+          message={t("banner.message")}
+          dismissLabel={t("banner.dismiss")}
+        />
+      )
+    }
     <div class="gh-ribbon">
       <a href="https://github.com/alrayyes/washy-washy" target="_blank" rel="noopener noreferrer">
-        Fork me on GitHub
+        {t("ribbon.forkMe")}
       </a>
     </div>
     <SiteHeader />

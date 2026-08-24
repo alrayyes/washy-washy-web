@@ -13,15 +13,10 @@ import {
   washGroups,
 } from "@washy-washy/core/browser";
 import { useState } from "react";
+import { useT } from "../i18n/TranslationProvider";
 import { CHART_CARD, CHART_CARD_HEADER, LINK } from "../lib/styles";
 import { IronDial, ProgramDial } from "./dials";
 import SectionHeading from "./SectionHeading";
-
-const SUBTITLE: Record<Variant, string> = {
-  full: "Scroll for the pile you are holding.",
-  wash: "Getting it into the machine. Ironing is on the other sheet.",
-  iron: "At the board. Washing is on the other sheet.",
-};
 
 /** What makes an ironing card unique — see `packages/pdf`'s `documents.tsx`. */
 function ironCardKey(item: ResolvedInstruction): string {
@@ -38,11 +33,28 @@ function sheetGroups(
   return cardGroups(items);
 }
 
-function Masthead({ machine, subtitle }: { machine: Machine; subtitle: string }) {
+const SUBTITLE_KEY: Record<
+  Variant,
+  "sheet.subtitleFull" | "sheet.subtitleWash" | "sheet.subtitleIron"
+> = {
+  full: "sheet.subtitleFull",
+  wash: "sheet.subtitleWash",
+  iron: "sheet.subtitleIron",
+};
+
+// `variant`, not a pre-translated `subtitle` string: `t()` needs to run
+// inside a component React actually renders through JSX, not one called as
+// a plain function — test/sheet-render.test.ts's own `render()` helper
+// invokes the top-level `Sheet` export directly (`Sheet({...})`, not
+// `<Sheet ... />`), which never enters React's render loop, so any hook
+// called there — including this file's own top-level `Sheet` — throws.
+// Every hook call in this file has to live in a component reached via JSX.
+function Masthead({ machine, variant }: { machine: Machine; variant: Variant }) {
+  const t = useT();
   return (
     <header className="mb-4">
-      <h2 className="text-xl font-bold text-ink sm:text-2xl">Washing instructions</h2>
-      <p className="mt-1 text-sm text-muted">{subtitle}</p>
+      <h2 className="text-xl font-bold text-ink sm:text-2xl">{t("sheet.washingInstructions")}</h2>
+      <p className="mt-1 text-sm text-muted">{t(SUBTITLE_KEY[variant])}</p>
       <p className="text-sm text-muted">
         {machine.washer.name}, {machine.washer.capacity} · {machine.iron.name}
       </p>
@@ -51,15 +63,13 @@ function Masthead({ machine, subtitle }: { machine: Machine; subtitle: string })
 }
 
 function Loads({ items }: { items: ResolvedInstruction[] }) {
+  const t = useT();
   const groups = loadGroups(items);
 
   return (
     <section className="mb-4">
-      <SectionHeading>Loads — one line, one wash</SectionHeading>
-      <p className="mb-2 text-xs text-muted">
-        A TOGETHER badge means every pile on that line shares one wash — put them in the machine at
-        once.
-      </p>
+      <SectionHeading>{t("sheet.loadsHeading")}</SectionHeading>
+      <p className="mb-2 text-xs text-muted">{t("sheet.loadsExplain")}</p>
       <div className="rounded-md border border-hairline px-3">
         {groups.map((group, index) => {
           const first = group[0] as ResolvedInstruction;
@@ -77,7 +87,7 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
                 {group.map((item) => item.clothingType).join("  +  ")}
                 {group.length > 1 && (
                   <span className="ml-1.5 rounded bg-accent-soft px-1 py-0.5 text-xs font-bold tracking-wide text-accent-text">
-                    TOGETHER
+                    {t("sheet.together")}
                   </span>
                 )}
               </span>
@@ -91,6 +101,7 @@ function Loads({ items }: { items: ResolvedInstruction[] }) {
 }
 
 function Legend({ machine, variant }: { machine: Machine; variant: Variant }) {
+  const t = useT();
   const { washer } = machine;
   const off = washer.programs[0] ?? "";
   const example = washer.programs[1] ?? off;
@@ -104,21 +115,19 @@ function Legend({ machine, variant }: { machine: Machine; variant: Variant }) {
         ) : (
           <ProgramDial program={example} washer={washer} size={54} />
         )}
-        <p className="mt-1 text-xs text-body">{variant === "iron" ? "thermostat" : "programme"}</p>
+        <p className="mt-1 text-xs text-body">
+          {variant === "iron"
+            ? t("sheet.legendThermostatCaption")
+            : t("sheet.legendProgrammeCaption")}
+        </p>
       </div>
       <p className="text-sm leading-relaxed text-body">
         {variant === "iron" ? (
-          <>
-            The ring is the iron's thermostat as it sits on the dial, and the red pointer is where
-            to turn it. The blue band is the zone where it makes steam; a setting below it is a dry
-            iron. A crossed-out ring means leave the iron in the cupboard.
-          </>
+          t("sheet.legendIronExplain")
         ) : (
           <>
-            The dials are drawn as they sit on the machine: twelve o'clock is {off}, and the red
-            pointer is where to turn it. Chips show every value the display steps through, filled in
-            on the one you want.
-            {variant === "full" && " On the iron, the blue band is the zone where it makes steam."}
+            {t("sheet.legendWashExplain", { off })}
+            {variant === "full" && t("sheet.legendWashExplainFullSuffix")}
           </>
         )}
       </p>
@@ -160,6 +169,7 @@ function ChipRow({
 }
 
 function ControlPanel({ item, machine }: { item: ResolvedInstruction; machine: Machine }) {
+  const t = useT();
   const { washer } = machine;
   const position = washer.programs.indexOf(item.program);
   const off = washer.programs[0] ?? "";
@@ -169,20 +179,23 @@ function ControlPanel({ item, machine }: { item: ResolvedInstruction; machine: M
       <div className="w-20 shrink-0 text-center">
         <ProgramDial program={item.program} washer={washer} size={78} />
         <p className="mt-1 text-xs font-bold text-ink">{item.program}</p>
-        <p className="text-xs text-body">
-          {position} clockwise from {off}
-        </p>
+        <p className="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
       </div>
       <div className="flex flex-1 flex-col justify-center">
-        <ChipRow label="Temp" values={washer.temperatures} selected={[item.temperature]} />
-        <ChipRow label="Spin rpm" values={washer.spins} selected={[item.spin]} />
-        <ChipRow label="Buttons" values={washer.options} selected={item.options} />
+        <ChipRow
+          label={t("common.temp")}
+          values={washer.temperatures}
+          selected={[item.temperature]}
+        />
+        <ChipRow label={t("common.spinRpm")} values={washer.spins} selected={[item.spin]} />
+        <ChipRow label={t("common.buttons")} values={washer.options} selected={item.options} />
       </div>
     </div>
   );
 }
 
 function IronPanel({ items, machine }: { items: ResolvedInstruction[]; machine: Machine }) {
+  const t = useT();
   const item = items[0] as ResolvedInstruction;
   const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined;
 
@@ -196,11 +209,11 @@ function IronPanel({ items, machine }: { items: ResolvedInstruction[]; machine: 
       />
       <div className="flex-1">
         <p className="text-sm font-bold text-ink">
-          {setting ? `${setting.label} — ${setting.detail}` : "Do not iron"}
+          {setting ? `${setting.label} — ${setting.detail}` : t("common.doNotIron")}
         </p>
         {setting && (
           <p className="mt-0.5 text-xs text-body">
-            {setting.steam ? "inside the steam zone" : "below the steam zone — dry iron only"}
+            {setting.steam ? t("common.insideSteamZone") : t("common.belowSteamZone")}
           </p>
         )}
         <Prose items={items} pick={(entry) => entry.ironingNotes} className="mt-1" />
@@ -275,12 +288,13 @@ function SplitField({
  * rather than picking one to speak for the whole card.
  */
 function ReferenceField({ items }: { items: ResolvedInstruction[] }) {
+  const t = useT();
   const cited = items.filter((item) => item.referenceName !== "");
   if (cited.length === 0) return null;
 
   return (
     <div className="mt-2">
-      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      <p className="text-xs font-bold tracking-wide text-muted">{t("common.source")}</p>
       {cited.map((item, index) => (
         <p
           key={item.clothingType}
@@ -321,11 +335,12 @@ function Field({
 }
 
 function SoftenerBadge({ on }: { on: boolean }) {
+  const t = useT();
   return (
     <span
       className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${on ? "bg-yes" : "bg-no"}`}
     >
-      {on ? "SOFTENER OK" : "NO SOFTENER"}
+      {on ? t("common.softenerOk") : t("common.noSoftener")}
     </span>
   );
 }
@@ -351,6 +366,7 @@ function CardActions({
   onDownload: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShare: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
+  const t = useT();
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dropped, setDropped] = useState<string[]>([]);
@@ -380,7 +396,7 @@ function CardActions({
       // visible feedback — whether assistive tech announces a label
       // change on the focused control is implementation-defined, so
       // this sr-only region carries the actual announcement (#55).
-      setShareStatus("Copied!");
+      setShareStatus(t("common.copied"));
       setTimeout(() => {
         setCopied(false);
         setShareStatus("");
@@ -394,7 +410,7 @@ function CardActions({
     <div className="flex flex-col items-end gap-1">
       <div className="flex shrink-0 gap-1.5">
         <button type="button" className={CARD_ACTION} onClick={handleShare}>
-          {copied ? "Copied!" : "Copy link"}
+          {copied ? t("common.copied") : t("sheet.copyLink")}
         </button>
         <button
           type="button"
@@ -402,7 +418,7 @@ function CardActions({
           onClick={handleDownload}
           disabled={downloading}
         >
-          {downloading ? "Preparing…" : "Download"}
+          {downloading ? t("sheet.preparing") : t("sheet.download")}
         </button>
       </div>
       <p aria-live="polite" role="status" className="sr-only">
@@ -410,17 +426,17 @@ function CardActions({
       </p>
       {shareError && (
         <p className="text-right text-xs text-no-text" role="alert">
-          Could not copy the link: {shareError}
+          {t("sheet.couldNotCopyLink", { error: shareError })}
         </p>
       )}
       {error && (
         <p className="text-right text-xs text-no-text" role="alert">
-          Could not generate the PDF: {error}
+          {t("sheet.couldNotGeneratePdf", { error })}
         </p>
       )}
       {dropped.length > 0 && (
         <p className="text-right text-xs text-muted" role="status">
-          Couldn't render in the PDF: {dropped.join(" ")}
+          {t("sheet.couldntRenderInPdf", { chars: dropped.join(" ") })}
         </p>
       )}
     </div>
@@ -442,6 +458,7 @@ function Card({
   onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
 }) {
+  const t = useT();
   const item = group[0] as ResolvedInstruction;
   const heading = group.map((member) => member.clothingType).join(" + ");
   const names = new Set(group.map((member) => member.clothingType));
@@ -464,41 +481,43 @@ function Card({
         </div>
       </div>
 
-      <SectionHeading>Wash</SectionHeading>
+      <SectionHeading>{t("sheet.washHeading")}</SectionHeading>
       <div className="mb-3 flex items-center gap-2">
         <SoftenerBadge on={item.fabricSoftener} />
         <span className="text-xs font-bold text-ink">
           {item.program} {item.temperature === "koud" ? "koud" : `${item.temperature} °C`} ·{" "}
-          {item.spin === "0" ? "no spin" : `${item.spin} rpm`}
+          {item.spin === "0" ? t("common.noSpin") : `${item.spin} rpm`}
         </span>
       </div>
 
       <ControlPanel item={item} machine={machine} />
 
-      <SplitField label="Detergent" items={group} pick={(member) => member.detergent} />
+      <SplitField label={t("common.detergent")} items={group} pick={(member) => member.detergent} />
       <Field
-        label="Wash together with"
+        label={t("sheet.washTogetherWithLabel")}
         value={
           group.length > 1 && together
-            ? `each other${alsoWith.length > 0 ? `, and ${alsoWith.join(", ")}` : ""}`
+            ? alsoWith.length > 0
+              ? t("sheet.washTogetherEachOtherAnd", { names: alsoWith.join(", ") })
+              : t("sheet.washTogetherEachOther")
             : group.length > 1
-              ? "same settings, but wash these separately — see the matrix"
+              ? t("sheet.washSeparately")
               : alsoWith.length > 0
                 ? alsoWith.join(", ")
-                : "nothing else — wash alone"
+                : t("sheet.washAlone")
         }
         emphasis
       />
-      <SplitField label="Drying" items={group} pick={(member) => member.drying} />
+      <SplitField label={t("sheet.dryingLabel")} items={group} pick={(member) => member.drying} />
 
       {variant !== "wash" && (
         <div className="mt-3">
-          <SectionHeading>Iron</SectionHeading>
+          <SectionHeading>{t("common.iron")}</SectionHeading>
           <IronPanel items={group} machine={machine} />
         </div>
       )}
 
-      <SplitField label="Notes" items={group} pick={(member) => member.notes} />
+      <SplitField label={t("common.notes")} items={group} pick={(member) => member.notes} />
       <ReferenceField items={group} />
     </article>
   );
@@ -513,6 +532,7 @@ function IronCard({
   index: number;
   machine: Machine;
 }) {
+  const t = useT();
   const item = group[0] as ResolvedInstruction;
   const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined;
 
@@ -520,10 +540,12 @@ function IronCard({
     <article className={CHART_CARD}>
       <div className={CHART_CARD_HEADER}>
         <h3 className="text-base font-bold text-ink">
-          {index}. {setting ? `${setting.label} — ${setting.detail}` : "Do not iron"}
+          {index}. {setting ? `${setting.label} — ${setting.detail}` : t("common.doNotIron")}
         </h3>
         <span className="shrink-0 text-xs text-muted">
-          {group.length} {group.length === 1 ? "pile" : "piles"}
+          {group.length === 1
+            ? t("sheet.pileCountOne", { count: group.length })
+            : t("sheet.pileCountOther", { count: group.length })}
         </span>
       </div>
 
@@ -536,20 +558,22 @@ function IronCard({
         />
         <div className="flex-1">
           <p className="text-sm font-bold text-ink">
-            {setting ? `Thermostat on ${setting.label}` : "Leave the iron off"}
+            {setting ? t("sheet.thermostatOn", { label: setting.label }) : t("sheet.leaveIronOff")}
           </p>
           <p className="mt-0.5 text-xs text-body">
             {setting
               ? setting.steam
-                ? "inside the steam zone"
-                : "below the steam zone — dry iron only"
-              : "nothing on this card ever goes near the board"}
+                ? t("common.insideSteamZone")
+                : t("common.belowSteamZone")
+              : t("sheet.neverNearBoard")}
           </p>
         </div>
       </div>
 
       <div className="mt-3">
-        <SectionHeading>{setting ? "How" : "Never these"}</SectionHeading>
+        <SectionHeading>
+          {setting ? t("sheet.howHeading") : t("sheet.neverTheseHeading")}
+        </SectionHeading>
         {group.map((member) => (
           <div key={member.clothingType} className="mt-1 flex items-start gap-2">
             <span className="w-26 shrink-0 text-xs font-bold text-ink">{member.clothingType}</span>
@@ -585,12 +609,19 @@ interface Props {
  * phone standing in front of the machine — a two-column grid only kicks in
  * once there's room to actually read two cards side by side.
  */
+function DurationsDisclaimer() {
+  const t = useT();
+  return (
+    <p className="mt-3 text-center text-xs text-muted italic">{t("sheet.durationsDisclaimer")}</p>
+  );
+}
+
 export default function Sheet({ items, machine, variant, onDownloadCard, onShareCard }: Props) {
   const groups = sheetGroups(items, machine, variant);
 
   return (
     <div>
-      <Masthead machine={machine} subtitle={SUBTITLE[variant]} />
+      <Masthead machine={machine} variant={variant} />
       {variant !== "iron" && <Loads items={items} />}
       <Legend machine={machine} variant={variant} />
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -615,11 +646,7 @@ export default function Sheet({ items, machine, variant, onDownloadCard, onShare
           ),
         )}
       </div>
-      {variant !== "iron" && (
-        <p className="mt-3 text-center text-xs text-muted italic">
-          Durations are the machine's own estimates and vary with load.
-        </p>
-      )}
+      {variant !== "iron" && <DurationsDisclaimer />}
     </div>
   );
 }

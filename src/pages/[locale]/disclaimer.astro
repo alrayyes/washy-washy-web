@@ -1,0 +1,10 @@
+---
+import DisclaimerPage from "../../components/pages/DisclaimerPage.astro";
+import { NON_DEFAULT_LOCALES } from "../../i18n/locales";
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map((locale) => ({ params: { locale } }));
+}
+---
+
+<DisclaimerPage />

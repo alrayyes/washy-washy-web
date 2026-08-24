@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import type { Locale } from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import {
   readThemePreference,
   type ThemePreference,
   writeThemePreference,
 } from "../lib/themePreference";
+
+interface Props {
+  locale: Locale;
+}
 
 /**
  * A global light/dark toggle, visible in the header on every page — same
@@ -20,7 +26,8 @@ import {
  * correct from the start regardless of when this component catches up
  * (#111).
  */
-export default function ThemeToggle() {
+export default function ThemeToggle({ locale }: Props) {
+  const t = translator(locale);
   const [effective, setEffective] = useState<ThemePreference>("light");
   // A ref, not just the `stored` local the effect closes over — the media
   // query's own change handler needs the *current* answer, not the one
@@ -60,7 +67,7 @@ export default function ThemeToggle() {
     <button
       type="button"
       data-testid="theme-toggle"
-      aria-label={effective === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={effective === "dark" ? t("theme.switchToLight") : t("theme.switchToDark")}
       className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-line bg-surface p-1.5 text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
       onClick={toggle}
     >

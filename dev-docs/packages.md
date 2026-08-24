@@ -1,7 +1,4 @@
----
-title: Package relationships
-description: How this repo relates to washy-washy-cli and the shared @washy-washy/core and @washy-washy/pdf packages.
----
+# Package relationships
 
 Washy washy started as one monorepo,
 [`alrayyes/washy-washy`](https://github.com/alrayyes/washy-washy), with the

@@ -31,9 +31,9 @@ and persisted state, and a prompt for generating a config from photos of your
 appliances with an AI chat tool. [The CLI](https://github.com/alrayyes/washy-washy-cli)
 has its own README for installing and running it.
 
-Contributing to this repo? See [`/dev-docs`](https://washy-washy.ryankes.eu/dev-docs/)
-for architecture, how this repo relates to `washy-washy-cli` and the shared
-`@washy-washy/*` packages, and other technical documentation — start with
+Contributing to this repo? See [`dev-docs/`](dev-docs/) for architecture, how
+this repo relates to `washy-washy-cli` and the shared `@washy-washy/*`
+packages, and other technical documentation — start with
 [`CONTRIBUTING.md`](CONTRIBUTING.md) to actually get a checkout running.
 
 ## Installation
@@ -57,6 +57,15 @@ the browser rather than on any server.
 bun run build      # static build to dist/
 bun run test:e2e   # Playwright, against a real astro build
 ```
+
+## Languages
+
+The home, disclaimer and privacy pages are also available in Japanese,
+German, Spanish, French and Jive (a joke locale, played for laughs) — pick
+one from the language switcher in the header. Everything else (the washing
+loads and washer/iron editors, and `/docs`) stays English-only for now.
+Every non-English page shows a one-time banner warning that the translation
+is AI-generated and may not be perfect.
 
 ## Configuration
 
