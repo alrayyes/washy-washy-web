@@ -27,6 +27,8 @@ test("the language switcher lists every locale, in its own name, and switches th
     "Deutsch",
     "Español",
     "Français",
+    "العربية",
+    "简体中文",
     "Jive",
   ]);
 
@@ -140,7 +142,44 @@ test("jive's own docs render the site's chrome, a sidebar, Prev/Next, and pass a
   await expectNoA11yViolations(page);
 });
 
-test("the AI-translation banner only shows on non-English locales, and hreflang alternates cover all six", async ({
+test("Arabic renders right-to-left — the app's own chrome and Starlight's docs alike", async ({
+  page,
+}) => {
+  await gotoHydrated(page, "/ar/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("جدول الغسيل الخاص بك");
+
+  // Starlight computes `dir` per locale from its own config (astro.config.mjs
+  // sets it explicitly for ar — it isn't auto-derived when locales are
+  // configured directly rather than converted from a root Astro i18n config,
+  // confirmed by reading Starlight's own schema).
+  await page.goto("/ar/docs/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("مستندات Washy washy");
+
+  await expectNoA11yViolations(page);
+});
+
+test("Chinese chrome and docs are translated, and the bundled demo data comes out in Chinese too", async ({
+  page,
+}) => {
+  await gotoHydrated(page, "/zh/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("你的洗衣图表");
+  await page.locator("summary", { hasText: "高级" }).click();
+  await expect(page.locator("#filter-program option")).toContainText(["棉织物"]);
+
+  await page.goto("/zh/docs/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Washy washy 文档");
+
+  await expectNoA11yViolations(page);
+});
+
+test("the AI-translation banner only shows on non-English locales, and hreflang alternates cover every locale", async ({
   page,
 }) => {
   await page.goto("/");
@@ -148,7 +187,7 @@ test("the AI-translation banner only shows on non-English locales, and hreflang 
 
   await page.goto("/de/");
   await expect(page.getByTestId("language-warning-banner")).toBeVisible();
-  await expect(page.locator('link[rel="alternate"]')).toHaveCount(7); // all 6 locales, plus x-default
+  await expect(page.locator('link[rel="alternate"]')).toHaveCount(9); // all 8 locales, plus x-default
 });
 
 test("the banner stays pinned to the top of the viewport while scrolling, instead of scrolling away", async ({

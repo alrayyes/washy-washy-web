@@ -16,6 +16,13 @@ config:
   # Emphasis characters.
   MD049: false
   MD050: false
+  # Table pipe alignment — newer than the bundled prettier style above, so
+  # not one of its 23 rules. Prettier still owns this: it measures column
+  # width by character count, and Arabic combining diacritics (tanwīn,
+  # shadda) throw MD060's own width count off by one per mark, flagging a
+  # table Prettier itself considers correctly aligned (confirmed: `prettier
+  # --check` passes the same file MD060 fails, #147).
+  MD060: false
 
   # A theme-matched docs screenshot is a light/dark pair of <img>, toggled
   # by CSS (global.css's .theme-shot rules, #127) — plain ![]() syntax has

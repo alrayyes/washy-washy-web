@@ -36,7 +36,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
 ---
 
 <!doctype html>
-<html lang={LOCALE_META[locale].htmlLang}>
+<html lang={LOCALE_META[locale].htmlLang} dir={LOCALE_META[locale].dir}>
   <head>
     {
       translationKey && (
