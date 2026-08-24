@@ -36,3 +36,23 @@ packages knows either app exists. A change to the chart/machine format or to
 how a PDF renders happens in the shared package first, gets published, then
 gets picked up here as an exact-pinned version bump — never patched locally
 against a vendored copy.
+
+## Sharing translations with washy-washy-pdf
+
+Whenever a new locale lands here — a new dictionary in `src/i18n/ui.ts` plus
+a new `data/washy-washy.<locale>.json.dist` — pass the new
+`washy-washy.<locale>.json.dist` to `washy-washy-pdf`'s own session so it can
+run its overflow/rendering checks against real translated strings instead of
+only synthetic long-text fixtures. Non-Latin scripts and unusually long
+compound words (Arabic, Chinese, German, Turkish's dotted/dotless İ/I) each
+stress the PDF renderer's font and layout handling in ways an ASCII
+placeholder can't, and this repo's own layout bugs from real translations
+(#150) have already turned out to generalise.
+
+- `ListAgents` first — `washy-washy-pdf` runs its own long-running session on
+  its own repo; this isn't something to branch into directly (see the
+  `washy-washy-repo-layout` memory).
+- Hand over the new locale's `.json.dist` and say what prompted it; let that
+  session decide whether and how to extend its own test suite
+  (`overflow-guards.test.ts` today) — this repo doesn't own
+  `washy-washy-pdf`'s tests or its ticket queue.
