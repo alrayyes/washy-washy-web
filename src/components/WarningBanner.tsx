@@ -44,7 +44,11 @@ export default function WarningBanner({ message, dismissLabel }: Props) {
       ref={bannerRef}
       role="alert"
       data-testid="language-warning-banner"
-      className="flex items-center justify-between gap-4 border-b border-hairline bg-panel px-4 py-2 text-sm text-body sm:px-6"
+      // .gh-ribbon (global.css) is `position: absolute` pinned to the
+      // page's top-right corner at z-index 40 — without a higher stacking
+      // context of its own, this banner (plain flow, z-index: auto) sits
+      // underneath it, right where the dismiss button lives.
+      className="relative z-50 flex items-center justify-between gap-4 border-b border-hairline bg-panel px-4 py-2 text-sm text-body sm:px-6"
     >
       <p className="flex-1">{message}</p>
       <button
