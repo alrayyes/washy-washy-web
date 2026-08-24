@@ -1,26 +1,42 @@
 import { useEffect, useRef, useState } from "react";
+import { hasSeenBanner, markBannerSeen } from "../i18n/bannerSeen";
+import type { Locale } from "../i18n/locales";
 
 interface Props {
+  locale: Locale;
   message: string;
   dismissLabel: string;
 }
 
 /**
- * The "this page was AI-translated" banner shown on every non-English
- * locale (Layout.astro only renders this island there). Auto-hides after
- * 10s, or sooner via the close button, Escape, or a click anywhere outside
- * it (#143) — the explicit button is what makes it keyboard- and
- * screen-reader-operable; the document click listener is the "click away"
- * shortcut on top of that, not a replacement for it.
+ * The "this page was AI-translated" banner shown on non-English locales
+ * (Layout.astro only renders this island there). Shows once per locale per
+ * browser (bannerSeen.ts) — not once per page load — so it doesn't
+ * reappear every time a visitor moves between /ja/, its disclaimer and its
+ * privacy page. Auto-hides after 10s on that first showing, or sooner via
+ * the close button, Escape, or a click anywhere outside it (#143) — the
+ * explicit button is what makes it keyboard- and screen-reader-operable;
+ * the document click listener is the "click away" shortcut on top of
+ * that, not a replacement for it.
+ *
+ * Starts closed (`visible: false`) on the server and on first client
+ * render — matching, not guessing, since neither has read localStorage
+ * yet — and a mount effect opens it only if this locale hasn't been seen.
+ * Astro islands don't warn on a server/client mismatch the way a full SPA
+ * route would, so this avoids a flash without needing the theme
+ * bootstrap script's inline-script trick (themePreference.ts).
  */
-export default function WarningBanner({ message, dismissLabel }: Props) {
-  const [visible, setVisible] = useState(true);
+export default function WarningBanner({ locale, message, dismissLabel }: Props) {
+  const [visible, setVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (hasSeenBanner(locale)) return;
+    markBannerSeen(locale);
+    setVisible(true);
     const timer = window.setTimeout(() => setVisible(false), 10_000);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     function dismissIfOutside(event: MouseEvent) {

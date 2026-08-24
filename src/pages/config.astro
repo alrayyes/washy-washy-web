@@ -1,19 +1,5 @@
 ---
-// Same static import pattern as index.astro — see that file's comment on
-// why Vite's `?raw` import is used over a runtime file read.
-import configSource from "../../data/washy-washy.json.dist?raw";
-import ConfigViewer from "../components/ConfigViewer";
-import Layout from "../layouts/Layout.astro";
-import { buildChart } from "../lib/chart";
-
-const { items, machine } = buildChart(configSource);
+import ConfigPage from "../components/pages/ConfigPage.astro";
 ---
 
-<Layout
-  title="Washy washy — washing loads"
-  description="The full loaded config: the washing machine and iron's settings, and every pile in the chart, in one structured place."
-  wide
->
-  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">Washing loads</h1>
-  <ConfigViewer client:load items={items} machine={machine} />
-</Layout>
+<ConfigPage />

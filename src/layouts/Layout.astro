@@ -107,7 +107,12 @@ const site = Astro.site ?? new URL(Astro.url.origin);
     </a>
     {
       locale !== DEFAULT_LOCALE && (
-        <WarningBanner client:load message={t("banner.message")} dismissLabel={t("banner.dismiss")} />
+        <WarningBanner
+          client:load
+          locale={locale}
+          message={t("banner.message")}
+          dismissLabel={t("banner.dismiss")}
+        />
       )
     }
     <div class="gh-ribbon">

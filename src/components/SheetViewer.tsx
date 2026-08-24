@@ -7,6 +7,8 @@ import {
   variants,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { type Locale, relativeLocaleUrl } from "../i18n/locales";
+import { TranslationProvider, useLocale, useT } from "../i18n/TranslationProvider";
 import { CONFIG_HASH_PREFIX, decodeConfigHash, encodeConfigHash } from "../lib/configShare";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import {
@@ -25,12 +27,6 @@ import { readUrlFilters } from "../lib/url";
 import { writeUrlFilters } from "../lib/urlHistory";
 import Sheet from "./Sheet";
 
-const CUT_LABEL: Record<Variant, string> = {
-  full: "Everything",
-  wash: "Washing only",
-  iron: "Ironing only",
-};
-
 const FIELD_INPUT =
   "mt-1 block w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
 
@@ -48,6 +44,7 @@ const FIELD_INPUT =
 const TOOLTIP_WIDTH = 208;
 
 function HelpBubble({ id, text }: { id: string; text: string }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [alignRight, setAlignRight] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -69,7 +66,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
         ref={buttonRef}
         type="button"
         className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-xs font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        aria-label="What does this do?"
+        aria-label={t("common.whatDoesThisDo")}
         aria-expanded={open}
         aria-controls={id}
         aria-describedby={open ? id : undefined}
@@ -97,6 +94,7 @@ function HelpBubble({ id, text }: { id: string; text: string }) {
 interface Props {
   items: ResolvedInstruction[];
   machine: Machine;
+  locale: Locale;
 }
 
 /**
@@ -108,7 +106,32 @@ interface Props {
  * one of the two download buttons is clicked, not on every filter change
  * (#122).
  */
-export default function SheetViewer({ items: bundledItems, machine: bundledMachine }: Props) {
+export default function SheetViewer({
+  items: bundledItems,
+  machine: bundledMachine,
+  locale,
+}: Props) {
+  return (
+    <TranslationProvider locale={locale}>
+      <SheetViewerContent bundledItems={bundledItems} bundledMachine={bundledMachine} />
+    </TranslationProvider>
+  );
+}
+
+function SheetViewerContent({
+  bundledItems,
+  bundledMachine,
+}: {
+  bundledItems: ResolvedInstruction[];
+  bundledMachine: Machine;
+}) {
+  const t = useT();
+  const locale = useLocale();
+  const CUT_LABEL: Record<Variant, string> = {
+    full: t("sheetViewer.cutEverything"),
+    wash: t("sheetViewer.cutWashOnly"),
+    iron: t("sheetViewer.cutIronOnly"),
+  };
   const [cut, setCut] = useState<Variant>("full");
   const [pileQuery, setPileQuery] = useState("");
   const [advanced, setAdvanced] = useState<AdvancedFilters>(emptyAdvancedFilters);
@@ -367,7 +390,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
     try {
       await navigator.clipboard.writeText(url);
-      setShareStatus("Copied!");
+      setShareStatus(t("common.copied"));
       setTimeout(() => setShareStatus(""), 2000);
     } catch (reason) {
       setShareError(reason instanceof Error ? reason.message : String(reason));
@@ -377,15 +400,14 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
   return (
     <div className="flex flex-col gap-6" data-hydrated={hydrated}>
       <fieldset className="rounded-lg border border-hairline bg-panel p-4">
-        <legend className="px-1 text-sm font-semibold text-ink">Filter the chart</legend>
+        <legend className="px-1 text-sm font-semibold text-ink">
+          {t("sheetViewer.filterChart")}
+        </legend>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <span className={`block ${FIELD_LABEL}`}>
-              <label htmlFor="filter-cut">Cut</label>
-              <HelpBubble
-                id="filter-cut-help"
-                text="Which parts of the chart to show: everything, washing only, or ironing only."
-              />
+              <label htmlFor="filter-cut">{t("sheetViewer.cutLabel")}</label>
+              <HelpBubble id="filter-cut-help" text={t("sheetViewer.cutHelp")} />
             </span>
             <select
               id="filter-cut"
@@ -402,17 +424,14 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
           </div>
           <div className="flex-1">
             <span className={`block ${FIELD_LABEL}`}>
-              <label htmlFor="filter-pile">Pile</label>
-              <HelpBubble
-                id="filter-pile-help"
-                text={'Type part of a pile’s name, like "towels", to show just that card.'}
-              />
+              <label htmlFor="filter-pile">{t("common.pile")}</label>
+              <HelpBubble id="filter-pile-help" text={t("sheetViewer.pileHelp")} />
             </span>
             <input
               id="filter-pile"
               className={FIELD_INPUT}
               type="search"
-              placeholder="Search by pile name…"
+              placeholder={t("sheetViewer.pileSearchPlaceholder")}
               value={pileQuery}
               onChange={(event) => setPileQuery(event.target.value)}
             />
@@ -426,13 +445,13 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
         whether this was left open. */}
         <details className="mt-3">
           <summary className="cursor-pointer text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-            Advanced
+            {t("sheetViewer.advanced")}
           </summary>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <span className={`block ${FIELD_LABEL}`}>
-                <label htmlFor="filter-program">Programme</label>
-                <HelpBubble id="filter-program-help" text="Show only piles using this programme." />
+                <label htmlFor="filter-program">{t("common.programme")}</label>
+                <HelpBubble id="filter-program-help" text={t("sheetViewer.programmeHelp")} />
               </span>
               <select
                 id="filter-program"
@@ -443,7 +462,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                   setAdvanced((current) => ({ ...current, program: event.target.value }))
                 }
               >
-                <option value="">Any programme</option>
+                <option value="">{t("sheetViewer.anyProgramme")}</option>
                 {programOptions.map((program) => (
                   <option key={program} value={program}>
                     {program}
@@ -453,11 +472,8 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             </div>
             <div>
               <span className={`block ${FIELD_LABEL}`}>
-                <label htmlFor="filter-temperature">Temperature</label>
-                <HelpBubble
-                  id="filter-temperature-help"
-                  text="Show only piles washed at this temperature."
-                />
+                <label htmlFor="filter-temperature">{t("sheetViewer.temperatureLabel")}</label>
+                <HelpBubble id="filter-temperature-help" text={t("sheetViewer.temperatureHelp")} />
               </span>
               <select
                 id="filter-temperature"
@@ -468,7 +484,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                   setAdvanced((current) => ({ ...current, temperature: event.target.value }))
                 }
               >
-                <option value="">Any temperature</option>
+                <option value="">{t("sheetViewer.anyTemperature")}</option>
                 {temperatureOptions.map((temperature) => (
                   <option key={temperature} value={temperature}>
                     {formatTemperature(temperature)}
@@ -478,8 +494,8 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
             </div>
             <div>
               <span className={`block ${FIELD_LABEL}`}>
-                <label htmlFor="filter-spin">Spin</label>
-                <HelpBubble id="filter-spin-help" text="Show only piles spun at this speed." />
+                <label htmlFor="filter-spin">{t("sheetViewer.spinLabel")}</label>
+                <HelpBubble id="filter-spin-help" text={t("sheetViewer.spinHelp")} />
               </span>
               <select
                 id="filter-spin"
@@ -490,27 +506,24 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
                   setAdvanced((current) => ({ ...current, spin: event.target.value }))
                 }
               >
-                <option value="">Any spin</option>
+                <option value="">{t("sheetViewer.anySpin")}</option>
                 {spinOptions.map((spin) => (
                   <option key={spin} value={spin}>
-                    {spin === "0" ? "no spin" : `${spin} rpm`}
+                    {spin === "0" ? t("common.noSpin") : `${spin} rpm`}
                   </option>
                 ))}
               </select>
             </div>
             <div>
               <span className={`block ${FIELD_LABEL}`}>
-                <label htmlFor="filter-detergent">Detergent</label>
-                <HelpBubble
-                  id="filter-detergent-help"
-                  text='Type part of a detergent note, like "powder", to show only piles that mention it.'
-                />
+                <label htmlFor="filter-detergent">{t("common.detergent")}</label>
+                <HelpBubble id="filter-detergent-help" text={t("sheetViewer.detergentHelp")} />
               </span>
               <input
                 id="filter-detergent"
                 className={FIELD_INPUT}
                 type="search"
-                placeholder="Search by detergent…"
+                placeholder={t("sheetViewer.detergentSearchPlaceholder")}
                 value={advanced.detergentQuery}
                 onChange={(event) =>
                   setAdvanced((current) => ({ ...current, detergentQuery: event.target.value }))
@@ -523,20 +536,17 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
 
       {configHashError && (
         <p className={ALERT} role="alert">
-          Could not open the shared config: {configHashError}. Showing what was already active
-          instead.
+          {t("sheetViewer.sharedConfigError", { error: configHashError })}
         </p>
       )}
       <p className="text-sm text-body">
-        {customItems
-          ? "Showing your own config."
-          : "Showing the bundled example chart. It's a generic laundry chart, not your own."}{" "}
-        Upload, download or edit your own on the{" "}
+        {customItems ? t("common.showingOwnConfig") : t("sheetViewer.showingBundledChart")}{" "}
+        {t("sheetViewer.uploadEditPrefix")}{" "}
         <a
-          href="/config"
+          href={relativeLocaleUrl(locale, "/config")}
           className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
-          washing loads page
+          {t("common.washingLoadsPageLink")}
         </a>
         .
       </p>
@@ -544,10 +554,10 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
       {filtered.length === 0 ? (
         <p className="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
           {pileQuery !== "" && hasActiveAdvancedFilters(advanced)
-            ? `No pile matches “${pileQuery}” with those advanced filters. Try loosening one.`
+            ? t("sheetViewer.noPileMatchAdvanced", { query: pileQuery })
             : pileQuery !== ""
-              ? `No pile matches “${pileQuery}”. Try a different search.`
-              : "No pile matches those advanced filters. Try loosening one."}
+              ? t("sheetViewer.noPileMatchQuery", { query: pileQuery })
+              : t("sheetViewer.noPileMatchAdvancedOnly")}
         </p>
       ) : (
         <>
@@ -559,7 +569,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
               onClick={handleDownloadPhone}
               disabled={downloadingPhone}
             >
-              {downloadingPhone ? "Preparing PDF…" : "Download for phone"}
+              {downloadingPhone ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadForPhone")}
             </button>
             <button
               className={BUTTON_PRIMARY}
@@ -568,7 +578,7 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
               onClick={handleDownloadPrint}
               disabled={downloadingPrint}
             >
-              {downloadingPrint ? "Preparing PDF…" : "Download to print"}
+              {downloadingPrint ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadToPrint")}
             </button>
             <button
               className={BUTTON_SECONDARY}
@@ -576,7 +586,9 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
               data-testid="share-sheet"
               onClick={handleShareSheet}
             >
-              {shareStatus === "Copied!" ? "Copied!" : "Share this view"}
+              {shareStatus === t("common.copied")
+                ? t("common.copied")
+                : t("sheetViewer.shareThisView")}
             </button>
           </div>
           <p aria-live="polite" role="status" data-testid="share-sheet-status" className="sr-only">
@@ -584,27 +596,27 @@ export default function SheetViewer({ items: bundledItems, machine: bundledMachi
           </p>
           {shareError && (
             <p className={ALERT} role="alert">
-              Could not share this view: {shareError}
+              {t("sheetViewer.couldNotShare", { error: shareError })}
             </p>
           )}
           {phoneDownloadError && (
             <p className={ALERT} role="alert">
-              Could not generate the phone PDF: {phoneDownloadError}
+              {t("sheetViewer.couldNotGeneratePhonePdf", { error: phoneDownloadError })}
             </p>
           )}
           {phoneDownloadDropped.length > 0 && (
             <p className="text-xs text-muted" role="status">
-              Couldn't render in the phone PDF: {phoneDownloadDropped.join(" ")}
+              {t("sheetViewer.couldntRenderPhone", { chars: phoneDownloadDropped.join(" ") })}
             </p>
           )}
           {printDownloadError && (
             <p className={ALERT} role="alert">
-              Could not generate the print PDF: {printDownloadError}
+              {t("sheetViewer.couldNotGeneratePrintPdf", { error: printDownloadError })}
             </p>
           )}
           {printDownloadDropped.length > 0 && (
             <p className="text-xs text-muted" role="status">
-              Couldn't render in the print PDF: {printDownloadDropped.join(" ")}
+              {t("sheetViewer.couldntRenderPrint", { chars: printDownloadDropped.join(" ") })}
             </p>
           )}
           <Sheet

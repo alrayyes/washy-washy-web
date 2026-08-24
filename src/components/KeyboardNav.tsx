@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
+import type { Locale } from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import { KEY_BINDINGS } from "../lib/keyboardNav";
+
+interface Props {
+  locale: Locale;
+}
 
 /**
  * Global, header-mounted (`SiteHeader.astro`) — same placement rule as
@@ -14,7 +20,8 @@ import { KEY_BINDINGS } from "../lib/keyboardNav";
  * which `rules/a11y.md`'s "fully operable, focus trapped" requirement
  * would otherwise mean reimplementing by hand (#133).
  */
-export default function KeyboardNav() {
+export default function KeyboardNav({ locale }: Props) {
+  const t = translator(locale);
   const { helpOpen, openHelp, closeHelp } = useKeyboardNav();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -41,7 +48,7 @@ export default function KeyboardNav() {
       <button
         type="button"
         data-testid="keyboard-help-trigger"
-        aria-label="Keyboard shortcuts"
+        aria-label={t("keyboardNav.title")}
         className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-line bg-surface p-1.5 text-sm font-bold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
         onClick={openHelp}
       >
@@ -58,7 +65,7 @@ export default function KeyboardNav() {
       <dialog
         ref={dialogRef}
         data-testid="keyboard-help-dialog"
-        aria-label="Keyboard shortcuts"
+        aria-label={t("keyboardNav.title")}
         className="max-w-sm rounded-lg border border-hairline bg-panel p-6 text-body shadow-lg backdrop:bg-ink/40"
         onClick={(event) => {
           if (event.target === dialogRef.current) closeHelp();
@@ -71,13 +78,13 @@ export default function KeyboardNav() {
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: see above */}
         <div onClick={(event) => event.stopPropagation()}>
           <div className="mb-3 flex items-center justify-between gap-4">
-            <h2 className="font-heading text-lg font-bold text-ink">Keyboard shortcuts</h2>
+            <h2 className="font-heading text-lg font-bold text-ink">{t("keyboardNav.title")}</h2>
             <button
               type="button"
               className="text-sm font-semibold text-body hover:text-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               onClick={closeHelp}
             >
-              Close
+              {t("keyboardNav.close")}
             </button>
           </div>
           <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2 text-sm">
@@ -88,7 +95,7 @@ export default function KeyboardNav() {
                     {binding.keys}
                   </kbd>
                 </dt>
-                <dd>{binding.description}</dd>
+                <dd>{t(binding.descriptionKey)}</dd>
               </div>
             ))}
           </dl>

@@ -1,9 +1,14 @@
 import { DEFAULT_LOCALE, type Locale } from "./locales";
 
 /**
- * Site chrome and the three translated pages (home, disclaimer, privacy).
- * `/config`, `/config/machine` and `/docs` stay English-only for now (#144)
- * — their strings live in their own components, untouched by this file.
+ * Site chrome, the three static pages (home, disclaimer, privacy), and the
+ * interactive chart/config/machine UI. `/docs` prose stays in its own
+ * per-locale content collection (src/content/docs/), not here.
+ *
+ * Values with a `{token}` placeholder are interpolated by `translator()`'s
+ * returned `t(key, params)` — plain string replacement (`"{token}"` ->
+ * `String(params.token)`), not ICU MessageFormat. Keep every placeholder
+ * name in a translation identical to the English source's.
  */
 export interface Ui {
   "skip.toContent": string;
@@ -44,6 +49,220 @@ export interface Ui {
   /** Shown for 10s (or until dismissed) at the top of every page in this locale. */
   "banner.message": string;
   "banner.dismiss": string;
+
+  // --- Shared across the interactive chart/config/machine UI ---
+  "common.pile": string;
+  "common.detergent": string;
+  "common.notes": string;
+  "common.temp": string;
+  "common.spinRpm": string;
+  "common.buttons": string;
+  "common.programme": string;
+  "common.source": string;
+  "common.doNotIron": string;
+  "common.noSpin": string;
+  "common.softenerOk": string;
+  "common.noSoftener": string;
+  "common.copied": string;
+  "common.remove": string;
+  "common.name": string;
+  "common.iron": string;
+  "common.washingLoadsPageLink": string;
+  /** "{position} clockwise from {off}" — the caption under a programme dial. */
+  "common.clockwiseFrom": string;
+  "common.insideSteamZone": string;
+  "common.belowSteamZone": string;
+  /** "Could not use that file: {error}" */
+  "common.couldNotUseFile": string;
+  /** "Could not save: {error}" */
+  "common.couldNotSave": string;
+  "common.downloadCurrentConfig": string;
+  "common.uploadConfigJson": string;
+  "common.saveChanges": string;
+  "common.showingOwnConfig": string;
+  /** aria-label on every HelpBubble ("?") button. */
+  "common.whatDoesThisDo": string;
+
+  // --- SheetViewer.tsx (home page's filter bar and status/error text) ---
+  "sheetViewer.cutEverything": string;
+  "sheetViewer.cutWashOnly": string;
+  "sheetViewer.cutIronOnly": string;
+  "sheetViewer.filterChart": string;
+  "sheetViewer.cutLabel": string;
+  "sheetViewer.cutHelp": string;
+  "sheetViewer.pileHelp": string;
+  "sheetViewer.pileSearchPlaceholder": string;
+  "sheetViewer.advanced": string;
+  "sheetViewer.programmeHelp": string;
+  "sheetViewer.anyProgramme": string;
+  "sheetViewer.temperatureLabel": string;
+  "sheetViewer.temperatureHelp": string;
+  "sheetViewer.anyTemperature": string;
+  "sheetViewer.spinLabel": string;
+  "sheetViewer.spinHelp": string;
+  "sheetViewer.anySpin": string;
+  "sheetViewer.detergentHelp": string;
+  "sheetViewer.detergentSearchPlaceholder": string;
+  /** "Could not open the shared config: {error}. Showing what was already active instead." */
+  "sheetViewer.sharedConfigError": string;
+  "sheetViewer.showingBundledChart": string;
+  "sheetViewer.uploadEditPrefix": string;
+  /** 'No pile matches "{query}" with those advanced filters. Try loosening one.' */
+  "sheetViewer.noPileMatchAdvanced": string;
+  /** 'No pile matches "{query}". Try a different search.' */
+  "sheetViewer.noPileMatchQuery": string;
+  "sheetViewer.noPileMatchAdvancedOnly": string;
+  "sheetViewer.preparingPdf": string;
+  "sheetViewer.downloadForPhone": string;
+  "sheetViewer.downloadToPrint": string;
+  "sheetViewer.shareThisView": string;
+  /** "Could not share this view: {error}" */
+  "sheetViewer.couldNotShare": string;
+  /** "Could not generate the phone PDF: {error}" */
+  "sheetViewer.couldNotGeneratePhonePdf": string;
+  /** "Could not generate the print PDF: {error}" */
+  "sheetViewer.couldNotGeneratePrintPdf": string;
+  /** "Couldn't render in the phone PDF: {chars}" */
+  "sheetViewer.couldntRenderPhone": string;
+  /** "Couldn't render in the print PDF: {chars}" */
+  "sheetViewer.couldntRenderPrint": string;
+
+  // --- Sheet.tsx (the read-only rendered sheet, and each card) ---
+  "sheet.subtitleFull": string;
+  "sheet.subtitleWash": string;
+  "sheet.subtitleIron": string;
+  "sheet.washingInstructions": string;
+  "sheet.loadsHeading": string;
+  "sheet.loadsExplain": string;
+  "sheet.together": string;
+  "sheet.legendThermostatCaption": string;
+  "sheet.legendProgrammeCaption": string;
+  "sheet.legendIronExplain": string;
+  /** "The dials are drawn as they sit on the machine: twelve o'clock is {off}, ..." */
+  "sheet.legendWashExplain": string;
+  /** Appended only for the "full" variant. */
+  "sheet.legendWashExplainFullSuffix": string;
+  "sheet.washHeading": string;
+  "sheet.washTogetherWithLabel": string;
+  "sheet.washTogetherEachOther": string;
+  /** "each other, and {names}" */
+  "sheet.washTogetherEachOtherAnd": string;
+  "sheet.washSeparately": string;
+  "sheet.washAlone": string;
+  "sheet.dryingLabel": string;
+  /** "{count} pile" */
+  "sheet.pileCountOne": string;
+  /** "{count} piles" */
+  "sheet.pileCountOther": string;
+  "sheet.thermostatOn": string;
+  "sheet.leaveIronOff": string;
+  "sheet.neverNearBoard": string;
+  "sheet.howHeading": string;
+  "sheet.neverTheseHeading": string;
+  "sheet.durationsDisclaimer": string;
+  "sheet.copyLink": string;
+  "sheet.preparing": string;
+  "sheet.download": string;
+  /** "Could not copy the link: {error}" */
+  "sheet.couldNotCopyLink": string;
+  /** "Could not generate the PDF: {error}" */
+  "sheet.couldNotGeneratePdf": string;
+  /** "Couldn't render in the PDF: {chars}" */
+  "sheet.couldntRenderInPdf": string;
+
+  // --- ConfigViewer.tsx (/config, the washing-loads editor) ---
+  "config.editMachine": string;
+  "config.programmes": string;
+  "config.temperatures": string;
+  "config.spinSpeeds": string;
+  "config.ironSettings": string;
+  "config.durationInvalidHint": string;
+  "config.durationValidHint": string;
+  "config.durationAriaLabel": string;
+  "config.showingBundledConfig": string;
+  "config.uploadEditHelp": string;
+  "config.yourConfigHeading": string;
+  "config.useBundledInstead": string;
+  "config.machineHeading": string;
+  "config.chartHeading": string;
+  "config.chartEditHelp": string;
+  "config.sortBy": string;
+  "config.chartOrder": string;
+  "config.ironedLabel": string;
+  "config.ironingNotesAriaLabel": string;
+  "config.colourGroupHeading": string;
+  "config.mixTagsHeading": string;
+
+  // --- MachineEditor.tsx (/config/machine) ---
+  /** "Move {value} up" */
+  "machine.moveUp": string;
+  /** "Move {value} down" */
+  "machine.moveDown": string;
+  /** "Remove {value}" */
+  "machine.removeItem": string;
+  "machine.addButton": string;
+  "machine.capacityLabel": string;
+  "machine.programmesHint": string;
+  "machine.temperaturesLabel": string;
+  "machine.addPlaceholderProgramme": string;
+  "machine.addPlaceholderTemperature": string;
+  "machine.addPlaceholderSpin": string;
+  "machine.addPlaceholderButton": string;
+  "machine.addAriaProgramme": string;
+  "machine.addAriaTemperature": string;
+  "machine.addAriaSpin": string;
+  "machine.addAriaButton": string;
+  "machine.settingsHeading": string;
+  "machine.settingColumnHeader": string;
+  "machine.dotsColumnHeader": string;
+  "machine.detailColumnHeader": string;
+  "machine.steamColumnHeader": string;
+  /** "Setting {n} label" */
+  "machine.settingLabelAria": string;
+  /** "Setting {n} dots" */
+  "machine.settingDotsAria": string;
+  /** "Setting {n} detail" */
+  "machine.settingDetailAria": string;
+  /** "Setting {n} makes steam" */
+  "machine.settingSteamAria": string;
+  /** "Remove setting {n}" */
+  "machine.removeSettingAria": string;
+  "machine.addSetting": string;
+  "machine.newSettingDefaultLabel": string;
+  "machine.showingOwnMachine": string;
+  "machine.showingBundledMachine": string;
+  "machine.changesApplyPrefix": string;
+  "machine.changesApplySuffix": string;
+  "machine.useBundledMachineInstead": string;
+  "machine.washerHeading": string;
+
+  // --- HeaderUpload.tsx ---
+  "upload.uploadConfig": string;
+
+  // --- KeyboardNav.tsx + lib/keyboardNav.ts ---
+  "keyboardNav.title": string;
+  "keyboardNav.close": string;
+  "keyboardNav.scrollDown": string;
+  "keyboardNav.scrollUp": string;
+  "keyboardNav.jumpTop": string;
+  "keyboardNav.jumpBottom": string;
+  "keyboardNav.focusSearch": string;
+  "keyboardNav.toggleHelp": string;
+  "keyboardNav.closeHelp": string;
+
+  // --- ThemeToggle.tsx ---
+  "theme.switchToLight": string;
+  "theme.switchToDark": string;
+
+  // --- src/pages/config.astro ---
+  "page.config.title": string;
+  "page.config.description": string;
+  "page.config.h1": string;
+
+  // --- src/pages/config/machine.astro ---
+  "page.machine.title": string;
+  "page.machine.description": string;
+  "page.machine.h1": string;
 }
 
 const en: Ui = {
@@ -95,6 +314,198 @@ const en: Ui = {
   "banner.message":
     "You're already reading this in English — no AI translator was harmed (or needed) here.",
   "banner.dismiss": "Dismiss",
+
+  "common.pile": "Pile",
+  "common.detergent": "Detergent",
+  "common.notes": "Notes",
+  "common.temp": "Temp",
+  "common.spinRpm": "Spin rpm",
+  "common.buttons": "Buttons",
+  "common.programme": "Programme",
+  "common.source": "SOURCE",
+  "common.doNotIron": "Do not iron",
+  "common.noSpin": "no spin",
+  "common.softenerOk": "SOFTENER OK",
+  "common.noSoftener": "NO SOFTENER",
+  "common.copied": "Copied!",
+  "common.remove": "Remove",
+  "common.name": "Name",
+  "common.iron": "Iron",
+  "common.washingLoadsPageLink": "washing loads page",
+  "common.clockwiseFrom": "{position} clockwise from {off}",
+  "common.insideSteamZone": "inside the steam zone",
+  "common.belowSteamZone": "below the steam zone — dry iron only",
+  "common.couldNotUseFile": "Could not use that file: {error}",
+  "common.couldNotSave": "Could not save: {error}",
+  "common.downloadCurrentConfig": "Download current config",
+  "common.uploadConfigJson": "Upload a config (JSON)",
+  "common.saveChanges": "Save changes",
+  "common.showingOwnConfig": "Showing your own config.",
+  "common.whatDoesThisDo": "What does this do?",
+
+  "sheetViewer.cutEverything": "Everything",
+  "sheetViewer.cutWashOnly": "Washing only",
+  "sheetViewer.cutIronOnly": "Ironing only",
+  "sheetViewer.filterChart": "Filter the chart",
+  "sheetViewer.cutLabel": "Cut",
+  "sheetViewer.cutHelp":
+    "Which parts of the chart to show: everything, washing only, or ironing only.",
+  "sheetViewer.pileHelp": 'Type part of a pile’s name, like "towels", to show just that card.',
+  "sheetViewer.pileSearchPlaceholder": "Search by pile name…",
+  "sheetViewer.advanced": "Advanced",
+  "sheetViewer.programmeHelp": "Show only piles using this programme.",
+  "sheetViewer.anyProgramme": "Any programme",
+  "sheetViewer.temperatureLabel": "Temperature",
+  "sheetViewer.temperatureHelp": "Show only piles washed at this temperature.",
+  "sheetViewer.anyTemperature": "Any temperature",
+  "sheetViewer.spinLabel": "Spin",
+  "sheetViewer.spinHelp": "Show only piles spun at this speed.",
+  "sheetViewer.anySpin": "Any spin",
+  "sheetViewer.detergentHelp":
+    'Type part of a detergent note, like "powder", to show only piles that mention it.',
+  "sheetViewer.detergentSearchPlaceholder": "Search by detergent…",
+  "sheetViewer.sharedConfigError":
+    "Could not open the shared config: {error}. Showing what was already active instead.",
+  "sheetViewer.showingBundledChart":
+    "Showing the bundled example chart. It's a generic laundry chart, not your own.",
+  "sheetViewer.uploadEditPrefix": "Upload, download or edit your own on the",
+  "sheetViewer.noPileMatchAdvanced":
+    'No pile matches "{query}" with those advanced filters. Try loosening one.',
+  "sheetViewer.noPileMatchQuery": 'No pile matches "{query}". Try a different search.',
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "No pile matches those advanced filters. Try loosening one.",
+  "sheetViewer.preparingPdf": "Preparing PDF…",
+  "sheetViewer.downloadForPhone": "Download for phone",
+  "sheetViewer.downloadToPrint": "Download to print",
+  "sheetViewer.shareThisView": "Share this view",
+  "sheetViewer.couldNotShare": "Could not share this view: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Could not generate the phone PDF: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Could not generate the print PDF: {error}",
+  "sheetViewer.couldntRenderPhone": "Couldn't render in the phone PDF: {chars}",
+  "sheetViewer.couldntRenderPrint": "Couldn't render in the print PDF: {chars}",
+
+  "sheet.subtitleFull": "Scroll for the pile you are holding.",
+  "sheet.subtitleWash": "Getting it into the machine. Ironing is on the other sheet.",
+  "sheet.subtitleIron": "At the board. Washing is on the other sheet.",
+  "sheet.washingInstructions": "Washing instructions",
+  "sheet.loadsHeading": "Loads — one line, one wash",
+  "sheet.loadsExplain":
+    "A TOGETHER badge means every pile on that line shares one wash — put them in the machine at once.",
+  "sheet.together": "TOGETHER",
+  "sheet.legendThermostatCaption": "thermostat",
+  "sheet.legendProgrammeCaption": "programme",
+  "sheet.legendIronExplain":
+    "The ring is the iron's thermostat as it sits on the dial, and the red pointer is where to turn it. The blue band is the zone where it makes steam; a setting below it is a dry iron. A crossed-out ring means leave the iron in the cupboard.",
+  "sheet.legendWashExplain":
+    "The dials are drawn as they sit on the machine: twelve o'clock is {off}, and the red pointer is where to turn it. Chips show every value the display steps through, filled in on the one you want.",
+  "sheet.legendWashExplainFullSuffix":
+    " On the iron, the blue band is the zone where it makes steam.",
+  "sheet.washHeading": "Wash",
+  "sheet.washTogetherWithLabel": "Wash together with",
+  "sheet.washTogetherEachOther": "each other",
+  "sheet.washTogetherEachOtherAnd": "each other, and {names}",
+  "sheet.washSeparately": "same settings, but wash these separately — see the matrix",
+  "sheet.washAlone": "nothing else — wash alone",
+  "sheet.dryingLabel": "Drying",
+  "sheet.pileCountOne": "{count} pile",
+  "sheet.pileCountOther": "{count} piles",
+  "sheet.thermostatOn": "Thermostat on {label}",
+  "sheet.leaveIronOff": "Leave the iron off",
+  "sheet.neverNearBoard": "nothing on this card ever goes near the board",
+  "sheet.howHeading": "How",
+  "sheet.neverTheseHeading": "Never these",
+  "sheet.durationsDisclaimer": "Durations are the machine's own estimates and vary with load.",
+  "sheet.copyLink": "Copy link",
+  "sheet.preparing": "Preparing…",
+  "sheet.download": "Download",
+  "sheet.couldNotCopyLink": "Could not copy the link: {error}",
+  "sheet.couldNotGeneratePdf": "Could not generate the PDF: {error}",
+  "sheet.couldntRenderInPdf": "Couldn't render in the PDF: {chars}",
+
+  "config.editMachine": "Edit machine →",
+  "config.programmes": "Programmes",
+  "config.temperatures": "Temperatures",
+  "config.spinSpeeds": "Spin speeds",
+  "config.ironSettings": "Iron settings",
+  "config.durationInvalidHint": "Use H:MM, like 2:30",
+  "config.durationValidHint": "Format: H:MM, like 2:30",
+  "config.durationAriaLabel": "Duration",
+  "config.showingBundledConfig":
+    "Showing the bundled example config. It's a generic laundry chart and washing machine, not your own.",
+  "config.uploadEditHelp":
+    "Upload, download or edit below — changes apply across the whole site once saved, and persist in this browser until you clear them.",
+  "config.yourConfigHeading": "Your config",
+  "config.useBundledInstead": "Use the bundled example instead",
+  "config.machineHeading": "Machine",
+  "config.chartHeading": "Chart — every pile",
+  "config.chartEditHelp":
+    "Every field is editable. Save checks each row against the machine above, the same way an upload does — an unknown value is called out by row and column, not silently accepted.",
+  "config.sortBy": "Sort by",
+  "config.chartOrder": "Chart order",
+  "config.ironedLabel": "IRONED",
+  "config.ironingNotesAriaLabel": "Ironing notes",
+  "config.colourGroupHeading": "Colour group",
+  "config.mixTagsHeading": "Mix tags",
+
+  "machine.moveUp": "Move {value} up",
+  "machine.moveDown": "Move {value} down",
+  "machine.removeItem": "Remove {value}",
+  "machine.addButton": "+ Add",
+  "machine.capacityLabel": "Capacity",
+  "machine.programmesHint": "In dial order, starting from twelve o'clock.",
+  "machine.temperaturesLabel": "Temperatures (°C)",
+  "machine.addPlaceholderProgramme": "Add a programme…",
+  "machine.addPlaceholderTemperature": "Add a temperature…",
+  "machine.addPlaceholderSpin": "Add a spin…",
+  "machine.addPlaceholderButton": "Add a button…",
+  "machine.addAriaProgramme": "Add to Programmes",
+  "machine.addAriaTemperature": "Add to Temperatures (°C)",
+  "machine.addAriaSpin": "Add to Spin speeds",
+  "machine.addAriaButton": "Add to Buttons",
+  "machine.settingsHeading": "Settings",
+  "machine.settingColumnHeader": "Setting",
+  "machine.dotsColumnHeader": "Dots",
+  "machine.detailColumnHeader": "Detail",
+  "machine.steamColumnHeader": "Steam",
+  "machine.settingLabelAria": "Setting {n} label",
+  "machine.settingDotsAria": "Setting {n} dots",
+  "machine.settingDetailAria": "Setting {n} detail",
+  "machine.settingSteamAria": "Setting {n} makes steam",
+  "machine.removeSettingAria": "Remove setting {n}",
+  "machine.addSetting": "+ Add setting",
+  "machine.newSettingDefaultLabel": "New setting",
+  "machine.showingOwnMachine": "Showing your own machine.",
+  "machine.showingBundledMachine":
+    "Showing the bundled example machine. It's a generic washer and iron, not your own.",
+  "machine.changesApplyPrefix": "Changes apply across the whole site once saved — the same config",
+  "machine.changesApplySuffix": " reads.",
+  "machine.useBundledMachineInstead": "Use the bundled machine instead",
+  "machine.washerHeading": "Washer",
+
+  "upload.uploadConfig": "Upload config",
+
+  "keyboardNav.title": "Keyboard shortcuts",
+  "keyboardNav.close": "Close",
+  "keyboardNav.scrollDown": "Scroll down",
+  "keyboardNav.scrollUp": "Scroll up",
+  "keyboardNav.jumpTop": "Jump to the top",
+  "keyboardNav.jumpBottom": "Jump to the bottom",
+  "keyboardNav.focusSearch": "Focus the page's search field",
+  "keyboardNav.toggleHelp": "Toggle this help",
+  "keyboardNav.closeHelp": "Close this help",
+
+  "theme.switchToLight": "Switch to light mode",
+  "theme.switchToDark": "Switch to dark mode",
+
+  "page.config.title": "Washy washy — washing loads",
+  "page.config.description":
+    "The full loaded config: the washing machine and iron's settings, and every pile in the chart, in one structured place.",
+  "page.config.h1": "Washing loads",
+
+  "page.machine.title": "Washy washy — washer & iron settings",
+  "page.machine.description":
+    "The washing machine and iron's settings — programmes, temperatures, spins, and the iron's thermostat.",
+  "page.machine.h1": "Washer & iron settings",
 };
 
 const ja: Ui = {
@@ -146,6 +557,199 @@ const ja: Ui = {
   "banner.message":
     "開発者は日本語がまったく話せないので、誤訳やそれによる不具合の責任は負いかねます。このサイトの翻訳はAI任せです。ご不満はすべてskynet宛てにお送りください。",
   "banner.dismiss": "閉じる",
+
+  "common.pile": "山",
+  "common.detergent": "洗剤",
+  "common.notes": "メモ",
+  "common.temp": "温度",
+  "common.spinRpm": "脱水rpm",
+  "common.buttons": "ボタン",
+  "common.programme": "プログラム",
+  "common.source": "ソース",
+  "common.doNotIron": "アイロン不可",
+  "common.noSpin": "脱水なし",
+  "common.softenerOk": "柔軟剤OK",
+  "common.noSoftener": "柔軟剤NG",
+  "common.copied": "コピーしました!",
+  "common.remove": "削除",
+  "common.name": "名前",
+  "common.iron": "アイロン",
+  "common.washingLoadsPageLink": "洗濯物一覧ページ",
+  "common.clockwiseFrom": "{off}から時計回りに{position}",
+  "common.insideSteamZone": "スチームゾーン内",
+  "common.belowSteamZone": "スチームゾーンより下 — ドライアイロンのみ",
+  "common.couldNotUseFile": "そのファイルを使用できませんでした: {error}",
+  "common.couldNotSave": "保存できませんでした: {error}",
+  "common.downloadCurrentConfig": "現在の設定をダウンロード",
+  "common.uploadConfigJson": "設定（JSON）をアップロード",
+  "common.saveChanges": "変更を保存",
+  "common.showingOwnConfig": "あなた自身の設定を表示しています。",
+  "common.whatDoesThisDo": "これは何をするもの?",
+
+  "sheetViewer.cutEverything": "すべて",
+  "sheetViewer.cutWashOnly": "洗濯のみ",
+  "sheetViewer.cutIronOnly": "アイロンのみ",
+  "sheetViewer.filterChart": "チャートを絞り込む",
+  "sheetViewer.cutLabel": "表示範囲",
+  "sheetViewer.cutHelp":
+    "チャートのどの部分を表示するか: すべて、洗濯のみ、アイロンのみから選べます。",
+  "sheetViewer.pileHelp":
+    "「タオル」のように山の名前の一部を入力すると、そのカードだけを表示します。",
+  "sheetViewer.pileSearchPlaceholder": "山の名前で検索…",
+  "sheetViewer.advanced": "詳細設定",
+  "sheetViewer.programmeHelp": "このプログラムを使用する山だけを表示します。",
+  "sheetViewer.anyProgramme": "すべてのプログラム",
+  "sheetViewer.temperatureLabel": "温度",
+  "sheetViewer.temperatureHelp": "この温度で洗う山だけを表示します。",
+  "sheetViewer.anyTemperature": "すべての温度",
+  "sheetViewer.spinLabel": "脱水",
+  "sheetViewer.spinHelp": "この速度で脱水する山だけを表示します。",
+  "sheetViewer.anySpin": "すべての脱水",
+  "sheetViewer.detergentHelp":
+    "「粉末」のように洗剤メモの一部を入力すると、それに言及する山だけを表示します。",
+  "sheetViewer.detergentSearchPlaceholder": "洗剤で検索…",
+  "sheetViewer.sharedConfigError":
+    "共有された設定を開けませんでした: {error}。代わりに、すでに有効だった設定を表示しています。",
+  "sheetViewer.showingBundledChart":
+    "同梱のサンプルチャートを表示しています。これは一般的な洗濯チャートであり、あなた自身のものではありません。",
+  "sheetViewer.uploadEditPrefix": "自分のものをアップロード・ダウンロード・編集できるのは",
+  "sheetViewer.noPileMatchAdvanced":
+    "詳細フィルターの条件では「{query}」に一致する山がありません。条件を緩めてみてください。",
+  "sheetViewer.noPileMatchQuery":
+    "「{query}」に一致する山がありません。別のキーワードで検索してみてください。",
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "その詳細フィルターの条件に一致する山がありません。条件を緩めてみてください。",
+  "sheetViewer.preparingPdf": "PDFを準備中…",
+  "sheetViewer.downloadForPhone": "スマホ用にダウンロード",
+  "sheetViewer.downloadToPrint": "印刷用にダウンロード",
+  "sheetViewer.shareThisView": "この表示を共有",
+  "sheetViewer.couldNotShare": "この表示を共有できませんでした: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "スマホ用PDFを生成できませんでした: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "印刷用PDFを生成できませんでした: {error}",
+  "sheetViewer.couldntRenderPhone": "スマホ用PDFで描画できませんでした: {chars}",
+  "sheetViewer.couldntRenderPrint": "印刷用PDFで描画できませんでした: {chars}",
+
+  "sheet.subtitleFull": "手に持っている山までスクロールしてください。",
+  "sheet.subtitleWash": "洗濯機に入れる作業です。アイロンはもう一方のシートにあります。",
+  "sheet.subtitleIron": "アイロン台での作業です。洗濯はもう一方のシートにあります。",
+  "sheet.washingInstructions": "洗濯方法",
+  "sheet.loadsHeading": "洗濯単位 — 1行 = 1回の洗濯",
+  "sheet.loadsExplain":
+    "「同時洗い」バッジは、その行のすべての山が同じ洗濯を共有することを意味します — まとめて洗濯機に入れてください。",
+  "sheet.together": "同時洗い",
+  "sheet.legendThermostatCaption": "サーモスタット",
+  "sheet.legendProgrammeCaption": "プログラム",
+  "sheet.legendIronExplain":
+    "この輪はダイヤル上のアイロンのサーモスタットを表し、赤い矢印は合わせるべき位置です。青い帯はスチームが出る範囲で、それより低い設定はドライアイロンになります。輪に斜線が入っている場合は、アイロンを戸棚にしまったままにしてください。",
+  "sheet.legendWashExplain":
+    "ダイヤルは洗濯機についているとおりに描かれています: 12時の位置が{off}で、赤い矢印は合わせるべき位置です。チップは表示が切り替わるすべての値を示し、目的の値が塗りつぶされています。",
+  "sheet.legendWashExplainFullSuffix": " アイロンでは、青い帯がスチームの出る範囲です。",
+  "sheet.washHeading": "洗濯",
+  "sheet.washTogetherWithLabel": "一緒に洗う相手",
+  "sheet.washTogetherEachOther": "お互い",
+  "sheet.washTogetherEachOtherAnd": "お互い、そして{names}",
+  "sheet.washSeparately": "設定は同じですが、これらは別々に洗ってください — 表を参照",
+  "sheet.washAlone": "他には何もありません — 単独で洗う",
+  "sheet.dryingLabel": "乾燥",
+  "sheet.pileCountOne": "{count}枚",
+  "sheet.pileCountOther": "{count}枚",
+  "sheet.thermostatOn": "サーモスタットを{label}に設定",
+  "sheet.leaveIronOff": "アイロンの電源は入れない",
+  "sheet.neverNearBoard": "このカードのものはアイロン台に一切近づけません",
+  "sheet.howHeading": "方法",
+  "sheet.neverTheseHeading": "厳禁",
+  "sheet.durationsDisclaimer": "所要時間は洗濯機による目安であり、洗濯物の量によって変わります。",
+  "sheet.copyLink": "リンクをコピー",
+  "sheet.preparing": "準備中…",
+  "sheet.download": "ダウンロード",
+  "sheet.couldNotCopyLink": "リンクをコピーできませんでした: {error}",
+  "sheet.couldNotGeneratePdf": "PDFを生成できませんでした: {error}",
+  "sheet.couldntRenderInPdf": "PDFで描画できませんでした: {chars}",
+
+  "config.editMachine": "洗濯機を編集 →",
+  "config.programmes": "プログラム",
+  "config.temperatures": "温度",
+  "config.spinSpeeds": "脱水速度",
+  "config.ironSettings": "アイロン設定",
+  "config.durationInvalidHint": "H:MM形式で入力してください（例: 2:30）",
+  "config.durationValidHint": "形式: H:MM（例: 2:30）",
+  "config.durationAriaLabel": "所要時間",
+  "config.showingBundledConfig":
+    "同梱のサンプル設定を表示しています。これは一般的な洗濯チャートと洗濯機であり、あなた自身のものではありません。",
+  "config.uploadEditHelp":
+    "以下でアップロード、ダウンロード、編集ができます — 保存すると変更はサイト全体に適用され、消去するまでこのブラウザに保存されます。",
+  "config.yourConfigHeading": "あなたの設定",
+  "config.useBundledInstead": "代わりに同梱のサンプルを使用",
+  "config.machineHeading": "洗濯機",
+  "config.chartHeading": "チャート — すべての山",
+  "config.chartEditHelp":
+    "すべての項目を編集できます。保存時には、アップロード時と同様に各行を上の洗濯機の設定と照合します — 不明な値は黙って受け入れられず、行と列で指摘されます。",
+  "config.sortBy": "並べ替え",
+  "config.chartOrder": "チャート順",
+  "config.ironedLabel": "アイロン済み",
+  "config.ironingNotesAriaLabel": "アイロンメモ",
+  "config.colourGroupHeading": "色グループ",
+  "config.mixTagsHeading": "混用タグ",
+
+  "machine.moveUp": "{value}を上に移動",
+  "machine.moveDown": "{value}を下に移動",
+  "machine.removeItem": "{value}を削除",
+  "machine.addButton": "+ 追加",
+  "machine.capacityLabel": "容量",
+  "machine.programmesHint": "12時の位置から始まる、ダイヤルの並び順どおりに。",
+  "machine.temperaturesLabel": "温度（°C）",
+  "machine.addPlaceholderProgramme": "プログラムを追加…",
+  "machine.addPlaceholderTemperature": "温度を追加…",
+  "machine.addPlaceholderSpin": "脱水を追加…",
+  "machine.addPlaceholderButton": "ボタンを追加…",
+  "machine.addAriaProgramme": "プログラムに追加",
+  "machine.addAriaTemperature": "温度（°C）に追加",
+  "machine.addAriaSpin": "脱水速度に追加",
+  "machine.addAriaButton": "ボタンに追加",
+  "machine.settingsHeading": "設定",
+  "machine.settingColumnHeader": "設定",
+  "machine.dotsColumnHeader": "ドット",
+  "machine.detailColumnHeader": "詳細",
+  "machine.steamColumnHeader": "スチーム",
+  "machine.settingLabelAria": "設定{n}のラベル",
+  "machine.settingDotsAria": "設定{n}のドット",
+  "machine.settingDetailAria": "設定{n}の詳細",
+  "machine.settingSteamAria": "設定{n}はスチームが出る",
+  "machine.removeSettingAria": "設定{n}を削除",
+  "machine.addSetting": "+ 設定を追加",
+  "machine.newSettingDefaultLabel": "新しい設定",
+  "machine.showingOwnMachine": "あなた自身の洗濯機を表示しています。",
+  "machine.showingBundledMachine":
+    "同梱のサンプル洗濯機を表示しています。これは一般的な洗濯機とアイロンであり、あなた自身のものではありません。",
+  "machine.changesApplyPrefix": "変更は保存するとサイト全体に適用されます — これは",
+  "machine.changesApplySuffix": "が読み込むのと同じ設定です。",
+  "machine.useBundledMachineInstead": "代わりに同梱の洗濯機を使用",
+  "machine.washerHeading": "洗濯機",
+
+  "upload.uploadConfig": "設定をアップロード",
+
+  "keyboardNav.title": "キーボードショートカット",
+  "keyboardNav.close": "閉じる",
+  "keyboardNav.scrollDown": "下にスクロール",
+  "keyboardNav.scrollUp": "上にスクロール",
+  "keyboardNav.jumpTop": "先頭に移動",
+  "keyboardNav.jumpBottom": "末尾に移動",
+  "keyboardNav.focusSearch": "ページの検索欄にフォーカス",
+  "keyboardNav.toggleHelp": "このヘルプを切り替え",
+  "keyboardNav.closeHelp": "このヘルプを閉じる",
+
+  "theme.switchToLight": "ライトモードに切り替え",
+  "theme.switchToDark": "ダークモードに切り替え",
+
+  "page.config.title": "washy washy — 洗濯物一覧",
+  "page.config.description":
+    "読み込まれた設定のすべて: 洗濯機とアイロンの設定、そしてチャート内のすべての山を、ひとつの構造化された場所にまとめています。",
+  "page.config.h1": "洗濯物一覧",
+
+  "page.machine.title": "washy washy — 洗濯機とアイロンの設定",
+  "page.machine.description":
+    "洗濯機とアイロンの設定 — プログラム、温度、脱水、そしてアイロンのサーモスタット。",
+  "page.machine.h1": "洗濯機とアイロンの設定",
 };
 const es: Ui = {
   "skip.toContent": "Saltar al contenido",
@@ -196,6 +800,200 @@ const es: Ui = {
   "banner.message":
     "El desarrollador no habla español y no se hace responsable de traducciones desastrosas ni de líos varios. Esta página la tradujo una IA; para quejas, escribe a skynet.",
   "banner.dismiss": "Cerrar",
+
+  "common.pile": "Montón",
+  "common.detergent": "Detergente",
+  "common.notes": "Notas",
+  "common.temp": "Temp.",
+  "common.spinRpm": "Centrifugado (rpm)",
+  "common.buttons": "Botones",
+  "common.programme": "Programa",
+  "common.source": "FUENTE",
+  "common.doNotIron": "No planchar",
+  "common.noSpin": "sin centrifugado",
+  "common.softenerOk": "SUAVIZANTE OK",
+  "common.noSoftener": "SIN SUAVIZANTE",
+  "common.copied": "¡Copiado!",
+  "common.remove": "Quitar",
+  "common.name": "Nombre",
+  "common.iron": "Plancha",
+  "common.washingLoadsPageLink": "página de cargas de lavado",
+  "common.clockwiseFrom": "{position} en sentido horario desde {off}",
+  "common.insideSteamZone": "dentro de la zona de vapor",
+  "common.belowSteamZone": "por debajo de la zona de vapor — solo planchado en seco",
+  "common.couldNotUseFile": "No se pudo usar ese archivo: {error}",
+  "common.couldNotSave": "No se pudo guardar: {error}",
+  "common.downloadCurrentConfig": "Descargar la configuración actual",
+  "common.uploadConfigJson": "Subir una configuración (JSON)",
+  "common.saveChanges": "Guardar cambios",
+  "common.showingOwnConfig": "Mostrando tu propia configuración.",
+  "common.whatDoesThisDo": "¿Qué hace esto?",
+
+  "sheetViewer.cutEverything": "Todo",
+  "sheetViewer.cutWashOnly": "Solo lavado",
+  "sheetViewer.cutIronOnly": "Solo planchado",
+  "sheetViewer.filterChart": "Filtrar la tabla",
+  "sheetViewer.cutLabel": "Vista",
+  "sheetViewer.cutHelp": "Qué partes de la tabla mostrar: todo, solo lavado o solo planchado.",
+  "sheetViewer.pileHelp":
+    "Escribe parte del nombre de un montón, como «toallas», para mostrar solo esa tarjeta.",
+  "sheetViewer.pileSearchPlaceholder": "Buscar por nombre de montón…",
+  "sheetViewer.advanced": "Avanzado",
+  "sheetViewer.programmeHelp": "Muestra solo los montones que usan este programa.",
+  "sheetViewer.anyProgramme": "Cualquier programa",
+  "sheetViewer.temperatureLabel": "Temperatura",
+  "sheetViewer.temperatureHelp": "Muestra solo los montones lavados a esta temperatura.",
+  "sheetViewer.anyTemperature": "Cualquier temperatura",
+  "sheetViewer.spinLabel": "Centrifugado",
+  "sheetViewer.spinHelp": "Muestra solo los montones centrifugados a esta velocidad.",
+  "sheetViewer.anySpin": "Cualquier centrifugado",
+  "sheetViewer.detergentHelp":
+    "Escribe parte de una nota de detergente, como «en polvo», para mostrar solo los montones que la mencionen.",
+  "sheetViewer.detergentSearchPlaceholder": "Buscar por detergente…",
+  "sheetViewer.sharedConfigError":
+    "No se pudo abrir la configuración compartida: {error}. Se muestra en su lugar lo que ya estaba activo.",
+  "sheetViewer.showingBundledChart":
+    "Mostrando la tabla de ejemplo incluida. Es una tabla de lavado genérica, no la tuya.",
+  "sheetViewer.uploadEditPrefix": "Sube, descarga o edita la tuya en la",
+  "sheetViewer.noPileMatchAdvanced":
+    "Ningún montón coincide con «{query}» con esos filtros avanzados. Prueba a aflojar alguno.",
+  "sheetViewer.noPileMatchQuery": "Ningún montón coincide con «{query}». Prueba otra búsqueda.",
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "Ningún montón coincide con esos filtros avanzados. Prueba a aflojar alguno.",
+  "sheetViewer.preparingPdf": "Preparando PDF…",
+  "sheetViewer.downloadForPhone": "Descargar para el móvil",
+  "sheetViewer.downloadToPrint": "Descargar para imprimir",
+  "sheetViewer.shareThisView": "Compartir esta vista",
+  "sheetViewer.couldNotShare": "No se pudo compartir esta vista: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "No se pudo generar el PDF para el móvil: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "No se pudo generar el PDF para imprimir: {error}",
+  "sheetViewer.couldntRenderPhone": "No se pudo renderizar en el PDF para el móvil: {chars}",
+  "sheetViewer.couldntRenderPrint": "No se pudo renderizar en el PDF para imprimir: {chars}",
+
+  "sheet.subtitleFull": "Desplázate hasta el montón que tienes en la mano.",
+  "sheet.subtitleWash": "Metiéndola en la lavadora. El planchado está en la otra hoja.",
+  "sheet.subtitleIron": "En la tabla de planchar. El lavado está en la otra hoja.",
+  "sheet.washingInstructions": "Instrucciones de lavado",
+  "sheet.loadsHeading": "Cargas — una línea, un lavado",
+  "sheet.loadsExplain":
+    "Una insignia JUNTOS significa que todos los montones de esa línea comparten un lavado: mételos en la lavadora a la vez.",
+  "sheet.together": "JUNTOS",
+  "sheet.legendThermostatCaption": "termostato",
+  "sheet.legendProgrammeCaption": "programa",
+  "sheet.legendIronExplain":
+    "El anillo es el termostato de la plancha tal como aparece en el dial, y la flecha roja indica hasta dónde girarlo. La banda azul es la zona donde genera vapor; un ajuste por debajo de ella es plancha en seco. Un anillo tachado significa que hay que dejar la plancha en el armario.",
+  "sheet.legendWashExplain":
+    "Los diales se dibujan tal como están en la máquina: las doce en punto son {off}, y la flecha roja indica hasta dónde girarlo. Las etiquetas muestran cada valor por el que pasa la pantalla, resaltando el que quieres.",
+  "sheet.legendWashExplainFullSuffix":
+    " En la plancha, la banda azul es la zona donde genera vapor.",
+  "sheet.washHeading": "Lavado",
+  "sheet.washTogetherWithLabel": "Lavar junto con",
+  "sheet.washTogetherEachOther": "entre sí",
+  "sheet.washTogetherEachOtherAnd": "entre sí y con {names}",
+  "sheet.washSeparately": "mismos ajustes, pero lava esto por separado — consulta la matriz",
+  "sheet.washAlone": "nada más — lava esto solo",
+  "sheet.dryingLabel": "Secado",
+  "sheet.pileCountOne": "{count} montón",
+  "sheet.pileCountOther": "{count} montones",
+  "sheet.thermostatOn": "Termostato en {label}",
+  "sheet.leaveIronOff": "Deja la plancha apagada",
+  "sheet.neverNearBoard": "nada de esta tarjeta se acerca nunca a la tabla de planchar",
+  "sheet.howHeading": "Cómo",
+  "sheet.neverTheseHeading": "Nunca estas",
+  "sheet.durationsDisclaimer":
+    "Las duraciones son estimaciones de la propia máquina y varían según la carga.",
+  "sheet.copyLink": "Copiar enlace",
+  "sheet.preparing": "Preparando…",
+  "sheet.download": "Descargar",
+  "sheet.couldNotCopyLink": "No se pudo copiar el enlace: {error}",
+  "sheet.couldNotGeneratePdf": "No se pudo generar el PDF: {error}",
+  "sheet.couldntRenderInPdf": "No se pudo renderizar en el PDF: {chars}",
+
+  "config.editMachine": "Editar máquina →",
+  "config.programmes": "Programas",
+  "config.temperatures": "Temperaturas",
+  "config.spinSpeeds": "Velocidades de centrifugado",
+  "config.ironSettings": "Ajustes de la plancha",
+  "config.durationInvalidHint": "Usa H:MM, como 2:30",
+  "config.durationValidHint": "Formato: H:MM, como 2:30",
+  "config.durationAriaLabel": "Duración",
+  "config.showingBundledConfig":
+    "Mostrando la configuración de ejemplo incluida. Es una tabla de lavado y una lavadora genéricas, no las tuyas.",
+  "config.uploadEditHelp":
+    "Sube, descarga o edita más abajo — los cambios se aplican a todo el sitio una vez guardados, y persisten en este navegador hasta que los borres.",
+  "config.yourConfigHeading": "Tu configuración",
+  "config.useBundledInstead": "Usar el ejemplo incluido en su lugar",
+  "config.machineHeading": "Máquina",
+  "config.chartHeading": "Tabla — todos los montones",
+  "config.chartEditHelp":
+    "Todos los campos son editables. Al guardar se comprueba cada fila contra la máquina de arriba, igual que al subir un archivo — un valor desconocido se señala por fila y columna, no se acepta en silencio.",
+  "config.sortBy": "Ordenar por",
+  "config.chartOrder": "Orden de la tabla",
+  "config.ironedLabel": "PLANCHADO",
+  "config.ironingNotesAriaLabel": "Notas de planchado",
+  "config.colourGroupHeading": "Grupo de color",
+  "config.mixTagsHeading": "Etiquetas de mezcla",
+
+  "machine.moveUp": "Subir {value}",
+  "machine.moveDown": "Bajar {value}",
+  "machine.removeItem": "Quitar {value}",
+  "machine.addButton": "+ Añadir",
+  "machine.capacityLabel": "Capacidad",
+  "machine.programmesHint": "En el orden del dial, empezando desde las doce en punto.",
+  "machine.temperaturesLabel": "Temperaturas (°C)",
+  "machine.addPlaceholderProgramme": "Añadir un programa…",
+  "machine.addPlaceholderTemperature": "Añadir una temperatura…",
+  "machine.addPlaceholderSpin": "Añadir un centrifugado…",
+  "machine.addPlaceholderButton": "Añadir un botón…",
+  "machine.addAriaProgramme": "Añadir a Programas",
+  "machine.addAriaTemperature": "Añadir a Temperaturas (°C)",
+  "machine.addAriaSpin": "Añadir a Velocidades de centrifugado",
+  "machine.addAriaButton": "Añadir a Botones",
+  "machine.settingsHeading": "Ajustes",
+  "machine.settingColumnHeader": "Ajuste",
+  "machine.dotsColumnHeader": "Puntos",
+  "machine.detailColumnHeader": "Detalle",
+  "machine.steamColumnHeader": "Vapor",
+  "machine.settingLabelAria": "Etiqueta del ajuste {n}",
+  "machine.settingDotsAria": "Puntos del ajuste {n}",
+  "machine.settingDetailAria": "Detalle del ajuste {n}",
+  "machine.settingSteamAria": "El ajuste {n} genera vapor",
+  "machine.removeSettingAria": "Quitar el ajuste {n}",
+  "machine.addSetting": "+ Añadir ajuste",
+  "machine.newSettingDefaultLabel": "Nuevo ajuste",
+  "machine.showingOwnMachine": "Mostrando tu propia máquina.",
+  "machine.showingBundledMachine":
+    "Mostrando la máquina de ejemplo incluida. Es una lavadora y plancha genéricas, no las tuyas.",
+  "machine.changesApplyPrefix":
+    "Los cambios se aplican a todo el sitio una vez guardados — es la misma configuración que la",
+  "machine.changesApplySuffix": " lee.",
+  "machine.useBundledMachineInstead": "Usar la máquina incluida en su lugar",
+  "machine.washerHeading": "Lavadora",
+
+  "upload.uploadConfig": "Subir configuración",
+
+  "keyboardNav.title": "Atajos de teclado",
+  "keyboardNav.close": "Cerrar",
+  "keyboardNav.scrollDown": "Bajar",
+  "keyboardNav.scrollUp": "Subir",
+  "keyboardNav.jumpTop": "Ir arriba del todo",
+  "keyboardNav.jumpBottom": "Ir abajo del todo",
+  "keyboardNav.focusSearch": "Enfocar el campo de búsqueda de la página",
+  "keyboardNav.toggleHelp": "Alternar esta ayuda",
+  "keyboardNav.closeHelp": "Cerrar esta ayuda",
+
+  "theme.switchToLight": "Cambiar a modo claro",
+  "theme.switchToDark": "Cambiar a modo oscuro",
+
+  "page.config.title": "Washy washy — cargas de lavado",
+  "page.config.description":
+    "La configuración completa cargada: los ajustes de la lavadora y la plancha, y todos los montones de la tabla, en un solo lugar estructurado.",
+  "page.config.h1": "Cargas de lavado",
+
+  "page.machine.title": "Washy washy — ajustes de lavadora y plancha",
+  "page.machine.description":
+    "Los ajustes de la lavadora y la plancha — programas, temperaturas, centrifugados y el termostato de la plancha.",
+  "page.machine.h1": "Ajustes de lavadora y plancha",
 };
 const de: Ui = {
   "skip.toContent": "Zum Inhalt springen",
@@ -246,6 +1044,202 @@ const de: Ui = {
   "banner.message":
     "Der Entwickler spricht kein Deutsch und übernimmt keine Verantwortung für Übersetzungsfehler & andere Katastrophen. Diese Seite wurde von einer KI übersetzt — alle Beschwerden bitte per E-Mail an skynet.",
   "banner.dismiss": "Schließen",
+
+  "common.pile": "Stapel",
+  "common.detergent": "Waschmittel",
+  "common.notes": "Notizen",
+  "common.temp": "Temp.",
+  "common.spinRpm": "Schleudern (U/min)",
+  "common.buttons": "Tasten",
+  "common.programme": "Programm",
+  "common.source": "QUELLE",
+  "common.doNotIron": "Nicht bügeln",
+  "common.noSpin": "ohne Schleudern",
+  "common.softenerOk": "WEICHSPÜLER OK",
+  "common.noSoftener": "KEIN WEICHSPÜLER",
+  "common.copied": "Kopiert!",
+  "common.remove": "Entfernen",
+  "common.name": "Name",
+  "common.iron": "Bügeln",
+  "common.washingLoadsPageLink": "Waschladungen-Seite",
+  "common.clockwiseFrom": "{position} im Uhrzeigersinn von {off}",
+  "common.insideSteamZone": "innerhalb der Dampfzone",
+  "common.belowSteamZone": "unterhalb der Dampfzone – nur Trockenbügeln",
+  "common.couldNotUseFile": "Diese Datei konnte nicht verwendet werden: {error}",
+  "common.couldNotSave": "Konnte nicht gespeichert werden: {error}",
+  "common.downloadCurrentConfig": "Aktuelle Konfiguration herunterladen",
+  "common.uploadConfigJson": "Konfiguration hochladen (JSON)",
+  "common.saveChanges": "Änderungen speichern",
+  "common.showingOwnConfig": "Zeigt deine eigene Konfiguration.",
+  "common.whatDoesThisDo": "Was macht das?",
+
+  "sheetViewer.cutEverything": "Alles",
+  "sheetViewer.cutWashOnly": "Nur Waschen",
+  "sheetViewer.cutIronOnly": "Nur Bügeln",
+  "sheetViewer.filterChart": "Tabelle filtern",
+  "sheetViewer.cutLabel": "Ausschnitt",
+  "sheetViewer.cutHelp":
+    "Welche Teile der Tabelle angezeigt werden: alles, nur Waschen oder nur Bügeln.",
+  "sheetViewer.pileHelp":
+    "Gib einen Teil des Namens eines Stapels ein, z. B. „Handtücher“, um nur diese Karte anzuzeigen.",
+  "sheetViewer.pileSearchPlaceholder": "Nach Stapelname suchen…",
+  "sheetViewer.advanced": "Erweitert",
+  "sheetViewer.programmeHelp": "Nur Stapel anzeigen, die dieses Programm verwenden.",
+  "sheetViewer.anyProgramme": "Beliebiges Programm",
+  "sheetViewer.temperatureLabel": "Temperatur",
+  "sheetViewer.temperatureHelp": "Nur Stapel anzeigen, die bei dieser Temperatur gewaschen werden.",
+  "sheetViewer.anyTemperature": "Beliebige Temperatur",
+  "sheetViewer.spinLabel": "Schleudern",
+  "sheetViewer.spinHelp": "Nur Stapel anzeigen, die mit dieser Drehzahl geschleudert werden.",
+  "sheetViewer.anySpin": "Beliebige Schleuderzahl",
+  "sheetViewer.detergentHelp":
+    "Gib einen Teil eines Waschmittelhinweises ein, z. B. „Pulver“, um nur Stapel anzuzeigen, die ihn erwähnen.",
+  "sheetViewer.detergentSearchPlaceholder": "Nach Waschmittel suchen…",
+  "sheetViewer.sharedConfigError":
+    "Die geteilte Konfiguration konnte nicht geöffnet werden: {error}. Es wird stattdessen die zuvor aktive Konfiguration angezeigt.",
+  "sheetViewer.showingBundledChart":
+    "Zeigt die mitgelieferte Beispieltabelle. Das ist eine allgemeine Wäschetabelle, nicht deine eigene.",
+  "sheetViewer.uploadEditPrefix":
+    "Lade deine eigene hoch oder herunter, oder bearbeite sie auf der",
+  "sheetViewer.noPileMatchAdvanced":
+    "Kein Stapel passt mit diesen erweiterten Filtern zu „{query}“. Versuch, einen davon zu lockern.",
+  "sheetViewer.noPileMatchQuery": "Kein Stapel passt zu „{query}“. Versuch eine andere Suche.",
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "Kein Stapel passt zu diesen erweiterten Filtern. Versuch, einen davon zu lockern.",
+  "sheetViewer.preparingPdf": "PDF wird vorbereitet…",
+  "sheetViewer.downloadForPhone": "Für Handy herunterladen",
+  "sheetViewer.downloadToPrint": "Zum Drucken herunterladen",
+  "sheetViewer.shareThisView": "Diese Ansicht teilen",
+  "sheetViewer.couldNotShare": "Diese Ansicht konnte nicht geteilt werden: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Das Handy-PDF konnte nicht erstellt werden: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Das Druck-PDF konnte nicht erstellt werden: {error}",
+  "sheetViewer.couldntRenderPhone": "Im Handy-PDF konnte nicht dargestellt werden: {chars}",
+  "sheetViewer.couldntRenderPrint": "Im Druck-PDF konnte nicht dargestellt werden: {chars}",
+
+  "sheet.subtitleFull": "Scroll zu dem Stapel, den du in der Hand hältst.",
+  "sheet.subtitleWash": "Es geht in die Maschine. Bügeln steht auf dem anderen Blatt.",
+  "sheet.subtitleIron": "Am Bügelbrett. Waschen steht auf dem anderen Blatt.",
+  "sheet.washingInstructions": "Waschanleitung",
+  "sheet.loadsHeading": "Ladungen – eine Zeile, eine Wäsche",
+  "sheet.loadsExplain":
+    "Ein ZUSAMMEN-Badge bedeutet, dass sich alle Stapel dieser Zeile eine Wäsche teilen – gib sie auf einmal in die Maschine.",
+  "sheet.together": "ZUSAMMEN",
+  "sheet.legendThermostatCaption": "Thermostat",
+  "sheet.legendProgrammeCaption": "Programm",
+  "sheet.legendIronExplain":
+    "Der Ring zeigt das Thermostat des Bügeleisens, wie es am Regler sitzt, und der rote Zeiger zeigt, wohin du es drehst. Das blaue Band ist die Zone, in der Dampf entsteht; eine Einstellung darunter ist Trockenbügeln. Ein durchgestrichener Ring bedeutet: Bügeleisen im Schrank lassen.",
+  "sheet.legendWashExplain":
+    "Die Regler sind so dargestellt, wie sie an der Maschine sitzen: zwölf Uhr ist {off}, und der rote Zeiger zeigt, wohin du drehst. Chips zeigen jeden Wert, den das Display durchläuft, gefüllt bei dem, den du willst.",
+  "sheet.legendWashExplainFullSuffix":
+    " Beim Bügeleisen ist das blaue Band die Zone, in der Dampf entsteht.",
+  "sheet.washHeading": "Waschen",
+  "sheet.washTogetherWithLabel": "Zusammen waschen mit",
+  "sheet.washTogetherEachOther": "einander",
+  "sheet.washTogetherEachOtherAnd": "einander und {names}",
+  "sheet.washSeparately": "gleiche Einstellungen, aber diese getrennt waschen – siehe Matrix",
+  "sheet.washAlone": "nichts anderes – allein waschen",
+  "sheet.dryingLabel": "Trocknen",
+  "sheet.pileCountOne": "{count} Stapel",
+  "sheet.pileCountOther": "{count} Stapel",
+  "sheet.thermostatOn": "Thermostat auf {label}",
+  "sheet.leaveIronOff": "Bügeleisen ausgeschaltet lassen",
+  "sheet.neverNearBoard": "nichts auf dieser Karte kommt je ans Bügelbrett",
+  "sheet.howHeading": "Wie",
+  "sheet.neverTheseHeading": "Niemals diese",
+  "sheet.durationsDisclaimer":
+    "Die Dauern sind Schätzungen der Maschine und variieren je nach Beladung.",
+  "sheet.copyLink": "Link kopieren",
+  "sheet.preparing": "Wird vorbereitet…",
+  "sheet.download": "Herunterladen",
+  "sheet.couldNotCopyLink": "Der Link konnte nicht kopiert werden: {error}",
+  "sheet.couldNotGeneratePdf": "Das PDF konnte nicht erstellt werden: {error}",
+  "sheet.couldntRenderInPdf": "Im PDF konnte nicht dargestellt werden: {chars}",
+
+  "config.editMachine": "Maschine bearbeiten →",
+  "config.programmes": "Programme",
+  "config.temperatures": "Temperaturen",
+  "config.spinSpeeds": "Schleuderzahlen",
+  "config.ironSettings": "Bügeleinstellungen",
+  "config.durationInvalidHint": "Verwende das Format H:MM, z. B. 2:30",
+  "config.durationValidHint": "Format: H:MM, z. B. 2:30",
+  "config.durationAriaLabel": "Dauer",
+  "config.showingBundledConfig":
+    "Zeigt die mitgelieferte Beispielkonfiguration. Das sind eine allgemeine Wäschetabelle und Waschmaschine, nicht deine eigenen.",
+  "config.uploadEditHelp":
+    "Lade unten hoch, herunter oder bearbeite – Änderungen gelten nach dem Speichern für die ganze Seite und bleiben in diesem Browser erhalten, bis du sie löschst.",
+  "config.yourConfigHeading": "Deine Konfiguration",
+  "config.useBundledInstead": "Stattdessen das mitgelieferte Beispiel verwenden",
+  "config.machineHeading": "Maschine",
+  "config.chartHeading": "Tabelle – jeder Stapel",
+  "config.chartEditHelp":
+    "Jedes Feld ist bearbeitbar. Beim Speichern wird jede Zeile gegen die Maschine oben geprüft, genau wie bei einem Upload – ein unbekannter Wert wird nach Zeile und Spalte benannt, nicht stillschweigend akzeptiert.",
+  "config.sortBy": "Sortieren nach",
+  "config.chartOrder": "Tabellenreihenfolge",
+  "config.ironedLabel": "GEBÜGELT",
+  "config.ironingNotesAriaLabel": "Bügelhinweise",
+  "config.colourGroupHeading": "Farbgruppe",
+  "config.mixTagsHeading": "Misch-Tags",
+
+  "machine.moveUp": "{value} nach oben verschieben",
+  "machine.moveDown": "{value} nach unten verschieben",
+  "machine.removeItem": "{value} entfernen",
+  "machine.addButton": "+ Hinzufügen",
+  "machine.capacityLabel": "Kapazität",
+  "machine.programmesHint": "In Reglerreihenfolge, beginnend bei zwölf Uhr.",
+  "machine.temperaturesLabel": "Temperaturen (°C)",
+  "machine.addPlaceholderProgramme": "Programm hinzufügen…",
+  "machine.addPlaceholderTemperature": "Temperatur hinzufügen…",
+  "machine.addPlaceholderSpin": "Schleuderzahl hinzufügen…",
+  "machine.addPlaceholderButton": "Taste hinzufügen…",
+  "machine.addAriaProgramme": "Zu Programme hinzufügen",
+  "machine.addAriaTemperature": "Zu Temperaturen (°C) hinzufügen",
+  "machine.addAriaSpin": "Zu Schleuderzahlen hinzufügen",
+  "machine.addAriaButton": "Zu Tasten hinzufügen",
+  "machine.settingsHeading": "Einstellungen",
+  "machine.settingColumnHeader": "Einstellung",
+  "machine.dotsColumnHeader": "Punkte",
+  "machine.detailColumnHeader": "Detail",
+  "machine.steamColumnHeader": "Dampf",
+  "machine.settingLabelAria": "Bezeichnung von Einstellung {n}",
+  "machine.settingDotsAria": "Punkte von Einstellung {n}",
+  "machine.settingDetailAria": "Detail von Einstellung {n}",
+  "machine.settingSteamAria": "Einstellung {n} erzeugt Dampf",
+  "machine.removeSettingAria": "Einstellung {n} entfernen",
+  "machine.addSetting": "+ Einstellung hinzufügen",
+  "machine.newSettingDefaultLabel": "Neue Einstellung",
+  "machine.showingOwnMachine": "Zeigt deine eigene Maschine.",
+  "machine.showingBundledMachine":
+    "Zeigt die mitgelieferte Beispielmaschine. Das sind eine allgemeine Waschmaschine und ein Bügeleisen, nicht deine eigenen.",
+  "machine.changesApplyPrefix":
+    "Änderungen gelten nach dem Speichern für die ganze Seite – dieselbe Konfiguration, wie sie die",
+  "machine.changesApplySuffix": " liest.",
+  "machine.useBundledMachineInstead": "Stattdessen die mitgelieferte Maschine verwenden",
+  "machine.washerHeading": "Waschmaschine",
+
+  "upload.uploadConfig": "Konfiguration hochladen",
+
+  "keyboardNav.title": "Tastaturkürzel",
+  "keyboardNav.close": "Schließen",
+  "keyboardNav.scrollDown": "Nach unten scrollen",
+  "keyboardNav.scrollUp": "Nach oben scrollen",
+  "keyboardNav.jumpTop": "Zum Anfang springen",
+  "keyboardNav.jumpBottom": "Zum Ende springen",
+  "keyboardNav.focusSearch": "Suchfeld der Seite fokussieren",
+  "keyboardNav.toggleHelp": "Diese Hilfe ein-/ausblenden",
+  "keyboardNav.closeHelp": "Diese Hilfe schließen",
+
+  "theme.switchToLight": "Zum hellen Modus wechseln",
+  "theme.switchToDark": "Zum dunklen Modus wechseln",
+
+  "page.config.title": "Washy washy — Waschladungen",
+  "page.config.description":
+    "Die vollständig geladene Konfiguration: die Einstellungen von Waschmaschine und Bügeleisen sowie jeder Stapel der Tabelle, an einem strukturierten Ort.",
+  "page.config.h1": "Waschladungen",
+
+  "page.machine.title": "Washy washy — Einstellungen für Waschmaschine & Bügeleisen",
+  "page.machine.description":
+    "Die Einstellungen von Waschmaschine und Bügeleisen – Programme, Temperaturen, Schleuderzahlen und das Thermostat des Bügeleisens.",
+  "page.machine.h1": "Einstellungen für Waschmaschine & Bügeleisen",
 };
 
 const fr: Ui = {
@@ -297,6 +1291,202 @@ const fr: Ui = {
   "banner.message":
     "Le développeur ne parle pas français et n'est responsable d'aucune mauvaise traduction ni d'aucun impair. Ce site a été traduit par une IA : envoie toutes tes réclamations à skynet.",
   "banner.dismiss": "Fermer",
+
+  "common.pile": "Pile",
+  "common.detergent": "Lessive",
+  "common.notes": "Notes",
+  "common.temp": "Temp.",
+  "common.spinRpm": "Essorage (tr/min)",
+  "common.buttons": "Boutons",
+  "common.programme": "Programme",
+  "common.source": "SOURCE",
+  "common.doNotIron": "Ne pas repasser",
+  "common.noSpin": "sans essorage",
+  "common.softenerOk": "ADOUCISSANT OK",
+  "common.noSoftener": "SANS ADOUCISSANT",
+  "common.copied": "Copié !",
+  "common.remove": "Supprimer",
+  "common.name": "Nom",
+  "common.iron": "Fer",
+  "common.washingLoadsPageLink": "page des charges de lavage",
+  "common.clockwiseFrom": "{position} dans le sens horaire depuis {off}",
+  "common.insideSteamZone": "dans la zone vapeur",
+  "common.belowSteamZone": "en dessous de la zone vapeur — repassage à sec uniquement",
+  "common.couldNotUseFile": "Impossible d'utiliser ce fichier : {error}",
+  "common.couldNotSave": "Impossible d'enregistrer : {error}",
+  "common.downloadCurrentConfig": "Télécharger la config actuelle",
+  "common.uploadConfigJson": "Importer une config (JSON)",
+  "common.saveChanges": "Enregistrer les modifications",
+  "common.showingOwnConfig": "Affiche ta propre config.",
+  "common.whatDoesThisDo": "À quoi ça sert ?",
+
+  "sheetViewer.cutEverything": "Tout",
+  "sheetViewer.cutWashOnly": "Lavage uniquement",
+  "sheetViewer.cutIronOnly": "Repassage uniquement",
+  "sheetViewer.filterChart": "Filtrer le tableau",
+  "sheetViewer.cutLabel": "Vue",
+  "sheetViewer.cutHelp":
+    "Quelles parties du tableau afficher : tout, le lavage uniquement, ou le repassage uniquement.",
+  "sheetViewer.pileHelp":
+    "Tape une partie du nom d'une pile, comme « serviettes », pour n'afficher que cette carte.",
+  "sheetViewer.pileSearchPlaceholder": "Rechercher par nom de pile…",
+  "sheetViewer.advanced": "Avancé",
+  "sheetViewer.programmeHelp": "N'afficher que les piles utilisant ce programme.",
+  "sheetViewer.anyProgramme": "Tous les programmes",
+  "sheetViewer.temperatureLabel": "Température",
+  "sheetViewer.temperatureHelp": "N'afficher que les piles lavées à cette température.",
+  "sheetViewer.anyTemperature": "Toutes les températures",
+  "sheetViewer.spinLabel": "Essorage",
+  "sheetViewer.spinHelp": "N'afficher que les piles essorées à cette vitesse.",
+  "sheetViewer.anySpin": "Tous les essorages",
+  "sheetViewer.detergentHelp":
+    "Tape une partie d'une note de lessive, comme « poudre », pour n'afficher que les piles qui la mentionnent.",
+  "sheetViewer.detergentSearchPlaceholder": "Rechercher par lessive…",
+  "sheetViewer.sharedConfigError":
+    "Impossible d'ouvrir la config partagée : {error}. Affiche ce qui était déjà actif à la place.",
+  "sheetViewer.showingBundledChart":
+    "Affiche le tableau d'exemple fourni. C'est un tableau de lavage générique, pas le tien.",
+  "sheetViewer.uploadEditPrefix": "Importe, télécharge ou modifie la tienne sur la",
+  "sheetViewer.noPileMatchAdvanced":
+    "Aucune pile ne correspond à « {query} » avec ces filtres avancés. Essaie d'en assouplir un.",
+  "sheetViewer.noPileMatchQuery":
+    "Aucune pile ne correspond à « {query} ». Essaie une autre recherche.",
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "Aucune pile ne correspond à ces filtres avancés. Essaie d'en assouplir un.",
+  "sheetViewer.preparingPdf": "Préparation du PDF…",
+  "sheetViewer.downloadForPhone": "Télécharger pour téléphone",
+  "sheetViewer.downloadToPrint": "Télécharger pour impression",
+  "sheetViewer.shareThisView": "Partager cette vue",
+  "sheetViewer.couldNotShare": "Impossible de partager cette vue : {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Impossible de générer le PDF téléphone : {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Impossible de générer le PDF d'impression : {error}",
+  "sheetViewer.couldntRenderPhone": "Impossible d'afficher dans le PDF téléphone : {chars}",
+  "sheetViewer.couldntRenderPrint": "Impossible d'afficher dans le PDF d'impression : {chars}",
+
+  "sheet.subtitleFull": "Fais défiler jusqu'à la pile que tu as en main.",
+  "sheet.subtitleWash": "Pour la mettre dans la machine. Le repassage est sur l'autre fiche.",
+  "sheet.subtitleIron": "À la planche à repasser. Le lavage est sur l'autre fiche.",
+  "sheet.washingInstructions": "Instructions de lavage",
+  "sheet.loadsHeading": "Charges — une ligne, un lavage",
+  "sheet.loadsExplain":
+    "Un badge ENSEMBLE signifie que toutes les piles de cette ligne partagent un même lavage — mets-les dans la machine en même temps.",
+  "sheet.together": "ENSEMBLE",
+  "sheet.legendThermostatCaption": "thermostat",
+  "sheet.legendProgrammeCaption": "programme",
+  "sheet.legendIronExplain":
+    "L'anneau représente le thermostat du fer tel qu'il apparaît sur le cadran, et le repère rouge indique où le régler. La bande bleue est la zone où il produit de la vapeur ; un réglage en dessous correspond à un repassage à sec. Un anneau barré signifie qu'il faut laisser le fer au placard.",
+  "sheet.legendWashExplain":
+    "Les cadrans sont dessinés tels qu'ils apparaissent sur la machine : midi correspond à {off}, et le repère rouge indique où le régler. Les puces montrent toutes les valeurs que l'affichage parcourt, celle que tu veux étant remplie.",
+  "sheet.legendWashExplainFullSuffix":
+    " Sur le fer, la bande bleue est la zone où il produit de la vapeur.",
+  "sheet.washHeading": "Lavage",
+  "sheet.washTogetherWithLabel": "Laver avec",
+  "sheet.washTogetherEachOther": "entre elles",
+  "sheet.washTogetherEachOtherAnd": "entre elles, et {names}",
+  "sheet.washSeparately": "mêmes réglages, mais à laver séparément — voir la matrice",
+  "sheet.washAlone": "rien d'autre — à laver seule",
+  "sheet.dryingLabel": "Séchage",
+  "sheet.pileCountOne": "{count} pile",
+  "sheet.pileCountOther": "{count} piles",
+  "sheet.thermostatOn": "Thermostat sur {label}",
+  "sheet.leaveIronOff": "Laisse le fer éteint",
+  "sheet.neverNearBoard": "rien sur cette carte ne s'approche jamais de la planche à repasser",
+  "sheet.howHeading": "Comment",
+  "sheet.neverTheseHeading": "Jamais avec",
+  "sheet.durationsDisclaimer":
+    "Les durées sont des estimations de la machine et varient selon la charge.",
+  "sheet.copyLink": "Copier le lien",
+  "sheet.preparing": "Préparation…",
+  "sheet.download": "Télécharger",
+  "sheet.couldNotCopyLink": "Impossible de copier le lien : {error}",
+  "sheet.couldNotGeneratePdf": "Impossible de générer le PDF : {error}",
+  "sheet.couldntRenderInPdf": "Impossible d'afficher dans le PDF : {chars}",
+
+  "config.editMachine": "Modifier la machine →",
+  "config.programmes": "Programmes",
+  "config.temperatures": "Températures",
+  "config.spinSpeeds": "Vitesses d'essorage",
+  "config.ironSettings": "Réglages du fer",
+  "config.durationInvalidHint": "Utilise H:MM, comme 2:30",
+  "config.durationValidHint": "Format : H:MM, comme 2:30",
+  "config.durationAriaLabel": "Durée",
+  "config.showingBundledConfig":
+    "Affiche la config d'exemple fournie. C'est un tableau de lavage et un lave-linge génériques, pas les tiens.",
+  "config.uploadEditHelp":
+    "Importe, télécharge ou modifie ci-dessous — les changements s'appliquent à tout le site une fois enregistrés, et persistent dans ce navigateur jusqu'à ce que tu les effaces.",
+  "config.yourConfigHeading": "Ta config",
+  "config.useBundledInstead": "Utiliser l'exemple fourni à la place",
+  "config.machineHeading": "Machine",
+  "config.chartHeading": "Tableau — toutes les piles",
+  "config.chartEditHelp":
+    "Chaque champ est modifiable. L'enregistrement vérifie chaque ligne par rapport à la machine ci-dessus, comme le ferait un import — une valeur inconnue est signalée par ligne et colonne, jamais acceptée en silence.",
+  "config.sortBy": "Trier par",
+  "config.chartOrder": "Ordre du tableau",
+  "config.ironedLabel": "REPASSÉ",
+  "config.ironingNotesAriaLabel": "Notes de repassage",
+  "config.colourGroupHeading": "Groupe de couleurs",
+  "config.mixTagsHeading": "Étiquettes de mélange",
+
+  "machine.moveUp": "Déplacer {value} vers le haut",
+  "machine.moveDown": "Déplacer {value} vers le bas",
+  "machine.removeItem": "Supprimer {value}",
+  "machine.addButton": "+ Ajouter",
+  "machine.capacityLabel": "Capacité",
+  "machine.programmesHint": "Dans l'ordre du cadran, en partant de midi.",
+  "machine.temperaturesLabel": "Températures (°C)",
+  "machine.addPlaceholderProgramme": "Ajouter un programme…",
+  "machine.addPlaceholderTemperature": "Ajouter une température…",
+  "machine.addPlaceholderSpin": "Ajouter un essorage…",
+  "machine.addPlaceholderButton": "Ajouter un bouton…",
+  "machine.addAriaProgramme": "Ajouter aux programmes",
+  "machine.addAriaTemperature": "Ajouter aux températures (°C)",
+  "machine.addAriaSpin": "Ajouter aux vitesses d'essorage",
+  "machine.addAriaButton": "Ajouter aux boutons",
+  "machine.settingsHeading": "Réglages",
+  "machine.settingColumnHeader": "Réglage",
+  "machine.dotsColumnHeader": "Points",
+  "machine.detailColumnHeader": "Détail",
+  "machine.steamColumnHeader": "Vapeur",
+  "machine.settingLabelAria": "Libellé du réglage {n}",
+  "machine.settingDotsAria": "Points du réglage {n}",
+  "machine.settingDetailAria": "Détail du réglage {n}",
+  "machine.settingSteamAria": "Le réglage {n} produit de la vapeur",
+  "machine.removeSettingAria": "Supprimer le réglage {n}",
+  "machine.addSetting": "+ Ajouter un réglage",
+  "machine.newSettingDefaultLabel": "Nouveau réglage",
+  "machine.showingOwnMachine": "Affiche ta propre machine.",
+  "machine.showingBundledMachine":
+    "Affiche la machine d'exemple fournie. C'est un lave-linge et un fer génériques, pas les tiens.",
+  "machine.changesApplyPrefix":
+    "Les changements s'appliquent à tout le site une fois enregistrés — la même config que la",
+  "machine.changesApplySuffix": " lit.",
+  "machine.useBundledMachineInstead": "Utiliser la machine fournie à la place",
+  "machine.washerHeading": "Lave-linge",
+
+  "upload.uploadConfig": "Importer une config",
+
+  "keyboardNav.title": "Raccourcis clavier",
+  "keyboardNav.close": "Fermer",
+  "keyboardNav.scrollDown": "Défiler vers le bas",
+  "keyboardNav.scrollUp": "Défiler vers le haut",
+  "keyboardNav.jumpTop": "Aller tout en haut",
+  "keyboardNav.jumpBottom": "Aller tout en bas",
+  "keyboardNav.focusSearch": "Donner le focus au champ de recherche de la page",
+  "keyboardNav.toggleHelp": "Afficher ou masquer cette aide",
+  "keyboardNav.closeHelp": "Fermer cette aide",
+
+  "theme.switchToLight": "Passer en mode clair",
+  "theme.switchToDark": "Passer en mode sombre",
+
+  "page.config.title": "Washy washy — charges de lavage",
+  "page.config.description":
+    "La config complète chargée : les réglages du lave-linge et du fer, et toutes les piles du tableau, au même endroit, de façon structurée.",
+  "page.config.h1": "Charges de lavage",
+
+  "page.machine.title": "Washy washy — réglages du lave-linge et du fer",
+  "page.machine.description":
+    "Les réglages du lave-linge et du fer — programmes, températures, essorages, et le thermostat du fer.",
+  "page.machine.h1": "Réglages du lave-linge et du fer",
 };
 const jive: Ui = {
   "skip.toContent": "Jump straight past the jibber-jabber to the good stuff",
@@ -347,14 +1537,216 @@ const jive: Ui = {
   "banner.message":
     "Now dig this, jack: the cat who built this crib don't speak a lick o' Jive, so he ain't on the hook for whatever jibber-jabber got lost in translation. Some slick AI cooked up this whole rap, so if you got beef, take it up with skynet, you dig?",
   "banner.dismiss": "Scram",
+
+  "common.pile": "Da Pile",
+  "common.detergent": "Da Suds",
+  "common.notes": "Da Word",
+  "common.temp": "Heat",
+  "common.spinRpm": "Spin, rpm-style",
+  "common.buttons": "Buttons",
+  "common.programme": "Programme",
+  "common.source": "SOURCE",
+  "common.doNotIron": "Don't iron dis, chump",
+  "common.noSpin": "no spin, jack",
+  "common.softenerOk": "SOFTENER'S COOL",
+  "common.noSoftener": "NO SOFTENER, JACK",
+  "common.copied": "Copied, dig it!",
+  "common.remove": "Split",
+  "common.name": "Handle",
+  "common.iron": "Iron",
+  "common.washingLoadsPageLink": "washin' loads page",
+  "common.clockwiseFrom": "{position} clockwise from {off}, you dig?",
+  "common.insideSteamZone": "deep inside the steam zone",
+  "common.belowSteamZone": "below the steam zone — dry iron only, chump",
+  "common.couldNotUseFile": "No can do with that file, jack: {error}",
+  "common.couldNotSave": "Couldn't save dat, chump: {error}",
+  "common.downloadCurrentConfig": "Snag da current config",
+  "common.uploadConfigJson": "Upload a config (JSON), dig it",
+  "common.saveChanges": "Lock in dem changes",
+  "common.showingOwnConfig": "Showin' yo' own config, fo' sho'.",
+  "common.whatDoesThisDo": "What's dis jibber-jabber do?",
+
+  "sheetViewer.cutEverything": "Everything, baby",
+  "sheetViewer.cutWashOnly": "Washin' only",
+  "sheetViewer.cutIronOnly": "Ironin' only",
+  "sheetViewer.filterChart": "Filter dis chart, jack",
+  "sheetViewer.cutLabel": "Slice",
+  "sheetViewer.cutHelp":
+    "Which parts of da chart to show: everything, washin' only, or ironin' only.",
+  "sheetViewer.pileHelp":
+    'Type part of a pile\'s handle, like "towels", and just dat card show up, you dig?',
+  "sheetViewer.pileSearchPlaceholder": "Search by pile handle…",
+  "sheetViewer.advanced": "Advanced stuff",
+  "sheetViewer.programmeHelp": "Show only piles rollin' wit' dis programme.",
+  "sheetViewer.anyProgramme": "Any ol' programme",
+  "sheetViewer.temperatureLabel": "Heat",
+  "sheetViewer.temperatureHelp": "Show only piles washed at dis here heat.",
+  "sheetViewer.anyTemperature": "Any ol' heat",
+  "sheetViewer.spinLabel": "Spin",
+  "sheetViewer.spinHelp": "Show only piles spun at dis speed, jack.",
+  "sheetViewer.anySpin": "Any ol' spin",
+  "sheetViewer.detergentHelp":
+    'Type part of a suds note, like "powder", and only dem piles mentionin\' it show up.',
+  "sheetViewer.detergentSearchPlaceholder": "Search by suds…",
+  "sheetViewer.sharedConfigError":
+    "Couldn't crack open dat shared config, jack: {error}. Showin' what was already cookin' instead.",
+  "sheetViewer.showingBundledChart":
+    "Showin' da bundled example chart. It's a plain ol' laundry chart, not yo' own.",
+  "sheetViewer.uploadEditPrefix": "Upload, download or tinker wit' yo' own on da",
+  "sheetViewer.noPileMatchAdvanced":
+    "No pile matchin' \"{query}\" wit' them deep-cut filters. Loosen one up, chump.",
+  "sheetViewer.noPileMatchQuery": 'No pile matchin\' "{query}". Try another search, jack.',
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "No pile matchin' them deep-cut filters. Loosen one up, chump.",
+  "sheetViewer.preparingPdf": "Cookin' up dat PDF…",
+  "sheetViewer.downloadForPhone": "Snag it fo' yo' phone",
+  "sheetViewer.downloadToPrint": "Snag it to print",
+  "sheetViewer.shareThisView": "Pass round dis view",
+  "sheetViewer.couldNotShare": "Couldn't pass dis view round, jack: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Couldn't cook up da phone PDF, chump: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Couldn't cook up da print PDF, chump: {error}",
+  "sheetViewer.couldntRenderPhone": "Couldn't render dat in da phone PDF: {chars}",
+  "sheetViewer.couldntRenderPrint": "Couldn't render dat in da print PDF: {chars}",
+
+  "sheet.subtitleFull": "Scroll on down fo' da pile you holdin', dig it.",
+  "sheet.subtitleWash": "Gettin' it in da machine. Ironin's on da other sheet, jack.",
+  "sheet.subtitleIron": "At da board. Washin's on da other sheet, jack.",
+  "sheet.washingInstructions": "Washin' instructions",
+  "sheet.loadsHeading": "Loads — one line, one wash, dig it",
+  "sheet.loadsExplain":
+    "A TOGETHER badge mean every pile on dat line share one wash — throw 'em in da machine all at once, chump.",
+  "sheet.together": "TOGETHER",
+  "sheet.legendThermostatCaption": "thermostat",
+  "sheet.legendProgrammeCaption": "programme",
+  "sheet.legendIronExplain":
+    "Dat ring's da iron's thermostat, sittin' right there on da dial, and da red pointer's where you turn it, dig it. Da blue band's da zone where it's makin' steam; a setting below dat, you got a dry iron. A crossed-out ring mean leave dat iron in da cupboard, jack.",
+  "sheet.legendWashExplain":
+    "Dem dials drawn just like they sit on da machine: twelve o'clock is {off}, and da red pointer's where you turn it. Dem chips show every value da display steps through, filled in on da one you want, you dig?",
+  "sheet.legendWashExplainFullSuffix":
+    " On da iron, dat blue band's da zone where it's makin' steam.",
+  "sheet.washHeading": "Wash",
+  "sheet.washTogetherWithLabel": "Wash together wit'",
+  "sheet.washTogetherEachOther": "each other, dig it",
+  "sheet.washTogetherEachOtherAnd": "each other, and {names}",
+  "sheet.washSeparately": "same settings, but wash dese separate-like — check da matrix, jack",
+  "sheet.washAlone": "nothin' else — wash it alone, chump",
+  "sheet.dryingLabel": "Dryin'",
+  "sheet.pileCountOne": "{count} pile",
+  "sheet.pileCountOther": "{count} piles, solid",
+  "sheet.thermostatOn": "Thermostat set to {label}, jack",
+  "sheet.leaveIronOff": "Leave dat iron off, chump",
+  "sheet.neverNearBoard": "ain't nothin' on dis card ever goin' near da board",
+  "sheet.howHeading": "How",
+  "sheet.neverTheseHeading": "Never dese, chump",
+  "sheet.durationsDisclaimer":
+    "Dem durations is just da machine's own guesses, and they shift wit' da load, dig it.",
+  "sheet.copyLink": "Copy da link",
+  "sheet.preparing": "Cookin' it up…",
+  "sheet.download": "Snag it",
+  "sheet.couldNotCopyLink": "Couldn't copy dat link, jack: {error}",
+  "sheet.couldNotGeneratePdf": "Couldn't cook up dat PDF, chump: {error}",
+  "sheet.couldntRenderInPdf": "Couldn't render dat in da PDF: {chars}",
+
+  "config.editMachine": "Tinker wit' da machine →",
+  "config.programmes": "Programmes",
+  "config.temperatures": "Heats",
+  "config.spinSpeeds": "Spin speeds",
+  "config.ironSettings": "Iron settings",
+  "config.durationInvalidHint": "Use H:MM, like 2:30, dig it",
+  "config.durationValidHint": "Format: H:MM, like 2:30, you dig",
+  "config.durationAriaLabel": "How long",
+  "config.showingBundledConfig":
+    "Showin' da bundled example config. Just a plain laundry chart and washin' machine, not yo' own.",
+  "config.uploadEditHelp":
+    "Upload, download, or tinker below — changes hit da whole site once you save 'em, and they stick round in dis browser till you wipe 'em clean, jack.",
+  "config.yourConfigHeading": "Yo' config",
+  "config.useBundledInstead": "Roll wit' da bundled example instead",
+  "config.machineHeading": "Machine",
+  "config.chartHeading": "Chart — every last pile",
+  "config.chartEditHelp":
+    "Every field's yours to tinker wit'. Savin' checks each row against da machine up top, same as an upload do — a value it don't recognize gets called out by row and column, ain't slippin' through quiet, chump.",
+  "config.sortBy": "Sort by",
+  "config.chartOrder": "Chart order",
+  "config.ironedLabel": "IRONED",
+  "config.ironingNotesAriaLabel": "Ironin' notes",
+  "config.colourGroupHeading": "Colour clique",
+  "config.mixTagsHeading": "Mix tags",
+
+  "machine.moveUp": "Bump {value} up",
+  "machine.moveDown": "Bump {value} down",
+  "machine.removeItem": "Split {value}",
+  "machine.addButton": "+ Add",
+  "machine.capacityLabel": "Capacity",
+  "machine.programmesHint": "In dial order, kickin' off from twelve o'clock.",
+  "machine.temperaturesLabel": "Heats (°C)",
+  "machine.addPlaceholderProgramme": "Add a programme…",
+  "machine.addPlaceholderTemperature": "Add a heat…",
+  "machine.addPlaceholderSpin": "Add a spin…",
+  "machine.addPlaceholderButton": "Add a button…",
+  "machine.addAriaProgramme": "Add to Programmes",
+  "machine.addAriaTemperature": "Add to Heats (°C)",
+  "machine.addAriaSpin": "Add to Spin speeds",
+  "machine.addAriaButton": "Add to Buttons",
+  "machine.settingsHeading": "Settings",
+  "machine.settingColumnHeader": "Setting",
+  "machine.dotsColumnHeader": "Dots",
+  "machine.detailColumnHeader": "Detail",
+  "machine.steamColumnHeader": "Steam",
+  "machine.settingLabelAria": "Setting {n} handle",
+  "machine.settingDotsAria": "Setting {n} dots",
+  "machine.settingDetailAria": "Setting {n} detail",
+  "machine.settingSteamAria": "Setting {n} makin' steam",
+  "machine.removeSettingAria": "Split setting {n}",
+  "machine.addSetting": "+ Add setting",
+  "machine.newSettingDefaultLabel": "Fresh setting",
+  "machine.showingOwnMachine": "Showin' yo' own machine, fo' sho'.",
+  "machine.showingBundledMachine":
+    "Showin' da bundled example machine. Just a plain ol' washer and iron, not yo' own.",
+  "machine.changesApplyPrefix": "Changes hit da whole site once you save 'em — same config da",
+  "machine.changesApplySuffix": " reads, you dig.",
+  "machine.useBundledMachineInstead": "Roll wit' da bundled machine instead",
+  "machine.washerHeading": "Washer",
+
+  "upload.uploadConfig": "Upload config, dig it",
+
+  "keyboardNav.title": "Keyboard shortcuts, jack",
+  "keyboardNav.close": "Close",
+  "keyboardNav.scrollDown": "Scroll on down",
+  "keyboardNav.scrollUp": "Scroll on up",
+  "keyboardNav.jumpTop": "Jump to da top",
+  "keyboardNav.jumpBottom": "Jump to da bottom",
+  "keyboardNav.focusSearch": "Zero in on da page's search field",
+  "keyboardNav.toggleHelp": "Toggle dis help",
+  "keyboardNav.closeHelp": "Close dis help",
+
+  "theme.switchToLight": "Flip to light mode",
+  "theme.switchToDark": "Flip to dark mode",
+
+  "page.config.title": "Washy washy — washin' loads",
+  "page.config.description":
+    "Da whole loaded config: da washin' machine and iron's settings, and every pile in da chart, all in one tight package, dig it.",
+  "page.config.h1": "Washin' Loads",
+
+  "page.machine.title": "Washy washy — washer & iron settings",
+  "page.machine.description":
+    "Da washin' machine and iron's settings — programmes, heats, spins, and da iron's thermostat, dig it.",
+  "page.machine.h1": "Washer & Iron Settings",
 };
 
 /** Exported for test/ui.test.ts, which checks every locale carries the same keys. */
 export const dictionaries: Record<Locale, Ui> = { en, ja, de, es, fr, jive };
 
+/** Plain `{token}` -> `String(value)` replacement — see the `Ui` interface's own doc comment. */
+export type TranslationParams = Record<string, string | number>;
+
 export function translator(locale: Locale) {
   const dict = dictionaries[locale] ?? dictionaries[DEFAULT_LOCALE];
-  return function t(key: keyof Ui): string {
-    return dict[key] ?? dictionaries[DEFAULT_LOCALE][key];
+  return function t(key: keyof Ui, params?: TranslationParams): string {
+    const value = dict[key] ?? dictionaries[DEFAULT_LOCALE][key];
+    if (!params) return value;
+    return Object.entries(params).reduce(
+      (result, [token, replacement]) => result.replaceAll(`{${token}}`, String(replacement)),
+      value,
+    );
   };
 }

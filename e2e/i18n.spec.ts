@@ -39,13 +39,16 @@ test("the language switcher lists every locale, in its own name, and switches th
 test("switching language from a page with no translation falls back to that locale's home", async ({
   page,
 }) => {
-  await page.goto("/config");
+  // /docs is Starlight's own separate i18n system (#144) — jive isn't part
+  // of it (astro.config.mjs), so it's the one page that's genuinely
+  // untranslated for every locale this switcher offers, including jive.
+  await page.goto("/docs/");
 
-  await page.getByLabel("Language").selectOption({ label: "Français" });
-  await expect(page).toHaveURL(/\/fr\/?$/);
+  await page.getByLabel("Language").selectOption({ label: "Jive" });
+  await expect(page).toHaveURL(/\/jive\/?$/);
 });
 
-test("English site chrome doesn't bleed into a translated page, or the other way round", async ({
+test("the washing-loads and washer/iron editors are translated too, and stay in their own locale across nav", async ({
   page,
 }) => {
   await gotoHydrated(page, "/ja/");
@@ -56,13 +59,44 @@ test("English site chrome doesn't bleed into a translated page, or the other way
     "ドキュメント",
   ]);
 
-  // "Washing loads" only exists in English (#144) — following it should land
-  // back on the plain English page, chrome included, not a half-translated one.
   await page
     .getByRole("navigation", { name: "Site" })
     .getByRole("link", { name: "洗濯物" })
     .click();
-  await expect(page).toHaveURL(/\/config\/?$/);
+  await expect(page).toHaveURL(/\/ja\/config\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("洗濯物一覧");
+
+  await page
+    .getByRole("navigation", { name: "Site" })
+    .getByRole("link", { name: "洗濯機とアイロン" })
+    .click();
+  await expect(page).toHaveURL(/\/ja\/config\/machine\/?$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("洗濯機とアイロンの設定");
+});
+
+test("/docs stays English chrome and content regardless of the locale visited from", async ({
+  page,
+}) => {
+  await gotoHydrated(page, "/ja/");
+
+  await page
+    .getByRole("navigation", { name: "Site" })
+    .getByRole("link", { name: "ドキュメント" })
+    .click();
+  // Starlight's own i18n (#144) does support ja for docs, so this lands on
+  // /ja/docs/, not plain /docs/ — the nav link itself is locale-aware.
+  await expect(page).toHaveURL(/\/ja\/docs\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+
+  // jive has no Starlight docs at all (astro.config.mjs) — its Docs link
+  // goes to the plain English docs instead, chrome and all.
+  await gotoHydrated(page, "/jive/");
+  await page
+    .getByRole("navigation", { name: "Site" })
+    .getByRole("link", { name: "The Docs, Jack" })
+    .click();
+  await expect(page).toHaveURL(/\/docs\/?$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("navigation", { name: "Site" }).getByRole("link")).toHaveText([
     "Home",
@@ -94,19 +128,44 @@ test("the banner auto-dismisses after 10 seconds", async ({ page }) => {
   await expect(banner).toHaveCount(0);
 });
 
-test("the banner can be dismissed early, via its close button or a click elsewhere on the page", async ({
-  page,
-}) => {
+test("the banner can be dismissed early via its close button", async ({ page }) => {
   await gotoHydrated(page, "/ja/");
   const banner = page.getByTestId("language-warning-banner");
 
   await banner.getByRole("button", { name: "閉じる" }).click();
   await expect(banner).toHaveCount(0);
+});
 
+test("the banner can be dismissed early via a click elsewhere on the page", async ({ page }) => {
   await gotoHydrated(page, "/ja/");
+  const banner = page.getByTestId("language-warning-banner");
+
   await expect(banner).toBeVisible();
   await page.getByRole("heading", { level: 1 }).click();
   await expect(banner).toHaveCount(0);
+});
+
+test("the banner shows once per locale, not on every page load — but a different locale still gets its own", async ({
+  page,
+}) => {
+  const banner = page.getByTestId("language-warning-banner");
+
+  await gotoHydrated(page, "/ja/");
+  await expect(banner).toBeVisible();
+
+  // Same locale, a different translated page — already seen, stays hidden.
+  // Plain goto, not gotoHydrated: /ja/disclaimer has no other island to
+  // carry a data-hydrated flag, but that's fine here — the banner's SSR
+  // markup already excludes it (visible starts false), so "stays absent"
+  // needs no wait to assert correctly either way.
+  await page.goto("/ja/disclaimer");
+  await expect(banner).toHaveCount(0);
+  await gotoHydrated(page, "/ja/");
+  await expect(banner).toHaveCount(0);
+
+  // A locale never seen before still gets its own first showing.
+  await gotoHydrated(page, "/de/");
+  await expect(banner).toBeVisible();
 });
 
 test("a translated page with the banner visible passes an accessibility scan", async ({ page }) => {

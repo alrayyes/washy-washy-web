@@ -43,12 +43,13 @@ export function localeFromPath(pathname: string): Locale {
 }
 
 /**
- * The only pages that exist per-locale (src/pages/[locale]/*.astro). Every
- * other route (/config, /config/machine, /docs/*) only exists in English —
- * #144 tracks translating them — so the language switcher falls back to a
- * locale's home page from anywhere else.
+ * The pages that exist per-locale (src/pages/[locale]/*.astro). /docs is
+ * separate — it's Starlight's own i18n system (DOCS_LOCALES/docsHref
+ * below), not this table, since Starlight doesn't support "jive"'s
+ * BCP-47 tag (see astro.config.mjs) and so isn't on the same locale set.
+ * Anywhere else, the language switcher falls back to a locale's home page.
  */
-export const TRANSLATED_PAGES = ["home", "disclaimer", "privacy"] as const;
+export const TRANSLATED_PAGES = ["home", "disclaimer", "privacy", "config", "machine"] as const;
 
 export type TranslatedPage = (typeof TRANSLATED_PAGES)[number];
 
@@ -56,7 +57,25 @@ const PAGE_PATHS: Record<TranslatedPage, string> = {
   home: "/",
   disclaimer: "/disclaimer",
   privacy: "/privacy",
+  config: "/config",
+  machine: "/config/machine",
 };
+
+/**
+ * Locales Starlight actually has content/chrome for (#144) — every
+ * configured locale except "jive", which Starlight's own i18n rejects
+ * outright (astro.config.mjs). A jive visitor's "Docs" link goes to the
+ * plain English docs instead, same fallback as any other untranslated page.
+ */
+export const DOCS_LOCALES = LOCALES.filter((locale): locale is Exclude<Locale, "jive"> =>
+  ["en", "ja", "de", "es", "fr"].includes(locale),
+);
+
+export function docsHref(locale: Locale): string {
+  return (DOCS_LOCALES as readonly Locale[]).includes(locale)
+    ? relativeLocaleUrl(locale, "/docs/")
+    : "/docs/";
+}
 
 /** Matches the current URL against the pages that have per-locale routes, English or not. */
 export function matchTranslatedPage(pathname: string): TranslatedPage | null {

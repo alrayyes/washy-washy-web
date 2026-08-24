@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   absoluteLocaleUrl,
+  docsHref,
   isLocale,
   localeFromPath,
   matchTranslatedPage,
@@ -52,18 +53,20 @@ describe("absoluteLocaleUrl", () => {
 });
 
 describe("matchTranslatedPage", () => {
-  test("matches the three translated pages regardless of locale prefix", () => {
+  test("matches the five translated pages regardless of locale prefix", () => {
     expect(matchTranslatedPage("/")).toBe("home");
     expect(matchTranslatedPage("/ja/")).toBe("home");
     expect(matchTranslatedPage("/disclaimer")).toBe("disclaimer");
     expect(matchTranslatedPage("/de/disclaimer")).toBe("disclaimer");
     expect(matchTranslatedPage("/privacy/")).toBe("privacy");
     expect(matchTranslatedPage("/es/privacy/")).toBe("privacy");
+    expect(matchTranslatedPage("/config")).toBe("config");
+    expect(matchTranslatedPage("/fr/config")).toBe("config");
+    expect(matchTranslatedPage("/config/machine")).toBe("machine");
+    expect(matchTranslatedPage("/jive/config/machine")).toBe("machine");
   });
 
   test("returns null for pages with no per-locale route", () => {
-    expect(matchTranslatedPage("/config")).toBeNull();
-    expect(matchTranslatedPage("/config/machine")).toBeNull();
     expect(matchTranslatedPage("/docs/")).toBeNull();
   });
 });
@@ -73,6 +76,20 @@ describe("pagePath", () => {
     expect(pagePath("home")).toBe("/");
     expect(pagePath("disclaimer")).toBe("/disclaimer");
     expect(pagePath("privacy")).toBe("/privacy");
+    expect(pagePath("config")).toBe("/config");
+    expect(pagePath("machine")).toBe("/config/machine");
+  });
+});
+
+describe("docsHref", () => {
+  test("goes to that locale's own docs root for a locale Starlight actually has", () => {
+    expect(docsHref("en")).toBe("/docs/");
+    expect(docsHref("ja")).toBe("/ja/docs/");
+    expect(docsHref("de")).toBe("/de/docs/");
+  });
+
+  test("falls back to the plain English docs for jive, which Starlight doesn't support", () => {
+    expect(docsHref("jive")).toBe("/docs/");
   });
 });
 

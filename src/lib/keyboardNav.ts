@@ -41,15 +41,23 @@ export function isSecondGPress(
 /** Single source of truth for both the handler's `switch` and the help overlay's own listing. */
 export interface KeyBinding {
   keys: string;
-  description: string;
+  /** A `Ui` key (i18n/ui.ts) — the overlay translates it via `t()`, this file has no locale of its own. */
+  descriptionKey:
+    | "keyboardNav.scrollDown"
+    | "keyboardNav.scrollUp"
+    | "keyboardNav.jumpTop"
+    | "keyboardNav.jumpBottom"
+    | "keyboardNav.focusSearch"
+    | "keyboardNav.toggleHelp"
+    | "keyboardNav.closeHelp";
 }
 
 export const KEY_BINDINGS: KeyBinding[] = [
-  { keys: "j", description: "Scroll down" },
-  { keys: "k", description: "Scroll up" },
-  { keys: "g g", description: "Jump to the top" },
-  { keys: "G", description: "Jump to the bottom" },
-  { keys: "/", description: "Focus the page's search field" },
-  { keys: "?", description: "Toggle this help" },
-  { keys: "Esc", description: "Close this help" },
+  { keys: "j", descriptionKey: "keyboardNav.scrollDown" },
+  { keys: "k", descriptionKey: "keyboardNav.scrollUp" },
+  { keys: "g g", descriptionKey: "keyboardNav.jumpTop" },
+  { keys: "G", descriptionKey: "keyboardNav.jumpBottom" },
+  { keys: "/", descriptionKey: "keyboardNav.focusSearch" },
+  { keys: "?", descriptionKey: "keyboardNav.toggleHelp" },
+  { keys: "Esc", descriptionKey: "keyboardNav.closeHelp" },
 ];

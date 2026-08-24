@@ -12,6 +12,8 @@ import {
   rowsFromInstructions,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
+import { type Locale, relativeLocaleUrl } from "../i18n/locales";
+import { TranslationProvider, useLocale, useT } from "../i18n/TranslationProvider";
 import {
   clearCustomConfig,
   readCustomConfig,
@@ -44,14 +46,8 @@ const PILL_BUTTON = "rounded px-1.5 py-0.5 text-xs font-bold text-white";
 interface Props {
   items: Instruction[];
   machine: Machine;
+  locale: Locale;
 }
-
-/** Every field is a plain string (`Row`'s shape), so alphabetical sort just works. */
-const SORT_FIELDS: { value: (typeof COLUMNS)[number]; label: string }[] = [
-  { value: "clothing_type", label: "Pile" },
-  { value: "detergent", label: "Detergent" },
-  { value: "notes", label: "Notes" },
-];
 
 function ChipList({ values }: { values: readonly string[] }) {
   return (
@@ -73,6 +69,8 @@ function ChipList({ values }: { values: readonly string[] }) {
  * below, so machine setup isn't lost among fifteen-per-pile chart cards.
  */
 function MachineSummary({ machine }: { machine: Machine }) {
+  const t = useT();
+  const locale = useLocale();
   const { washer, iron } = machine;
 
   return (
@@ -82,27 +80,27 @@ function MachineSummary({ machine }: { machine: Machine }) {
           {washer.name} · {washer.capacity} · {iron.name}
         </p>
         <a
-          href="/config/machine"
+          href={relativeLocaleUrl(locale, "/config/machine")}
           className="shrink-0 rounded border border-line bg-surface px-2 py-1 text-xs font-semibold text-ink hover:border-accent hover:text-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          Edit machine →
+          {t("config.editMachine")}
         </a>
       </div>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
-          <p className={FIELD_LABEL}>Programmes</p>
+          <p className={FIELD_LABEL}>{t("config.programmes")}</p>
           <ChipList values={washer.programs} />
         </div>
         <div>
-          <p className={FIELD_LABEL}>Temperatures</p>
+          <p className={FIELD_LABEL}>{t("config.temperatures")}</p>
           <ChipList values={washer.temperatures} />
         </div>
         <div>
-          <p className={FIELD_LABEL}>Spin speeds</p>
+          <p className={FIELD_LABEL}>{t("config.spinSpeeds")}</p>
           <ChipList values={washer.spins} />
         </div>
         <div>
-          <p className={FIELD_LABEL}>Iron settings</p>
+          <p className={FIELD_LABEL}>{t("config.ironSettings")}</p>
           <ChipList values={iron.settings.map((setting) => setting.label)} />
         </div>
       </div>
@@ -273,6 +271,7 @@ function DurationField({
   rowId: number;
   onChange: (value: string) => void;
 }) {
+  const t = useT();
   const stripped = value.replace(/^~/, "");
   const invalid = stripped !== "" && !isValidDuration(stripped);
   const hintId = `${name}-format-hint-${rowId}`;
@@ -291,7 +290,7 @@ function DurationField({
           // needs (#53).
           inputMode="text"
           name={name}
-          aria-label="Duration"
+          aria-label={t("config.durationAriaLabel")}
           aria-invalid={invalid}
           aria-describedby={hintId}
           placeholder="2:30"
@@ -303,7 +302,7 @@ function DurationField({
         />
       </div>
       <p id={hintId} className={invalid ? "text-xs text-no-text" : "sr-only"}>
-        {invalid ? "Use H:MM, like 2:30" : "Format: H:MM, like 2:30"}
+        {invalid ? t("config.durationInvalidHint") : t("config.durationValidHint")}
       </p>
     </div>
   );
@@ -347,11 +346,12 @@ function EditableSplitField({
  * visitor fills in here, only something an uploaded chart can carry.
  */
 function ReferenceLink({ name, link }: { name: string; link: string }) {
+  const t = useT();
   if (name === "") return null;
 
   return (
     <div className="mt-2">
-      <p className="text-xs font-bold tracking-wide text-muted">SOURCE</p>
+      <p className="text-xs font-bold tracking-wide text-muted">{t("common.source")}</p>
       <p className="text-sm leading-relaxed text-body">
         {link !== "" ? (
           <a href={link} target="_blank" rel="noopener noreferrer" className={LINK}>
@@ -389,6 +389,7 @@ function ChartCards({
   machine: Machine;
   onChange: (index: number, key: (typeof COLUMNS)[number], value: string) => void;
 }) {
+  const t = useT();
   const { washer, iron } = machine;
 
   return (
@@ -412,7 +413,7 @@ function ChartCards({
                   className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
                   type="text"
                   name="clothing_type"
-                  aria-label="Pile"
+                  aria-label={t("common.pile")}
                   value={row.clothing_type}
                   onChange={(event) => set("clothing_type", event.target.value)}
                 />
@@ -428,14 +429,14 @@ function ChartCards({
             <div className="mb-3 flex flex-wrap items-center gap-2">
               <PillToggle
                 on={row.fabric_softener === "yes"}
-                onLabel="SOFTENER OK"
-                offLabel="NO SOFTENER"
+                onLabel={t("common.softenerOk")}
+                offLabel={t("common.noSoftener")}
                 name="fabric_softener"
                 onClick={() => set("fabric_softener", row.fabric_softener === "yes" ? "no" : "yes")}
               />
               <span className="text-xs font-bold text-ink">
                 {row.program} {row.temperature === "koud" ? "koud" : `${row.temperature} °C`} ·{" "}
-                {row.spin === "0" ? "no spin" : `${row.spin} rpm`}
+                {row.spin === "0" ? t("common.noSpin") : `${row.spin} rpm`}
               </span>
             </div>
 
@@ -445,7 +446,7 @@ function ChartCards({
                 <select
                   className="mt-1 w-full rounded border border-line bg-transparent px-0 text-center text-xs font-bold text-ink focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   name="program"
-                  aria-label="Programme"
+                  aria-label={t("common.programme")}
                   value={row.program}
                   onChange={(event) => set("program", event.target.value)}
                 >
@@ -455,13 +456,11 @@ function ChartCards({
                     </option>
                   ))}
                 </select>
-                <p className="text-xs text-body">
-                  {position} clockwise from {off}
-                </p>
+                <p className="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
               </div>
               <div className="flex flex-1 flex-col justify-center">
                 <ChipSelectRow
-                  label="Temp"
+                  label={t("common.temp")}
                   field="temperature"
                   groupName={`temperature-${index}`}
                   values={washer.temperatures}
@@ -469,7 +468,7 @@ function ChartCards({
                   onSelect={(value) => set("temperature", value)}
                 />
                 <ChipSelectRow
-                  label="Spin rpm"
+                  label={t("common.spinRpm")}
                   field="spin"
                   groupName={`spin-${index}`}
                   values={washer.spins}
@@ -477,7 +476,7 @@ function ChartCards({
                   onSelect={(value) => set("spin", value)}
                 />
                 <ChipMultiRow
-                  label="Buttons"
+                  label={t("common.buttons")}
                   name="options"
                   values={washer.options}
                   selected={splitPipe(row.options)}
@@ -492,7 +491,7 @@ function ChartCards({
             </div>
 
             <EditableSplitField
-              label="Detergent"
+              label={t("common.detergent")}
               value={row.detergent}
               name="detergent"
               rowId={index}
@@ -500,7 +499,7 @@ function ChartCards({
             />
 
             <div className="mt-3">
-              <SectionHeading>Iron</SectionHeading>
+              <SectionHeading>{t("common.iron")}</SectionHeading>
               <div className={`flex items-center gap-3 ${SUB_PANEL}`}>
                 <IronDial
                   setting={row.iron_setting}
@@ -512,8 +511,8 @@ function ChartCards({
                   <div className="flex flex-wrap items-center gap-2">
                     <PillToggle
                       on={ironing}
-                      onLabel="IRONED"
-                      offLabel="DO NOT IRON"
+                      onLabel={t("config.ironedLabel")}
+                      offLabel={t("common.doNotIron").toUpperCase()}
                       name="ironing"
                       onClick={() => {
                         set("ironing", ironing ? "no" : "yes");
@@ -552,14 +551,14 @@ function ChartCards({
                     value={row.ironing_notes}
                     name="ironing_notes"
                     onChange={(value) => set("ironing_notes", value)}
-                    ariaLabel="Ironing notes"
+                    ariaLabel={t("config.ironingNotesAriaLabel")}
                   />
                 </div>
               </div>
             </div>
 
             <EditableSplitField
-              label="Drying"
+              label={t("sheet.dryingLabel")}
               value={row.drying}
               name="drying"
               rowId={index}
@@ -567,7 +566,7 @@ function ChartCards({
             />
 
             <div className="mt-2">
-              <SectionHeading>Colour group</SectionHeading>
+              <SectionHeading>{t("config.colourGroupHeading")}</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {colourGroups.map((group) => (
                   <button
@@ -587,7 +586,7 @@ function ChartCards({
             </div>
 
             <div className="mt-2">
-              <SectionHeading>Mix tags</SectionHeading>
+              <SectionHeading>{t("config.mixTagsHeading")}</SectionHeading>
               <div className="mt-1 flex flex-wrap gap-1">
                 {mixTags.map((tag) => {
                   const selected = splitPipe(row.mix_tags);
@@ -614,7 +613,7 @@ function ChartCards({
             </div>
 
             <EditableSplitField
-              label="Notes"
+              label={t("common.notes")}
               value={row.notes}
               name="notes"
               rowId={index}
@@ -638,15 +637,32 @@ function ChartCards({
  * `Config` (`customConfig.ts`) — the index page only ever displays
  * whatever's active, it carries no upload/download UI of its own.
  */
-export default function ConfigViewer({ items: bundledItems, machine }: Props) {
+export default function ConfigViewer({ items: bundledItems, machine, locale }: Props) {
+  return (
+    <TranslationProvider locale={locale}>
+      <ConfigViewerContent bundledItems={bundledItems} machine={machine} />
+    </TranslationProvider>
+  );
+}
+
+function ConfigViewerContent({
+  bundledItems,
+  machine,
+}: {
+  bundledItems: Instruction[];
+  machine: Machine;
+}) {
+  const t = useT();
   const [customConfig, setCustomConfig] = useState<Config | null>(null);
   const [draftRows, setDraftRows] = useState<Row[]>(() => rowsFromInstructions(bundledItems));
   const [saveError, setSaveError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [sortField, setSortField] = useState<(typeof COLUMNS)[number] | "">("");
   const sortOptions: { value: (typeof COLUMNS)[number] | ""; label: string }[] = [
-    { value: "", label: "Chart order" },
-    ...SORT_FIELDS,
+    { value: "", label: t("config.chartOrder") },
+    { value: "clothing_type", label: t("common.pile") },
+    { value: "detergent", label: t("common.detergent") },
+    { value: "notes", label: t("common.notes") },
   ];
   // Same hydration marker SheetViewer exposes, and for the same reason: the
   // E2E suite needs a way to know React has attached before it interacts.
@@ -743,20 +759,15 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
   return (
     <div data-hydrated={hydrated}>
       <p className="mb-1 text-sm text-body">
-        {customConfig
-          ? "Showing your own config."
-          : "Showing the bundled example config. It's a generic laundry chart and washing machine, not your own."}
+        {customConfig ? t("common.showingOwnConfig") : t("config.showingBundledConfig")}
       </p>
-      <p className="mb-6 text-xs text-muted">
-        Upload, download or edit below — changes apply across the whole site once saved, and persist
-        in this browser until you clear them.
-      </p>
+      <p className="mb-6 text-xs text-muted">{t("config.uploadEditHelp")}</p>
 
       <section className={SECTION}>
-        <h2 className={SECTION_HEADING}>Your config</h2>
+        <h2 className={SECTION_HEADING}>{t("config.yourConfigHeading")}</h2>
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="flex-1 sm:flex-none">
-            <span className={FIELD_LABEL}>Upload a config (JSON)</span>
+            <span className={FIELD_LABEL}>{t("common.uploadConfigJson")}</span>
             <input
               className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
               type="file"
@@ -766,35 +777,32 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
             />
           </label>
           <a className={BUTTON_SECONDARY} href={downloadHref} download="washy-washy.json">
-            Download current config
+            {t("common.downloadCurrentConfig")}
           </a>
           {customConfig && (
             <button className={BUTTON_SECONDARY} type="button" onClick={handleClear}>
-              Use the bundled example instead
+              {t("config.useBundledInstead")}
             </button>
           )}
         </div>
         {uploadError && (
           <p className={`${ALERT} mt-3`} role="alert">
-            Could not use that file: {uploadError}
+            {t("common.couldNotUseFile", { error: uploadError })}
           </p>
         )}
       </section>
 
       <section className={SECTION}>
-        <h2 className={SECTION_HEADING}>Machine</h2>
+        <h2 className={SECTION_HEADING}>{t("config.machineHeading")}</h2>
         <MachineSummary machine={activeConfig.machine} />
       </section>
 
       <section className={SECTION}>
-        <h2 className={SECTION_HEADING}>Chart — every pile</h2>
-        <p className="mb-3 text-xs text-body">
-          Every field is editable. Save checks each row against the machine above, the same way an
-          upload does — an unknown value is called out by row and column, not silently accepted.
-        </p>
+        <h2 className={SECTION_HEADING}>{t("config.chartHeading")}</h2>
+        <p className="mb-3 text-xs text-body">{t("config.chartEditHelp")}</p>
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className={FIELD_LABEL}>Sort by</span>
-          <div className="flex flex-wrap gap-1" role="radiogroup" aria-label="Sort by">
+          <span className={FIELD_LABEL}>{t("config.sortBy")}</span>
+          <div className="flex flex-wrap gap-1" role="radiogroup" aria-label={t("config.sortBy")}>
             {sortOptions.map((option) => (
               <label
                 key={option.value}
@@ -820,12 +828,12 @@ export default function ConfigViewer({ items: bundledItems, machine }: Props) {
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <button type="button" className={BUTTON_PRIMARY} onClick={handleSave}>
-            Save changes
+            {t("common.saveChanges")}
           </button>
         </div>
         {saveError && (
           <p className={`${ALERT} mt-3`} role="alert">
-            Could not save: {saveError}
+            {t("common.couldNotSave", { error: saveError })}
           </p>
         )}
       </section>

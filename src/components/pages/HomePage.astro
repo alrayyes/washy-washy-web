@@ -21,5 +21,5 @@ const t = translator(locale);
 <Layout title={t("home.title")} description={t("home.description")} translationKey="home">
   <h1 class="mb-2 font-heading text-3xl font-bold text-ink sm:text-4xl">{t("home.h1")}</h1>
   <p class="mb-6 text-base text-body" set:html={richText(t("home.intro"))} />
-  <SheetViewer client:load items={items} machine={machine} />
+  <SheetViewer client:load items={items} machine={machine} locale={locale} />
 </Layout>

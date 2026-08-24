@@ -12,6 +12,8 @@ import {
   type Washer,
 } from "@washy-washy/core/browser";
 import { useEffect, useMemo, useState } from "react";
+import { type Locale, relativeLocaleUrl } from "../i18n/locales";
+import { TranslationProvider, useLocale, useT } from "../i18n/TranslationProvider";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
 import { slug } from "../lib/slug";
 import {
@@ -64,14 +66,20 @@ function EditableField({
 function StringListEditor({
   label,
   hint,
+  addPlaceholder,
+  addAriaLabel,
   values,
   onChange,
 }: {
   label: string;
   hint?: string;
+  /** Per-list, not derived from `label` — translated singularisation doesn't generalise across languages. */
+  addPlaceholder: string;
+  addAriaLabel: string;
   values: string[];
   onChange: (values: string[]) => void;
 }) {
+  const t = useT();
   const [draft, setDraft] = useState("");
 
   function add() {
@@ -112,7 +120,7 @@ function StringListEditor({
               className={ITEM_BUTTON}
               onClick={() => move(index, -1)}
               disabled={index === 0}
-              aria-label={`Move ${value} up`}
+              aria-label={t("machine.moveUp", { value })}
             >
               ↑
             </button>
@@ -121,7 +129,7 @@ function StringListEditor({
               className={ITEM_BUTTON}
               onClick={() => move(index, 1)}
               disabled={index === values.length - 1}
-              aria-label={`Move ${value} down`}
+              aria-label={t("machine.moveDown", { value })}
             >
               ↓
             </button>
@@ -129,9 +137,9 @@ function StringListEditor({
               type="button"
               className={ITEM_BUTTON}
               onClick={() => remove(index)}
-              aria-label={`Remove ${value}`}
+              aria-label={t("machine.removeItem", { value })}
             >
-              Remove
+              {t("common.remove")}
             </button>
           </li>
         ))}
@@ -141,8 +149,8 @@ function StringListEditor({
           className={TEXT_INPUT}
           type="text"
           value={draft}
-          placeholder={`Add a ${label.toLowerCase().replace(/s$/, "")}…`}
-          aria-label={`Add to ${label}`}
+          placeholder={addPlaceholder}
+          aria-label={addAriaLabel}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -152,7 +160,7 @@ function StringListEditor({
           }}
         />
         <button type="button" className={ITEM_BUTTON} onClick={add}>
-          + Add
+          {t("machine.addButton")}
         </button>
       </div>
     </div>
@@ -166,6 +174,7 @@ function WasherEditor({
   washer: Washer;
   onChange: (washer: Washer) => void;
 }) {
+  const t = useT();
   function set<K extends keyof Washer>(key: K, value: Washer[K]) {
     onChange({ ...washer, [key]: value });
   }
@@ -174,13 +183,13 @@ function WasherEditor({
     <div className={CARD}>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <EditableField
-          label="Name"
+          label={t("common.name")}
           id="washer-name"
           value={washer.name}
           onChange={(v) => set("name", v)}
         />
         <EditableField
-          label="Capacity"
+          label={t("machine.capacityLabel")}
           id="washer-capacity"
           value={washer.capacity}
           onChange={(v) => set("capacity", v)}
@@ -188,23 +197,31 @@ function WasherEditor({
       </div>
       <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <StringListEditor
-          label="Programmes"
-          hint="In dial order, starting from twelve o'clock."
+          label={t("config.programmes")}
+          hint={t("machine.programmesHint")}
+          addPlaceholder={t("machine.addPlaceholderProgramme")}
+          addAriaLabel={t("machine.addAriaProgramme")}
           values={washer.programs}
           onChange={(v) => set("programs", v)}
         />
         <StringListEditor
-          label="Temperatures (°C)"
+          label={t("machine.temperaturesLabel")}
+          addPlaceholder={t("machine.addPlaceholderTemperature")}
+          addAriaLabel={t("machine.addAriaTemperature")}
           values={washer.temperatures}
           onChange={(v) => set("temperatures", v)}
         />
         <StringListEditor
-          label="Spin speeds"
+          label={t("config.spinSpeeds")}
+          addPlaceholder={t("machine.addPlaceholderSpin")}
+          addAriaLabel={t("machine.addAriaSpin")}
           values={washer.spins}
           onChange={(v) => set("spins", v)}
         />
         <StringListEditor
-          label="Buttons"
+          label={t("common.buttons")}
+          addPlaceholder={t("machine.addPlaceholderButton")}
+          addAriaLabel={t("machine.addAriaButton")}
           values={washer.options}
           onChange={(v) => set("options", v)}
         />
@@ -214,6 +231,7 @@ function WasherEditor({
 }
 
 function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => void }) {
+  const t = useT();
   function setSetting(index: number, patch: Partial<IronSetting>) {
     onChange({
       ...iron,
@@ -233,7 +251,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         {
           key: `setting-${iron.settings.length + 1}`,
           dots: "•",
-          label: "New setting",
+          label: t("machine.newSettingDefaultLabel"),
           detail: "",
           steam: false,
         },
@@ -248,12 +266,12 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
   return (
     <div className={CARD}>
       <EditableField
-        label="Name"
+        label={t("common.name")}
         id="iron-name"
         value={iron.name}
         onChange={(v) => onChange({ ...iron, name: v })}
       />
-      <h3 className={`${FIELD_LABEL} mt-3`}>Settings</h3>
+      <h3 className={`${FIELD_LABEL} mt-3`}>{t("machine.settingsHeading")}</h3>
       {/* contain-layout (#47): overflow-x-auto alone correctly scrolls the
       table within its own bounds — confirmed, this wrapper's own box was
       already the right width — but a <table> wider than its ancestor
@@ -272,12 +290,12 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead>
             <tr className="border-b border-hairline text-xs text-body uppercase">
-              <th className="py-1 pr-3 font-semibold">Setting</th>
-              <th className="py-1 pr-3 font-semibold">Dots</th>
-              <th className="py-1 pr-3 font-semibold">Detail</th>
-              <th className="py-1 pr-3 font-semibold">Steam</th>
+              <th className="py-1 pr-3 font-semibold">{t("machine.settingColumnHeader")}</th>
+              <th className="py-1 pr-3 font-semibold">{t("machine.dotsColumnHeader")}</th>
+              <th className="py-1 pr-3 font-semibold">{t("machine.detailColumnHeader")}</th>
+              <th className="py-1 pr-3 font-semibold">{t("machine.steamColumnHeader")}</th>
               <th className="py-1 font-semibold">
-                <span className="sr-only">Remove</span>
+                <span className="sr-only">{t("common.remove")}</span>
               </th>
             </tr>
           </thead>
@@ -287,7 +305,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 <td className="py-1 pr-3">
                   <input
                     className={TEXT_INPUT}
-                    aria-label={`Setting ${index + 1} label`}
+                    aria-label={t("machine.settingLabelAria", { n: index + 1 })}
                     type="text"
                     value={setting.label}
                     onChange={(event) => setSetting(index, { label: event.target.value })}
@@ -296,7 +314,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 <td className="py-1 pr-3">
                   <input
                     className={`${TEXT_INPUT} w-16`}
-                    aria-label={`Setting ${index + 1} dots`}
+                    aria-label={t("machine.settingDotsAria", { n: index + 1 })}
                     type="text"
                     value={setting.dots}
                     onChange={(event) => setSetting(index, { dots: event.target.value })}
@@ -305,7 +323,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 <td className="py-1 pr-3">
                   <input
                     className={TEXT_INPUT}
-                    aria-label={`Setting ${index + 1} detail`}
+                    aria-label={t("machine.settingDetailAria", { n: index + 1 })}
                     type="text"
                     value={setting.detail}
                     onChange={(event) => setSetting(index, { detail: event.target.value })}
@@ -315,7 +333,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                   <input
                     type="checkbox"
                     className="h-4 w-4"
-                    aria-label={`Setting ${index + 1} makes steam`}
+                    aria-label={t("machine.settingSteamAria", { n: index + 1 })}
                     checked={setting.steam}
                     onChange={(event) => setSetting(index, { steam: event.target.checked })}
                   />
@@ -325,9 +343,9 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                     type="button"
                     className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     onClick={() => removeSetting(index)}
-                    aria-label={`Remove setting ${index + 1}`}
+                    aria-label={t("machine.removeSettingAria", { n: index + 1 })}
                   >
-                    Remove
+                    {t("common.remove")}
                   </button>
                 </td>
               </tr>
@@ -345,30 +363,30 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
           <div key={setting.key} className="rounded-md border border-hairline p-3">
             <div className="flex flex-col gap-2">
               <div>
-                <span className={FIELD_LABEL}>Setting</span>
+                <span className={FIELD_LABEL}>{t("machine.settingColumnHeader")}</span>
                 <input
                   className={`${TEXT_INPUT} mt-1`}
-                  aria-label={`Setting ${index + 1} label`}
+                  aria-label={t("machine.settingLabelAria", { n: index + 1 })}
                   type="text"
                   value={setting.label}
                   onChange={(event) => setSetting(index, { label: event.target.value })}
                 />
               </div>
               <div>
-                <span className={FIELD_LABEL}>Dots</span>
+                <span className={FIELD_LABEL}>{t("machine.dotsColumnHeader")}</span>
                 <input
                   className={`${TEXT_INPUT} mt-1`}
-                  aria-label={`Setting ${index + 1} dots`}
+                  aria-label={t("machine.settingDotsAria", { n: index + 1 })}
                   type="text"
                   value={setting.dots}
                   onChange={(event) => setSetting(index, { dots: event.target.value })}
                 />
               </div>
               <div>
-                <span className={FIELD_LABEL}>Detail</span>
+                <span className={FIELD_LABEL}>{t("machine.detailColumnHeader")}</span>
                 <input
                   className={`${TEXT_INPUT} mt-1`}
-                  aria-label={`Setting ${index + 1} detail`}
+                  aria-label={t("machine.settingDetailAria", { n: index + 1 })}
                   type="text"
                   value={setting.detail}
                   onChange={(event) => setSetting(index, { detail: event.target.value })}
@@ -379,19 +397,19 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                   <input
                     type="checkbox"
                     className="h-4 w-4"
-                    aria-label={`Setting ${index + 1} makes steam`}
+                    aria-label={t("machine.settingSteamAria", { n: index + 1 })}
                     checked={setting.steam}
                     onChange={(event) => setSetting(index, { steam: event.target.checked })}
                   />
-                  Steam
+                  {t("machine.steamColumnHeader")}
                 </span>
                 <button
                   type="button"
                   className="rounded border border-line px-1.5 py-0.5 text-xs text-body hover:border-no hover:text-no-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   onClick={() => removeSetting(index)}
-                  aria-label={`Remove setting ${index + 1}`}
+                  aria-label={t("machine.removeSettingAria", { n: index + 1 })}
                 >
-                  Remove
+                  {t("common.remove")}
                 </button>
               </div>
             </div>
@@ -403,7 +421,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         className="mt-2 rounded border border-line px-2 py-1 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         onClick={addSetting}
       >
-        + Add setting
+        {t("machine.addSetting")}
       </button>
     </div>
   );
@@ -412,6 +430,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
 interface Props {
   items: Instruction[];
   machine: Machine;
+  locale: Locale;
 }
 
 /**
@@ -422,7 +441,27 @@ interface Props {
  * the edit, the same way `/config`'s own chart editor already works — no
  * new inconsistency, just the existing app-wide pattern applied here too.
  */
-export default function MachineEditor({ items: bundledItems, machine: bundledMachine }: Props) {
+export default function MachineEditor({
+  items: bundledItems,
+  machine: bundledMachine,
+  locale,
+}: Props) {
+  return (
+    <TranslationProvider locale={locale}>
+      <MachineEditorContent bundledItems={bundledItems} bundledMachine={bundledMachine} />
+    </TranslationProvider>
+  );
+}
+
+function MachineEditorContent({
+  bundledItems,
+  bundledMachine,
+}: {
+  bundledItems: Instruction[];
+  bundledMachine: Machine;
+}) {
+  const t = useT();
+  const locale = useLocale();
   const [customConfig, setCustomConfig] = useState<Config | null>(null);
   const [draftWasher, setDraftWasher] = useState<Washer>(bundledMachine.washer);
   const [draftIron, setDraftIron] = useState<Iron>(bundledMachine.iron);
@@ -507,25 +546,23 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
   return (
     <div data-hydrated={hydrated}>
       <p className="mb-1 text-sm text-body">
-        {machineIsCustom
-          ? "Showing your own machine."
-          : "Showing the bundled example machine. It's a generic washer and iron, not your own."}
+        {machineIsCustom ? t("machine.showingOwnMachine") : t("machine.showingBundledMachine")}
       </p>
       <p className="mb-6 text-xs text-muted">
-        Changes apply across the whole site once saved — the same config{" "}
+        {t("machine.changesApplyPrefix")}{" "}
         <a
-          href="/config"
+          href={relativeLocaleUrl(locale, "/config")}
           className="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
         >
-          the washing loads page
-        </a>{" "}
-        reads.
+          {t("common.washingLoadsPageLink")}
+        </a>
+        {t("machine.changesApplySuffix")}
       </p>
 
       <section className={SECTION}>
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="flex-1 sm:flex-none">
-            <span className={FIELD_LABEL}>Upload a config (JSON)</span>
+            <span className={FIELD_LABEL}>{t("common.uploadConfigJson")}</span>
             <input
               className="mt-1 block w-full text-sm text-body file:mr-3 file:min-h-11 file:rounded-md file:border-0 file:bg-accent file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent/90"
               type="file"
@@ -534,39 +571,39 @@ export default function MachineEditor({ items: bundledItems, machine: bundledMac
             />
           </label>
           <a className={BUTTON_SECONDARY} href={downloadHref} download="washy-washy.json">
-            Download current config
+            {t("common.downloadCurrentConfig")}
           </a>
           {machineIsCustom && (
             <button className={BUTTON_SECONDARY} type="button" onClick={handleResetMachine}>
-              Use the bundled machine instead
+              {t("machine.useBundledMachineInstead")}
             </button>
           )}
         </div>
         {uploadError && (
           <p className={`${ALERT} mt-3`} role="alert">
-            Could not use that file: {uploadError}
+            {t("common.couldNotUseFile", { error: uploadError })}
           </p>
         )}
       </section>
 
       <section className={SECTION}>
-        <h2 className={SECTION_HEADING}>Washer</h2>
+        <h2 className={SECTION_HEADING}>{t("machine.washerHeading")}</h2>
         <WasherEditor washer={draftWasher} onChange={setDraftWasher} />
       </section>
 
       <section className={SECTION}>
-        <h2 className={SECTION_HEADING}>Iron</h2>
+        <h2 className={SECTION_HEADING}>{t("common.iron")}</h2>
         <IronEditor iron={draftIron} onChange={setDraftIron} />
       </section>
 
       <div className="flex flex-wrap items-center gap-3">
         <button type="button" className={BUTTON_PRIMARY} onClick={handleSave}>
-          Save changes
+          {t("common.saveChanges")}
         </button>
       </div>
       {saveError && (
         <p className={`${ALERT} mt-3`} role="alert">
-          Could not save: {saveError}
+          {t("common.couldNotSave", { error: saveError })}
         </p>
       )}
     </div>

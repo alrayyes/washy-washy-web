@@ -1,0 +1,12 @@
+---
+/**
+ * Overrides Starlight's own language picker with nothing — same reasoning
+ * as ThemeSelect.astro alongside it: the site already has one
+ * (SiteHeader's LanguageSwitcher), visible on every page including on
+ * mobile (it wraps onto its own row rather than hiding behind Starlight's
+ * sidebar toggle, #114's full-parity header). Starlight's own picker, left
+ * alone, would only surface here — in the mobile menu footer
+ * (MobileMenuFooter.astro, not itself overridden) — as a redundant second
+ * control for the same six locales.
+ */
+---

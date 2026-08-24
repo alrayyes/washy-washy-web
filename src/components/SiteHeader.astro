@@ -6,7 +6,7 @@
  * Self-contained: reads Astro.url.pathname itself rather than taking a
  * `path` prop, so both call sites stay trivial one-liners.
  */
-import { localeFromPath, relativeLocaleUrl } from "../i18n/locales";
+import { docsHref, localeFromPath, matchTranslatedPage, relativeLocaleUrl } from "../i18n/locales";
 import { translator } from "../i18n/ui";
 import HeaderUpload from "./HeaderUpload";
 import KeyboardNav from "./KeyboardNav";
@@ -18,18 +18,18 @@ const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
 const locale = localeFromPath(path);
 const t = translator(locale);
-// /config, /config/machine and /docs only exist in English (#144) — the
-// home link stays locale-aware, but these three always point at the
-// English page, same as the language switcher's own fallback.
 const homeHref = relativeLocaleUrl(locale, "/");
+const configHref = relativeLocaleUrl(locale, "/config");
+const machineHref = relativeLocaleUrl(locale, "/config/machine");
 const normalize = (value: string) => value.replace(/\/+$/, "") || "/";
 const isHome = normalize(path) === normalize(homeHref);
-// Astro's directory build format gives static pages a trailing-slash
-// pathname ("/config/"), so this is a prefix check, not `path === "/config"`
-// — and /config/machine ("Washer & iron") gets its own link now, so
-// Washing loads must exclude it.
-const isWashingLoads = path.startsWith("/config") && !path.startsWith("/config/machine");
-const isDocs = path.startsWith("/docs");
+const currentPage = matchTranslatedPage(path);
+const isWashingLoads = currentPage === "config";
+const isMachine = currentPage === "machine";
+// /docs is Starlight's own i18n system, not the TRANSLATED_PAGES table
+// above (see locales.ts's DOCS_LOCALES) — still the same "/xx/" prefix
+// convention, so a plain prefix-stripped check works the same way.
+const isDocs = path.replace(/^\/(ja|de|es|fr|jive)(?=\/|$)/, "").startsWith("/docs");
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
 const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";
@@ -66,21 +66,21 @@ const NAV_LINK_INACTIVE = "text-body";
         {t("nav.home")}
       </a>
       <a
-        href="/config"
+        href={configHref}
         aria-current={isWashingLoads ? "page" : undefined}
         class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
         {t("nav.washingLoads")}
       </a>
       <a
-        href="/config/machine"
-        aria-current={path.startsWith("/config/machine") ? "page" : undefined}
-        class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        href={machineHref}
+        aria-current={isMachine ? "page" : undefined}
+        class={`${NAV_LINK} ${isMachine ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
         {t("nav.washerIron")}
       </a>
       <a
-        href="/docs/"
+        href={docsHref(locale)}
         aria-current={isDocs ? "page" : undefined}
         class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
@@ -88,8 +88,8 @@ const NAV_LINK_INACTIVE = "text-body";
       </a>
     </nav>
     <LanguageSwitcher />
-    <HeaderUpload client:load />
-    <ThemeToggle client:load />
-    <KeyboardNav client:load />
+    <HeaderUpload client:load locale={locale} />
+    <ThemeToggle client:load locale={locale} />
+    <KeyboardNav client:load locale={locale} />
   </div>
 </header>

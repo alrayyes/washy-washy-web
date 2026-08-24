@@ -37,6 +37,13 @@ export default defineConfig({
     // the documented way to run Starlight at a subpath alongside an
     // existing app's own pages (#12).
     starlight({
+      locales: {
+        root: { label: "English", lang: "en" },
+        ja: { label: "日本語", lang: "ja" },
+        de: { label: "Deutsch", lang: "de" },
+        es: { label: "Español", lang: "es" },
+        fr: { label: "Français", lang: "fr" },
+      },
       title: "Washy washy docs",
       description:
         "How to use washy-washy: the web app's filters, uploads and persisted state, the chart and machine file format, and generating a config with AI.",
@@ -73,6 +80,10 @@ export default defineConfig({
         // theme source of truth on every page, docs included.
         ThemeProvider: "./src/components/starlight/ThemeProvider.astro",
         ThemeSelect: "./src/components/starlight/ThemeSelect.astro",
+        // Same redundancy as ThemeSelect above, now that Starlight has its
+        // own locales too (#143/#144) — SiteHeader's LanguageSwitcher
+        // already covers every page, docs included.
+        LanguageSelect: "./src/components/starlight/LanguageSelect.astro",
       },
       // Loads Tailwind (and this site's own colour/theme variables) on
       // docs pages too, since SiteHeader/SiteFooter above are styled with
