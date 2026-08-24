@@ -106,6 +106,42 @@ test("the Docs link is locale-aware for locales Starlight supports, and falls ba
   ]);
 });
 
+test("a jive visitor who follows the English-fallback Docs link lands back in jive on Home, not stuck in English", async ({
+  page,
+}) => {
+  await gotoHydrated(page, "/jive/");
+  await page
+    .getByRole("navigation", { name: "Site" })
+    .getByRole("link", { name: "The Docs, Jack" })
+    .click();
+  await expect(page).toHaveURL(/\/docs\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+
+  // The nav-restore script (localePreference.ts) rewrites Home/Washing
+  // loads/Washer & iron once it reads back the "jive" preference the
+  // /jive/ visit just wrote — same for the footer's Disclaimer/Privacy.
+  await page.getByRole("navigation", { name: "Site" }).getByRole("link", { name: "Home" }).click();
+  await expect(page).toHaveURL(/\/jive\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-x-jive");
+});
+
+test("switching language on a translated docs page goes to the same page in that language, not back to home", async ({
+  page,
+}) => {
+  await page.goto("/ja/docs/chart-and-machine/");
+
+  // 言語 — the ja translation of "Language" (switcher.label, src/i18n/ui.ts).
+  const select = page.getByLabel("言語");
+  await select.selectOption({ label: "Deutsch" });
+  await expect(page).toHaveURL(/\/de\/docs\/chart-and-machine\/?$/);
+
+  // jive has no Starlight docs (DOCS_LOCALES) — switching to it from a
+  // docs page still falls back to its home, same as any other
+  // untranslated page, unlike the four locales Starlight does cover.
+  await page.getByLabel("Sprache").selectOption({ label: "Jive" });
+  await expect(page).toHaveURL(/\/jive\/?$/);
+});
+
 test("the AI-translation banner only shows on non-English locales, and hreflang alternates cover all six", async ({
   page,
 }) => {

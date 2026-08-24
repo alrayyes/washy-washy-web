@@ -2,6 +2,7 @@
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import WarningBanner from "../components/WarningBanner";
+import { localePreferenceScript } from "../i18n/localePreference";
 import {
   absoluteLocaleUrl,
   DEFAULT_LOCALE,
@@ -105,6 +106,12 @@ const site = Astro.site ?? new URL(Astro.url.origin);
     >
       {t("skip.toContent")}
     </a>
+    {/* So a visit to any of these pages — not just one reached through the
+    language switcher — keeps localePreference.ts's stored value true, for
+    the nav-restore script SiteHeader.astro/SiteFooter.astro run on the
+    `/docs` locale-fallback page (never this one, so nothing here
+    overwrites it right back). */}
+    <script is:inline set:html={localePreferenceScript(locale)} />
     {
       locale !== DEFAULT_LOCALE && (
         <WarningBanner

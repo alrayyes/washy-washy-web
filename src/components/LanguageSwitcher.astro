@@ -7,14 +7,20 @@
  * countries, not languages, and several of these locales don't map to one
  * country cleanly anyway (#143).
  *
- * Only home/disclaimer/privacy exist per-locale (#144 tracks the rest), so
- * from anywhere else (e.g. /config, /docs) this falls back to that
- * locale's home page rather than a 404.
+ * Home/disclaimer/privacy/config/machine exist per-locale (locales.ts's
+ * TRANSLATED_PAGES); /docs is a separate, Starlight-routed per-locale set
+ * (DOCS_LOCALES) that doesn't cover jive — switching to a locale in
+ * DOCS_LOCALES from a docs page goes to that locale's translated docs at
+ * the same slug, switching to jive falls back to its home page same as
+ * any other untranslated page (there's nothing else for it to link to).
  */
 import {
+  DOCS_LOCALES,
   LOCALE_META,
   LOCALES,
+  type Locale,
   localeFromPath,
+  matchDocsSlug,
   matchTranslatedPage,
   pagePath,
   relativeLocaleUrl,
@@ -24,12 +30,19 @@ import { translator } from "../i18n/ui";
 const currentLocale = localeFromPath(Astro.url.pathname);
 const t = translator(currentLocale);
 const page = matchTranslatedPage(Astro.url.pathname);
-const targetPath = page ? pagePath(page) : "/";
+const docsSlug = matchDocsSlug(Astro.url.pathname);
+
+function targetHref(locale: Locale): string {
+  if (docsSlug !== null && (DOCS_LOCALES as readonly Locale[]).includes(locale)) {
+    return relativeLocaleUrl(locale, `/docs${docsSlug}`);
+  }
+  return relativeLocaleUrl(locale, page ? pagePath(page) : "/");
+}
 
 const options = LOCALES.map((locale) => ({
   locale,
   label: LOCALE_META[locale].label,
-  href: relativeLocaleUrl(locale, targetPath),
+  href: targetHref(locale),
 }));
 ---
 

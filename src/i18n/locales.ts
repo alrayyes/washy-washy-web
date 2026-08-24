@@ -77,6 +77,18 @@ export function docsHref(locale: Locale): string {
     : "/docs/";
 }
 
+/**
+ * Matches any docs URL (English or Starlight-locale-prefixed) and returns
+ * the slug after "/docs", or `null` off a docs page entirely. Lets the
+ * language switcher and the nav-restore script (SiteHeader.astro) treat
+ * `/docs` the same way `matchTranslatedPage` treats the app's own pages,
+ * despite it being routed by Starlight's separate i18n system.
+ */
+export function matchDocsSlug(pathname: string): string | null {
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr)\/)?docs(\/.*)?$/);
+  return match ? (match[1] ?? "/") : null;
+}
+
 /** Matches the current URL against the pages that have per-locale routes, English or not. */
 export function matchTranslatedPage(pathname: string): TranslatedPage | null {
   // Strip a leading locale segment ("/ja/disclaimer" -> "/disclaimer") so English

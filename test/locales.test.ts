@@ -4,6 +4,7 @@ import {
   docsHref,
   isLocale,
   localeFromPath,
+  matchDocsSlug,
   matchTranslatedPage,
   pagePath,
   relativeLocaleUrl,
@@ -90,6 +91,22 @@ describe("docsHref", () => {
 
   test("falls back to the plain English docs for jive, which Starlight doesn't support", () => {
     expect(docsHref("jive")).toBe("/docs/");
+  });
+});
+
+describe("matchDocsSlug", () => {
+  test("extracts the slug after /docs, English or Starlight-locale-prefixed", () => {
+    expect(matchDocsSlug("/docs")).toBe("/");
+    expect(matchDocsSlug("/docs/")).toBe("/");
+    expect(matchDocsSlug("/docs/chart-and-machine/")).toBe("/chart-and-machine/");
+    expect(matchDocsSlug("/ja/docs/chart-and-machine/")).toBe("/chart-and-machine/");
+    expect(matchDocsSlug("/de/docs/")).toBe("/");
+  });
+
+  test("returns null off a docs page, including jive's own prefix (no Starlight docs for it)", () => {
+    expect(matchDocsSlug("/")).toBeNull();
+    expect(matchDocsSlug("/config")).toBeNull();
+    expect(matchDocsSlug("/jive/docs/")).toBeNull();
   });
 });
 
