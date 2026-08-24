@@ -252,6 +252,57 @@ test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ pag
   await expect.poll(() => header.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
 });
 
+// #150 was reported against English ("White Towels"), but the underlying
+// cause — a Tailwind class-order override that silently never applied — was
+// never about string length, so it's worth checking a spread of locales
+// rather than just the one that got screenshotted: German for compound
+// words, Arabic for right-to-left (where "overlap" has to be checked
+// direction-agnostically, not just "duration starts after title"), Chinese
+// as a contrasting short-glyph script. Add a locale here whenever a new one
+// ships (see e2e/i18n.spec.ts for the same pattern).
+const OVERLAP_TEST_LOCALES = [
+  { locale: "", label: "en" },
+  { locale: "de", label: "de" },
+  { locale: "ar", label: "ar" },
+  { locale: "zh", label: "zh" },
+];
+
+for (const { locale, label } of OVERLAP_TEST_LOCALES) {
+  test(`a chart card's title never crowds into the duration field, even at a narrow viewport (${label})`, async ({
+    page,
+  }) => {
+    // #150: TEXT_INPUT's own `min-w-[8rem]` floor won every time a caller
+    // tried to override it by appending a later Tailwind class in the same
+    // string — class order in a `className` attribute doesn't affect the
+    // generated stylesheet's cascade order, so both this title input and
+    // DurationField's own input silently ignored their intended overrides
+    // and fought each other for space on a 320px-wide card.
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(locale ? `/${locale}/config` : "/config");
+    await page.waitForSelector('[data-hydrated="true"]');
+
+    // Not `getByRole(..., { name: "Duration" })` — that accessible name is
+    // localized, so a role+name lookup would only ever match English.
+    const card = page.locator('[data-testid="chart-cards"] > article').first();
+    const title = card.locator('input[name="clothing_type"]');
+    const duration = card.locator('input[name="duration"]');
+
+    const titleBox = await title.boundingBox();
+    const durationBox = await duration.boundingBox();
+    const titleLeft = titleBox?.x ?? 0;
+    const titleRight = titleLeft + (titleBox?.width ?? 0);
+    const durationLeft = durationBox?.x ?? 0;
+    const durationRight = durationLeft + (durationBox?.width ?? 0);
+    // Direction-agnostic: Arabic renders the duration field to the *left*
+    // of the title, not the right, so this can't assume LTR order.
+    const overlaps = titleLeft < durationRight && durationLeft < titleRight;
+    expect(overlaps).toBe(false);
+    // Duration keeps its own full ~64px width rather than the title's
+    // shrinking eating into it too.
+    expect(durationBox?.width).toBeGreaterThanOrEqual(60);
+  });
+}
+
 test("editing a chart field and saving applies it across the site", async ({ page }) => {
   await goto(page);
 

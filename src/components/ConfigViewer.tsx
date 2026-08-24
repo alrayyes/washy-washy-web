@@ -277,13 +277,13 @@ function DurationField({
   const hintId = `${name}-format-hint-${rowId}`;
 
   return (
-    <div className="flex flex-col items-end gap-0.5">
+    <div className="flex shrink-0 flex-col items-end gap-0.5">
       <div className="flex items-center gap-1">
         <span aria-hidden="true" className="text-body">
           ~
         </span>
         <input
-          className={`${TEXT_INPUT} w-16 ${invalid ? "border-no focus:border-no" : ""}`}
+          className={`${TEXT_INPUT} w-16! min-w-0! ${invalid ? "border-no focus:border-no" : ""}`}
           type="text"
           // "numeric" requests a digits-only keypad on some Android
           // keyboards, with no ":" key — the one separator this format
@@ -410,7 +410,7 @@ function ChartCards({
             <div className={CHART_CARD_HEADER}>
               <h3 className="min-w-0 flex-1">
                 <input
-                  className={`${TEXT_INPUT} min-w-0 text-base font-bold text-ink`}
+                  className={`${TEXT_INPUT} min-w-0! truncate text-base font-bold text-ink`}
                   type="text"
                   name="clothing_type"
                   aria-label={t("common.pile")}
