@@ -4,16 +4,12 @@
  * reason as SiteHeader.astro: a Starlight override component renders it
  * on /docs pages too, instead of Starlight's own footer (#114).
  */
-import { DEFAULT_LOCALE, localeFromPath, matchDocsSlug, relativeLocaleUrl } from "../i18n/locales";
+import { localeFromPath, relativeLocaleUrl } from "../i18n/locales";
 import { translator } from "../i18n/ui";
 
 const CHROME_WIDTH = "max-w-[90rem]";
-const path = Astro.url.pathname;
-const locale = localeFromPath(path);
+const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
-// Same jive-on-/docs-fallback case SiteHeader.astro restores its own nav
-// links for — see that component's comment and localePreference.ts.
-const restoreLocale = matchDocsSlug(path) !== null && locale === DEFAULT_LOCALE;
 ---
 
 <footer
@@ -40,14 +36,12 @@ const restoreLocale = matchDocsSlug(path) !== null && locale === DEFAULT_LOCALE;
       </a>
       <a
         href={relativeLocaleUrl(locale, "/disclaimer")}
-        data-restore-locale={restoreLocale ? "" : undefined}
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
         {t("footer.disclaimer")}
       </a>
       <a
         href={relativeLocaleUrl(locale, "/privacy")}
-        data-restore-locale={restoreLocale ? "" : undefined}
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
         {t("footer.privacy")}

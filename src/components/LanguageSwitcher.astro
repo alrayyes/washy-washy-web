@@ -8,14 +8,11 @@
  * country cleanly anyway (#143).
  *
  * Home/disclaimer/privacy/config/machine exist per-locale (locales.ts's
- * TRANSLATED_PAGES); /docs is a separate, Starlight-routed per-locale set
- * (DOCS_LOCALES) that doesn't cover jive — switching to a locale in
- * DOCS_LOCALES from a docs page goes to that locale's translated docs at
- * the same slug, switching to jive falls back to its home page same as
- * any other untranslated page (there's nothing else for it to link to).
+ * TRANSLATED_PAGES); /docs does too, for every locale (DOCS_LOCALES), just
+ * not all through the same mechanism — switching language on a docs page
+ * goes to that same doc in the new locale regardless.
  */
 import {
-  DOCS_LOCALES,
   LOCALE_META,
   LOCALES,
   type Locale,
@@ -33,9 +30,7 @@ const page = matchTranslatedPage(Astro.url.pathname);
 const docsSlug = matchDocsSlug(Astro.url.pathname);
 
 function targetHref(locale: Locale): string {
-  if (docsSlug !== null && (DOCS_LOCALES as readonly Locale[]).includes(locale)) {
-    return relativeLocaleUrl(locale, `/docs${docsSlug}`);
-  }
+  if (docsSlug !== null) return relativeLocaleUrl(locale, `/docs${docsSlug}`);
   return relativeLocaleUrl(locale, page ? pagePath(page) : "/");
 }
 
