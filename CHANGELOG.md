@@ -1,3 +1,9 @@
+## [1.30.0](https://github.com/alrayyes/washy-washy-web/compare/v1.29.0...v1.30.0) (2026-08-23)
+
+### Features
+
+* a separate developer/contributor docs surface ([#142](https://github.com/alrayyes/washy-washy-web/issues/142)) ([bf5a63c](https://github.com/alrayyes/washy-washy-web/commit/bf5a63c3c8172d1d1f3b6bb626f95f2d88b7dae8)), closes [#114](https://github.com/alrayyes/washy-washy-web/issues/114) [#114](https://github.com/alrayyes/washy-washy-web/issues/114) [#125](https://github.com/alrayyes/washy-washy-web/issues/125)
+
 ## [1.29.0](https://github.com/alrayyes/washy-washy-web/compare/v1.28.0...v1.29.0) (2026-08-23)
 
 ### Features
