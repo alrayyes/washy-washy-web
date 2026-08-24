@@ -1,3 +1,9 @@
+## [1.32.0](https://github.com/alrayyes/washy-washy-web/compare/v1.31.0...v1.32.0) (2026-08-24)
+
+### Features
+
+* give jive its own real docs, working around Starlight's locale limit ([#146](https://github.com/alrayyes/washy-washy-web/issues/146)) ([243e325](https://github.com/alrayyes/washy-washy-web/commit/243e3258262bf442e810c2e99bf9d80e32623339))
+
 ## [1.31.0](https://github.com/alrayyes/washy-washy-web/compare/v1.30.0...v1.31.0) (2026-08-24)
 
 ### Features
