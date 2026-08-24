@@ -255,14 +255,15 @@ test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ pag
 // #151 was reported against English ("White Towels"), but the underlying
 // cause — a Tailwind class-order override that silently never applied — was
 // never about string length, so it's worth checking a spread of locales
-// rather than just the one that got screenshotted: German for compound
-// words, Arabic for right-to-left (where "overlap" has to be checked
-// direction-agnostically, not just "duration starts after title"), Chinese
-// as a contrasting short-glyph script. Add a locale here whenever a new one
-// ships (see e2e/i18n.spec.ts for the same pattern).
+// rather than just the one that got screenshotted: German and Turkish for
+// compound/agglutinative words, Arabic for right-to-left (where "overlap"
+// has to be checked direction-agnostically, not just "duration starts
+// after title"), Chinese as a contrasting short-glyph script. Add a locale
+// here whenever a new one ships (see e2e/i18n.spec.ts for the same pattern).
 const OVERLAP_TEST_LOCALES = [
   { locale: "", label: "en" },
   { locale: "de", label: "de" },
+  { locale: "tr", label: "tr" },
   { locale: "ar", label: "ar" },
   { locale: "zh", label: "zh" },
 ];

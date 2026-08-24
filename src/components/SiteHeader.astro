@@ -30,7 +30,7 @@ const isMachine = currentPage === "machine";
 // a hand-rolled route for jive — see locales.ts's DOCS_LOCALES) but the
 // same "/xx/" prefix convention either way, so a plain prefix-stripped
 // check works the same way for both.
-const isDocs = path.replace(/^\/(ja|de|es|fr|ar|zh|jive)(?=\/|$)/, "").startsWith("/docs");
+const isDocs = path.replace(/^\/(ja|de|es|fr|ar|zh|tr|jive)(?=\/|$)/, "").startsWith("/docs");
 const NAV_LINK = "rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text";
 const NAV_LINK_ACTIVE = "text-accent-text";
 const NAV_LINK_INACTIVE = "text-body";

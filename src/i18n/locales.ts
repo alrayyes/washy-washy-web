@@ -4,7 +4,7 @@
  * so it's still a technically valid `lang` attribute for a joke dialect of
  * English, not a claim that it's a standardised language.
  */
-export const LOCALES = ["en", "ja", "de", "es", "fr", "ar", "zh", "jive"] as const;
+export const LOCALES = ["en", "ja", "de", "es", "fr", "ar", "zh", "tr", "jive"] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -31,6 +31,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   fr: { label: "Français", htmlLang: "fr", dir: "ltr" },
   ar: { label: "العربية", htmlLang: "ar", dir: "rtl" },
   zh: { label: "简体中文", htmlLang: "zh", dir: "ltr" },
+  tr: { label: "Türkçe", htmlLang: "tr", dir: "ltr" },
   jive: { label: "Jive", htmlLang: "en-x-jive", dir: "ltr" },
 };
 
@@ -87,7 +88,7 @@ export function docsHref(locale: Locale): string {
  * app's own pages, despite it being served by two different mechanisms.
  */
 export function matchDocsSlug(pathname: string): string | null {
-  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|jive)\/)?docs(\/.*)?$/);
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|tr|jive)\/)?docs(\/.*)?$/);
   return match ? (match[1] ?? "/") : null;
 }
 
