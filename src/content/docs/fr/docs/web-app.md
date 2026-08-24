@@ -35,8 +35,8 @@ JSON que celle que tu importerais. C'est l'aller-retour pour la modifier
 ailleurs sur une copie, ou pour transmettre ta configuration à quelqu'un
 d'autre.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/config-chart-cards-light.png" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/config-chart-cards-dark.png" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/config-chart-cards-light.png" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/config-chart-cards-dark.png" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
 
 ## Bascule de thème
 
@@ -93,8 +93,8 @@ paramètres de requête, et une URL qui en porte l'emporte toujours sur ce qui
 avait été enregistré lors d'une visite précédente — voir Partager ci-dessous
 pour le bouton qui transmet cette URL.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/sheet-filters-light.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/sheet-filters-dark.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
 
 ## Partager
 
@@ -151,8 +151,8 @@ imprimée dessine toujours tout le tableau de référence plus la carte de
 chaque tas, donc il n'y a aucun moyen de la limiter à un seul tas comme le
 permet le format téléphone.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-pdf-download-light.png" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-pdf-download-dark.png" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/sheet-pdf-download-light.png" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/sheet-pdf-download-dark.png" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
 
 **Copier le lien**, à côté du bouton de téléchargement d'une carte, met
 l'URL de cette vue filtrée dans ton presse-papiers — le même repli vers le

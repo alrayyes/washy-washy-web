@@ -64,8 +64,8 @@ de l'application web écrit exactement cette même forme — réordonner la list
 des programmes là-bas fait exactement ce que réordonner le tableau JSON
 ferait :
 
-<img class="theme-shot" data-variant="light" src="/docs/media/machine-editor-light.png" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/machine-editor-dark.png" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/machine-editor-light.png" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/machine-editor-dark.png" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
 
 ```json
 {

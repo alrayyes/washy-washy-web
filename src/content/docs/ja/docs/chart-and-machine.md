@@ -44,8 +44,8 @@ description: チャートの各項目、洗濯機ファイルであなたの洗�
 
 ウェブアプリ自体の[`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)エディタも、まったく同じ形式で書き出します — そこでプログラムリストを並べ替えるのは、JSON配列を並べ替えるのとまったく同じことです。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/machine-editor-light.png" alt="洗濯機エディタの脱水速度、ボタン、アイロン設定の表" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/machine-editor-dark.png" alt="洗濯機エディタの脱水速度、ボタン、アイロン設定の表" />
+<img class="theme-shot" data-variant="light" src="/docs/media/ja/machine-editor-light.png" alt="洗濯機エディタの脱水速度、ボタン、アイロン設定の表" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/ja/machine-editor-dark.png" alt="洗濯機エディタの脱水速度、ボタン、アイロン設定の表" />
 
 ```json
 {

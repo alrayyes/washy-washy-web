@@ -10,8 +10,8 @@ aparte lee la misma guía y descripción de máquina, y la convierte en un PDF
 en su lugar — este sitio cubre solo la aplicación web; la CLI tiene su
 propio README para instalarla y ejecutarla.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-overview-light.png" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-overview-dark.png" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
+<img class="theme-shot" data-variant="light" src="/docs/media/es/sheet-overview-light.png" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/es/sheet-overview-dark.png" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
 
 Empieza por lo que se ajuste a lo que quieres hacer:
 

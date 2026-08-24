@@ -15,8 +15,8 @@ configをアップロードすると、これが置き換わります。ヘッ�
 
 `/config`にはダウンロードリンクもあり、現在有効なconfig（同梱のものでもカスタムのものでも）を、アップロードするのと同じJSON形式で書き出します。これは、他の場所で編集用のコピーを作ったり、自分のconfigを誰かに渡したりするための往復手段です。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/config-chart-cards-light.png" alt="configページ：読み取り専用の洗濯機サマリー、アップロード/ダウンロードのコントロール、編集可能なカードとして表示される各洗濯物の山" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/config-chart-cards-dark.png" alt="configページ：読み取り専用の洗濯機サマリー、アップロード/ダウンロードのコントロール、編集可能なカードとして表示される各洗濯物の山" />
+<img class="theme-shot" data-variant="light" src="/docs/media/ja/config-chart-cards-light.png" alt="configページ：読み取り専用の洗濯機サマリー、アップロード/ダウンロードのコントロール、編集可能なカードとして表示される各洗濯物の山" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/ja/config-chart-cards-dark.png" alt="configページ：読み取り専用の洗濯機サマリー、アップロード/ダウンロードのコントロール、編集可能なカードとして表示される各洗濯物の山" />
 
 ## テーマ切り替え
 
@@ -42,8 +42,8 @@ configをアップロードすると、これが置き換わります。ヘッ�
 
 フィルターは、configと同じように`localStorage`に保存され、訪問間で保持されます。フィルターした状態のビューは共有もできます。アドレスバーには`cut`、`pile`、`program`、`temperature`、`spin`、`detergent`がクエリパラメータとして載り、これらのいずれかを含むURLは、前回の訪問時に保存された内容よりも常に優先されます — このURLを渡すためのボタンについては下のShareを参照してください。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="Advancedフィルターが開いた状態、洗濯のみが選択されている" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="Advancedフィルターが開いた状態、洗濯のみが選択されている" />
+<img class="theme-shot" data-variant="light" src="/docs/media/ja/sheet-filters-light.png" alt="Advancedフィルターが開いた状態、洗濯のみが選択されている" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/ja/sheet-filters-dark.png" alt="Advancedフィルターが開いた状態、洗濯のみが選択されている" />
 
 ## 共有
 
@@ -62,7 +62,7 @@ PDFダウンロードボタンの隣に**Share this view**があり、現在の�
 
 1枚のカードにもそれぞれ独自の**Download**ボタンがあり、その山1つ分だけをダウンロードできます。これはスマホ形式のみです。印刷レイアウトは常に参照用の表全体とすべての山のカードを描くため、Download for phoneのように1つの山だけに絞り込む方法はありません。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-pdf-download-light.png" alt="1枚のカード自身のDownloadとCopy linkボタン" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-pdf-download-dark.png" alt="1枚のカード自身のDownloadとCopy linkボタン" />
+<img class="theme-shot" data-variant="light" src="/docs/media/ja/sheet-pdf-download-light.png" alt="1枚のカード自身のDownloadとCopy linkボタン" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/ja/sheet-pdf-download-dark.png" alt="1枚のカード自身のDownloadとCopy linkボタン" />
 
 カードのダウンロードボタンの隣にある**Copy link**は、その絞り込まれたビューのURLをクリップボードに置きます — 上で説明したページ全体のShareボタンと同じクリップボードのフォールバックを、カード1枚分に絞って使うものです。

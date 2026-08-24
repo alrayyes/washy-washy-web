@@ -10,8 +10,8 @@ séparé lit la même grille et la même description de machine et les rend en
 PDF à la place — ce site ne couvre que l'application web ; le CLI a son
 propre README pour l'installer et le lancer.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-overview-light.png" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-overview-dark.png" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/sheet-overview-light.png" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/sheet-overview-dark.png" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
 
 Commence par celle qui correspond à ce que tu veux faire :
 

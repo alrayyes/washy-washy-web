@@ -35,8 +35,8 @@ mismo formato JSON que subirías. Ese es el recorrido de ida y vuelta para
 editar una copia en otro sitio, o para pasarle tu configuración a otra
 persona.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/config-chart-cards-light.png" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/config-chart-cards-dark.png" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
+<img class="theme-shot" data-variant="light" src="/docs/media/es/config-chart-cards-light.png" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/es/config-chart-cards-dark.png" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
 
 ## Alternar tema
 
@@ -93,8 +93,8 @@ direcciones lleva `cut`, `pile`, `program`, `temperature`, `spin` y
 ellos prevalece siempre sobre lo que se guardó de una visita anterior — ver
 Compartir más abajo para el botón que entrega esa URL.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
+<img class="theme-shot" data-variant="light" src="/docs/media/es/sheet-filters-light.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/es/sheet-filters-dark.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
 
 ## Compartir
 
@@ -150,8 +150,8 @@ dibuja toda la tabla de referencia más la tarjeta de cada montón, así que
 no hay forma de acotarlo a un solo montón como sí puede hacer el formato
 móvil.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-pdf-download-light.png" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-pdf-download-dark.png" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
+<img class="theme-shot" data-variant="light" src="/docs/media/es/sheet-pdf-download-light.png" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/es/sheet-pdf-download-dark.png" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
 
 **Copy link**, junto al botón de descarga de una tarjeta, pone la URL de
 esa vista filtrada en tu portapapeles — el mismo recurso de portapapeles

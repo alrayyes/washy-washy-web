@@ -37,8 +37,8 @@ ausgibt, die du hochladen würdest. Das ist der Rundweg, um anderswo eine
 Kopie zu bearbeiten oder deine Konfiguration an jemand anderen
 weiterzugeben.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/config-chart-cards-light.png" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/config-chart-cards-dark.png" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
+<img class="theme-shot" data-variant="light" src="/docs/media/de/config-chart-cards-light.png" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/de/config-chart-cards-dark.png" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
 
 ## Theme-Umschalter
 
@@ -97,8 +97,8 @@ Query-Parameter mit, und eine URL, die einen davon enthält, gewinnt
 uneingeschränkt gegenüber allem, was von einem früheren Besuch gespeichert
 war — siehe „Teilen" weiter unten für den Button, der diese URL weitergibt.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
+<img class="theme-shot" data-variant="light" src="/docs/media/de/sheet-filters-light.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/de/sheet-filters-dark.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
 
 ## Teilen
 
@@ -156,8 +156,8 @@ zeichnet immer die gesamte Referenztabelle plus die Karte jedes Stapels,
 sodass es sich nicht wie beim Handy-Format auf nur einen Stapel eingrenzen
 lässt.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-pdf-download-light.png" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-pdf-download-dark.png" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
+<img class="theme-shot" data-variant="light" src="/docs/media/de/sheet-pdf-download-light.png" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/de/sheet-pdf-download-dark.png" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
 
 **Copy link**, neben dem Download-Button einer Karte, legt die URL dieser
 gefilterten Ansicht in deine Zwischenablage — derselbe

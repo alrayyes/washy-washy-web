@@ -11,8 +11,8 @@ und Maschinenbeschreibung und rendert sie stattdessen als PDF — diese Seite
 behandelt nur die Web-App; das CLI hat sein eigenes README für Installation
 und Nutzung.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-overview-light.png" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-overview-dark.png" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
+<img class="theme-shot" data-variant="light" src="/docs/media/de/sheet-overview-light.png" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/de/sheet-overview-dark.png" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
 
 Fang mit dem an, was zu deinem Vorhaben passt:
 
