@@ -31,9 +31,9 @@ and persisted state, and a prompt for generating a config from photos of your
 appliances with an AI chat tool. [The CLI](https://github.com/alrayyes/washy-washy-cli)
 has its own README for installing and running it.
 
-Contributing to this repo? See [`/dev-docs`](https://washy-washy.ryankes.eu/dev-docs/)
-for architecture, how this repo relates to `washy-washy-cli` and the shared
-`@washy-washy/*` packages, and other technical documentation — start with
+Contributing to this repo? See [`dev-docs/`](dev-docs/) for architecture, how
+this repo relates to `washy-washy-cli` and the shared `@washy-washy/*`
+packages, and other technical documentation — start with
 [`CONTRIBUTING.md`](CONTRIBUTING.md) to actually get a checkout running.
 
 ## Installation

@@ -111,11 +111,7 @@ export default defineConfig({
       // — Starlight's sidebar and its auto-generated Prev/Next pagination
       // both read from these same entries, so one translation covers both
       // the left-hand menu and the "link-title" under the Previous/Next
-      // buttons. The four /dev-docs entries get labels too even though
-      // their content stays English (out of scope, different audience,
-      // #125) — the sidebar isn't scoped per top-level path (see the
-      // comment on the group below), so a ja/de/es/fr visitor on /docs
-      // still sees this group and its own labels are chrome, not content.
+      // buttons.
       sidebar: [
         {
           label: "Overview",
@@ -151,58 +147,6 @@ export default defineConfig({
             fr: "Générer une configuration avec l'IA",
           },
           link: "/docs/ai-prompt/",
-        },
-        {
-          // A separate, clearly-labelled group rather than a second
-          // sidebar scoped to /dev-docs — Starlight doesn't scope sidebar
-          // visibility per top-level path without a plugin, and the
-          // AC this satisfies (#125) is about page *content* staying
-          // end-user-only, not about a labelled cross-link to a
-          // different section being visible from the /docs sidebar too.
-          label: "Contributor docs",
-          translations: {
-            ja: "貢献者向けドキュメント",
-            de: "Mitwirkende-Dokumentation",
-            es: "Documentación para colaboradores",
-            fr: "Documentation pour les contributeurs",
-          },
-          items: [
-            {
-              label: "Overview",
-              translations: { ja: "概要", de: "Überblick", es: "Resumen", fr: "Aperçu" },
-              link: "/dev-docs/",
-            },
-            {
-              label: "Architecture",
-              translations: {
-                ja: "アーキテクチャ",
-                de: "Architektur",
-                es: "Arquitectura",
-                fr: "Architecture",
-              },
-              link: "/dev-docs/architecture/",
-            },
-            {
-              label: "Package relationships",
-              translations: {
-                ja: "パッケージの関係",
-                de: "Paketbeziehungen",
-                es: "Relaciones entre paquetes",
-                fr: "Relations entre paquets",
-              },
-              link: "/dev-docs/packages/",
-            },
-            {
-              label: "Island hydration",
-              translations: {
-                ja: "アイランドのハイドレーション",
-                de: "Island-Hydration",
-                es: "Hidratación de islas",
-                fr: "Hydratation des îlots",
-              },
-              link: "/dev-docs/hydration/",
-            },
-          ],
         },
       ],
     }),

@@ -1,10 +1,9 @@
 # Contributing
 
-See [`/dev-docs`](https://washy-washy.ryankes.eu/dev-docs/) for a deeper look
-at the architecture, the two Starlight surfaces, and how this repo relates to
-`washy-washy-cli` and the shared `@washy-washy/core`/`@washy-washy/pdf`
-packages. What follows here is what you need to actually get a checkout
-running.
+See [`dev-docs/`](dev-docs/) for a deeper look at the architecture and how
+this repo relates to `washy-washy-cli` and the shared
+`@washy-washy/core`/`@washy-washy/pdf` packages. What follows here is what
+you need to actually get a checkout running.
 
 ## Toolchain
 
