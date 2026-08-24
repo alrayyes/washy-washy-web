@@ -1,3 +1,9 @@
+## [1.31.0](https://github.com/alrayyes/washy-washy-web/compare/v1.30.0...v1.31.0) (2026-08-24)
+
+### Features
+
+* add a language switcher and AI-translation warning banner ([#145](https://github.com/alrayyes/washy-washy-web/issues/145)) ([0e54f6c](https://github.com/alrayyes/washy-washy-web/commit/0e54f6c317401970604ce0185f96d79d964c70c0)), closes [#144](https://github.com/alrayyes/washy-washy-web/issues/144) [#143](https://github.com/alrayyes/washy-washy-web/issues/143) [#143](https://github.com/alrayyes/washy-washy-web/issues/143) [#125](https://github.com/alrayyes/washy-washy-web/issues/125) [#142](https://github.com/alrayyes/washy-washy-web/issues/142) [#144](https://github.com/alrayyes/washy-washy-web/issues/144) [#144](https://github.com/alrayyes/washy-washy-web/issues/144)
+
 ## [1.30.0](https://github.com/alrayyes/washy-washy-web/compare/v1.29.0...v1.30.0) (2026-08-23)
 
 ### Features
