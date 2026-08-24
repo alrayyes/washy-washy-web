@@ -252,7 +252,7 @@ test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ pag
   await expect.poll(() => header.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
 });
 
-// #150 was reported against English ("White Towels"), but the underlying
+// #151 was reported against English ("White Towels"), but the underlying
 // cause — a Tailwind class-order override that silently never applied — was
 // never about string length, so it's worth checking a spread of locales
 // rather than just the one that got screenshotted: German for compound
@@ -271,7 +271,7 @@ for (const { locale, label } of OVERLAP_TEST_LOCALES) {
   test(`a chart card's title never crowds into the duration field, even at a narrow viewport (${label})`, async ({
     page,
   }) => {
-    // #150: TEXT_INPUT's own `min-w-[8rem]` floor won every time a caller
+    // #151: TEXT_INPUT's own `min-w-[8rem]` floor won every time a caller
     // tried to override it by appending a later Tailwind class in the same
     // string — class order in a `className` attribute doesn't affect the
     // generated stylesheet's cascade order, so both this title input and
