@@ -83,30 +83,30 @@ describe("pagePath", () => {
 });
 
 describe("docsHref", () => {
-  test("goes to that locale's own docs root for a locale Starlight actually has", () => {
+  test("goes to that locale's own docs root, Starlight-routed or not", () => {
     expect(docsHref("en")).toBe("/docs/");
     expect(docsHref("ja")).toBe("/ja/docs/");
     expect(docsHref("de")).toBe("/de/docs/");
-  });
-
-  test("falls back to the plain English docs for jive, which Starlight doesn't support", () => {
-    expect(docsHref("jive")).toBe("/docs/");
+    // jive's docs aren't Starlight-routed (src/pages/jive/docs/), but land
+    // on the exact same URL shape as every locale Starlight does cover.
+    expect(docsHref("jive")).toBe("/jive/docs/");
   });
 });
 
 describe("matchDocsSlug", () => {
-  test("extracts the slug after /docs, English or Starlight-locale-prefixed", () => {
+  test("extracts the slug after /docs, English, Starlight-locale-prefixed, or jive's own route", () => {
     expect(matchDocsSlug("/docs")).toBe("/");
     expect(matchDocsSlug("/docs/")).toBe("/");
     expect(matchDocsSlug("/docs/chart-and-machine/")).toBe("/chart-and-machine/");
     expect(matchDocsSlug("/ja/docs/chart-and-machine/")).toBe("/chart-and-machine/");
     expect(matchDocsSlug("/de/docs/")).toBe("/");
+    expect(matchDocsSlug("/jive/docs/")).toBe("/");
+    expect(matchDocsSlug("/jive/docs/chart-and-machine/")).toBe("/chart-and-machine/");
   });
 
-  test("returns null off a docs page, including jive's own prefix (no Starlight docs for it)", () => {
+  test("returns null off a docs page entirely", () => {
     expect(matchDocsSlug("/")).toBeNull();
     expect(matchDocsSlug("/config")).toBeNull();
-    expect(matchDocsSlug("/jive/docs/")).toBeNull();
   });
 });
 

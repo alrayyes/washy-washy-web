@@ -44,10 +44,9 @@ export function localeFromPath(pathname: string): Locale {
 
 /**
  * The pages that exist per-locale (src/pages/[locale]/*.astro). /docs is
- * separate — it's Starlight's own i18n system (DOCS_LOCALES/docsHref
- * below), not this table, since Starlight doesn't support "jive"'s
- * BCP-47 tag (see astro.config.mjs) and so isn't on the same locale set.
- * Anywhere else, the language switcher falls back to a locale's home page.
+ * separate (DOCS_LOCALES/docsHref below) — every locale has one, but not
+ * all through the same mechanism (see DOCS_LOCALES). Anywhere else, the
+ * language switcher falls back to a locale's home page.
  */
 export const TRANSLATED_PAGES = ["home", "disclaimer", "privacy", "config", "machine"] as const;
 
@@ -62,30 +61,29 @@ const PAGE_PATHS: Record<TranslatedPage, string> = {
 };
 
 /**
- * Locales Starlight actually has content/chrome for (#144) — every
- * configured locale except "jive", which Starlight's own i18n rejects
- * outright (astro.config.mjs). A jive visitor's "Docs" link goes to the
- * plain English docs instead, same fallback as any other untranslated page.
+ * Every locale has real docs (#144), but not all through Starlight: it
+ * can't register "jive" as a locale at all (Intl.DisplayNames throws on
+ * its en-x-jive BCP-47 tag, confirmed live), so /jive/docs is a second,
+ * hand-rolled route (src/pages/jive/docs/[...slug].astro,
+ * src/content.config.ts's `docsJive` collection) that happens to land on
+ * the exact same URL shape Starlight gives the other five. That's why
+ * this alias is worth keeping even though it's just `LOCALES` today —
+ * it documents "every locale has docs", not "every locale has Starlight".
  */
-export const DOCS_LOCALES = LOCALES.filter((locale): locale is Exclude<Locale, "jive"> =>
-  ["en", "ja", "de", "es", "fr"].includes(locale),
-);
+export const DOCS_LOCALES = LOCALES;
 
 export function docsHref(locale: Locale): string {
-  return (DOCS_LOCALES as readonly Locale[]).includes(locale)
-    ? relativeLocaleUrl(locale, "/docs/")
-    : "/docs/";
+  return relativeLocaleUrl(locale, "/docs/");
 }
 
 /**
- * Matches any docs URL (English or Starlight-locale-prefixed) and returns
- * the slug after "/docs", or `null` off a docs page entirely. Lets the
- * language switcher and the nav-restore script (SiteHeader.astro) treat
- * `/docs` the same way `matchTranslatedPage` treats the app's own pages,
- * despite it being routed by Starlight's separate i18n system.
+ * Matches any docs URL (English, Starlight-locale-prefixed, or jive's own
+ * hand-rolled route) and returns the slug after "/docs". Lets the language
+ * switcher treat `/docs` the same way `matchTranslatedPage` treats the
+ * app's own pages, despite it being served by two different mechanisms.
  */
 export function matchDocsSlug(pathname: string): string | null {
-  const match = pathname.match(/^\/(?:(?:ja|de|es|fr)\/)?docs(\/.*)?$/);
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|jive)\/)?docs(\/.*)?$/);
   return match ? (match[1] ?? "/") : null;
 }
 

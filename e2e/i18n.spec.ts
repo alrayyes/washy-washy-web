@@ -36,18 +36,6 @@ test("the language switcher lists every locale, in its own name, and switches th
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("あなたの洗濯チャート");
 });
 
-test("switching language from a page with no translation falls back to that locale's home", async ({
-  page,
-}) => {
-  // /docs is Starlight's own separate i18n system (#144) — jive isn't part
-  // of it (astro.config.mjs), so it's the one page that's genuinely
-  // untranslated for every locale this switcher offers, including jive.
-  await page.goto("/docs/");
-
-  await page.getByLabel("Language").selectOption({ label: "Jive" });
-  await expect(page).toHaveURL(/\/jive\/?$/);
-});
-
 test("the washing-loads and washer/iron editors are translated too, and stay in their own locale across nav", async ({
   page,
 }) => {
@@ -75,7 +63,7 @@ test("the washing-loads and washer/iron editors are translated too, and stay in 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("洗濯機とアイロンの設定");
 });
 
-test("the Docs link is locale-aware for locales Starlight supports, and falls back to English for jive, which it doesn't", async ({
+test("the Docs link is locale-aware for every locale, Starlight-routed or not", async ({
   page,
 }) => {
   await gotoHydrated(page, "/ja/");
@@ -84,48 +72,32 @@ test("the Docs link is locale-aware for locales Starlight supports, and falls ba
     .getByRole("navigation", { name: "Site" })
     .getByRole("link", { name: "ドキュメント" })
     .click();
-  // Starlight's own i18n (#144) does support ja for docs, so this lands on
+  // Starlight's own i18n (#144) supports ja for docs, so this lands on
   // /ja/docs/, not plain /docs/ — the nav link itself is locale-aware.
   await expect(page).toHaveURL(/\/ja\/docs\/?$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
 
-  // jive has no Starlight docs at all (astro.config.mjs) — its Docs link
-  // goes to the plain English docs instead, chrome and all.
+  // jive's docs aren't Starlight-routed (it can't register "jive" as a
+  // Starlight locale at all — Intl.DisplayNames rejects its BCP-47 tag) —
+  // src/pages/jive/docs/[...slug].astro is the hand-rolled workaround, but
+  // the Docs link itself still lands there with jive's own chrome, same
+  // as every other locale.
   await gotoHydrated(page, "/jive/");
   await page
     .getByRole("navigation", { name: "Site" })
     .getByRole("link", { name: "The Docs, Jack" })
     .click();
-  await expect(page).toHaveURL(/\/docs\/?$/);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page).toHaveURL(/\/jive\/docs\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-x-jive");
   await expect(page.getByRole("navigation", { name: "Site" }).getByRole("link")).toHaveText([
-    "Home",
-    "Washing loads",
-    "Washer & iron",
-    "Docs",
+    "Home Base",
+    "Wash Piles",
+    "Washer & Iron, Jack",
+    "The Docs, Jack",
   ]);
 });
 
-test("a jive visitor who follows the English-fallback Docs link lands back in jive on Home, not stuck in English", async ({
-  page,
-}) => {
-  await gotoHydrated(page, "/jive/");
-  await page
-    .getByRole("navigation", { name: "Site" })
-    .getByRole("link", { name: "The Docs, Jack" })
-    .click();
-  await expect(page).toHaveURL(/\/docs\/?$/);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
-
-  // The nav-restore script (localePreference.ts) rewrites Home/Washing
-  // loads/Washer & iron once it reads back the "jive" preference the
-  // /jive/ visit just wrote — same for the footer's Disclaimer/Privacy.
-  await page.getByRole("navigation", { name: "Site" }).getByRole("link", { name: "Home" }).click();
-  await expect(page).toHaveURL(/\/jive\/?$/);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en-x-jive");
-});
-
-test("switching language on a translated docs page goes to the same page in that language, not back to home", async ({
+test("switching language on a translated docs page goes to the same page in that language, jive included", async ({
   page,
 }) => {
   await page.goto("/ja/docs/chart-and-machine/");
@@ -135,11 +107,37 @@ test("switching language on a translated docs page goes to the same page in that
   await select.selectOption({ label: "Deutsch" });
   await expect(page).toHaveURL(/\/de\/docs\/chart-and-machine\/?$/);
 
-  // jive has no Starlight docs (DOCS_LOCALES) — switching to it from a
-  // docs page still falls back to its home, same as any other
-  // untranslated page, unlike the four locales Starlight does cover.
+  // jive's docs live at a different route (src/pages/jive/docs/) than the
+  // Starlight-routed ones, but the switcher treats it the same way —
+  // matchDocsSlug doesn't care which mechanism serves the URL.
   await page.getByLabel("Sprache").selectOption({ label: "Jive" });
-  await expect(page).toHaveURL(/\/jive\/?$/);
+  await expect(page).toHaveURL(/\/jive\/docs\/chart-and-machine\/?$/);
+});
+
+test("jive's own docs render the site's chrome, a sidebar, Prev/Next, and pass an accessibility scan", async ({
+  page,
+}) => {
+  await page.goto("/jive/docs/");
+
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-x-jive");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Big daddy-o washy washy jive");
+
+  // exact: true — "Jive docs pagination" (the Prev/Next nav below) would
+  // otherwise match too, since Playwright's name matching is substring by
+  // default.
+  const sidebar = page.getByRole("navigation", { name: "Jive docs", exact: true });
+  const machineLink = sidebar.getByRole("link", { name: "De Chart 'n Machine Jams" });
+  await expect(machineLink).toHaveAttribute("href", "/jive/docs/chart-and-machine/");
+  await machineLink.click();
+  await expect(page).toHaveURL(/\/jive\/docs\/chart-and-machine\/?$/);
+
+  // Each link's accessible name is its "Back up, Jack"/"Keep on jivin'"
+  // caption plus the neighbouring page's own nav label, concatenated.
+  await expect(
+    page.getByRole("navigation", { name: "Jive docs pagination" }).getByRole("link"),
+  ).toHaveText(["Back up, JackDe Lowdown", "Keep on jivin'Rappin' the Web Jive"]);
+
+  await expectNoA11yViolations(page);
 });
 
 test("the AI-translation banner only shows on non-English locales, and hreflang alternates cover all six", async ({

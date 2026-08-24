@@ -7,13 +7,13 @@
  * result the same way `og-image.png` and `favicon.svg` are hand-maintained
  * static assets rather than generated per build.
  *
- * Also captures one set per locale Starlight actually has docs for (ja, de,
- * es, fr — jive excluded, same reason its Docs nav link falls back to
- * English, see astro.config.mjs and locales.ts's DOCS_LOCALES) — #144's
- * "screenshots should reflect the language" — under
+ * Also captures one set per non-English locale (locales.ts's DOCS_LOCALES)
+ * — #144's "screenshots should reflect the language" — under
  * public/docs/media/{locale}/, alongside the existing unprefixed English
  * set at public/docs/media/ (left exactly where the English docs already
- * reference them).
+ * reference them). jive's own docs (src/pages/jive/docs/) reference
+ * public/docs/media/jive/ the same way the other locales' Starlight docs
+ * reference their own.
  *
  * Builds and serves via `scripts/serve-dist.ts`, the same static file server
  * `playwright.config.ts` uses for the e2e suite — `astro preview`/`astro
