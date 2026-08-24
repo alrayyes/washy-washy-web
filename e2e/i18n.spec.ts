@@ -195,11 +195,44 @@ test("docs content is translated too, with Starlight's own chrome translated alo
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Washy washy ドキュメント");
 
-  const jaLink = page.getByRole("link", { name: "チャートと洗濯機のファイル" });
+  // Scoped to <main>, exact — the sidebar and the Prev/Next pagination
+  // footer (both also inside <main>, #144 follow-up) carry this same
+  // translated label too, the pagination one prefixed with "次へ".
+  const jaLink = page
+    .getByRole("main")
+    .getByRole("link", { name: "チャートと洗濯機のファイル", exact: true });
   await expect(jaLink).toHaveAttribute("href", "/ja/docs/chart-and-machine/");
+
+  // The left-hand sidebar carries the same translated label as the page
+  // it links to (astro.config.mjs's sidebar `translations`, #144 follow-up).
+  // Starlight's own aria-label on this nav is itself locale-translated
+  // ("メイン" here), so it's targeted by its class instead.
+  await expect(page.locator("nav.sidebar")).toContainText("チャートと洗濯機のファイル");
+
   await jaLink.click();
   await expect(page).toHaveURL(/\/ja\/docs\/chart-and-machine\/?$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "ja");
 
+  // Prev/Next pagination reads the sidebar's translations too — its own
+  // "Previous"/"Next" strings come from Starlight's built-in i18n data.
+  await expect(page.getByRole("link", { name: /前へ/ })).toContainText("概要");
+  await expect(page.getByRole("link", { name: /次へ/ })).toContainText("ウェブアプリを使う");
+
   await expectNoA11yViolations(page);
+});
+
+test("the bundled example chart and machine are translated too, not just the chrome around them", async ({
+  page,
+}) => {
+  // German: the demo washer's own programme names come out translated,
+  // and stay cross-referenced correctly between the machine and the chart
+  // (#144 follow-up) — src/i18n/configSource.ts.
+  await gotoHydrated(page, "/de/");
+  await page.locator("summary", { hasText: "Erweitert" }).click();
+  await expect(page.locator("#filter-program option")).toContainText(["Baumwolle"]);
+
+  // Jive: the joke locale gets its own rewritten demo data too, consistent
+  // with every other layer of this locale already being jive-ified.
+  await gotoHydrated(page, "/jive/");
+  await expect(page.getByRole("article").first()).toContainText("Jack");
 });

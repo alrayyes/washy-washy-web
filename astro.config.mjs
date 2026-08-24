@@ -107,11 +107,51 @@ export default defineConfig({
             },
           ]
         : [],
+      // Every `label` below carries its own `translations` (#144 follow-up)
+      // — Starlight's sidebar and its auto-generated Prev/Next pagination
+      // both read from these same entries, so one translation covers both
+      // the left-hand menu and the "link-title" under the Previous/Next
+      // buttons. The four /dev-docs entries get labels too even though
+      // their content stays English (out of scope, different audience,
+      // #125) — the sidebar isn't scoped per top-level path (see the
+      // comment on the group below), so a ja/de/es/fr visitor on /docs
+      // still sees this group and its own labels are chrome, not content.
       sidebar: [
-        { label: "Overview", link: "/docs/" },
-        { label: "The chart and machine files", link: "/docs/chart-and-machine/" },
-        { label: "Using the web app", link: "/docs/web-app/" },
-        { label: "Generate a config with AI", link: "/docs/ai-prompt/" },
+        {
+          label: "Overview",
+          translations: { ja: "概要", de: "Überblick", es: "Resumen", fr: "Aperçu" },
+          link: "/docs/",
+        },
+        {
+          label: "The chart and machine files",
+          translations: {
+            ja: "チャートと洗濯機のファイル",
+            de: "Die Wäsche- und Maschinendateien",
+            es: "Los archivos de guía y máquina",
+            fr: "Les fichiers de grille et de machine",
+          },
+          link: "/docs/chart-and-machine/",
+        },
+        {
+          label: "Using the web app",
+          translations: {
+            ja: "ウェブアプリを使う",
+            de: "Die Web-App nutzen",
+            es: "Usar la aplicación web",
+            fr: "Utiliser l'application web",
+          },
+          link: "/docs/web-app/",
+        },
+        {
+          label: "Generate a config with AI",
+          translations: {
+            ja: "AIでconfigを生成",
+            de: "Konfiguration mit KI erstellen",
+            es: "Generar una configuración con IA",
+            fr: "Générer une configuration avec l'IA",
+          },
+          link: "/docs/ai-prompt/",
+        },
         {
           // A separate, clearly-labelled group rather than a second
           // sidebar scoped to /dev-docs — Starlight doesn't scope sidebar
@@ -120,11 +160,48 @@ export default defineConfig({
           // end-user-only, not about a labelled cross-link to a
           // different section being visible from the /docs sidebar too.
           label: "Contributor docs",
+          translations: {
+            ja: "貢献者向けドキュメント",
+            de: "Mitwirkende-Dokumentation",
+            es: "Documentación para colaboradores",
+            fr: "Documentation pour les contributeurs",
+          },
           items: [
-            { label: "Overview", link: "/dev-docs/" },
-            { label: "Architecture", link: "/dev-docs/architecture/" },
-            { label: "Package relationships", link: "/dev-docs/packages/" },
-            { label: "Island hydration", link: "/dev-docs/hydration/" },
+            {
+              label: "Overview",
+              translations: { ja: "概要", de: "Überblick", es: "Resumen", fr: "Aperçu" },
+              link: "/dev-docs/",
+            },
+            {
+              label: "Architecture",
+              translations: {
+                ja: "アーキテクチャ",
+                de: "Architektur",
+                es: "Arquitectura",
+                fr: "Architecture",
+              },
+              link: "/dev-docs/architecture/",
+            },
+            {
+              label: "Package relationships",
+              translations: {
+                ja: "パッケージの関係",
+                de: "Paketbeziehungen",
+                es: "Relaciones entre paquetes",
+                fr: "Relations entre paquets",
+              },
+              link: "/dev-docs/packages/",
+            },
+            {
+              label: "Island hydration",
+              translations: {
+                ja: "アイランドのハイドレーション",
+                de: "Island-Hydration",
+                es: "Hidratación de islas",
+                fr: "Hydratation des îlots",
+              },
+              link: "/dev-docs/hydration/",
+            },
           ],
         },
       ],

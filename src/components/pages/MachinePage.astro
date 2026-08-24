@@ -1,15 +1,13 @@
 ---
-// Same static import pattern as HomePage.astro — see that file's comment on
-// why Vite's `?raw` import is used over a runtime file read.
-import configSource from "../../../data/washy-washy.json.dist?raw";
+import { configSourceFor } from "../../i18n/configSource";
 import { localeFromPath } from "../../i18n/locales";
 import { translator } from "../../i18n/ui";
 import Layout from "../../layouts/Layout.astro";
 import { buildChart } from "../../lib/chart";
 import MachineEditor from "../MachineEditor";
 
-const { items, machine } = buildChart(configSource);
 const locale = localeFromPath(Astro.url.pathname);
+const { items, machine } = buildChart(configSourceFor(locale));
 const t = translator(locale);
 ---
 
