@@ -1,3 +1,9 @@
+## [1.33.0](https://github.com/alrayyes/washy-washy-web/compare/v1.32.0...v1.33.0) (2026-08-24)
+
+### Features
+
+* add Arabic and Chinese locales ([#148](https://github.com/alrayyes/washy-washy-web/issues/148)) ([cee4387](https://github.com/alrayyes/washy-washy-web/commit/cee4387b172b0188e4f32999da68b78d9844fb37)), closes [#147](https://github.com/alrayyes/washy-washy-web/issues/147)
+
 ## [1.32.0](https://github.com/alrayyes/washy-washy-web/compare/v1.31.0...v1.32.0) (2026-08-24)
 
 ### Features
