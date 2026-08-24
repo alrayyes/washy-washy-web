@@ -18,6 +18,15 @@ const umami = readUmamiConfig(process.env);
 export default defineConfig({
   site: "https://washy-washy.ryankes.eu",
   output: "static",
+  // No Astro `i18n` config here on purpose: Starlight (below) introspects
+  // the root i18n config at build time and validates every locale through
+  // `Intl.Locale`/`Intl.DisplayNames` — which rejects "jive"'s BCP-47
+  // private-use tag outright, and Starlight also refuses to run with both
+  // a root i18n config and its own `locales` option set (confirmed live,
+  // both throw). Routing, `lang` attributes and hreflang alternates for
+  // the three per-locale pages (#143) are hand-rolled in src/i18n/locales.ts
+  // instead, which keeps this decoupled from Starlight's own (English-only
+  // for now, #144) i18n entirely.
   integrations: [
     // The sheet viewer (#44) is a React island — the same @react-pdf/renderer
     // components src/documents.tsx uses, running client-side.

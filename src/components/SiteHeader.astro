@@ -6,13 +6,24 @@
  * Self-contained: reads Astro.url.pathname itself rather than taking a
  * `path` prop, so both call sites stay trivial one-liners.
  */
+import { localeFromPath, relativeLocaleUrl } from "../i18n/locales";
+import { translator } from "../i18n/ui";
 import HeaderUpload from "./HeaderUpload";
 import KeyboardNav from "./KeyboardNav";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
 import ThemeToggle from "./ThemeToggle";
 
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
+const locale = localeFromPath(path);
+const t = translator(locale);
+// /config, /config/machine and /docs only exist in English (#144) — the
+// home link stays locale-aware, but these three always point at the
+// English page, same as the language switcher's own fallback.
+const homeHref = relativeLocaleUrl(locale, "/");
+const normalize = (value: string) => value.replace(/\/+$/, "") || "/";
+const isHome = normalize(path) === normalize(homeHref);
 // Astro's directory build format gives static pages a trailing-slash
 // pathname ("/config/"), so this is a prefix check, not `path === "/config"`
 // — and /config/machine ("Washer & iron") gets its own link now, so
@@ -27,7 +38,7 @@ const NAV_LINK_INACTIVE = "text-body";
 <header
   class={`mx-auto flex ${CHROME_WIDTH} flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-hairline px-4 py-4 sm:px-6 md:flex-nowrap`}
 >
-  <a href="/" class="flex items-center gap-2 text-ink hover:text-accent-text">
+  <a href={homeHref} class="flex items-center gap-2 text-ink hover:text-accent-text">
     <Logo size={32} />
     <span class="font-heading text-xl font-bold tracking-tight sm:text-2xl">Washy washy</span>
   </a>
@@ -48,34 +59,35 @@ const NAV_LINK_INACTIVE = "text-body";
     links alone needed. */}
     <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold" aria-label="Site">
       <a
-        href="/"
-        aria-current={path === "/" ? "page" : undefined}
-        class={`${NAV_LINK} ${path === "/" ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
+        href={homeHref}
+        aria-current={isHome ? "page" : undefined}
+        class={`${NAV_LINK} ${isHome ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Home
+        {t("nav.home")}
       </a>
       <a
         href="/config"
         aria-current={isWashingLoads ? "page" : undefined}
         class={`${NAV_LINK} ${isWashingLoads ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Washing loads
+        {t("nav.washingLoads")}
       </a>
       <a
         href="/config/machine"
         aria-current={path.startsWith("/config/machine") ? "page" : undefined}
         class={`${NAV_LINK} ${path.startsWith("/config/machine") ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Washer &amp; iron
+        {t("nav.washerIron")}
       </a>
       <a
         href="/docs/"
         aria-current={isDocs ? "page" : undefined}
         class={`${NAV_LINK} ${isDocs ? NAV_LINK_ACTIVE : NAV_LINK_INACTIVE}`}
       >
-        Docs
+        {t("nav.docs")}
       </a>
     </nav>
+    <LanguageSwitcher />
     <HeaderUpload client:load />
     <ThemeToggle client:load />
     <KeyboardNav client:load />

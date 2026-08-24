@@ -1,0 +1,25 @@
+---
+/**
+ * Shared by src/pages/index.astro (English, root) and
+ * src/pages/[locale]/index.astro (#143) — derives its locale from the URL
+ * itself rather than taking a `locale` prop, same self-contained pattern as
+ * SiteHeader/SiteFooter.
+ */
+import configSource from "../../../data/washy-washy.json.dist?raw";
+import { localeFromPath } from "../../i18n/locales";
+import { richText } from "../../i18n/richText";
+import { translator } from "../../i18n/ui";
+import Layout from "../../layouts/Layout.astro";
+import { buildChart } from "../../lib/chart";
+import SheetViewer from "../SheetViewer";
+
+const { items, machine } = buildChart(configSource);
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+---
+
+<Layout title={t("home.title")} description={t("home.description")} translationKey="home">
+  <h1 class="mb-2 font-heading text-3xl font-bold text-ink sm:text-4xl">{t("home.h1")}</h1>
+  <p class="mb-6 text-base text-body" set:html={richText(t("home.intro"))} />
+  <SheetViewer client:load items={items} machine={machine} />
+</Layout>

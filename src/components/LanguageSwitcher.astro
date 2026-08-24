@@ -1,0 +1,52 @@
+---
+/**
+ * A plain <select>, not a custom dropdown — it's keyboard- and
+ * screen-reader-accessible for free, and switching language works without
+ * any client-side JS (the onchange navigates directly). Each locale is
+ * labelled in its own name (LOCALE_META), not a flag — flags represent
+ * countries, not languages, and several of these locales don't map to one
+ * country cleanly anyway (#143).
+ *
+ * Only home/disclaimer/privacy exist per-locale (#144 tracks the rest), so
+ * from anywhere else (e.g. /config, /docs) this falls back to that
+ * locale's home page rather than a 404.
+ */
+import {
+  LOCALE_META,
+  LOCALES,
+  localeFromPath,
+  matchTranslatedPage,
+  pagePath,
+  relativeLocaleUrl,
+} from "../i18n/locales";
+import { translator } from "../i18n/ui";
+
+const currentLocale = localeFromPath(Astro.url.pathname);
+const t = translator(currentLocale);
+const page = matchTranslatedPage(Astro.url.pathname);
+const targetPath = page ? pagePath(page) : "/";
+
+const options = LOCALES.map((locale) => ({
+  locale,
+  label: LOCALE_META[locale].label,
+  href: relativeLocaleUrl(locale, targetPath),
+}));
+---
+
+<div class="inline-flex items-center">
+  <label class="sr-only" for="lang-switch">{t("switcher.label")}</label>
+  <select
+    id="lang-switch"
+    data-testid="language-switcher"
+    class="min-h-9 rounded-md border border-line bg-surface px-2 py-1.5 text-sm text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+    onchange="window.location.href = this.value"
+  >
+    {
+      options.map((opt) => (
+        <option value={opt.href} selected={opt.locale === currentLocale}>
+          {opt.label}
+        </option>
+      ))
+    }
+  </select>
+</div>

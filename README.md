@@ -58,6 +58,15 @@ bun run build      # static build to dist/
 bun run test:e2e   # Playwright, against a real astro build
 ```
 
+## Languages
+
+The home, disclaimer and privacy pages are also available in Japanese,
+German, Spanish, French and Jive (a joke locale, played for laughs) — pick
+one from the language switcher in the header. Everything else (the washing
+loads and washer/iron editors, and `/docs`) stays English-only for now.
+Every non-English page shows a one-time banner warning that the translation
+is AI-generated and may not be perfect.
+
 ## Configuration
 
 Optional, both unset by default:

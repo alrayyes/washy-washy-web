@@ -4,7 +4,12 @@
  * reason as SiteHeader.astro: a Starlight override component renders it
  * on /docs pages too, instead of Starlight's own footer (#114).
  */
+import { localeFromPath, relativeLocaleUrl } from "../i18n/locales";
+import { translator } from "../i18n/ui";
+
 const CHROME_WIDTH = "max-w-[90rem]";
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
 ---
 
 <footer
@@ -27,30 +32,28 @@ const CHROME_WIDTH = "max-w-[90rem]";
         href="https://github.com/alrayyes/washy-washy"
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
-        Washy washy on GitHub
+        {t("footer.github")}
       </a>
       <a
-        href="/disclaimer"
+        href={relativeLocaleUrl(locale, "/disclaimer")}
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
-        Disclaimer
+        {t("footer.disclaimer")}
       </a>
       <a
-        href="/privacy"
+        href={relativeLocaleUrl(locale, "/privacy")}
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
-        Privacy policy
+        {t("footer.privacy")}
       </a>
     </div>
     <p class="max-w-md text-xs text-muted">
-      {"© 2026 Ryan Kes. Licensed under the "}<a
+      {t("footer.copyrightBefore")}<a
         href="https://github.com/alrayyes/washy-washy/blob/main/LICENSE"
         class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
       >
         GPL-3.0-or-later
-      </a>{
-        " — provided as-is, with no warranty of any kind (see the licence, sections 15–16). Always check a garment's own care label; this chart reflects one household's settings, not a manufacturer's guarantee."
-      }
+      </a>{t("footer.copyrightAfter")}
     </p>
   </div>
 </footer>
