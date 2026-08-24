@@ -313,7 +313,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                 </td>
                 <td className="py-1 pr-3">
                   <input
-                    className={`${TEXT_INPUT} w-16`}
+                    className={`${TEXT_INPUT} w-16! min-w-0!`}
                     aria-label={t("machine.settingDotsAria", { n: index + 1 })}
                     type="text"
                     value={setting.dots}
