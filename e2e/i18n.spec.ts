@@ -29,6 +29,7 @@ test("the language switcher lists every locale, in its own name, and switches th
     "Français",
     "العربية",
     "简体中文",
+    "Türkçe",
     "Jive",
   ]);
 
@@ -187,7 +188,7 @@ test("the AI-translation banner only shows on non-English locales, and hreflang 
 
   await page.goto("/de/");
   await expect(page.getByTestId("language-warning-banner")).toBeVisible();
-  await expect(page.locator('link[rel="alternate"]')).toHaveCount(9); // all 8 locales, plus x-default
+  await expect(page.locator('link[rel="alternate"]')).toHaveCount(10); // all 9 locales, plus x-default
 });
 
 test("the banner stays pinned to the top of the viewport while scrolling, instead of scrolling away", async ({
