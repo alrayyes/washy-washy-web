@@ -47,7 +47,7 @@ only synthetic long-text fixtures. Non-Latin scripts and unusually long
 compound words (Arabic, Chinese, German, Turkish's dotted/dotless İ/I) each
 stress the PDF renderer's font and layout handling in ways an ASCII
 placeholder can't, and this repo's own layout bugs from real translations
-(#150) have already turned out to generalise.
+(#151) have already turned out to generalise.
 
 - `ListAgents` first — `washy-washy-pdf` runs its own long-running session on
   its own repo; this isn't something to branch into directly (see the
