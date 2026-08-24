@@ -75,7 +75,7 @@ test("the washing-loads and washer/iron editors are translated too, and stay in 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("洗濯機とアイロンの設定");
 });
 
-test("/docs stays English chrome and content regardless of the locale visited from", async ({
+test("the Docs link is locale-aware for locales Starlight supports, and falls back to English for jive, which it doesn't", async ({
   page,
 }) => {
   await gotoHydrated(page, "/ja/");
@@ -171,6 +171,23 @@ test("the banner shows once per locale, not on every page load — but a differe
 test("a translated page with the banner visible passes an accessibility scan", async ({ page }) => {
   await gotoHydrated(page, "/ja/");
   await expect(page.getByTestId("language-warning-banner")).toBeVisible();
+
+  await expectNoA11yViolations(page);
+});
+
+test("docs content is translated too, with Starlight's own chrome translated alongside it, and cross-links stay in the same locale", async ({
+  page,
+}) => {
+  await page.goto("/ja/docs/");
+
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Washy washy ドキュメント");
+
+  const jaLink = page.getByRole("link", { name: "チャートと洗濯機のファイル" });
+  await expect(jaLink).toHaveAttribute("href", "/ja/docs/chart-and-machine/");
+  await jaLink.click();
+  await expect(page).toHaveURL(/\/ja\/docs\/chart-and-machine\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "ja");
 
   await expectNoA11yViolations(page);
 });
