@@ -1,3 +1,9 @@
+## [1.33.1](https://github.com/alrayyes/washy-washy-web/compare/v1.33.0...v1.33.1) (2026-08-24)
+
+### Bug Fixes
+
+* **header:** stop the GitHub ribbon clipping its own text on mobile ([#154](https://github.com/alrayyes/washy-washy-web/issues/154)) ([28d566e](https://github.com/alrayyes/washy-washy-web/commit/28d566ea21c84c393f594d487acd5714399aa8e6))
+
 ## [1.33.0](https://github.com/alrayyes/washy-washy-web/compare/v1.32.0...v1.33.0) (2026-08-24)
 
 ### Features
