@@ -204,14 +204,14 @@
 
 @media (max-width: 640px) {
   .gh-ribbon {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
   }
 
   .gh-ribbon a {
-    top: 18px;
-    right: -38px;
-    width: 150px;
+    top: 23px;
+    right: -49px;
+    width: 195px;
     padding: 4px 0;
     font-size: 11px;
   }
