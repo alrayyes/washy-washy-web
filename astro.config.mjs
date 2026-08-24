@@ -43,6 +43,14 @@ export default defineConfig({
         de: { label: "Deutsch", lang: "de" },
         es: { label: "Español", lang: "es" },
         fr: { label: "Français", lang: "fr" },
+        // `dir` defaults to "ltr" and is NOT auto-derived from the BCP-47
+        // tag when locales are configured directly like this (confirmed by
+        // reading Starlight's own schema, user-config.ts — that derivation
+        // only runs when converting *from* a root Astro i18n config, which
+        // this project doesn't use, see the top-level comment above) — ar
+        // needs it spelled out explicitly or its docs render LTR.
+        ar: { label: "العربية", lang: "ar", dir: "rtl" },
+        zh: { label: "简体中文", lang: "zh" },
       },
       title: "Washy washy docs",
       description:
@@ -115,7 +123,14 @@ export default defineConfig({
       sidebar: [
         {
           label: "Overview",
-          translations: { ja: "概要", de: "Überblick", es: "Resumen", fr: "Aperçu" },
+          translations: {
+            ja: "概要",
+            de: "Überblick",
+            es: "Resumen",
+            fr: "Aperçu",
+            ar: "نظرة عامة",
+            zh: "概览",
+          },
           link: "/docs/",
         },
         {
@@ -125,6 +140,8 @@ export default defineConfig({
             de: "Die Wäsche- und Maschinendateien",
             es: "Los archivos de guía y máquina",
             fr: "Les fichiers de grille et de machine",
+            ar: "ملفا المخطط والجهاز",
+            zh: "图表与机器文件",
           },
           link: "/docs/chart-and-machine/",
         },
@@ -135,6 +152,8 @@ export default defineConfig({
             de: "Die Web-App nutzen",
             es: "Usar la aplicación web",
             fr: "Utiliser l'application web",
+            ar: "استخدام تطبيق الويب",
+            zh: "使用网页应用",
           },
           link: "/docs/web-app/",
         },
@@ -145,6 +164,8 @@ export default defineConfig({
             de: "Konfiguration mit KI erstellen",
             es: "Generar una configuración con IA",
             fr: "Générer une configuration avec l'IA",
+            ar: "توليد إعداد بالذكاء الاصطناعي",
+            zh: "用 AI 生成配置",
           },
           link: "/docs/ai-prompt/",
         },

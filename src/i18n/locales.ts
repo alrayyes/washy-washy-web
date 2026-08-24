@@ -4,7 +4,7 @@
  * so it's still a technically valid `lang` attribute for a joke dialect of
  * English, not a claim that it's a standardised language.
  */
-export const LOCALES = ["en", "ja", "de", "es", "fr", "jive"] as const;
+export const LOCALES = ["en", "ja", "de", "es", "fr", "ar", "zh", "jive"] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -19,15 +19,19 @@ interface LocaleMeta {
   /** The locale's own name for itself, shown in the language switcher. */
   label: string;
   htmlLang: string;
+  /** `<html dir>` — only Arabic is RTL here. Defaults to "ltr" everywhere else. */
+  dir: "ltr" | "rtl";
 }
 
 export const LOCALE_META: Record<Locale, LocaleMeta> = {
-  en: { label: "English", htmlLang: "en" },
-  ja: { label: "日本語", htmlLang: "ja" },
-  de: { label: "Deutsch", htmlLang: "de" },
-  es: { label: "Español", htmlLang: "es" },
-  fr: { label: "Français", htmlLang: "fr" },
-  jive: { label: "Jive", htmlLang: "en-x-jive" },
+  en: { label: "English", htmlLang: "en", dir: "ltr" },
+  ja: { label: "日本語", htmlLang: "ja", dir: "ltr" },
+  de: { label: "Deutsch", htmlLang: "de", dir: "ltr" },
+  es: { label: "Español", htmlLang: "es", dir: "ltr" },
+  fr: { label: "Français", htmlLang: "fr", dir: "ltr" },
+  ar: { label: "العربية", htmlLang: "ar", dir: "rtl" },
+  zh: { label: "简体中文", htmlLang: "zh", dir: "ltr" },
+  jive: { label: "Jive", htmlLang: "en-x-jive", dir: "ltr" },
 };
 
 export function isLocale(value: string): value is Locale {
@@ -83,7 +87,7 @@ export function docsHref(locale: Locale): string {
  * app's own pages, despite it being served by two different mechanisms.
  */
 export function matchDocsSlug(pathname: string): string | null {
-  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|jive)\/)?docs(\/.*)?$/);
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|jive)\/)?docs(\/.*)?$/);
   return match ? (match[1] ?? "/") : null;
 }
 
