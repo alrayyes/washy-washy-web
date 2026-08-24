@@ -60,11 +60,15 @@ export default function WarningBanner({ locale, message, dismissLabel }: Props) 
       ref={bannerRef}
       role="alert"
       data-testid="language-warning-banner"
-      // .gh-ribbon (global.css) is `position: absolute` pinned to the
-      // page's top-right corner at z-index 40 — without a higher stacking
-      // context of its own, this banner (plain flow, z-index: auto) sits
-      // underneath it, right where the dismiss button lives.
-      className="relative z-50 flex items-center justify-between gap-4 border-b border-hairline bg-panel px-4 py-2 text-sm text-body sm:px-6"
+      // sticky + top-0 so the banner stays pinned to the viewport's top
+      // edge while it's up, instead of scrolling away with the rest of the
+      // page (#143 follow-up) — still in normal flow, so it doesn't
+      // overlap content the way `fixed` would, and it vacates that space
+      // cleanly once dismissed. z-50 is a higher stacking context than
+      // .gh-ribbon's (global.css, `position: absolute` at z-index 40 in
+      // the page's top-right corner), which otherwise sits over the
+      // banner's dismiss button.
+      className="sticky top-0 z-50 flex items-center justify-between gap-4 border-b border-hairline bg-panel px-4 py-2 text-sm text-body sm:px-6"
     >
       <p className="flex-1">{message}</p>
       <button

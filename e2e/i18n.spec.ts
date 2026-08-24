@@ -117,6 +117,18 @@ test("the AI-translation banner only shows on non-English locales, and hreflang 
   await expect(page.locator('link[rel="alternate"]')).toHaveCount(7); // all 6 locales, plus x-default
 });
 
+test("the banner stays pinned to the top of the viewport while scrolling, instead of scrolling away", async ({
+  page,
+}) => {
+  await gotoHydrated(page, "/ja/");
+  const banner = page.getByTestId("language-warning-banner");
+  await expect(banner).toBeVisible();
+  await expect(banner).toHaveCSS("position", "sticky");
+
+  await page.mouse.wheel(0, 800);
+  await expect(banner).toBeInViewport();
+});
+
 test("the banner auto-dismisses after 10 seconds", async ({ page }) => {
   await page.clock.install();
   await gotoHydrated(page, "/ja/");
