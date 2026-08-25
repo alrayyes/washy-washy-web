@@ -21,6 +21,7 @@ describe("localeFromPath", () => {
     expect(localeFromPath("/ja/")).toBe("ja");
     expect(localeFromPath("/ja")).toBe("ja");
     expect(localeFromPath("/jive/disclaimer")).toBe("jive");
+    expect(localeFromPath("/linkedin/disclaimer")).toBe("linkedin");
   });
 
   test("doesn't false-match a page whose name happens to start with a locale code", () => {
@@ -39,6 +40,7 @@ describe("relativeLocaleUrl", () => {
     expect(relativeLocaleUrl("ja", "/")).toBe("/ja/");
     expect(relativeLocaleUrl("ja", "/disclaimer")).toBe("/ja/disclaimer");
     expect(relativeLocaleUrl("jive", "/privacy")).toBe("/jive/privacy");
+    expect(relativeLocaleUrl("linkedin", "/privacy")).toBe("/linkedin/privacy");
   });
 });
 
@@ -65,6 +67,7 @@ describe("matchTranslatedPage", () => {
     expect(matchTranslatedPage("/fr/config")).toBe("config");
     expect(matchTranslatedPage("/config/machine")).toBe("machine");
     expect(matchTranslatedPage("/jive/config/machine")).toBe("machine");
+    expect(matchTranslatedPage("/linkedin/config/machine")).toBe("machine");
   });
 
   test("returns null for pages with no per-locale route", () => {
@@ -87,14 +90,16 @@ describe("docsHref", () => {
     expect(docsHref("en")).toBe("/docs/");
     expect(docsHref("ja")).toBe("/ja/docs/");
     expect(docsHref("de")).toBe("/de/docs/");
-    // jive's docs aren't Starlight-routed (src/pages/jive/docs/), but land
-    // on the exact same URL shape as every locale Starlight does cover.
+    // jive's and linkedin's docs aren't Starlight-routed (src/pages/jive/docs/,
+    // src/pages/linkedin/docs/), but land on the exact same URL shape as every
+    // locale Starlight does cover.
     expect(docsHref("jive")).toBe("/jive/docs/");
+    expect(docsHref("linkedin")).toBe("/linkedin/docs/");
   });
 });
 
 describe("matchDocsSlug", () => {
-  test("extracts the slug after /docs, English, Starlight-locale-prefixed, or jive's own route", () => {
+  test("extracts the slug after /docs, English, Starlight-locale-prefixed, or jive's/linkedin's own routes", () => {
     expect(matchDocsSlug("/docs")).toBe("/");
     expect(matchDocsSlug("/docs/")).toBe("/");
     expect(matchDocsSlug("/docs/chart-and-machine/")).toBe("/chart-and-machine/");
@@ -102,6 +107,8 @@ describe("matchDocsSlug", () => {
     expect(matchDocsSlug("/de/docs/")).toBe("/");
     expect(matchDocsSlug("/jive/docs/")).toBe("/");
     expect(matchDocsSlug("/jive/docs/chart-and-machine/")).toBe("/chart-and-machine/");
+    expect(matchDocsSlug("/linkedin/docs/")).toBe("/");
+    expect(matchDocsSlug("/linkedin/docs/chart-and-machine/")).toBe("/chart-and-machine/");
   });
 
   test("returns null off a docs page entirely", () => {
@@ -112,7 +119,7 @@ describe("matchDocsSlug", () => {
 
 describe("isLocale", () => {
   test("accepts every configured locale", () => {
-    for (const locale of ["en", "ja", "de", "es", "fr", "jive"]) {
+    for (const locale of ["en", "ja", "de", "es", "fr", "jive", "linkedin"]) {
       expect(isLocale(locale)).toBe(true);
     }
   });

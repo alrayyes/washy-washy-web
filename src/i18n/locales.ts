@@ -1,10 +1,22 @@
 /**
- * The site's supported locales. "jive" isn't a real BCP-47 language — its
- * `htmlLang` uses the private-use subtag form (`en-x-jive`, RFC 5646 §2.2.7)
- * so it's still a technically valid `lang` attribute for a joke dialect of
- * English, not a claim that it's a standardised language.
+ * The site's supported locales. "jive" and "linkedin" aren't real BCP-47
+ * languages — their `htmlLang` uses the private-use subtag form
+ * (`en-x-jive`/`en-x-linkedin`, RFC 5646 §2.2.7) so each is still a
+ * technically valid `lang` attribute for a joke dialect of English, not a
+ * claim that it's a standardised language.
  */
-export const LOCALES = ["en", "ja", "de", "es", "fr", "ar", "zh", "tr", "jive"] as const;
+export const LOCALES = [
+  "en",
+  "ja",
+  "de",
+  "es",
+  "fr",
+  "ar",
+  "zh",
+  "tr",
+  "jive",
+  "linkedin",
+] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
@@ -33,6 +45,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   zh: { label: "简体中文", htmlLang: "zh", dir: "ltr" },
   tr: { label: "Türkçe", htmlLang: "tr", dir: "ltr" },
   jive: { label: "Jive", htmlLang: "en-x-jive", dir: "ltr" },
+  linkedin: { label: "LinkedIn", htmlLang: "en-x-linkedin", dir: "ltr" },
 };
 
 export function isLocale(value: string): value is Locale {
@@ -67,13 +80,15 @@ const PAGE_PATHS: Record<TranslatedPage, string> = {
 
 /**
  * Every locale has real docs (#144), but not all through Starlight: it
- * can't register "jive" as a locale at all (Intl.DisplayNames throws on
- * its en-x-jive BCP-47 tag, confirmed live), so /jive/docs is a second,
- * hand-rolled route (src/pages/jive/docs/[...slug].astro,
- * src/content.config.ts's `docsJive` collection) that happens to land on
- * the exact same URL shape Starlight gives the other five. That's why
- * this alias is worth keeping even though it's just `LOCALES` today —
- * it documents "every locale has docs", not "every locale has Starlight".
+ * can't register "jive" or "linkedin" as a locale at all (Intl.DisplayNames
+ * throws on their en-x-jive/en-x-linkedin BCP-47 tags, confirmed live), so
+ * /jive/docs and /linkedin/docs are second, hand-rolled routes
+ * (src/pages/jive/docs/[...slug].astro, src/pages/linkedin/docs/
+ * [...slug].astro, src/content.config.ts's `docsJive`/`docsLinkedin`
+ * collections) that happen to land on the exact same URL shape Starlight
+ * gives the other five. That's why this alias is worth keeping even though
+ * it's just `LOCALES` today — it documents "every locale has docs", not
+ * "every locale has Starlight".
  */
 export const DOCS_LOCALES = LOCALES;
 
@@ -82,13 +97,14 @@ export function docsHref(locale: Locale): string {
 }
 
 /**
- * Matches any docs URL (English, Starlight-locale-prefixed, or jive's own
- * hand-rolled route) and returns the slug after "/docs". Lets the language
- * switcher treat `/docs` the same way `matchTranslatedPage` treats the
- * app's own pages, despite it being served by two different mechanisms.
+ * Matches any docs URL (English, Starlight-locale-prefixed, or jive's/
+ * linkedin's own hand-rolled routes) and returns the slug after "/docs".
+ * Lets the language switcher treat `/docs` the same way `matchTranslatedPage`
+ * treats the app's own pages, despite it being served by three different
+ * mechanisms.
  */
 export function matchDocsSlug(pathname: string): string | null {
-  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|tr|jive)\/)?docs(\/.*)?$/);
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|tr|jive|linkedin)\/)?docs(\/.*)?$/);
   return match ? (match[1] ?? "/") : null;
 }
 

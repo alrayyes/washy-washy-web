@@ -1,0 +1,212 @@
+---
+/**
+ * LinkedIn-speak's own docs, rendered outside Starlight entirely. Starlight
+ * can't register "linkedin" as a locale at all — Intl.DisplayNames throws
+ * on its en-x-linkedin BCP-47 tag, confirmed live, same as jive — so
+ * /linkedin/docs can never be a real Starlight-i18n route the way /ja/docs
+ * etc. are. This is the workaround, a straight copy of jive's own
+ * (src/pages/jive/docs/[...slug].astro): the same four pages, same content
+ * shape, read from the docsLinkedin collection (src/content.config.ts) and
+ * rendered through this app's own Layout.astro — same chrome as every other
+ * linkedin page (banner, theme, SiteHeader/SiteFooter) — with a small
+ * hand-built sidebar and Prev/Next standing in for what Starlight's
+ * PageFrame/Pagination give the other six locales for free.
+ */
+import { getCollection, render } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+
+interface NavEntry {
+  slug: string;
+  href: string;
+  navLabel: string;
+}
+
+// Order and short nav labels, same idea as astro.config.mjs's own docs
+// sidebar entries — hand-picked short LinkedIn-speak equivalents, not the
+// full (much longer) page titles.
+const NAV: NavEntry[] = [
+  { slug: "index", href: "/linkedin/docs/", navLabel: "The Big Picture" },
+  {
+    slug: "chart-and-machine",
+    href: "/linkedin/docs/chart-and-machine/",
+    navLabel: "Roadmap & Org Chart",
+  },
+  { slug: "web-app", href: "/linkedin/docs/web-app/", navLabel: "Using the Platform" },
+  { slug: "ai-prompt", href: "/linkedin/docs/ai-prompt/", navLabel: "AI-Assisted Onboarding" },
+];
+
+export async function getStaticPaths() {
+  const entries = await getCollection("docsLinkedin");
+  return entries.map((entry) => ({
+    params: { slug: entry.id === "index" ? undefined : entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const index = NAV.findIndex((item) => item.slug === entry.id);
+const prev = index > 0 ? NAV[index - 1] : undefined;
+const next = index < NAV.length - 1 ? NAV[index + 1] : undefined;
+---
+
+<Layout title={`${entry.data.title} — Washy washy`} description={entry.data.description} wide>
+  <div class="flex flex-col gap-8 md:flex-row md:items-start">
+    <nav class="shrink-0 md:sticky md:top-6 md:w-56" aria-label="LinkedIn docs">
+      <ul class="flex flex-col gap-1 text-sm">
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={item.slug === entry.id ? "page" : undefined}
+                class:list={[
+                  "block rounded-md px-2 py-1 -mx-2 hover:bg-panel hover:text-accent-text",
+                  item.slug === entry.id ? "font-semibold text-accent-text" : "text-body",
+                ]}
+              >
+                {item.navLabel}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="min-w-0 flex-1">
+      <article class="docs-content">
+        <h1 class="mb-4 font-heading text-3xl font-bold text-ink sm:text-4xl">
+          {entry.data.title}
+        </h1>
+        <Content />
+      </article>
+      <nav
+        class="mt-10 flex flex-col gap-4 border-t border-hairline pt-6 text-sm sm:flex-row sm:justify-between"
+        aria-label="LinkedIn docs pagination"
+      >
+        {prev ? (
+          <a href={prev.href} class="group">
+            <span class="block text-muted">Rewind</span>
+            <span class="font-semibold text-ink group-hover:text-accent-text">
+              {prev.navLabel}
+            </span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {next && (
+          <a href={next.href} class="group text-right">
+            <span class="block text-muted">Keep scrolling 👇</span>
+            <span class="font-semibold text-ink group-hover:text-accent-text">
+              {next.navLabel}
+            </span>
+          </a>
+        )}
+      </nav>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Hand-rolled prose styling — Starlight's own docs CSS only loads for
+  Starlight-routed pages, and this one isn't (see the comment above). Only
+  covers what the four docsLinkedin pages actually use. */
+  .docs-content :global(h2) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .docs-content :global(p),
+  .docs-content :global(ul),
+  .docs-content :global(ol) {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  .docs-content :global(ul),
+  .docs-content :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .docs-content :global(ul) {
+    list-style: disc;
+  }
+
+  .docs-content :global(ol) {
+    list-style: decimal;
+  }
+
+  .docs-content :global(li) {
+    margin-top: 0.25rem;
+  }
+
+  .docs-content :global(a) {
+    color: var(--color-accent-text);
+    text-decoration: underline;
+    text-decoration-color: var(--color-hairline);
+    text-underline-offset: 2px;
+  }
+
+  .docs-content :global(code) {
+    border-radius: 0.25rem;
+    background-color: var(--color-panel);
+    padding: 0.125rem 0.375rem;
+    font-size: 0.875em;
+  }
+
+  .docs-content :global(pre) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-hairline);
+    background-color: var(--color-panel);
+    padding: 1rem;
+  }
+
+  .docs-content :global(pre code) {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .docs-content :global(table) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .docs-content :global(th),
+  .docs-content :global(td) {
+    border: 1px solid var(--color-hairline);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .docs-content :global(th) {
+    background-color: var(--color-panel);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .docs-content :global(img) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-hairline);
+  }
+
+  .docs-content :global(strong) {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+</style>

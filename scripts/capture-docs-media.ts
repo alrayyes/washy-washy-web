@@ -11,9 +11,10 @@
  * — #144's "screenshots should reflect the language" — under
  * public/docs/media/{locale}/, alongside the existing unprefixed English
  * set at public/docs/media/ (left exactly where the English docs already
- * reference them). jive's own docs (src/pages/jive/docs/) reference
- * public/docs/media/jive/ the same way the other locales' Starlight docs
- * reference their own.
+ * reference them). jive's and linkedin's own docs (src/pages/jive/docs/,
+ * src/pages/linkedin/docs/) reference public/docs/media/jive/ and
+ * public/docs/media/linkedin/ the same way the other locales' Starlight
+ * docs reference their own.
  *
  * Builds and serves via `scripts/serve-dist.ts`, the same static file server
  * `playwright.config.ts` uses for the e2e suite — `astro preview`/`astro

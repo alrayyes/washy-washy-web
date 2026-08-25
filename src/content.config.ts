@@ -17,4 +17,11 @@ export const collections = {
     loader: glob({ pattern: "**/*.md", base: "./src/content/docs-jive" }),
     schema: z.object({ title: z.string(), description: z.string() }),
   }),
+  // Same workaround, same reason — Intl.DisplayNames rejects en-x-linkedin
+  // too — for the LinkedIn-speak locale's own docs
+  // (src/pages/linkedin/docs/[...slug].astro).
+  docsLinkedin: defineCollection({
+    loader: glob({ pattern: "**/*.md", base: "./src/content/docs-linkedin" }),
+    schema: z.object({ title: z.string(), description: z.string() }),
+  }),
 };
