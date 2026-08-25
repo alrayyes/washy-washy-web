@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { LOCALES, relativeLocaleUrl } from "../src/i18n/locales";
 import { expectNoA11yViolations } from "./a11y";
 
 /**
@@ -342,4 +343,31 @@ test("the bundled example chart and machine are translated too, not just the chr
   // Same for linkedin.
   await gotoHydrated(page, "/linkedin/");
   await expect(page.getByRole("article").first()).toContainText("Core Deliverable");
+});
+
+test("the GitHub ribbon's translated text never wraps to a second line, in every locale", async ({
+  page,
+}) => {
+  // The ribbon link (Layout.astro's .gh-ribbon, styled in global.css) is a
+  // fixed-size box sized for roughly the English original's length — a
+  // translation long enough to wrap onto a second line gets cropped by the
+  // ribbon's own `overflow: hidden` clip window instead of failing loudly
+  // (found live on a LinkedIn-speak translation nearly twice the original's
+  // length, #158). Comparing each locale's rendered height against
+  // English's own catches that: a second line roughly doubles it. Not a
+  // Range().getClientRects() line count — that over-counts for Arabic,
+  // whose ribbon string embeds Latin substrings ("Fork", "GitHub"): each
+  // bidi direction change gets its own rect even on a single visual line,
+  // read: single-line Arabic text on a real page.
+  await page.goto(relativeLocaleUrl("en", "/"));
+  const englishHeight = await page.locator(".gh-ribbon a").evaluate((el) => el.clientHeight);
+
+  for (const locale of LOCALES.filter((locale) => locale !== "en")) {
+    await page.goto(relativeLocaleUrl(locale, "/"));
+    const height = await page.locator(".gh-ribbon a").evaluate((el) => el.clientHeight);
+    expect(
+      height,
+      `${locale}'s ribbon text (${height}px tall) looks wrapped to a second line — English's is ${englishHeight}px`,
+    ).toBeLessThan(englishHeight * 1.5);
+  }
 });

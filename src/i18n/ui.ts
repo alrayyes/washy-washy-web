@@ -12,6 +12,25 @@ import { DEFAULT_LOCALE, type Locale } from "./locales";
  */
 export interface Ui {
   "skip.toContent": string;
+  /**
+   * The diagonal "Fork me on GitHub" corner ribbon (.gh-ribbon in
+   * global.css). Its link box has a real, measurable pixel budget, not
+   * just a "keep it short" guess — a translation longer than that wraps
+   * to a second line and gets cropped by the ribbon's own
+   * `overflow: hidden` clip window (found live on a LinkedIn-speak
+   * translation nearly twice the English original's length, #158). Both
+   * breakpoints have to fit, since the same string renders at each:
+   * bold Inter Variable (`--font-sans`) at 13px in a 225px-wide box
+   * (>=640px), and 11px in 195px (<640px). Measured live via
+   * `canvas.measureText()` against the real computed style, a string has
+   * comfortable headroom up to roughly 210px/178px rendered width at
+   * those two sizes respectively (leaving ~15px margin either side for
+   * font-fallback/rendering variance across browsers) — that is real
+   * room to work with, not the English original's exact character count.
+   * `e2e/i18n.spec.ts`'s ribbon-wrap test is the actual gate: it compares
+   * every locale's rendered ribbon height against English's own in a
+   * real browser, so trust that over hand-measuring.
+   */
   "ribbon.forkMe": string;
   "nav.home": string;
   "nav.washingLoads": string;
@@ -2424,7 +2443,7 @@ const jive: Ui = {
 
 const linkedin: Ui = {
   "skip.toContent": "Skip the fluff, straight to the value 🚀",
-  "ribbon.forkMe": "Fork me on GitHub — let's connect 🤝",
+  "ribbon.forkMe": "Fork me on GitHub, let's sync 🤝",
   "nav.home": "Feed",
   "nav.washingLoads": "Deliverables",
   "nav.washerIron": "Ops & Alignment",
