@@ -1,3 +1,9 @@
+## [1.34.1](https://github.com/alrayyes/washy-washy-web/compare/v1.34.0...v1.34.1) (2026-08-25)
+
+### Bug Fixes
+
+* **i18n:** stop the LinkedIn locale's ribbon text clipping ([#159](https://github.com/alrayyes/washy-washy-web/issues/159)) ([69f80a8](https://github.com/alrayyes/washy-washy-web/commit/69f80a8fa99d28b6ab3951da4d900c058b3e2bc8))
+
 ## [1.34.0](https://github.com/alrayyes/washy-washy-web/compare/v1.33.2...v1.34.0) (2026-08-25)
 
 ### Features
