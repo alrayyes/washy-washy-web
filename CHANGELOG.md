@@ -1,3 +1,9 @@
+## [1.35.0](https://github.com/alrayyes/washy-washy-web/compare/v1.34.1...v1.35.0) (2026-08-25)
+
+### Features
+
+* **config:** cap form field lengths to match @washy-washy/core's limits ([#161](https://github.com/alrayyes/washy-washy-web/issues/161)) ([2ae881a](https://github.com/alrayyes/washy-washy-web/commit/2ae881ab82bba324da8dc91d0b20525cac807f74))
+
 ## [1.34.1](https://github.com/alrayyes/washy-washy-web/compare/v1.34.0...v1.34.1) (2026-08-25)
 
 ### Bug Fixes
