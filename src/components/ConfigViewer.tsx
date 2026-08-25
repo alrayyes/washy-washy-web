@@ -21,6 +21,7 @@ import {
   writeCustomConfig,
 } from "../lib/customConfig";
 import { isValidDuration } from "../lib/duration";
+import { CHART_FIELD_LIMITS } from "../lib/fieldLimits";
 import {
   ALERT,
   BUTTON_PRIMARY,
@@ -121,12 +122,14 @@ function ProseField({
   onChange,
   ariaLabel,
   ariaLabelledBy,
+  maxLength,
 }: {
   value: string;
   name: string;
   onChange: (value: string) => void;
   ariaLabel?: string;
   ariaLabelledBy?: string;
+  maxLength?: number;
 }) {
   return (
     <textarea
@@ -137,6 +140,7 @@ function ProseField({
       onChange={(event) => onChange(event.target.value)}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
+      maxLength={maxLength}
     />
   );
 }
@@ -294,6 +298,10 @@ function DurationField({
           aria-invalid={invalid}
           aria-describedby={hintId}
           placeholder="2:30"
+          // -1: onChange below always re-adds the leading "~" this field
+          // strips for display, so the stored value is one character
+          // longer than what's typed here.
+          maxLength={CHART_FIELD_LIMITS.duration - 1}
           value={stripped}
           onChange={(event) => {
             const next = event.target.value.replace(/^~/, "");
@@ -314,6 +322,7 @@ function EditableSplitField({
   name,
   rowId,
   onChange,
+  maxLength,
 }: {
   label: string;
   value: string;
@@ -321,6 +330,7 @@ function EditableSplitField({
   /** Makes the label's id unique across every card's own copy of this field. */
   rowId: number;
   onChange: (value: string) => void;
+  maxLength?: number;
 }) {
   const labelId = `${name}-label-${rowId}`;
 
@@ -334,7 +344,13 @@ function EditableSplitField({
       <p id={labelId} className="text-xs font-bold tracking-wide text-muted">
         {label.toUpperCase()}
       </p>
-      <ProseField value={value} name={name} onChange={onChange} ariaLabelledBy={labelId} />
+      <ProseField
+        value={value}
+        name={name}
+        onChange={onChange}
+        ariaLabelledBy={labelId}
+        maxLength={maxLength}
+      />
     </div>
   );
 }
@@ -414,6 +430,7 @@ function ChartCards({
                   type="text"
                   name="clothing_type"
                   aria-label={t("common.pile")}
+                  maxLength={CHART_FIELD_LIMITS.clothingType}
                   value={row.clothing_type}
                   onChange={(event) => set("clothing_type", event.target.value)}
                 />
@@ -496,6 +513,7 @@ function ChartCards({
               name="detergent"
               rowId={index}
               onChange={(value) => set("detergent", value)}
+              maxLength={CHART_FIELD_LIMITS.detergent}
             />
 
             <div className="mt-3">
@@ -552,6 +570,7 @@ function ChartCards({
                     name="ironing_notes"
                     onChange={(value) => set("ironing_notes", value)}
                     ariaLabel={t("config.ironingNotesAriaLabel")}
+                    maxLength={CHART_FIELD_LIMITS.ironingNotes}
                   />
                 </div>
               </div>
@@ -563,6 +582,7 @@ function ChartCards({
               name="drying"
               rowId={index}
               onChange={(value) => set("drying", value)}
+              maxLength={CHART_FIELD_LIMITS.drying}
             />
 
             <div className="mt-2">
@@ -618,6 +638,7 @@ function ChartCards({
               name="notes"
               rowId={index}
               onChange={(value) => set("notes", value)}
+              maxLength={CHART_FIELD_LIMITS.notes}
             />
             <ReferenceLink name={row.reference_name} link={row.reference_link} />
           </article>

@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 import { type Locale, relativeLocaleUrl } from "../i18n/locales";
 import { TranslationProvider, useLocale, useT } from "../i18n/TranslationProvider";
 import { readCustomConfig, writeCustomConfig } from "../lib/customConfig";
+import { MACHINE_FIELD_LIMITS } from "../lib/fieldLimits";
 import { slug } from "../lib/slug";
 import {
   ALERT,
@@ -35,11 +36,13 @@ function EditableField({
   id,
   value,
   onChange,
+  maxLength,
 }: {
   label: string;
   id: string;
   value: string;
   onChange: (value: string) => void;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -52,6 +55,7 @@ function EditableField({
         type="text"
         value={value}
         onChange={(event) => onChange(event.target.value)}
+        maxLength={maxLength}
       />
     </div>
   );
@@ -70,6 +74,7 @@ function StringListEditor({
   addAriaLabel,
   values,
   onChange,
+  maxLength,
 }: {
   label: string;
   hint?: string;
@@ -78,6 +83,7 @@ function StringListEditor({
   addAriaLabel: string;
   values: string[];
   onChange: (values: string[]) => void;
+  maxLength?: number;
 }) {
   const t = useT();
   const [draft, setDraft] = useState("");
@@ -151,6 +157,7 @@ function StringListEditor({
           value={draft}
           placeholder={addPlaceholder}
           aria-label={addAriaLabel}
+          maxLength={maxLength}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -187,12 +194,14 @@ function WasherEditor({
           id="washer-name"
           value={washer.name}
           onChange={(v) => set("name", v)}
+          maxLength={MACHINE_FIELD_LIMITS.washerName}
         />
         <EditableField
           label={t("machine.capacityLabel")}
           id="washer-capacity"
           value={washer.capacity}
           onChange={(v) => set("capacity", v)}
+          maxLength={MACHINE_FIELD_LIMITS.washerCapacity}
         />
       </div>
       <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -203,6 +212,7 @@ function WasherEditor({
           addAriaLabel={t("machine.addAriaProgramme")}
           values={washer.programs}
           onChange={(v) => set("programs", v)}
+          maxLength={MACHINE_FIELD_LIMITS.program}
         />
         <StringListEditor
           label={t("machine.temperaturesLabel")}
@@ -210,6 +220,7 @@ function WasherEditor({
           addAriaLabel={t("machine.addAriaTemperature")}
           values={washer.temperatures}
           onChange={(v) => set("temperatures", v)}
+          maxLength={MACHINE_FIELD_LIMITS.temperature}
         />
         <StringListEditor
           label={t("config.spinSpeeds")}
@@ -217,6 +228,7 @@ function WasherEditor({
           addAriaLabel={t("machine.addAriaSpin")}
           values={washer.spins}
           onChange={(v) => set("spins", v)}
+          maxLength={MACHINE_FIELD_LIMITS.spin}
         />
         <StringListEditor
           label={t("common.buttons")}
@@ -224,6 +236,7 @@ function WasherEditor({
           addAriaLabel={t("machine.addAriaButton")}
           values={washer.options}
           onChange={(v) => set("options", v)}
+          maxLength={MACHINE_FIELD_LIMITS.option}
         />
       </div>
     </div>
@@ -270,6 +283,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
         id="iron-name"
         value={iron.name}
         onChange={(v) => onChange({ ...iron, name: v })}
+        maxLength={MACHINE_FIELD_LIMITS.ironName}
       />
       <h3 className={`${FIELD_LABEL} mt-3`}>{t("machine.settingsHeading")}</h3>
       {/* contain-layout (#47): overflow-x-auto alone correctly scrolls the
@@ -307,6 +321,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                     className={TEXT_INPUT}
                     aria-label={t("machine.settingLabelAria", { n: index + 1 })}
                     type="text"
+                    maxLength={MACHINE_FIELD_LIMITS.settingLabel}
                     value={setting.label}
                     onChange={(event) => setSetting(index, { label: event.target.value })}
                   />
@@ -316,6 +331,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                     className={`${TEXT_INPUT} w-16! min-w-0!`}
                     aria-label={t("machine.settingDotsAria", { n: index + 1 })}
                     type="text"
+                    maxLength={MACHINE_FIELD_LIMITS.settingDots}
                     value={setting.dots}
                     onChange={(event) => setSetting(index, { dots: event.target.value })}
                   />
@@ -325,6 +341,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                     className={TEXT_INPUT}
                     aria-label={t("machine.settingDetailAria", { n: index + 1 })}
                     type="text"
+                    maxLength={MACHINE_FIELD_LIMITS.settingDetail}
                     value={setting.detail}
                     onChange={(event) => setSetting(index, { detail: event.target.value })}
                   />
@@ -368,6 +385,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                   className={`${TEXT_INPUT} mt-1`}
                   aria-label={t("machine.settingLabelAria", { n: index + 1 })}
                   type="text"
+                  maxLength={MACHINE_FIELD_LIMITS.settingLabel}
                   value={setting.label}
                   onChange={(event) => setSetting(index, { label: event.target.value })}
                 />
@@ -378,6 +396,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                   className={`${TEXT_INPUT} mt-1`}
                   aria-label={t("machine.settingDotsAria", { n: index + 1 })}
                   type="text"
+                  maxLength={MACHINE_FIELD_LIMITS.settingDots}
                   value={setting.dots}
                   onChange={(event) => setSetting(index, { dots: event.target.value })}
                 />
@@ -388,6 +407,7 @@ function IronEditor({ iron, onChange }: { iron: Iron; onChange: (iron: Iron) => 
                   className={`${TEXT_INPUT} mt-1`}
                   aria-label={t("machine.settingDetailAria", { n: index + 1 })}
                   type="text"
+                  maxLength={MACHINE_FIELD_LIMITS.settingDetail}
                   value={setting.detail}
                   onChange={(event) => setSetting(index, { detail: event.target.value })}
                 />
