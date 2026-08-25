@@ -72,6 +72,7 @@ editors, and `/docs` — is available in:
 - Chinese (simplified)
 - Turkish
 - Jive — a joke locale, played for laughs
+- LinkedIn — a joke locale, played for laughs
 
 Pick one from the language switcher in the header. Every non-English page
 shows a one-time banner warning that the translation is AI-generated and may

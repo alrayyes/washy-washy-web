@@ -2422,8 +2422,254 @@ const jive: Ui = {
   "page.machine.h1": "Washer & Iron Settings",
 };
 
+const linkedin: Ui = {
+  "skip.toContent": "Skip the fluff, straight to the value 🚀",
+  "ribbon.forkMe": "Fork me on GitHub — let's connect 🤝",
+  "nav.home": "Feed",
+  "nav.washingLoads": "Deliverables",
+  "nav.washerIron": "Ops & Alignment",
+  "nav.docs": "Playbook",
+  "switcher.label": "Network",
+  "footer.github": "Washy washy — open to work on GitHub",
+  "footer.disclaimer": "Thought Leadership Disclaimer",
+  "footer.privacy": "Data Privacy (We're Compliant, Promise)",
+  "footer.copyrightBefore": "© 2026 Ryan Kes. Proud to announce this is licensed under the ",
+  "footer.copyrightAfter":
+    " — shipped as-is, no warranty, no SLA (see sections 15–16 of the licence, link in bio). Always double-click into your garment's own care label; this chart is one household's personal brand, not a manufacturer's guarantee. Agree? 👇",
+  "home.title": "Washy washy",
+  "home.description":
+    "Humbled to unlock a mobile-first laundry roadmap: programme, temperature and spin for every deliverable, what can co-locate in one drum, and where the iron's thermostat lives. 10x your fresh-laundry KPIs.",
+  "home.h1": "Your Laundry Roadmap",
+  "home.intro":
+    "Turns your laundry chart into a mobile-first, stakeholder-ready sheet: which programme, temperature and spin for each deliverable, what can co-locate in one drum, and where the iron's thermostat lives. Add this page to your phone's home screen — Safari's Share menu or Chrome's *⋮* menu both have an \"Add to Home Screen\" option — and it launches like a native app, zero address-bar friction, right at the point of execution. Let's circle back to fresh laundry. 🧺📈",
+  "disclaimer.title": "Washy washy — the disclaimer nobody reads but everyone should",
+  "disclaimer.description":
+    "Vulnerable share: this chart is unofficial, community-built, and reflects one household's own personal brand — not a manufacturer's guarantee.",
+  "disclaimer.h1": "Disclaimer (Thanks for Engaging)",
+  "disclaimer.p1":
+    "Washy washy is an unofficial, community-run passion project. Not affiliated with, sponsored by, or built in partnership with any washing machine or appliance manufacturer — this isn't a paid partnership, just organic hustle.",
+  "disclaimer.p2":
+    "The bundled chart reflects one household's own washing and ironing settings — a set of decisions that moved the needle for one washer, one iron and one person's wardrobe. It is not a manufacturer's guarantee, not a care-labelling standard, and not professional advice. Loads, fabrics and machines vary by org, and a setting that's a culture add on one machine can be a culture kill on another.",
+  "disclaimer.p3":
+    "A garment's own care label always outranks anything shown here in the org chart. When the two disagree, the label is the C-suite — defer to it.",
+  "disclaimer.p4":
+    "As stated in the project's licence (GPL-3.0-or-later, sections 15–16): the software ships \"as is,\" without warranty of any kind, express or implied — no SLA, no roadmap commitment. Washy washy's maintainers are not liable for any damage — to clothes, machines, or your personal brand — arising from its use.",
+  "privacy.title": "Washy washy — privacy policy (a thought leadership piece)",
+  "privacy.h1": "Privacy Policy",
+  "privacy.descriptionUmami":
+    "No account, no cookies — we don't do growth hacking. Page-view analytics via Umami, a privacy-respecting stack with zero PII. Any config you upload or chart you edit stays in your own browser, never synced to the cloud, never repurposed as a case study.",
+  "privacy.descriptionNoUmami":
+    "No account, no cookies, no analytics, no tracking — a rare flex in this economy. Any config you upload or chart you edit stays in your own browser and is never sent anywhere.",
+  "privacy.pUmami":
+    "Washy washy has no account and sets no cookies. It does use [Umami](https://umami.is/), a privacy-respecting analytics tool, purely to benchmark engagement — which pages, how many visits. Umami doesn't use cookies, doesn't track you across your other tabs, and doesn't collect anything that could go in a slide deck about you personally.",
+  "privacy.pNoUmami":
+    "Washy washy has no account, no cookies, no analytics, and no tracking scripts — full stop, no asterisk. Nothing here is watching your engagement metrics.",
+  "privacy.pStorage":
+    "Uploading your own config, or editing the chart or machine settings, saves that data only in your own browser's storage (`localStorage`) — a very personal, very unscalable database of one. It never leaves your device — not to a server, not to us, not to your network. Clearing your browser's site data for washy washy removes it completely, no offboarding paperwork required.",
+  "privacy.pHosting":
+    "The site itself is static — plain files, no backend, no growth team — served by [Cloudflare Workers](https://www.cloudflare.com/products/cloudflare-workers/). Like any web host, Cloudflare's own infrastructure sees the ordinary HTTP request metadata that comes with serving a page — your IP address, browser, the page requested — same as any site you've ever visited. Washy washy itself has zero access to that data, and doesn't request it from Cloudflare or anyone else. No data moat here.",
+  "banner.message":
+    "🚀 Humbled to announce: the person who built this doesn't actually speak LinkedIn as a first language. This whole banner was AI-generated, so if the tone feels... a lot, that's between you and the algorithm, not me. #Grateful #Blessed",
+  "banner.dismiss": "Not now — I'm heads-down",
+
+  "common.pile": "Deliverable",
+  "common.detergent": "Solution",
+  "common.notes": "Key Takeaways",
+  "common.temp": "Temp Check",
+  "common.spinRpm": "Spin (rpm)",
+  "common.buttons": "Growth Levers",
+  "common.programme": "Strategy",
+  "common.source": "SOURCE",
+  "common.doNotIron": "Do not iron — hard pass",
+  "common.noSpin": "zero spin",
+  "common.softenerOk": "CULTURE ADD: YES",
+  "common.noSoftener": "CULTURE ADD: NO",
+  "common.copied": "Reposted! 🔁",
+  "common.remove": "Offboard",
+  "common.name": "Personal Brand",
+  "common.iron": "Alignment",
+  "common.washingLoadsPageLink": "deliverables page",
+  "common.clockwiseFrom": "{position} clockwise from {off} — moving the needle forward, never back",
+  "common.insideSteamZone": "deep in the steam-powered growth zone",
+  "common.belowSteamZone": "below the growth zone — dry iron energy only",
+  "common.couldNotUseFile": "Could not leverage that file: {error}",
+  "common.couldNotSave": "Could not ship that: {error}",
+  "common.downloadCurrentConfig": "Export current config (repost-ready)",
+  "common.uploadConfigJson": "Onboard a config (JSON)",
+  "common.saveChanges": "Ship changes",
+  "common.showingOwnConfig": "Showing your own config. Iterating fast. 🚀",
+  "common.whatDoesThisDo": "What's the ROI on this?",
+
+  "sheetViewer.cutEverything": "Full Stack",
+  "sheetViewer.cutWashOnly": "Wash-Only Sprint",
+  "sheetViewer.cutIronOnly": "Alignment-Only Sprint",
+  "sheetViewer.filterChart": "Filter the roadmap",
+  "sheetViewer.cutLabel": "Scope",
+  "sheetViewer.cutHelp":
+    "Which parts of the roadmap to show: everything, wash-only, or alignment-only.",
+  "sheetViewer.pileHelp":
+    'Type part of a deliverable\'s personal brand, like "towels", to surface just that card.',
+  "sheetViewer.pileSearchPlaceholder": "Search by deliverable…",
+  "sheetViewer.advanced": "Advanced (for power users)",
+  "sheetViewer.programmeHelp": "Show only deliverables running this strategy.",
+  "sheetViewer.anyProgramme": "Any strategy",
+  "sheetViewer.temperatureLabel": "Temp Check",
+  "sheetViewer.temperatureHelp": "Show only deliverables washed at this temperature.",
+  "sheetViewer.anyTemperature": "Any temp",
+  "sheetViewer.spinLabel": "Spin",
+  "sheetViewer.spinHelp": "Show only deliverables spun at this speed.",
+  "sheetViewer.anySpin": "Any spin",
+  "sheetViewer.detergentHelp":
+    'Type part of a solution note, like "powder", to show only deliverables that mention it.',
+  "sheetViewer.detergentSearchPlaceholder": "Search by solution…",
+  "sheetViewer.sharedConfigError":
+    "Could not unlock the shared config: {error}. Showing what was already live instead.",
+  "sheetViewer.showingBundledChart":
+    "Showing the bundled example roadmap. It's a generic laundry chart, not your personal brand.",
+  "sheetViewer.uploadEditPrefix": "Onboard, export or iterate on your own on the",
+  "sheetViewer.noPileMatchAdvanced":
+    'No deliverable matches "{query}" with those advanced filters. Loosen one — don\'t let perfect be the enemy of shipped.',
+  "sheetViewer.noPileMatchQuery": 'No deliverable matches "{query}". Try a different search.',
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "No deliverable matches those advanced filters. Loosen one.",
+  "sheetViewer.preparingPdf": "Compiling the deck…",
+  "sheetViewer.downloadForPhone": "Export for mobile",
+  "sheetViewer.downloadToPrint": "Export to print",
+  "sheetViewer.shareThisView": "Share this win",
+  "sheetViewer.couldNotShare": "Could not share this win: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Could not compile the mobile deck: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Could not compile the print deck: {error}",
+  "sheetViewer.couldntRenderPhone": "Couldn't render in the mobile deck: {chars}",
+  "sheetViewer.couldntRenderPrint": "Couldn't render in the print deck: {chars}",
+
+  "sheet.subtitleFull": "Scroll for the deliverable you're currently holding.",
+  "sheet.subtitleWash": "Getting it into the machine. Alignment is on the other sheet.",
+  "sheet.subtitleIron": "At the board. Execution is on the other sheet.",
+  "sheet.washingInstructions": "Execution instructions",
+  "sheet.loadsHeading": "Sprints — one line, one wash",
+  "sheet.loadsExplain":
+    "A TOGETHER badge means every deliverable on that line ships in one wash — batch them into the machine at once. Efficiency win.",
+  "sheet.together": "TOGETHER",
+  "sheet.legendThermostatCaption": "thermostat",
+  "sheet.legendProgrammeCaption": "strategy",
+  "sheet.legendIronExplain":
+    "The ring is the iron's thermostat as it sits on the dial, and the red pointer shows where to align it. The blue band is the growth zone where it produces steam; a setting below it is dry-iron energy only. A crossed-out ring means this deliverable stays out of scope for ironing entirely.",
+  "sheet.legendWashExplain":
+    "The dials are drawn as they sit on the machine: twelve o'clock is {off}, and the red pointer shows where to align it. Chips show every value the display steps through, filled in on the one you're shipping.",
+  "sheet.legendWashExplainFullSuffix":
+    " On the iron, the blue band is the growth zone where it produces steam.",
+  "sheet.washHeading": "Execute",
+  "sheet.washTogetherWithLabel": "Co-locate in one wash with",
+  "sheet.washTogetherEachOther": "each other — great synergy",
+  "sheet.washTogetherEachOtherAnd": "each other, and {names}",
+  "sheet.washSeparately": "same settings, but keep these siloed — see the compatibility matrix",
+  "sheet.washAlone": "nothing else — solo founder energy, wash alone",
+  "sheet.dryingLabel": "Post-Wash Ops",
+  "sheet.pileCountOne": "{count} deliverable",
+  "sheet.pileCountOther": "{count} deliverables",
+  "sheet.thermostatOn": "Thermostat aligned to {label}",
+  "sheet.leaveIronOff": "Leave the iron off — this one's async",
+  "sheet.neverNearBoard": "nothing on this card ever touches the board (in the good way)",
+  "sheet.howHeading": "Playbook",
+  "sheet.neverTheseHeading": "Hard No's",
+  "sheet.durationsDisclaimer":
+    "Durations are the machine's own forecasts and shift with load — like any roadmap estimate.",
+  "sheet.copyLink": "Copy link",
+  "sheet.preparing": "Compiling…",
+  "sheet.download": "Export",
+  "sheet.couldNotCopyLink": "Could not copy the link: {error}",
+  "sheet.couldNotGeneratePdf": "Could not compile the deck: {error}",
+  "sheet.couldntRenderInPdf": "Couldn't render in the deck: {chars}",
+
+  "config.editMachine": "Edit the org chart →",
+  "config.programmes": "Strategies",
+  "config.temperatures": "Temp Checks",
+  "config.spinSpeeds": "Spin Speeds",
+  "config.ironSettings": "Alignment Settings",
+  "config.durationInvalidHint": "Use H:MM, like 2:30 — no vague timelines",
+  "config.durationValidHint": "Format: H:MM, like 2:30",
+  "config.durationAriaLabel": "Duration",
+  "config.showingBundledConfig":
+    "Showing the bundled example config. It's a generic laundry chart and washing machine, not your personal brand.",
+  "config.uploadEditHelp":
+    "Onboard, export or edit below — changes go live sitewide once shipped, and persist in this browser until you offboard them.",
+  "config.yourConfigHeading": "Your Config (Your Brand)",
+  "config.useBundledInstead": "Use the bundled example instead — no shame in a starter template",
+  "config.machineHeading": "The Org",
+  "config.chartHeading": "Roadmap — every deliverable",
+  "config.chartEditHelp":
+    "Every field is editable. Shipping checks each row against the org above, the same way onboarding does — an unrecognized value gets called out by row and column, never silently accepted. Radical transparency.",
+  "config.sortBy": "Sort by",
+  "config.chartOrder": "Roadmap order",
+  "config.ironedLabel": "ALIGNED",
+  "config.ironingNotesAriaLabel": "Alignment notes",
+  "config.colourGroupHeading": "Colour Cohort",
+  "config.mixTagsHeading": "Synergy Tags",
+
+  "machine.moveUp": "Promote {value}",
+  "machine.moveDown": "Demote {value}",
+  "machine.removeItem": "Offboard {value}",
+  "machine.addButton": "+ Onboard",
+  "machine.capacityLabel": "Capacity",
+  "machine.programmesHint":
+    "In dial order, starting from twelve o'clock — the org chart doesn't lie.",
+  "machine.temperaturesLabel": "Temp Checks (°C)",
+  "machine.addPlaceholderProgramme": "Onboard a strategy…",
+  "machine.addPlaceholderTemperature": "Onboard a temp check…",
+  "machine.addPlaceholderSpin": "Onboard a spin…",
+  "machine.addPlaceholderButton": "Onboard a lever…",
+  "machine.addAriaProgramme": "Add to Strategies",
+  "machine.addAriaTemperature": "Add to Temp Checks (°C)",
+  "machine.addAriaSpin": "Add to Spin speeds",
+  "machine.addAriaButton": "Add to Growth Levers",
+  "machine.settingsHeading": "Settings",
+  "machine.settingColumnHeader": "Setting",
+  "machine.dotsColumnHeader": "Dots",
+  "machine.detailColumnHeader": "Detail",
+  "machine.steamColumnHeader": "Steam",
+  "machine.settingLabelAria": "Setting {n} label",
+  "machine.settingDotsAria": "Setting {n} dots",
+  "machine.settingDetailAria": "Setting {n} detail",
+  "machine.settingSteamAria": "Setting {n} produces steam",
+  "machine.removeSettingAria": "Offboard setting {n}",
+  "machine.addSetting": "+ Onboard setting",
+  "machine.newSettingDefaultLabel": "New Hire Setting",
+  "machine.showingOwnMachine": "Showing your own org. Fully staffed. 💪",
+  "machine.showingBundledMachine":
+    "Showing the bundled example org. It's a generic washer and iron, not your own.",
+  "machine.changesApplyPrefix": "Changes go live sitewide once shipped — the same config the",
+  "machine.changesApplySuffix": " reads.",
+  "machine.useBundledMachineInstead": "Use the bundled org instead",
+  "machine.washerHeading": "Washer",
+
+  "upload.uploadConfig": "Onboard config",
+
+  "keyboardNav.title": "Keyboard shortcuts (for the power users)",
+  "keyboardNav.close": "Close",
+  "keyboardNav.scrollDown": "Scroll down the feed",
+  "keyboardNav.scrollUp": "Scroll up the feed",
+  "keyboardNav.jumpTop": "Jump to the top of the feed",
+  "keyboardNav.jumpBottom": "Jump to the bottom of the feed",
+  "keyboardNav.focusSearch": "Focus the page's search field",
+  "keyboardNav.toggleHelp": "Toggle this help",
+  "keyboardNav.closeHelp": "Close this help",
+
+  "theme.switchToLight": "Switch to light mode — always be optimizing",
+  "theme.switchToDark": "Switch to dark mode — deep work hours",
+
+  "page.config.title": "Washy washy — deliverables",
+  "page.config.description":
+    "The full loaded config: the washing machine and iron's settings, and every deliverable on the roadmap, in one structured place. Zero fluff.",
+  "page.config.h1": "Deliverables",
+
+  "page.machine.title": "Washy washy — org & alignment settings",
+  "page.machine.description":
+    "The washing machine and iron's settings — strategies, temp checks, spins, and the iron's thermostat.",
+  "page.machine.h1": "Org & Alignment Settings",
+};
+
 /** Exported for test/ui.test.ts, which checks every locale carries the same keys. */
-export const dictionaries: Record<Locale, Ui> = { en, ja, de, es, fr, ar, zh, tr, jive };
+export const dictionaries: Record<Locale, Ui> = { en, ja, de, es, fr, ar, zh, tr, jive, linkedin };
 
 /** Plain `{token}` -> `String(value)` replacement — see the `Ui` interface's own doc comment. */
 export type TranslationParams = Record<string, string | number>;

@@ -31,6 +31,7 @@ test("the language switcher lists every locale, in its own name, and switches th
     "简体中文",
     "Türkçe",
     "Jive",
+    "LinkedIn",
   ]);
 
   await select.selectOption({ label: "日本語" });
@@ -143,6 +144,34 @@ test("jive's own docs render the site's chrome, a sidebar, Prev/Next, and pass a
   await expectNoA11yViolations(page);
 });
 
+test("linkedin's own docs render the site's chrome, a sidebar, Prev/Next, and pass an accessibility scan", async ({
+  page,
+}) => {
+  await page.goto("/linkedin/docs/");
+
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-x-linkedin");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "I'm thrilled to announce washy washy 🚀",
+  );
+
+  // exact: true — "LinkedIn docs pagination" (the Prev/Next nav below) would
+  // otherwise match too, since Playwright's name matching is substring by
+  // default.
+  const sidebar = page.getByRole("navigation", { name: "LinkedIn docs", exact: true });
+  const machineLink = sidebar.getByRole("link", { name: "Roadmap & Org Chart" });
+  await expect(machineLink).toHaveAttribute("href", "/linkedin/docs/chart-and-machine/");
+  await machineLink.click();
+  await expect(page).toHaveURL(/\/linkedin\/docs\/chart-and-machine\/?$/);
+
+  // Each link's accessible name is its "Rewind"/"Keep scrolling" caption
+  // plus the neighbouring page's own nav label, concatenated.
+  await expect(
+    page.getByRole("navigation", { name: "LinkedIn docs pagination" }).getByRole("link"),
+  ).toHaveText(["RewindThe Big Picture", "Keep scrolling 👇Using the Platform"]);
+
+  await expectNoA11yViolations(page);
+});
+
 test("Arabic renders right-to-left — the app's own chrome and Starlight's docs alike", async ({
   page,
 }) => {
@@ -188,7 +217,7 @@ test("the AI-translation banner only shows on non-English locales, and hreflang 
 
   await page.goto("/de/");
   await expect(page.getByTestId("language-warning-banner")).toBeVisible();
-  await expect(page.locator('link[rel="alternate"]')).toHaveCount(10); // all 9 locales, plus x-default
+  await expect(page.locator('link[rel="alternate"]')).toHaveCount(11); // all 10 locales, plus x-default
 });
 
 test("the banner stays pinned to the top of the viewport while scrolling, instead of scrolling away", async ({
@@ -309,4 +338,8 @@ test("the bundled example chart and machine are translated too, not just the chr
   // with every other layer of this locale already being jive-ified.
   await gotoHydrated(page, "/jive/");
   await expect(page.getByRole("article").first()).toContainText("Jack");
+
+  // Same for linkedin.
+  await gotoHydrated(page, "/linkedin/");
+  await expect(page.getByRole("article").first()).toContainText("Core Deliverable");
 });
