@@ -1,3 +1,9 @@
+## [1.33.2](https://github.com/alrayyes/washy-washy-web/compare/v1.33.1...v1.33.2) (2026-08-24)
+
+### Bug Fixes
+
+* **config:** stop a chart card's title overlapping its duration field ([#152](https://github.com/alrayyes/washy-washy-web/issues/152)) ([dbe1a88](https://github.com/alrayyes/washy-washy-web/commit/dbe1a881a11c091c45bb2b7d9316b2041561a7e2)), closes [#151](https://github.com/alrayyes/washy-washy-web/issues/151) [#151](https://github.com/alrayyes/washy-washy-web/issues/151) [#155](https://github.com/alrayyes/washy-washy-web/issues/155) [#148](https://github.com/alrayyes/washy-washy-web/issues/148) [#149](https://github.com/alrayyes/washy-washy-web/issues/149)
+
 ## [1.33.1](https://github.com/alrayyes/washy-washy-web/compare/v1.33.0...v1.33.1) (2026-08-24)
 
 ### Bug Fixes
