@@ -1,3 +1,9 @@
+## [1.34.0](https://github.com/alrayyes/washy-washy-web/compare/v1.33.2...v1.34.0) (2026-08-25)
+
+### Features
+
+* **i18n:** add LinkedIn-speak locale ([#158](https://github.com/alrayyes/washy-washy-web/issues/158)) ([eb35cc7](https://github.com/alrayyes/washy-washy-web/commit/eb35cc757f40de54434000c1ec6473d2704b891f)), closes [#143](https://github.com/alrayyes/washy-washy-web/issues/143) [#156](https://github.com/alrayyes/washy-washy-web/issues/156)
+
 ## [1.33.2](https://github.com/alrayyes/washy-washy-web/compare/v1.33.1...v1.33.2) (2026-08-24)
 
 ### Bug Fixes
