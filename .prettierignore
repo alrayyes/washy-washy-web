@@ -20,6 +20,8 @@ CHANGELOG.md
 # a formatter war in the pre-commit hook.
 *.js
 *.jsx
+*.mjs
+*.cjs
 *.ts
 *.tsx
 *.astro
