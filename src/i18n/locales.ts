@@ -14,6 +14,7 @@ export const LOCALES = [
   "ar",
   "zh",
   "tr",
+  "ru",
   "jive",
   "linkedin",
 ] as const;
@@ -44,6 +45,7 @@ export const LOCALE_META: Record<Locale, LocaleMeta> = {
   ar: { label: "العربية", htmlLang: "ar", dir: "rtl" },
   zh: { label: "简体中文", htmlLang: "zh", dir: "ltr" },
   tr: { label: "Türkçe", htmlLang: "tr", dir: "ltr" },
+  ru: { label: "Русский", htmlLang: "ru", dir: "ltr" },
   jive: { label: "Jive", htmlLang: "en-x-jive", dir: "ltr" },
   linkedin: { label: "LinkedIn", htmlLang: "en-x-linkedin", dir: "ltr" },
 };
@@ -104,7 +106,7 @@ export function docsHref(locale: Locale): string {
  * mechanisms.
  */
 export function matchDocsSlug(pathname: string): string | null {
-  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|tr|jive|linkedin)\/)?docs(\/.*)?$/);
+  const match = pathname.match(/^\/(?:(?:ja|de|es|fr|ar|zh|tr|ru|jive|linkedin)\/)?docs(\/.*)?$/);
   return match ? (match[1] ?? "/") : null;
 }
 

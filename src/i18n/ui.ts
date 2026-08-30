@@ -2688,7 +2688,263 @@ const linkedin: Ui = {
 };
 
 /** Exported for test/ui.test.ts, which checks every locale carries the same keys. */
-export const dictionaries: Record<Locale, Ui> = { en, ja, de, es, fr, ar, zh, tr, jive, linkedin };
+const ru: Ui = {
+  "skip.toContent": "Перейти к содержимому",
+  "ribbon.forkMe": "Форкни на GitHub",
+  "nav.home": "Главная",
+  "nav.washingLoads": "Загрузки стирки",
+  "nav.washerIron": "Стиральная машина и утюг",
+  "nav.docs": "Документация",
+  "switcher.label": "Язык",
+  "footer.github": "Washy washy на GitHub",
+  "footer.disclaimer": "Отказ от ответственности",
+  "footer.privacy": "Политика конфиденциальности",
+  "footer.copyrightBefore": "© 2026 Ryan Kes. Лицензия ",
+  "footer.copyrightAfter":
+    " — предоставляется «как есть», без каких-либо гарантий (см. текст лицензии, разделы 15–16). Всегда сверяйтесь с ярлыком по уходу за конкретной вещью; эта таблица отражает настройки одного домохозяйства, а не гарантию производителя.",
+  "home.title": "Washy washy",
+  "home.description":
+    "Таблица стирки, удобная для телефона: программа, температура и отжим для каждой стопки белья, что можно стирать вместе в одном барабане и на какое деление ставить термостат утюга.",
+  "home.h1": "Ваша таблица стирки",
+  "home.intro":
+    "Превращает таблицу стирки в удобный для телефона лист: какая программа, температура и отжим нужны для каждой стопки белья, что можно стирать вместе в одном барабане и на какое деление ставить термостат утюга. Добавьте эту страницу на главный экран телефона — в меню «Поделиться» Safari или в меню *⋮* Chrome есть пункт «На экран «Домой»» — и она будет открываться как приложение, без адресной строки, прямо у стиральной машины.",
+  "disclaimer.title": "Washy washy — отказ от ответственности",
+  "disclaimer.description":
+    "Эта таблица неофициальная, её ведёт сообщество; она отражает настройки одного домохозяйства — а не гарантию производителя.",
+  "disclaimer.h1": "Отказ от ответственности",
+  "disclaimer.p1":
+    "Washy washy — неофициальный проект, который ведёт сообщество. Он никак не связан с производителями стиральных машин или бытовой техники, не одобрен ими и не создан в сотрудничестве с ними.",
+  "disclaimer.p2":
+    "Прилагаемая таблица отражает собственные настройки стирки и глажки одного домохозяйства — набор решений, которые подошли одной стиральной машине, одному утюгу и одежде одного человека. Это не гарантия производителя, не стандарт маркировки по уходу и не профессиональная консультация. Загрузки, ткани и машины различаются, и настройка, безопасная для одной машины, может повредить другую.",
+  "disclaimer.p3":
+    "Ярлык по уходу за вещью всегда имеет приоритет над всем, что показано здесь. Если они расходятся, следуйте ярлыку.",
+  "disclaimer.p4":
+    "Как указано в лицензии проекта (GPL-3.0-or-later, разделы 15–16): программное обеспечение предоставляется «как есть», без каких-либо гарантий, явных или подразумеваемых. Разработчики Washy washy не несут ответственности за любой ущерб — одежде, технике или чему-либо ещё, — возникший в результате использования.",
+  "privacy.title": "Washy washy — политика конфиденциальности",
+  "privacy.h1": "Политика конфиденциальности",
+  "privacy.descriptionUmami":
+    "Без аккаунта, без файлов cookie. Просмотры страниц учитываются через Umami — инструмент, уважающий конфиденциальность и не собирающий ничего, что может вас идентифицировать. Загруженный конфиг или изменение таблицы остаются в вашем браузере и никуда не отправляются.",
+  "privacy.descriptionNoUmami":
+    "Без аккаунта, файлов cookie, аналитики и слежения. Загруженный конфиг или изменение таблицы остаются в вашем браузере и никуда не отправляются.",
+  "privacy.pUmami":
+    "У Washy washy нет аккаунта, и он не устанавливает файлы cookie. При этом используется [Umami](https://umami.is/) — уважающий конфиденциальность инструмент аналитики, чтобы понимать, как используется сайт: какие страницы и сколько посещений. Umami не использует файлы cookie, не отслеживает вас на других сайтах и не собирает ничего, что могло бы вас лично идентифицировать.",
+  "privacy.pNoUmami":
+    "У Washy washy нет ни аккаунта, ни файлов cookie, ни аналитики, ни каких-либо скриптов слежения. Здесь ничто не наблюдает за тем, что вы делаете на сайте.",
+  "privacy.pStorage":
+    "Загрузка собственного конфига или изменение таблицы либо настроек машины сохраняет эти данные только в хранилище вашего браузера (`localStorage`). Они никогда не покидают ваше устройство — ни на сервер, ни к нам, ни к кому-либо ещё. Очистка данных сайта washy washy в браузере полностью их удаляет.",
+  "privacy.pHosting":
+    "Сам сайт статический — обычные файлы без бэкенда — и обслуживается через [Cloudflare Workers](https://www.cloudflare.com/products/cloudflare-workers/). Как и у любого веб-хостинга, инфраструктура Cloudflare видит обычные метаданные HTTP-запроса, сопутствующие показу страницы, — ваш IP-адрес, браузер, запрошенную страницу, — так же, как и на любом другом сайте, который вы посещаете. У самого Washy washy нет доступа к этим данным, и он не запрашивает их ни у Cloudflare, ни у кого-либо ещё.",
+  "banner.message":
+    "Разработчик не говорит по-русски и не несёт ответственности за ошибки перевода и прочие катастрофы. Эта страница переведена ИИ — все жалобы, пожалуйста, направляйте скайнету.",
+  "banner.dismiss": "Закрыть",
+
+  "common.pile": "Стопка",
+  "common.detergent": "Моющее средство",
+  "common.notes": "Заметки",
+  "common.temp": "Темп.",
+  "common.spinRpm": "Отжим (об/мин)",
+  "common.buttons": "Кнопки",
+  "common.programme": "Программа",
+  "common.source": "ИСТОЧНИК",
+  "common.doNotIron": "Не гладить",
+  "common.noSpin": "без отжима",
+  "common.softenerOk": "КОНДИЦИОНЕР МОЖНО",
+  "common.noSoftener": "БЕЗ КОНДИЦИОНЕРА",
+  "common.copied": "Скопировано!",
+  "common.remove": "Удалить",
+  "common.name": "Название",
+  "common.iron": "Утюг",
+  "common.washingLoadsPageLink": "странице загрузок стирки",
+  "common.clockwiseFrom": "{position} по часовой стрелке от {off}",
+  "common.insideSteamZone": "внутри зоны пара",
+  "common.belowSteamZone": "ниже зоны пара — только сухая глажка",
+  "common.couldNotUseFile": "Не удалось использовать этот файл: {error}",
+  "common.couldNotSave": "Не удалось сохранить: {error}",
+  "common.downloadCurrentConfig": "Скачать текущий конфиг",
+  "common.uploadConfigJson": "Загрузить конфиг (JSON)",
+  "common.saveChanges": "Сохранить изменения",
+  "common.showingOwnConfig": "Показан ваш собственный конфиг.",
+  "common.whatDoesThisDo": "Что это делает?",
+
+  "sheetViewer.cutEverything": "Всё",
+  "sheetViewer.cutWashOnly": "Только стирка",
+  "sheetViewer.cutIronOnly": "Только глажка",
+  "sheetViewer.filterChart": "Фильтровать таблицу",
+  "sheetViewer.cutLabel": "Показать",
+  "sheetViewer.cutHelp": "Какие части таблицы показывать: всё, только стирку или только глажку.",
+  "sheetViewer.pileHelp":
+    "Введите часть названия стопки, например «полотенца», чтобы показать только эту карточку.",
+  "sheetViewer.pileSearchPlaceholder": "Поиск по названию стопки…",
+  "sheetViewer.advanced": "Дополнительно",
+  "sheetViewer.programmeHelp": "Показывать только стопки, использующие эту программу.",
+  "sheetViewer.anyProgramme": "Любая программа",
+  "sheetViewer.temperatureLabel": "Температура",
+  "sheetViewer.temperatureHelp": "Показывать только стопки, стираемые при этой температуре.",
+  "sheetViewer.anyTemperature": "Любая температура",
+  "sheetViewer.spinLabel": "Отжим",
+  "sheetViewer.spinHelp": "Показывать только стопки с этой скоростью отжима.",
+  "sheetViewer.anySpin": "Любой отжим",
+  "sheetViewer.detergentHelp":
+    "Введите часть заметки о моющем средстве, например «порошок», чтобы показать только упомянувшие его стопки.",
+  "sheetViewer.detergentSearchPlaceholder": "Поиск по моющему средству…",
+  "sheetViewer.sharedConfigError":
+    "Не удалось открыть общий конфиг: {error}. Вместо этого показан ранее активный.",
+  "sheetViewer.showingBundledChart":
+    "Показана встроенная таблица-пример. Это обобщённая таблица стирки, а не ваша собственная.",
+  "sheetViewer.uploadEditPrefix": "Загрузите, скачайте или отредактируйте свою на",
+  "sheetViewer.noPileMatchAdvanced":
+    "Ни одна стопка не подходит под «{query}» с этими дополнительными фильтрами. Попробуйте ослабить один из них.",
+  "sheetViewer.noPileMatchQuery":
+    "Ни одна стопка не подходит под «{query}». Попробуйте другой запрос.",
+  "sheetViewer.noPileMatchAdvancedOnly":
+    "Ни одна стопка не подходит под эти дополнительные фильтры. Попробуйте ослабить один из них.",
+  "sheetViewer.preparingPdf": "Подготовка PDF…",
+  "sheetViewer.downloadForPhone": "Скачать для телефона",
+  "sheetViewer.downloadToPrint": "Скачать для печати",
+  "sheetViewer.shareThisView": "Поделиться этим видом",
+  "sheetViewer.couldNotShare": "Не удалось поделиться этим видом: {error}",
+  "sheetViewer.couldNotGeneratePhonePdf": "Не удалось создать PDF для телефона: {error}",
+  "sheetViewer.couldNotGeneratePrintPdf": "Не удалось создать PDF для печати: {error}",
+  "sheetViewer.couldntRenderPhone": "Не удалось отобразить в PDF для телефона: {chars}",
+  "sheetViewer.couldntRenderPrint": "Не удалось отобразить в PDF для печати: {chars}",
+
+  "sheet.subtitleFull": "Прокрутите до стопки, которая у вас в руках.",
+  "sheet.subtitleWash": "Закладывается в машину. Глажка — на другом листе.",
+  "sheet.subtitleIron": "У гладильной доски. Стирка — на другом листе.",
+  "sheet.washingInstructions": "Инструкции по стирке",
+  "sheet.loadsHeading": "Загрузки — одна строка, одна стирка",
+  "sheet.loadsExplain":
+    "Значок «ВМЕСТЕ» означает, что все стопки в этой строке стираются за одну стирку — закладывайте их в машину сразу.",
+  "sheet.together": "ВМЕСТЕ",
+  "sheet.legendThermostatCaption": "термостат",
+  "sheet.legendProgrammeCaption": "программа",
+  "sheet.legendIronExplain":
+    "Кольцо — это термостат утюга, как он расположен на регуляторе, а красная стрелка показывает, куда его повернуть. Синяя полоса — зона, где образуется пар; деление ниже неё — сухая глажка. Перечёркнутое кольцо означает: оставьте утюг в шкафу.",
+  "sheet.legendWashExplain":
+    "Регуляторы нарисованы так, как они расположены на машине: двенадцать часов — это {off}, а красная стрелка показывает, куда его повернуть. Метки показывают каждое значение, через которое проходит дисплей, закрашено — нужное вам.",
+  "sheet.legendWashExplainFullSuffix": " На утюге синяя полоса — зона, где образуется пар.",
+  "sheet.washHeading": "Стирка",
+  "sheet.washTogetherWithLabel": "Стирать вместе с",
+  "sheet.washTogetherEachOther": "друг с другом",
+  "sheet.washTogetherEachOtherAnd": "друг с другом и с {names}",
+  "sheet.washSeparately": "те же настройки, но стирать отдельно — см. таблицу совместимости",
+  "sheet.washAlone": "ни с чем — стирать отдельно",
+  "sheet.dryingLabel": "Сушка",
+  "sheet.pileCountOne": "{count} стопка",
+  "sheet.pileCountOther": "{count} стопки",
+  "sheet.thermostatOn": "Термостат на {label}",
+  "sheet.leaveIronOff": "Не включайте утюг",
+  "sheet.neverNearBoard": "ничто на этой карточке никогда не попадает на гладильную доску",
+  "sheet.howHeading": "Как",
+  "sheet.neverTheseHeading": "Никогда эти",
+  "sheet.durationsDisclaimer": "Длительность — собственная оценка машины, зависит от загрузки.",
+  "sheet.copyLink": "Скопировать ссылку",
+  "sheet.preparing": "Подготовка…",
+  "sheet.download": "Скачать",
+  "sheet.couldNotCopyLink": "Не удалось скопировать ссылку: {error}",
+  "sheet.couldNotGeneratePdf": "Не удалось создать PDF: {error}",
+  "sheet.couldntRenderInPdf": "Не удалось отобразить в PDF: {chars}",
+
+  "config.editMachine": "Редактировать машину →",
+  "config.programmes": "Программы",
+  "config.temperatures": "Температуры",
+  "config.spinSpeeds": "Скорости отжима",
+  "config.ironSettings": "Настройки утюга",
+  "config.durationInvalidHint": "Используйте формат Ч:ММ, например 2:30",
+  "config.durationValidHint": "Формат: Ч:ММ, например 2:30",
+  "config.durationAriaLabel": "Длительность",
+  "config.showingBundledConfig":
+    "Показан встроенный конфиг-пример. Это обобщённые стиральная машина и таблица, а не ваши собственные.",
+  "config.uploadEditHelp":
+    "Загружайте, скачивайте или редактируйте ниже — изменения применяются по всему сайту после сохранения и сохраняются в этом браузере, пока вы их не очистите.",
+  "config.yourConfigHeading": "Ваш конфиг",
+  "config.useBundledInstead": "Использовать встроенный пример вместо этого",
+  "config.machineHeading": "Машина",
+  "config.chartHeading": "Таблица — все стопки",
+  "config.chartEditHelp":
+    "Каждое поле можно редактировать. При сохранении каждая строка проверяется по машине выше, так же как и при загрузке файла — неизвестное значение указывается по строке и столбцу, а не принимается молча.",
+  "config.sortBy": "Сортировать по",
+  "config.chartOrder": "Порядок в таблице",
+  "config.ironedLabel": "ГЛАЖЕНО",
+  "config.ironingNotesAriaLabel": "Заметки о глажке",
+  "config.colourGroupHeading": "Цветовая группа",
+  "config.mixTagsHeading": "Метки совместимости",
+
+  "machine.moveUp": "Переместить {value} вверх",
+  "machine.moveDown": "Переместить {value} вниз",
+  "machine.removeItem": "Удалить {value}",
+  "machine.addButton": "+ Добавить",
+  "machine.capacityLabel": "Вместимость",
+  "machine.programmesHint": "В порядке расположения на регуляторе, начиная с двенадцати часов.",
+  "machine.temperaturesLabel": "Температуры (°C)",
+  "machine.addPlaceholderProgramme": "Добавить программу…",
+  "machine.addPlaceholderTemperature": "Добавить температуру…",
+  "machine.addPlaceholderSpin": "Добавить отжим…",
+  "machine.addPlaceholderButton": "Добавить кнопку…",
+  "machine.addAriaProgramme": "Добавить в «Программы»",
+  "machine.addAriaTemperature": "Добавить в «Температуры (°C)»",
+  "machine.addAriaSpin": "Добавить в «Скорости отжима»",
+  "machine.addAriaButton": "Добавить в «Кнопки»",
+  "machine.settingsHeading": "Настройки",
+  "machine.settingColumnHeader": "Настройка",
+  "machine.dotsColumnHeader": "Точки",
+  "machine.detailColumnHeader": "Детали",
+  "machine.steamColumnHeader": "Пар",
+  "machine.settingLabelAria": "Название настройки {n}",
+  "machine.settingDotsAria": "Точки настройки {n}",
+  "machine.settingDetailAria": "Детали настройки {n}",
+  "machine.settingSteamAria": "Настройка {n} создаёт пар",
+  "machine.removeSettingAria": "Удалить настройку {n}",
+  "machine.addSetting": "+ Добавить настройку",
+  "machine.newSettingDefaultLabel": "Новая настройка",
+  "machine.showingOwnMachine": "Показана ваша собственная машина.",
+  "machine.showingBundledMachine":
+    "Показана встроенная машина-пример. Это обобщённые стиральная машина и утюг, а не ваши собственные.",
+  "machine.changesApplyPrefix":
+    "Изменения применяются по всему сайту после сохранения — то же самое, что и на",
+  "machine.changesApplySuffix": ".",
+  "machine.useBundledMachineInstead": "Использовать встроенную машину вместо этого",
+  "machine.washerHeading": "Стиральная машина",
+
+  "upload.uploadConfig": "Загрузить конфиг",
+
+  "keyboardNav.title": "Горячие клавиши",
+  "keyboardNav.close": "Закрыть",
+  "keyboardNav.scrollDown": "Прокрутить вниз",
+  "keyboardNav.scrollUp": "Прокрутить вверх",
+  "keyboardNav.jumpTop": "Перейти в начало",
+  "keyboardNav.jumpBottom": "Перейти в конец",
+  "keyboardNav.focusSearch": "Фокус на поле поиска страницы",
+  "keyboardNav.toggleHelp": "Показать/скрыть эту справку",
+  "keyboardNav.closeHelp": "Закрыть эту справку",
+
+  "theme.switchToLight": "Переключить на светлый режим",
+  "theme.switchToDark": "Переключить на тёмный режим",
+
+  "page.config.title": "Washy washy — загрузки стирки",
+  "page.config.description":
+    "Полный загруженный конфиг: настройки стиральной машины и утюга, а также каждая стопка таблицы — в одном структурированном месте.",
+  "page.config.h1": "Загрузки стирки",
+
+  "page.machine.title": "Washy washy — настройки стиральной машины и утюга",
+  "page.machine.description":
+    "Настройки стиральной машины и утюга — программы, температуры, отжимы и термостат утюга.",
+  "page.machine.h1": "Настройки стиральной машины и утюга",
+};
+
+export const dictionaries: Record<Locale, Ui> = {
+  en,
+  ja,
+  de,
+  es,
+  fr,
+  ar,
+  zh,
+  tr,
+  ru,
+  jive,
+  linkedin,
+};
 
 /** Plain `{token}` -> `String(value)` replacement — see the `Ui` interface's own doc comment. */
 export type TranslationParams = Record<string, string | number>;
