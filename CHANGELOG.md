@@ -1,3 +1,9 @@
+## [1.36.1](https://github.com/alrayyes/washy-washy-web/compare/v1.36.0...v1.36.1) (2026-08-30)
+
+### Bug Fixes
+
+* **tooling:** exclude .mjs and .cjs from prettier ([#166](https://github.com/alrayyes/washy-washy-web/issues/166)) ([a80fae9](https://github.com/alrayyes/washy-washy-web/commit/a80fae9540b0e86fb599ea15b705daa8306240f1)), closes [#165](https://github.com/alrayyes/washy-washy-web/issues/165)
+
 ## [1.36.0](https://github.com/alrayyes/washy-washy-web/compare/v1.35.0...v1.36.0) (2026-08-30)
 
 ### Features
