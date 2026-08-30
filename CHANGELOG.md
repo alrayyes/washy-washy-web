@@ -1,3 +1,9 @@
+## [1.36.0](https://github.com/alrayyes/washy-washy-web/compare/v1.35.0...v1.36.0) (2026-08-30)
+
+### Features
+
+* **i18n:** add Russian (ru) localization ([#164](https://github.com/alrayyes/washy-washy-web/issues/164)) ([6953097](https://github.com/alrayyes/washy-washy-web/commit/6953097f5ed776398d47cfbe3310f904b10d3275))
+
 ## [1.35.0](https://github.com/alrayyes/washy-washy-web/compare/v1.34.1...v1.35.0) (2026-08-25)
 
 ### Features
