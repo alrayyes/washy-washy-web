@@ -6,6 +6,11 @@ pre-commit:
       glob: "*.{js,jsx,ts,tsx,json,jsonc,css}"
       run: bunx --bun biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
+    # Biome formats package.json but doesn't know npm's canonical key order.
+    - name: package-json
+      glob: "package.json"
+      run: bunx --bun sort-package-json {staged_files}
+      stage_fixed: true
     # Prettier decides the layout and markdownlint then judges what Prettier
     # produced, so these two are piped rather than parallel. The other order has
     # markdownlint fixing something Prettier is about to overwrite.
@@ -58,6 +63,8 @@ pre-push:
       run: bun run lint
     - name: markdownlint
       run: bun run lint:md
+    - name: package-json
+      run: bun run lint:package-json
     - name: yaml
       run: bun run lint:yaml
     - name: typecheck

@@ -1,0 +1,56 @@
+# Merges here are squashes, so the pull request title becomes the subject of
+# the commit that lands on main and the branch commits become its body.
+# `check.yml`'s `commits` job lints the branch — exactly the half a squash
+# throws away. Nothing reads the title, and semantic-release reads nothing
+# else.
+#
+# commitlint has no PR-title mode — it only ever reads commit objects — so
+# this needs a separate check rather than piping the title through it. See
+# rules/commit.md's "PR titles on a squash-merge repo".
+#
+# pull_request_target, not pull_request: this needs base-repo permissions to
+# work on PRs from forks, and it means GitHub runs the workflow version on the
+# base branch rather than whatever a PR branch might have edited it to.
+# `types` mirrors @commitlint/config-conventional's list so the two checks
+# agree on what's a valid type. `synchronize` is required too, since this is a
+# required status check under branch protection with strict mode — without
+# it, a push to an open PR wouldn't re-run the check against the new commits.
+name: pr-title
+
+on:
+  pull_request_target:
+    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # Dependabot is exempt for the same reason the commits job in check.yml is:
+  # its title is always "Bump x from a to b", and config-conventional's
+  # subject-case rule refuses the capital B. What lands on main is
+  # normalised by the auto-merge workflow's squash subject instead, so main
+  # stays conventional without this job failing on every dependency bump.
+  pr-title:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert

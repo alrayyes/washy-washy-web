@@ -29,8 +29,19 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
+      # All four ignored advisories are transitive through @lhci/cli (dev-only,
+      # never shipped) and `bun audit fix` can't reach them: extract-zip has no
+      # published fix at all, and lhci's own tmp/uuid ranges block the rest.
+      # Revisit when @lhci/cli bumps its dependencies.
+      - run: >-
+          bun audit
+          --ignore GHSA-jmr9-qjv8-65gv
+          --ignore GHSA-52f5-9888-hmc6
+          --ignore GHSA-ph9p-34f9-6g65
+          --ignore GHSA-w5hq-g745-h8pq
       - run: bun run lint
       - run: bun run lint:md
+      - run: bun run lint:package-json
       - run: bun run lint:yaml
       - run: bun run typecheck
       - run: bun run check

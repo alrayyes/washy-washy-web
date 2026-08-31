@@ -16,6 +16,7 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "lint:md": "prettier --check \"**/*.md\" && markdownlint-cli2 \"**/*.md\"",
+    "lint:package-json": "sort-package-json --check",
     "lint:prose": ".tools/vale --glob='!{styles/**,CHANGELOG.md}' --minAlertLevel=error .",
     "lint:prose:advice": ".tools/vale --glob='!{styles/**,CHANGELOG.md}' .",
     "lint:yaml": "prettier --check \"**/*.{yml,yaml}\"",
@@ -61,6 +62,7 @@
     "pdf-lib": "1.17.1",
     "prettier": "3.9.6",
     "semantic-release": "25.0.9",
+    "sort-package-json": "4.0.0",
     "typescript": "6.0.3",
     "wrangler": "4.125.0"
   }
