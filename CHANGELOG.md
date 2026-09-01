@@ -1,3 +1,10 @@
+## [1.36.2](https://github.com/alrayyes/washy-washy-web/compare/v1.36.1...v1.36.2) (2026-09-01)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/starlight from 0.41.7 to 0.41.9 ([ea5418b](https://github.com/alrayyes/washy-washy-web/commit/ea5418bce52f96bdffc5f77a659597816fe89e42))
+* **deps:** bump astro from 7.2.2 to 7.2.9 ([7ba76fe](https://github.com/alrayyes/washy-washy-web/commit/7ba76fe6dfb0656fb30daeed71fa917bc37e7bf3))
+
 ## [1.36.1](https://github.com/alrayyes/washy-washy-web/compare/v1.36.0...v1.36.1) (2026-08-30)
 
 ### Bug Fixes
