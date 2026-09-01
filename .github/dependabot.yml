@@ -35,6 +35,13 @@ updates:
       # js-yaml range covers 5.x.
       - dependency-name: js-yaml
         update-types: ["version-update:semver-major"]
+      # TypeScript 7's new native compiler doesn't yet expose the
+      # programmatic API `astro check` (via @astrojs/language-server)
+      # relies on -- astro check refuses to run under it outright. See
+      # https://github.com/withastro/roadmap/discussions/1321. Lift once
+      # Astro's language server supports TS 7.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
     groups:
       # One pull request for the linters rather than five. They move together,
       # they are all development-only, and each one on its own is a review
