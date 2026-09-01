@@ -27,6 +27,14 @@ updates:
       # Lift it when the generator understands the new shape.
       - dependency-name: conventional-changelog-conventionalcommits
         update-types: ["version-update:semver-major"]
+      # js-yaml 5.x dropped the CJS default-export interop; Astro 7.2.2's
+      # bundled `js-yaml: ^4.3.0` still does a default import
+      # (astro/dist/runtime/prerender/static-paths.js), so bumping this
+      # direct devDependency to 5.x breaks the build outright even though
+      # nothing here imports js-yaml directly. Lift once Astro's own
+      # js-yaml range covers 5.x.
+      - dependency-name: js-yaml
+        update-types: ["version-update:semver-major"]
     groups:
       # One pull request for the linters rather than five. They move together,
       # they are all development-only, and each one on its own is a review
