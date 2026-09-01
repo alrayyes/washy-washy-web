@@ -35,7 +35,7 @@
     "@tailwindcss/vite": "4.3.3",
     "@washy-washy/core": "1.4.1",
     "@washy-washy/pdf": "2.3.7",
-    "astro": "7.2.2",
+    "astro": "7.2.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "tailwindcss": "4.3.3"
