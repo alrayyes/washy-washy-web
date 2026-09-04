@@ -154,21 +154,17 @@ jobs:
   ltex:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      LTEX_VERSION: "18.7.0"
+    # ghcr.io/alrayyes/ltex-cli-plus is built once by that repo, not fetched
+    # fresh here: `ltex-cli-plus` is already on PATH, its own bundled Java
+    # runtime already wired up, so this job's setup is just what
+    # actions/checkout itself needs.
+    container:
+      image: ghcr.io/alrayyes/ltex-cli-plus@sha256:bf8c54087ad5418da57d9ef5a9604b4dd70aa0737fa0d732b2a2d5cd81e64c18 # 18.7.0
     steps:
+      - run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git nodejs
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Fetch ltex-cli-plus
-        run: |
-          curl -sSfL -o ltex.tar.gz \
-            "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${LTEX_VERSION}/ltex-ls-plus-${LTEX_VERSION}-linux-x64.tar.gz"
-          tar xzf ltex.tar.gz
-          # The release carries its own Java 21, but the launcher is a Gradle
-          # start script and prefers JAVA_HOME — which a GitHub runner sets to
-          # its own Java 17. The class files are version 65 and 17 reads up to
-          # 61, so it fails to load rather than falling back. Point JAVA_HOME
-          # at the runtime that shipped beside it.
-          echo "JAVA_HOME=$PWD/$(ls -d ltex-ls-plus-${LTEX_VERSION}/jdk-*)" >> "$GITHUB_ENV"
       # It reports findings with exit code 3, not 1, so a step testing for a
       # specific code would pass a failing document. Let the shell judge
       # non-zero. The files are named rather than passing `.`: LTeX traverses
@@ -177,7 +173,7 @@ jobs:
       # (#12) is plain Markdown, so it's named alongside them rather than
       # exempted — passing the directory is safe because it holds nothing but
       # genuine prose, unlike the repo root.
-      - run: ./ltex-ls-plus-${LTEX_VERSION}/bin/ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md src/content/docs/docs
+      - run: ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md src/content/docs/docs
 
   # Style. House voice, weasel words, wordiness, undefined jargon. Advice
   # rather than a verdict: Vale exits non-zero only on error-severity alerts,
