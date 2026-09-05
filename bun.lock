@@ -10,7 +10,7 @@
         "@fontsource-variable/inter": "5.3.0",
         "@fontsource-variable/space-grotesk": "5.3.0",
         "@tailwindcss/vite": "4.3.3",
-        "@washy-washy/core": "1.4.1",
+        "@washy-washy/core": "1.5.0",
         "@washy-washy/pdf": "2.3.8",
         "astro": "7.2.10",
         "react": "19.2.8",
@@ -699,7 +699,7 @@
 
     "@vscode/l10n": ["@vscode/l10n@0.0.18", "", {}, "sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ=="],
 
-    "@washy-washy/core": ["@washy-washy/core@1.4.1", "", { "dependencies": { "csv-parse": "7.0.2" } }, "sha512-8NXdpwnFA8zUFLH1HefBYcsnM6ftsZMyTarSF9M6efVYjjL8dweCMakQGndyDTevIQZ7RZMsCxpxMzZoJ/hMyw=="],
+    "@washy-washy/core": ["@washy-washy/core@1.5.0", "", { "dependencies": { "csv-parse": "7.0.2" } }, "sha512-5/sZqWHxwteAKqkzex1AjdfIRLTJItmXMd3reWaPdgXTA9geb56ExMSJ1kVtS4gh2Xd8w9NOMiVBYZe3R8ibCw=="],
 
     "@washy-washy/pdf": ["@washy-washy/pdf@2.3.8", "", { "dependencies": { "@react-pdf/renderer": "4.6.1", "@washy-washy/core": "1.4.0", "pdf-lib": "1.17.1", "react": "19.2.8" } }, "sha512-GGJ8UUkXiOBvjg0HHZpBouTA9aEiMQOnaerChgk8sR2pWQPc0djEeKLqzY3b/RPa9c9sb8AFowyZdcwNWuorPw=="],
 
