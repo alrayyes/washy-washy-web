@@ -30,16 +30,24 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      # All four ignored advisories are transitive through @lhci/cli (dev-only,
-      # never shipped) and `bun audit fix` can't reach them: extract-zip has no
-      # published fix at all, and lhci's own tmp/uuid ranges block the rest.
-      # Revisit when @lhci/cli bumps its dependencies.
+      # Six ignored advisories, all transitive and all dev-only (never
+      # shipped) - `bun audit fix` can't reach any of them:
+      #   - Five (incl. the two extract-zip IDs) run through @lhci/cli
+      #     (Lighthouse CI) - extract-zip has no published fix at all, and
+      #     lhci's own tmp/uuid ranges block the rest.
+      #   - GHSA-rgj7-g3m4-5g8c (sharp) runs through wrangler > miniflare,
+      #     which pins sharp@0.35.2 exactly - astro's own sharp already
+      #     resolves to the fixed 0.35.4, this is only miniflare's local
+      #     dev-server copy.
+      # Revisit when @lhci/cli/miniflare bump their own pinned dependencies.
       - run: >-
           bun audit
           --ignore GHSA-jmr9-qjv8-65gv
           --ignore GHSA-52f5-9888-hmc6
           --ignore GHSA-ph9p-34f9-6g65
           --ignore GHSA-w5hq-g745-h8pq
+          --ignore GHSA-7pqw-9j4j-h8q3
+          --ignore GHSA-rgj7-g3m4-5g8c
       - run: bun run lint
       - run: bun run lint:md
       - run: bun run lint:package-json
