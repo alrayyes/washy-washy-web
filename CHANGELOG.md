@@ -1,3 +1,15 @@
+## [1.36.3](https://github.com/alrayyes/washy-washy-web/compare/v1.36.2...v1.36.3) (2026-09-09)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/react from 6.0.4 to 6.0.5 ([b6b5cd0](https://github.com/alrayyes/washy-washy-web/commit/b6b5cd0c27d6600b3b2f1a9dd71b655db143478a))
+* **deps:** bump @astrojs/starlight from 0.41.9 to 0.41.11 ([1737c64](https://github.com/alrayyes/washy-washy-web/commit/1737c6426b68bebe2bb64d0a0f3f3e6b96ee6aed))
+* **deps:** bump @washy-washy/core from 1.4.1 to 1.5.0 ([179f964](https://github.com/alrayyes/washy-washy-web/commit/179f9640dce44a05ae8439368dcde6311dbb3da1))
+* **deps:** bump @washy-washy/pdf from 2.3.7 to 2.3.8 ([c4912ff](https://github.com/alrayyes/washy-washy-web/commit/c4912ff7c7f8f809af0bada0cfb1405a39e6a707))
+* **deps:** bump astro from 7.2.9 to 7.2.10 ([b0d22e3](https://github.com/alrayyes/washy-washy-web/commit/b0d22e3b269c7634a3fb25d7c811447c95fde612))
+* **deps:** resolve and ignore bun audit's new advisories ([#200](https://github.com/alrayyes/washy-washy-web/issues/200)) ([0c91393](https://github.com/alrayyes/washy-washy-web/commit/0c91393410f3963c01015aff9d0e046739b752a1))
+* **lint:** defer biome indent settings to .editorconfig ([#198](https://github.com/alrayyes/washy-washy-web/issues/198)) ([ca9f67f](https://github.com/alrayyes/washy-washy-web/commit/ca9f67f57a4a06ab68b30304f03b709b6b8e63ff)), closes [#187](https://github.com/alrayyes/washy-washy-web/issues/187)
+
 ## [1.36.2](https://github.com/alrayyes/washy-washy-web/compare/v1.36.1...v1.36.2) (2026-09-01)
 
 ### Bug Fixes
