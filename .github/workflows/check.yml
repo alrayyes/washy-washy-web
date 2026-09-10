@@ -57,7 +57,11 @@ jobs:
       - run: bun run build
       # Coverage instrumentation slows the suite down, which is why the
       # pre-push hook runs plain `bun run test` and only CI pays for this.
-      - run: bun test test/ --coverage --coverage-reporter=lcov
+      # --reporter=junit alongside the coverage flags, not instead of them:
+      # Codecov Test Analytics (below) reads the JUnit file for
+      # failure/flake history, coverage-reporter=lcov still feeds the
+      # coverage upload.
+      - run: bun test test/ --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=junit.xml
       # Regular repo secrets, CODECOV_TOKEN included, aren't exposed to runs
       # triggered by dependabot[bot] on pull_request -- a GitHub security
       # boundary, not a config gap. Skip the upload there rather than fail
@@ -68,6 +72,20 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage/lcov.info
+          fail_ci_if_error: true
+      # Codecov Test Analytics: per-test failure/flake detail, not just a
+      # coverage delta. !cancelled(), not the step default - this still
+      # runs when the test step above failed (junit.xml exists either way;
+      # that's the case Test Analytics is actually for), but not if the
+      # whole run was cancelled out from under it. Same dependabot
+      # exemption as the coverage upload, same reason.
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && github.actor != 'dependabot[bot]' }}
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: junit.xml
+          report_type: test_results
           fail_ci_if_error: true
 
   # Real browser, real clicks — the layer type checks and static-markup
@@ -85,13 +103,30 @@ jobs:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
       - run: bunx playwright install --with-deps chromium
-      - run: bun run test:e2e
+      # ,junit alongside the CI reporter Playwright already uses (its own
+      # config default), not instead of it - Codecov Test Analytics reads
+      # the JUnit file, GitHub's own annotations still come from the other
+      # one.
+      - run: bunx playwright test --reporter=github,junit
+        env:
+          PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit-e2e.xml
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+      # Codecov Test Analytics for the e2e suite too - same
+      # !cancelled()/dependabot-exempt reasoning as the check job's own
+      # upload step above.
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && github.actor != 'dependabot[bot]' }}
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: junit-e2e.xml
+          report_type: test_results
+          fail_ci_if_error: true
 
   # Category-score gates against a real astro build — see lighthouserc.cjs
   # for what's asserted and why performance is a warning rather than a hard
