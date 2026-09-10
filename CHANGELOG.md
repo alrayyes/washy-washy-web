@@ -1,3 +1,9 @@
+## [1.37.0](https://github.com/alrayyes/washy-washy-web/compare/v1.36.3...v1.37.0) (2026-09-10)
+
+### Features
+
+* **ci:** add Codecov Test Analytics and Bundle Analysis ([#203](https://github.com/alrayyes/washy-washy-web/issues/203)) ([538efa1](https://github.com/alrayyes/washy-washy-web/commit/538efa1797f9d2df38f82a3d1102241f11c94aa2)), closes [#201](https://github.com/alrayyes/washy-washy-web/issues/201) [#202](https://github.com/alrayyes/washy-washy-web/issues/202)
+
 ## [1.36.3](https://github.com/alrayyes/washy-washy-web/compare/v1.36.2...v1.36.3) (2026-09-09)
 
 ### Bug Fixes
