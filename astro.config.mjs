@@ -4,6 +4,7 @@
 // client-side, as an island — the site itself stays plain HTML/JS.
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
+import codecovAstroPlugin from "@codecov/astro-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import { readUmamiConfig } from "./src/lib/analytics.ts";
@@ -184,6 +185,15 @@ export default defineConfig({
           link: "/docs/ai-prompt/",
         },
       ],
+    }),
+    // Codecov Bundle Analysis: build-time plugin, not a CI-time upload
+    // step. Reuses the same CODECOV_TOKEN coverage/test results already
+    // do - one credential across all three.
+    codecovAstroPlugin({
+      enableBundleAnalysis: true,
+      bundleName: "washy-washy-web",
+      uploadToken: process.env.CODECOV_TOKEN,
+      gitService: "github",
     }),
   ],
   vite: {

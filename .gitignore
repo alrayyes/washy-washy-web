@@ -8,6 +8,10 @@ dist
 coverage
 *.lcov
 
+# Codecov Test Analytics' JUnit input, generated in CI only.
+junit.xml
+junit-e2e.xml
+
 # dotenv environment variable files
 .env
 .env.development.local
