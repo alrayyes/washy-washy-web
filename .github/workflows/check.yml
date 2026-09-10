@@ -85,7 +85,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: junit.xml
-          report-type: test_results
+          report_type: test_results
           fail_ci_if_error: true
 
   # Real browser, real clicks — the layer type checks and static-markup
@@ -125,7 +125,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: junit-e2e.xml
-          report-type: test_results
+          report_type: test_results
           fail_ci_if_error: true
 
   # Category-score gates against a real astro build — see lighthouserc.cjs
