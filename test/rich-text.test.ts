@@ -26,6 +26,10 @@ describe("richText", () => {
     expect(richText("Chrome's *⋮* menu")).toBe("Chrome's <em>⋮</em> menu");
   });
 
+  test("turns multi-character *emphasis* into <em>, not just a single character", () => {
+    expect(richText("This is *very* important.")).toBe("This is <em>very</em> important.");
+  });
+
   test("handles a mix of markup and escapes surrounding text", () => {
     expect(richText('Safari & Chrome\'s *⋮* menu both have "Add to Home Screen".')).toBe(
       "Safari &amp; Chrome's <em>⋮</em> menu both have &quot;Add to Home Screen&quot;.",

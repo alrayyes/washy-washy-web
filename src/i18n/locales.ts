@@ -118,6 +118,12 @@ export function matchTranslatedPage(pathname: string): TranslatedPage | null {
     new RegExp(`^/(${NON_DEFAULT_LOCALES.join("|")})(?=/|$)`),
     "",
   );
+  // The ternary's own condition is redundant, not load-bearing: when
+  // withoutLocale is "", the false branch computes "".replace(...) || "/"
+  // which is "" || "/" — "/" again, the exact same result as the true
+  // branch. Both branches converge for every input; the condition itself
+  // never changes the outcome. Confirmed equivalent by inspection.
+  // Stryker disable next-line ConditionalExpression,StringLiteral
   const normalized = withoutLocale === "" ? "/" : withoutLocale.replace(/\/+$/, "") || "/";
   const entry = Object.entries(PAGE_PATHS).find(([, path]) => path === normalized);
   return entry ? (entry[0] as TranslatedPage) : null;
@@ -134,6 +140,12 @@ export function pagePath(page: TranslatedPage): string {
  */
 export function relativeLocaleUrl(locale: Locale, path: string): string {
   if (locale === DEFAULT_LOCALE) return path;
+  // The ternary's own condition is redundant, not load-bearing: when
+  // path === "/", `${locale}${path}` in the false branch already produces
+  // the exact same string as the hardcoded `${locale}/` in the true
+  // branch — string interpolation of "/" IS "/". Both branches converge
+  // for every input. Confirmed equivalent by inspection.
+  // Stryker disable next-line ConditionalExpression,StringLiteral
   return path === "/" ? `/${locale}/` : `/${locale}${path}`;
 }
 

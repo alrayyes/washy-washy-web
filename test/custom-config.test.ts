@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { configToJson } from "@washy-washy/core";
-import { clearCustomConfig, readCustomConfig, writeCustomConfig } from "../src/lib/customConfig";
+import {
+  clearCustomConfig,
+  readCustomConfig,
+  uploadConfigFile,
+  writeCustomConfig,
+} from "../src/lib/customConfig";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 /** `bun:test` has no `localStorage` global — a browser API — so stand one in. */
@@ -61,5 +66,24 @@ describe("readCustomConfig / writeCustomConfig / clearCustomConfig", () => {
     clearCustomConfig();
 
     expect(readCustomConfig()).toBeNull();
+  });
+
+  test("reads back whatever is stored under the documented key literally", () => {
+    localStorage.setItem("washy-washy:config", configToJson(config));
+
+    expect(readCustomConfig()).toEqual(config);
+  });
+});
+
+describe("uploadConfigFile", () => {
+  test("parses and stores an uploaded config file, returning the parsed config", async () => {
+    const file = new File([configToJson(config)], "washy-washy.json", {
+      type: "application/json",
+    });
+
+    const uploaded = await uploadConfigFile(file);
+
+    expect(uploaded).toEqual(config);
+    expect(readCustomConfig()).toEqual(config);
   });
 });

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import {
+  DOCS_THEME_BOOTSTRAP_SCRIPT,
   readThemePreference,
   THEME_BOOTSTRAP_SCRIPT,
   writeThemePreference,
@@ -54,6 +55,14 @@ describe("readThemePreference / writeThemePreference", () => {
     expect(readThemePreference()).toBe("dark");
   });
 
+  test("round-trips 'light' too, not just 'dark'", () => {
+    stub(new MemoryStorage());
+
+    writeThemePreference("light");
+
+    expect(readThemePreference()).toBe("light");
+  });
+
   test("returns null when nothing has been stored yet — 'follow the OS', not a default mode", () => {
     stub(new MemoryStorage());
 
@@ -84,5 +93,16 @@ describe("THEME_BOOTSTRAP_SCRIPT", () => {
   test("only ever sets data-theme to a valid explicit value, never an arbitrary stored string", () => {
     expect(THEME_BOOTSTRAP_SCRIPT).toContain('stored === "light"');
     expect(THEME_BOOTSTRAP_SCRIPT).toContain('stored === "dark"');
+  });
+});
+
+describe("DOCS_THEME_BOOTSTRAP_SCRIPT", () => {
+  test("reads the same key as the other bootstrap script", () => {
+    expect(DOCS_THEME_BOOTSTRAP_SCRIPT).toContain('"washy-washy:theme"');
+  });
+
+  test("falls back to prefers-color-scheme when nothing is stored, unlike THEME_BOOTSTRAP_SCRIPT", () => {
+    expect(DOCS_THEME_BOOTSTRAP_SCRIPT).toContain("prefers-color-scheme: dark");
+    expect(DOCS_THEME_BOOTSTRAP_SCRIPT).toContain("document.documentElement.dataset.theme = theme");
   });
 });

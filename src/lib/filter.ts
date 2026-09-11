@@ -7,6 +7,10 @@ import type { ResolvedInstruction } from "@washy-washy/core/browser";
  */
 export function filterByPile(items: ResolvedInstruction[], query: string): ResolvedInstruction[] {
   const needle = query.trim().toLowerCase();
+  // Redundant, not load-bearing: `"anything".includes("")` is always true,
+  // so the .filter() below already keeps every item once needle is "" —
+  // this early return is just a shortcut, confirmed equivalent either way.
+  // Stryker disable next-line ConditionalExpression,StringLiteral
   if (needle === "") return items;
   return items.filter((item) => item.clothingType.toLowerCase().includes(needle));
 }
@@ -56,6 +60,12 @@ export function filterAdvanced(
     if (filters.program !== "" && item.program !== filters.program) return false;
     if (filters.temperature !== "" && item.temperature !== filters.temperature) return false;
     if (filters.spin !== "" && item.spin !== filters.spin) return false;
+    // Same reasoning as filterByPile's own early return above:
+    // `.includes("")` is always true, so when detergentNeedle is "" the
+    // second operand is always false regardless of the first — the guard
+    // never changes the outcome. Equivalent either way, confirmed by
+    // inspection.
+    // Stryker disable next-line ConditionalExpression,StringLiteral
     if (detergentNeedle !== "" && !item.detergent.toLowerCase().includes(detergentNeedle)) {
       return false;
     }

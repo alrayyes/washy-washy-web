@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isSecondGPress, isTypingTarget } from "../src/lib/keyboardNav";
+import { isSecondGPress, isTypingTarget, KEY_BINDINGS } from "../src/lib/keyboardNav";
 
 describe("isTypingTarget", () => {
   test("is false for no target", () => {
@@ -36,5 +36,27 @@ describe("isSecondGPress", () => {
 
   test("is false once the threshold has passed", () => {
     expect(isSecondGPress(1_600, 1_000, 500)).toBe(false);
+  });
+
+  test("is false when lastGPressAt is 0 — 'no press yet', even if now is within the threshold of zero", () => {
+    // lastGPressAt === 0 means "nothing recent behind it" per this
+    // module's own doc comment, so this must stay false even though
+    // now - 0 is well within the threshold — a first `g` press should
+    // never itself read as completing `gg`.
+    expect(isSecondGPress(100, 0, 500)).toBe(false);
+  });
+});
+
+describe("KEY_BINDINGS", () => {
+  test("lists every binding with its exact keys and description key", () => {
+    expect(KEY_BINDINGS).toEqual([
+      { keys: "j", descriptionKey: "keyboardNav.scrollDown" },
+      { keys: "k", descriptionKey: "keyboardNav.scrollUp" },
+      { keys: "g g", descriptionKey: "keyboardNav.jumpTop" },
+      { keys: "G", descriptionKey: "keyboardNav.jumpBottom" },
+      { keys: "/", descriptionKey: "keyboardNav.focusSearch" },
+      { keys: "?", descriptionKey: "keyboardNav.toggleHelp" },
+      { keys: "Esc", descriptionKey: "keyboardNav.closeHelp" },
+    ]);
   });
 });

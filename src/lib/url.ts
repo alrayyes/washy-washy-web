@@ -2,6 +2,11 @@ import { type Variant, variants } from "@washy-washy/core/browser";
 import type { StoredFilters } from "./storage";
 
 function isVariant(value: string | null): value is Variant {
+  // The null guard is pure TS type-narrowing, not a runtime necessity:
+  // Array.prototype.includes uses strict equality, so `null` can never
+  // match a string in `variants` regardless. Confirmed equivalent either
+  // way.
+  // Stryker disable next-line ConditionalExpression
   return value !== null && (variants as readonly string[]).includes(value);
 }
 

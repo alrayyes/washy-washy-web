@@ -8,6 +8,10 @@ dist
 coverage
 *.lcov
 
+# Stryker mutation testing
+.stryker-tmp
+reports/mutation
+
 # Codecov Test Analytics' JUnit input, generated in CI only.
 junit.xml
 junit-e2e.xml
