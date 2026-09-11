@@ -9,6 +9,7 @@ import {
   facetOptions,
   filterAdvanced,
   filterByPile,
+  hasActiveAdvancedFilters,
 } from "../src/lib/filter";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
@@ -101,6 +102,16 @@ describe("filterAdvanced", () => {
     for (const item of matches) expect(item.detergent.toLowerCase()).toContain("powder");
   });
 
+  test("trims surrounding whitespace from the detergent query before matching", async () => {
+    const { items } = await loadWebChart();
+
+    const padded = filterAdvanced(items, { ...emptyAdvancedFilters, detergentQuery: "  powder  " });
+    const trimmed = filterAdvanced(items, { ...emptyAdvancedFilters, detergentQuery: "powder" });
+
+    expect(padded).toEqual(trimmed);
+    expect(padded.length).toBeGreaterThan(0);
+  });
+
   test("combines fields as AND, not OR", async () => {
     const { items } = await loadWebChart();
     const target = items.find((item) => item.temperature !== items[0]?.temperature);
@@ -133,6 +144,33 @@ describe("filterAdvanced", () => {
       expect(item.clothingType.toLowerCase()).toContain("sock");
       expect(item.program).toBe(program);
     }
+  });
+});
+
+describe("hasActiveAdvancedFilters", () => {
+  test("is false when every field is empty, including whitespace-only detergent", () => {
+    expect(hasActiveAdvancedFilters(emptyAdvancedFilters)).toBe(false);
+    expect(hasActiveAdvancedFilters({ ...emptyAdvancedFilters, detergentQuery: "   " })).toBe(
+      false,
+    );
+  });
+
+  test("is true when program alone is set", () => {
+    expect(hasActiveAdvancedFilters({ ...emptyAdvancedFilters, program: "Cottons" })).toBe(true);
+  });
+
+  test("is true when temperature alone is set", () => {
+    expect(hasActiveAdvancedFilters({ ...emptyAdvancedFilters, temperature: "60" })).toBe(true);
+  });
+
+  test("is true when spin alone is set", () => {
+    expect(hasActiveAdvancedFilters({ ...emptyAdvancedFilters, spin: "1200" })).toBe(true);
+  });
+
+  test("is true when detergentQuery alone is set", () => {
+    expect(hasActiveAdvancedFilters({ ...emptyAdvancedFilters, detergentQuery: "powder" })).toBe(
+      true,
+    );
   });
 });
 

@@ -94,6 +94,14 @@ describe("readFilters / writeFilters", () => {
     expect(readFilters()).toBeNull();
   });
 
+  test("ignores a value whose pileQuery isn't a string", () => {
+    const storage = new MemoryStorage();
+    storage.setItem("washy-washy:filters", JSON.stringify({ cut: "wash", pileQuery: 123 }));
+    stub(storage);
+
+    expect(readFilters()).toBeNull();
+  });
+
   test("degrades to not remembering when storage itself throws", () => {
     stub(new ThrowingStorage());
 

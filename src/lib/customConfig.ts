@@ -15,6 +15,11 @@ const KEY = "washy-washy:config";
 export function readCustomConfig(): Config | null {
   try {
     const raw = localStorage.getItem(KEY);
+    // Not load-bearing on its own (confirmed: configFromJson(null) itself
+    // throws "the file must contain an object", caught by this same
+    // try/catch below) — kept for the early, more specific return rather
+    // than relying on that behavior.
+    // Stryker disable next-line ConditionalExpression
     if (raw === null) return null;
     return configFromJson(raw);
   } catch {

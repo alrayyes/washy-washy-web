@@ -1,14 +1,47 @@
 import { describe, expect, test } from "bun:test";
 import {
   absoluteLocaleUrl,
+  DEFAULT_LOCALE,
   docsHref,
   isLocale,
+  LOCALE_META,
+  LOCALES,
+  type Locale,
   localeFromPath,
   matchDocsSlug,
   matchTranslatedPage,
+  NON_DEFAULT_LOCALES,
   pagePath,
   relativeLocaleUrl,
 } from "../src/i18n/locales";
+
+describe("NON_DEFAULT_LOCALES", () => {
+  test("is every locale except the default", () => {
+    expect(NON_DEFAULT_LOCALES).not.toContain(DEFAULT_LOCALE);
+    expect(NON_DEFAULT_LOCALES.length).toBe(LOCALES.length - 1);
+    expect(new Set<Locale>(NON_DEFAULT_LOCALES)).toEqual(
+      new Set<Locale>(LOCALES.filter((locale) => locale !== DEFAULT_LOCALE)),
+    );
+  });
+});
+
+describe("LOCALE_META", () => {
+  test("has the exact label, htmlLang and dir for every locale", () => {
+    expect(LOCALE_META).toEqual({
+      en: { label: "English", htmlLang: "en", dir: "ltr" },
+      ja: { label: "日本語", htmlLang: "ja", dir: "ltr" },
+      de: { label: "Deutsch", htmlLang: "de", dir: "ltr" },
+      es: { label: "Español", htmlLang: "es", dir: "ltr" },
+      fr: { label: "Français", htmlLang: "fr", dir: "ltr" },
+      ar: { label: "العربية", htmlLang: "ar", dir: "rtl" },
+      zh: { label: "简体中文", htmlLang: "zh", dir: "ltr" },
+      tr: { label: "Türkçe", htmlLang: "tr", dir: "ltr" },
+      ru: { label: "Русский", htmlLang: "ru", dir: "ltr" },
+      jive: { label: "Jive", htmlLang: "en-x-jive", dir: "ltr" },
+      linkedin: { label: "LinkedIn", htmlLang: "en-x-linkedin", dir: "ltr" },
+    });
+  });
+});
 
 describe("localeFromPath", () => {
   test("defaults to English for the root and unprefixed pages", () => {
@@ -73,6 +106,10 @@ describe("matchTranslatedPage", () => {
   test("returns null for pages with no per-locale route", () => {
     expect(matchTranslatedPage("/docs/")).toBeNull();
   });
+
+  test("strips every trailing slash, not just one", () => {
+    expect(matchTranslatedPage("/config//")).toBe("config");
+  });
 });
 
 describe("pagePath", () => {
@@ -114,6 +151,16 @@ describe("matchDocsSlug", () => {
   test("returns null off a docs page entirely", () => {
     expect(matchDocsSlug("/")).toBeNull();
     expect(matchDocsSlug("/config")).toBeNull();
+  });
+
+  test("doesn't match 'docs' as a mere prefix of a longer, unrelated segment", () => {
+    expect(matchDocsSlug("/docsomething")).toBeNull();
+  });
+
+  test("doesn't match 'docs' appearing after an unrecognised segment", () => {
+    // "foo" isn't one of the recognised locale prefixes, so this must not
+    // be treated as a docs page just because "/docs" appears as a suffix.
+    expect(matchDocsSlug("/foo/docs")).toBeNull();
   });
 });
 

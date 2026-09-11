@@ -29,4 +29,14 @@ describe("translator", () => {
     // @ts-expect-error — exercising the runtime fallback for a bad locale value.
     expect(translator("xx")("nav.home")).toBe(dictionaries.en["nav.home"]);
   });
+
+  test("interpolates {token} placeholders when params are given", () => {
+    expect(translator("en")("common.couldNotSave", { error: "disk full" })).toBe(
+      "Could not save: disk full",
+    );
+  });
+
+  test("returns the raw string untouched when no params are given, placeholders included", () => {
+    expect(translator("en")("common.couldNotSave")).toBe(dictionaries.en["common.couldNotSave"]);
+  });
 });

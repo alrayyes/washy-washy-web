@@ -34,4 +34,8 @@ describe("isValidDuration", () => {
   test("rejects a leading ~ — callers strip it before validating", () => {
     expect(isValidDuration("~2:30")).toBe(false);
   });
+
+  test("rejects trailing text after an otherwise-valid duration", () => {
+    expect(isValidDuration("2:30 extra")).toBe(false);
+  });
 });

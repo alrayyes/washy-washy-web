@@ -9,6 +9,7 @@
       "!**/test-results",
       "!**/playwright-report",
       "!**/.lighthouseci",
+      "!**/reports",
       "!.claude/worktrees",
       "!styles/Google",
       "!styles/proselint"
