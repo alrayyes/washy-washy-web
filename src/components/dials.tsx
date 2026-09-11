@@ -10,6 +10,17 @@ function polar(cx: number, cy: number, radius: number, degrees: number) {
 function arc(cx: number, cy: number, radius: number, from: number, to: number): string {
   const start = polar(cx, cy, radius, from);
   const end = polar(cx, cy, radius, to);
+  // `>` vs `>=` only differs when `to - from` is exactly 180, and neither of
+  // this file's two call sites can ever produce that: ProgramDial's ring
+  // passes `360 - 1.2 * (360 / washer.programs.length)`, which only equals
+  // 180 for a fractional (impossible) program count; IronDial's fixed 280
+  // degree sweep means any two positions in the same "lap" span at most 140
+  // degrees before the modulo wrap in `angleOf` kicks in, and a pair
+  // straddling that wrap can't land on a clean +180 either (confirmed by
+  // working the arithmetic through both branches). Confirmed equivalent by
+  // inspection, same as the `Stryker disable` lines already in url.ts/
+  // locales.ts for this exact reason.
+  // Stryker disable next-line EqualityOperator
   const largeArc = to - from > 180 ? 1 : 0;
   return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`;
 }
@@ -116,6 +127,12 @@ export function IronDial({
   const angleOf = (position: number) => (first + position * step + 360) % 360;
   const pointer = polar(centre, centre, knob - 1.5, angleOf(index));
   const steamFrom = settings.findIndex((entry) => entry.steam);
+  // The seed only survives to the end when no setting steams at all, and
+  // the render below gates on `steamFrom >= 0` (from the `findIndex` above,
+  // which independently yields -1 in exactly that case) — so this seed's
+  // own value never reaches the arc it feeds. Any seed produces the same
+  // observable output. Confirmed equivalent by inspection.
+  // Stryker disable next-line UnaryOperator
   const steamTo = settings.reduce((last, entry, at) => (entry.steam ? at : last), -1);
   const offLine1 = polar(centre, centre, outer - 6, 225);
   const offLine2 = polar(centre, centre, outer - 6, 45);
