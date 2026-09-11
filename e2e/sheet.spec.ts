@@ -115,8 +115,12 @@ test("the Advanced disclosure is closed by default and filters combine with pile
   const combinedCount = await cards.count();
   expect(combinedCount).toBeLessThanOrEqual(programCount);
 
-  // The URL carries both, so a filtered link stays shareable.
-  await expect(page).toHaveURL(new RegExp(`[?&]program=${encodeURIComponent(program as string)}`));
+  // The URL carries both, so a filtered link stays shareable. An exact
+  // query-param check rather than building a RegExp from `program` — the
+  // value comes from the page's own rendered text, not a fixed literal, so
+  // a dynamic RegExp here would (rightly) flag as attacker-shaped even
+  // though nothing here is attacker-controlled.
+  await expect.poll(() => new URL(page.url()).searchParams.get("program")).toBe(program);
   await expect(page).toHaveURL(/[?&]pile=sock/);
 
   // A reload keeps the filter values, but the disclosure itself starts

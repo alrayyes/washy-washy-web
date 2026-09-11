@@ -10,6 +10,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
+    # A newly-published version is the likeliest moment for a compromised
+    # maintainer account to slip a malicious release past a registry's own
+    # review window. A few days' wait costs nothing against a weekly
+    # schedule and gives that window a chance to catch it first.
+    cooldown:
+      default-days: 7
     commit-message:
       # commitlint gates every commit that lands, and Dependabot's default
       # subject is not a Conventional Commit. chore: is right for a dev
@@ -60,6 +66,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     # Changes the pipeline, not the artifact - releasing for this is noise.
     commit-message:
       prefix: ci

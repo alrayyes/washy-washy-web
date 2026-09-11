@@ -79,9 +79,10 @@ const SHOTS: Shot[] = [
     file: "sheet-pdf-download.png",
     act: async (page, t) => {
       const card = page.locator("article").first();
-      await card
-        .getByRole("button", { name: new RegExp(t("sheet.download")) })
-        .scrollIntoViewIfNeeded();
+      // A plain string does the same substring match Playwright's own
+      // getByRole already does by default -- no need to build a RegExp out
+      // of a translated string just to get that behaviour.
+      await card.getByRole("button", { name: t("sheet.download") }).scrollIntoViewIfNeeded();
     },
   },
   { path: "/config", viewport: DESKTOP, file: "config-chart-cards.png" },
