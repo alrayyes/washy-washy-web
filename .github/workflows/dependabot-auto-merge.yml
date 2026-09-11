@@ -24,9 +24,10 @@ jobs:
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: write
-      pull-requests: write
+    # No elevated GITHUB_TOKEN permissions needed here: RELEASE_TOKEN (a
+    # real PAT, see below) does the actual merge, so this job never touches
+    # the implicit token at all -- the workflow-level contents: read default
+    # is unused too, but there's nothing to check out.
     steps:
       # Squashed with a subject commitlint accepts. Dependabot writes "Bump x
       # from a to b" and config-conventional refuses the capital B, so the
@@ -36,6 +37,15 @@ jobs:
       # --auto is the whole safety story: it holds the pull request until the
       # required checks on main have passed. Without a ruleset naming those
       # checks it merges the moment the branch is mergeable, red or not.
+      #
+      # RELEASE_TOKEN, not GITHUB_TOKEN: a GITHUB_TOKEN-authored squash-merge
+      # commit trips GitHub's anti-recursion guard, so check.yml's own
+      # push-to-main trigger never fires for it and release.yml (which only
+      # runs via workflow_run off check) never sees the merge either. A
+      # fix: dependency bump merged this way sat unreleased on main for
+      # days until an unrelated human-authored push happened to sweep it
+      # up (#212) -- RELEASE_TOKEN authors the commit as a real account,
+      # same fix as release.yml's own checkout step uses this token for.
       - name: Wave it through once the checks are green
         run: |
           subject=$(printf '%s' "$PR_TITLE" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
@@ -43,4 +53,4 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_TITLE: ${{ github.event.pull_request.title }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
