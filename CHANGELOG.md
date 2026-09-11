@@ -1,3 +1,9 @@
+## [1.37.3](https://github.com/alrayyes/washy-washy-web/compare/v1.37.2...v1.37.3) (2026-09-11)
+
+### Bug Fixes
+
+* **ci:** suppress the reviewed Semgrep finding on escapeHtml ([#222](https://github.com/alrayyes/washy-washy-web/issues/222)) ([5d32718](https://github.com/alrayyes/washy-washy-web/commit/5d3271890101ae058f9c4d1bf86b19b1e79e1450)), closes [#221](https://github.com/alrayyes/washy-washy-web/issues/221)
+
 ## [1.37.2](https://github.com/alrayyes/washy-washy-web/compare/v1.37.1...v1.37.2) (2026-09-11)
 
 ### Bug Fixes
