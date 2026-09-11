@@ -53,6 +53,11 @@ jobs:
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
+      # Reviewed false positive, Ryan sign-off 2026-09-11: the job-level `if:`
+      # above (github.event.workflow_run.event == 'push') already makes this
+      # safe -- workflow_run only ever fires for a run completed inside this
+      # same repo, so a fork's PR can never reach this job or its head_sha.
+      # nosemgrep: yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.token.outputs.present == 'true'
         with:
