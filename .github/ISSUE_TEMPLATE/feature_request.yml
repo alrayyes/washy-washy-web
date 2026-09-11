@@ -1,6 +1,6 @@
 name: Feature request
 description: New capability or change
-labels: ["kind/feature"]
+labels: ["enhancement"]
 body:
   - type: textarea
     id: description

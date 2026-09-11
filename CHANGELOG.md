@@ -1,3 +1,9 @@
+## [1.37.1](https://github.com/alrayyes/washy-washy-web/compare/v1.37.0...v1.37.1) (2026-09-11)
+
+### Bug Fixes
+
+* **templates:** use GitHub's standard labels, not kind/+topic/ ([#210](https://github.com/alrayyes/washy-washy-web/issues/210)) ([48b1aee](https://github.com/alrayyes/washy-washy-web/commit/48b1aeec0bb13d0cd7fd518c1ca6b1f4ae49a303)), closes [#205](https://github.com/alrayyes/washy-washy-web/issues/205)
+
 ## [1.37.0](https://github.com/alrayyes/washy-washy-web/compare/v1.36.3...v1.37.0) (2026-09-10)
 
 ### Features
