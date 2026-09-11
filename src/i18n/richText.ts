@@ -20,6 +20,7 @@ const CODE_CLASS = "text-sm text-ink";
 // own translation strings (i18n/ui.ts), never anything user-supplied, so
 // there's no untrusted input here for a sanitizer to add protection against.
 function escapeHtml(text: string): string {
+  // nosemgrep: javascript.audit.detect-replaceall-sanitization.detect-replaceall-sanitization
   return text
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
