@@ -25,6 +25,15 @@ const I18nContext = createContext<I18nContextValue>({
  * many components sit between the island and a piece of hardcoded text.
  */
 export function TranslationProvider({ locale, children }: { locale: Locale; children: ReactNode }) {
+  // The dependency list only matters across a re-render of an already-
+  // mounted instance, and every caller (SheetViewer/ConfigViewer/
+  // MachineEditor) passes `locale` as a prop set once at mount from the
+  // page's own URL — Astro serves each locale as its own page, a full
+  // navigation apart, so nothing here ever re-renders this component with a
+  // *different* locale prop. `[locale]` vs `[]` are observably identical
+  // for every instance this app ever creates. Confirmed equivalent by
+  // inspection.
+  // Stryker disable next-line ArrayDeclaration
   const value = useMemo(() => ({ t: translator(locale), locale }), [locale]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

@@ -105,6 +105,12 @@ function Legend({ machine, variant }: { machine: Machine; variant: Variant }) {
   const { washer } = machine;
   const off = washer.programs[0] ?? "";
   const example = washer.programs[1] ?? off;
+  // The "" fallback only ever runs when `settings` is empty, and IronDial's
+  // own `setting` prop only ever feeds a `findIndex` lookup against that
+  // same (then-empty) array — every value of `setting` produces the exact
+  // same "nothing found, fall back to index 0" render when there's nothing
+  // to find it in. Confirmed equivalent by inspection.
+  // Stryker disable next-line StringLiteral
   const hottest = machine.iron.settings[machine.iron.settings.length - 1]?.key ?? "";
 
   return (
@@ -222,19 +228,22 @@ function IronPanel({ items, machine }: { items: ResolvedInstruction[]; machine: 
   );
 }
 
+// No `emphasis` prop: every real caller (SplitField, IronPanel) always
+// wants plain body text — Card's own bold wash-together value goes through
+// Field instead, which has its own copy of this same ternary. An untaken
+// branch here would be untested code with no caller to exercise it, same
+// reasoning as Field's own now-removed default.
 function Prose({
   items,
   pick,
-  emphasis = false,
   className = "",
 }: {
   items: ResolvedInstruction[];
   pick: (item: ResolvedInstruction) => string;
-  emphasis?: boolean;
   className?: string;
 }) {
   const values = items.map(pick);
-  const textClass = `text-sm leading-relaxed ${emphasis ? "font-bold text-ink" : "text-body"}`;
+  const textClass = "text-sm leading-relaxed text-body";
 
   if (values.every((value) => value === "")) return null;
 
@@ -260,12 +269,10 @@ function SplitField({
   label,
   items,
   pick,
-  emphasis = false,
 }: {
   label: string;
   items: ResolvedInstruction[];
   pick: (item: ResolvedInstruction) => string;
-  emphasis?: boolean;
 }) {
   if (items.every((item) => pick(item) === "")) return null;
 
@@ -275,7 +282,7 @@ function SplitField({
       collapse with here — Prose's <p> carries no mt-* — so it would add
       a real 4px gap that isn't there today. */}
       <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
-      <Prose items={items} pick={pick} emphasis={emphasis} />
+      <Prose items={items} pick={pick} />
     </div>
   );
 }
@@ -314,22 +321,16 @@ function ReferenceField({ items }: { items: ResolvedInstruction[] }) {
   );
 }
 
-function Field({
-  label,
-  value,
-  emphasis = false,
-}: {
-  label: string;
-  value: string;
-  emphasis?: boolean;
-}) {
+// No `emphasis` prop, unlike Prose/SplitField above: Card's own use is this
+// component's only call site, and it always wants the bold styling —
+// a conditional with no caller ever taking its other branch is untested
+// code, not real flexibility.
+function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="mt-2">
       {/* Not <SectionHeading> — same reason as SplitField above (#94). */}
       <p className="text-xs font-bold tracking-wide text-muted">{label.toUpperCase()}</p>
-      <p className={`text-sm leading-relaxed ${emphasis ? "font-bold text-ink" : "text-body"}`}>
-        {value}
-      </p>
+      <p className="text-sm leading-relaxed font-bold text-ink">{value}</p>
     </div>
   );
 }
@@ -461,7 +462,23 @@ function Card({
   const t = useT();
   const item = group[0] as ResolvedInstruction;
   const heading = group.map((member) => member.clothingType).join(" + ");
+  // `alsoWith`'s own `group.every(member.mixesWith.includes(name))` check
+  // below already excludes any of this group's own members from ever
+  // qualifying as an "also invite" name — `resolve()` never lists an item
+  // in its own `mixesWith`, so that check fails for a self-referential name
+  // regardless of what `names` contains. This set exists to make that
+  // exclusion explicit, but nothing observable depends on its own contents
+  // being correct. Confirmed equivalent by inspection.
+  // Stryker disable next-line ArrowFunction
   const names = new Set(group.map((member) => member.clothingType));
+  // The `a === b` shortcut only matters when it would disagree with
+  // `canMix(a, a)` — and the only thing that makes an item incompatible
+  // with itself is its own "solo" tag, which also blocks every one of that
+  // item's *other* pairings the exact same way. Whenever the shortcut
+  // would change this one pairing's answer, some other pairing in the same
+  // `every` already forces the same false result. Confirmed equivalent by
+  // inspection.
+  // Stryker disable next-line ConditionalExpression
   const together = group.every((a) => group.every((b) => a === b || canMix(a, b)));
   const alsoWith = item.mixesWith.filter(
     (name) => !names.has(name) && group.every((member) => member.mixesWith.includes(name)),
@@ -506,7 +523,6 @@ function Card({
                 ? alsoWith.join(", ")
                 : t("sheet.washAlone")
         }
-        emphasis
       />
       <SplitField label={t("sheet.dryingLabel")} items={group} pick={(member) => member.drying} />
 

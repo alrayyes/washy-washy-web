@@ -99,10 +99,17 @@ jobs:
   # Scoped to files this PR actually changed (or, on a push to main, the
   # last commit's own files), not stryker.config.mjs's full `mutate` list —
   # per rules/testing.md, inherited mutation-testing debt gets a tracked
-  # issue (#219 covers the two deliberate holes: every .tsx/.astro file,
-  # and src/lib/urlHistory.ts) rather than blocking every unrelated PR on
-  # gaps it didn't introduce. `thresholds.break: 100` still applies to
-  # whatever's in scope for a given run — no ratchet, just a narrower set.
+  # issue rather than blocking every unrelated PR on gaps it didn't
+  # introduce. `thresholds.break: 100` still applies to whatever's in scope
+  # for a given run — no ratchet, just a narrower set.
+  #
+  # #219 closed both of that issue's holes: src/lib and src/i18n now cover
+  # every file in each directory (including urlHistory.ts and
+  # TranslationProvider.tsx — see stryker.config.mjs's own comment for why
+  # both were excluded before and aren't anymore), plus the three .tsx
+  # components that turned out to be pure render logic. The rest of the
+  # .tsx/.astro layer stays a deliberate, permanent exclusion — not debt —
+  # for the same reason stryker.config.mjs documents.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -118,9 +125,10 @@ jobs:
         id: changed
         run: |
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
-          FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- src/lib src/i18n \
-            | grep -E '\.ts$' \
-            | grep -vx 'src/lib/urlHistory.ts' || true)
+          FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
+              src/lib src/i18n \
+              src/components/Sheet.tsx src/components/dials.tsx src/components/SectionHeading.tsx \
+            | grep -E '\.tsx?$' || true)
           {
             echo "files<<STRYKER_FILES_EOF"
             echo "$FILES"
