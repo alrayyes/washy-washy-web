@@ -1,3 +1,9 @@
+## [1.37.2](https://github.com/alrayyes/washy-washy-web/compare/v1.37.1...v1.37.2) (2026-09-11)
+
+### Bug Fixes
+
+* **ci:** merge dependabot PRs with RELEASE_TOKEN, not GITHUB_TOKEN ([#213](https://github.com/alrayyes/washy-washy-web/issues/213)) ([50d8d51](https://github.com/alrayyes/washy-washy-web/commit/50d8d510298e2bec5e75d9b6de8e485b4defe76e)), closes [#212](https://github.com/alrayyes/washy-washy-web/issues/212)
+
 ## [1.37.1](https://github.com/alrayyes/washy-washy-web/compare/v1.37.0...v1.37.1) (2026-09-11)
 
 ### Bug Fixes
