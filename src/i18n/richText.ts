@@ -13,6 +13,12 @@ const LINK_CLASS =
   "underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent";
 const CODE_CLASS = "text-sm text-ink";
 
+// Flagged by Semgrep's detect-replaceall-sanitization audit rule, which
+// warns that a hand-rolled replaceAll chain is normally a fragile stand-in
+// for a real sanitization library. Reviewed and kept: this file's own top
+// comment already establishes the actual boundary — every caller passes our
+// own translation strings (i18n/ui.ts), never anything user-supplied, so
+// there's no untrusted input here for a sanitizer to add protection against.
 function escapeHtml(text: string): string {
   return text
     .replaceAll("&", "&amp;")
