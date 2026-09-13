@@ -29,6 +29,7 @@
     "typecheck": "astro sync && tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
   },
   "overrides": {
+    "playwright-core": "1.63.0",
     "qs": "6.16.0",
     "smol-toml": "1.7.2"
   },
