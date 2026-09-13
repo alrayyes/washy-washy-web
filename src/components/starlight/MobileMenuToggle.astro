@@ -5,14 +5,15 @@
  * assumption that only holds when the header above it is also fixed at
  * that same height. Our header scrolls with the page instead (#114, full
  * parity), so this button renders in normal flow instead: still the same
- * toggle behaviour and icon (Starlight's own `<starlight-menu-button>`
- * custom element, untouched).
+ * toggle behaviour and icon (Starlight's own `popovertarget` button,
+ * untouched).
  *
- * Deliberately NOT wrapped in an extra element: PageFrame.astro's own
- * `:global([aria-expanded='true']) ~ .sidebar-pane` rule (also inherited
- * from Starlight's default) needs `<starlight-menu-button>` — the actual
- * element `aria-expanded` toggles on — to stay a direct sibling of
- * `.sidebar-pane`, or the sidebar never shows when the menu opens.
+ * As of Starlight 0.42, the button is a plain `<button popovertarget=
+ * "starlight__sidebar" class="sl-menu-button …">` — no more wrapping
+ * `<starlight-menu-button>` custom element, so there's nothing left to
+ * reposition but the button itself. Desktop hiding is already handled by
+ * Starlight's own `md:sl-hidden` class on the button, not duplicated
+ * here.
  */
 import Default from "@astrojs/starlight/components/MobileMenuToggle.astro";
 ---
@@ -23,19 +24,7 @@ import Default from "@astrojs/starlight/components/MobileMenuToggle.astro";
   /* Wins over the original's `@layer starlight.core` rule without
      needing !important — an unlayered rule always beats any named
      layer, regardless of specificity, and this block isn't in one. */
-  :global(starlight-menu-button) {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0.5rem 1rem;
-  }
-
-  :global(starlight-menu-button button) {
+  :global(.sl-menu-button) {
     position: static;
-  }
-
-  @media (min-width: 50rem) {
-    :global(starlight-menu-button) {
-      display: none;
-    }
   }
 </style>
