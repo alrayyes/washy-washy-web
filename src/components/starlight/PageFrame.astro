@@ -13,6 +13,17 @@
  * is untouched — reused verbatim from Starlight, still a full-screen
  * overlay when open, just anchored to the top of the viewport instead of
  * below a fixed header that no longer exists.
+ *
+ * Starlight 0.42 rebuilt that overlay on the native Popover API: the
+ * toggle button is a plain `popovertarget="starlight__sidebar"` button
+ * (no more `<starlight-menu-button>` custom element or `aria-expanded`),
+ * and `#starlight__sidebar` itself has to carry the `popover` attribute
+ * for the button to do anything — our own markup, not something Starlight
+ * injects, since we render this div ourselves instead of reusing
+ * Starlight's default `PageFrame`. Visibility on mobile now comes from
+ * the browser's own popover show/hide (`display: none` until invoked)
+ * rather than a `--sl-sidebar-visibility` custom property keyed off a
+ * sibling's `aria-expanded`.
  */
 import MobileMenuToggle from "virtual:starlight/components/MobileMenuToggle";
 import SiteFooter from "../SiteFooter.astro";
@@ -31,7 +42,7 @@ const { hasSidebar } = Astro.locals.starlightRoute;
           aria-label={Astro.locals.t("sidebarNav.accessibleLabel")}
         >
           <MobileMenuToggle />
-          <div id="starlight__sidebar" class="sidebar-pane">
+          <div id="starlight__sidebar" class="sidebar-pane" popover="">
             <div class="sidebar-content sl-flex">
               <slot name="sidebar" />
             </div>
@@ -62,9 +73,19 @@ const { hasSidebar } = Astro.locals.starlightRoute;
 
     /* Mobile: the same full-screen toggle overlay Starlight ships, just
        anchored to the viewport's own top (`inset: 0`) rather than below a
-       fixed header — there's no fixed header here to dodge. */
+       fixed header — there's no fixed header here to dodge. Shown/hidden
+       state comes from the `popover` attribute itself (the UA hides it by
+       default, the toggle button's `popovertarget` shows it) rather than
+       anything we style here. */
     .sidebar-pane {
-      visibility: var(--sl-sidebar-visibility, hidden);
+      /* The UA stylesheet applies its own opinionated popover styles
+         (border, padding, positioning) — undo them rather than fight
+         them with higher specificity. */
+      margin: unset;
+      border: unset;
+      padding: unset;
+      color: unset;
+
       position: fixed;
       z-index: var(--sl-z-index-menu);
       inset: 0;
@@ -72,10 +93,6 @@ const { hasSidebar } = Astro.locals.starlightRoute;
       background-color: var(--sl-color-black);
       overflow-y: auto;
       scrollbar-gutter: stable;
-    }
-
-    :global([aria-expanded="true"]) ~ .sidebar-pane {
-      --sl-sidebar-visibility: visible;
     }
 
     .sidebar-content {
@@ -91,12 +108,13 @@ const { hasSidebar } = Astro.locals.starlightRoute;
         flex-direction: row;
       }
 
-      /* Desktop: back in normal flow, side-by-side with .main-frame — no
-         more position: fixed, so it scrolls away with the rest of the
-         page instead of staying pinned while a long doc scrolls under
-         it. */
+      /* Desktop: always shown regardless of popover state (the toggle
+         button itself is hidden here — Starlight's own `md:sl-hidden`),
+         and back in normal flow, side-by-side with .main-frame — no more
+         position: fixed, so it scrolls away with the rest of the page
+         instead of staying pinned while a long doc scrolls under it. */
       .sidebar-pane {
-        visibility: visible;
+        display: block;
         position: static;
         z-index: auto;
         inset: auto;
