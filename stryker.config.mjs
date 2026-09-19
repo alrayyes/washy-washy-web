@@ -41,10 +41,25 @@
 /** @type {import("@stryker-mutator/api/core").PartialStrykerOptions} */
 export default {
   // Stryker's default plugin glob is "@stryker-mutator/*" — the bun runner
-  // lives outside that scope, so it has to be named explicitly.
-  plugins: ["@hughescr/stryker-bun-runner"],
+  // lives outside that scope, so it has to be named explicitly. Once
+  // `plugins` is set at all, the default glob no longer applies on top of
+  // it, so the typescript checker (which *would* have matched the default
+  // glob on its own) needs to be listed here too.
+  plugins: ["@hughescr/stryker-bun-runner", "@stryker-mutator/typescript-checker"],
   testRunner: "bun",
   coverageAnalysis: "perTest",
+  // A mutant that wouldn't even compile fails fast as a CompileError
+  // instead of wasting a full test run finding out the same thing
+  // (rules/javascript.md's mutation-testing section). Checks straight
+  // against `tsconfigFile`'s default (tsconfig.json) — the same program
+  // `bun run typecheck` already validates src/lib and src/i18n against.
+  // A `.svelte` mutant (Sheet.svelte, CardActions.svelte, the dials) isn't
+  // part of that plain-tsc program at all, so the checker's own "pass
+  // through if the mutated file isn't part of the typescript project"
+  // fallback (confirmed by reading typescript-checker.js) applies to all
+  // of them — harmless, not a hole this introduces: they're checked by
+  // running their tests same as before, same as every mutant already was.
+  checkers: ["typescript"],
   // Scoped to the pure-logic modules this repo's own `bun:test` suite
   // exercises directly — src/lib/**/*.ts and src/i18n/**/*.ts, plus the
   // handful of .tsx pieces below that turned out to be pure render logic
