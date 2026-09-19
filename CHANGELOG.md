@@ -1,3 +1,9 @@
+## [1.44.0](https://github.com/alrayyes/washy-washy-web/compare/v1.43.0...v1.44.0) (2026-09-19)
+
+### Features
+
+* **svelte:** remove React now that every island is Svelte ([#256](https://github.com/alrayyes/washy-washy-web/issues/256)) ([4f0ad52](https://github.com/alrayyes/washy-washy-web/commit/4f0ad52c682e0eeae3bf80603bed67f065c01fc3)), closes [244/#245](https://github.com/244/washy-washy-web/issues/245) [#246](https://github.com/alrayyes/washy-washy-web/issues/246)
+
 ## [1.43.0](https://github.com/alrayyes/washy-washy-web/compare/v1.42.0...v1.43.0) (2026-09-19)
 
 ### Features
