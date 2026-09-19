@@ -13,6 +13,8 @@ you need to actually get a checkout running.
 bun install
 ```
 
+Claude Code sessions in this repo get Svelte's own [MCP server](https://svelte.dev/docs/ai/overview) (`.mcp.json`, `AGENTS.md`) — Svelte/SvelteKit documentation lookup and static analysis for any Svelte component work (the ongoing React-to-Svelte island migration, #239).
+
 ## Architecture
 
 Static Astro site (`output: "static"`), deployed to Cloudflare Workers as
