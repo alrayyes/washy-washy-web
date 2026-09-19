@@ -14,9 +14,10 @@ static file server.
 `src/pages/*.astro` are the app's own pages (the front page, `/config`,
 `/config/machine`, `/privacy`, `/disclaimer`). Most of what's on them is
 plain server-rendered HTML — the header, the footer, page chrome — with the
-genuinely interactive parts mounted as React islands (`client:load`):
-`SheetViewer`, `ConfigViewer`, `MachineEditor`, `HeaderUpload`, `ThemeToggle`,
-`KeyboardNav`. An island hydrates independently of the rest of the page, and
+genuinely interactive parts mounted as islands (`client:load`): `SheetViewer`,
+`ConfigViewer`, `MachineEditor`, `KeyboardNav` (still React — mid-migration to
+Svelte, see #239), and `HeaderUpload`, `ThemeToggle`, `WarningBanner` (already
+Svelte, #240). An island hydrates independently of the rest of the page, and
 each one that has meaningful client-side state to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see
 [Island hydration](hydration.md) for why that convention exists and what
