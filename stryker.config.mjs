@@ -6,14 +6,31 @@
 // repo's suite imports from "bun:test", which doesn't exist outside the Bun
 // runtime — running it under real Jest would mean rewriting every test file,
 // not a drop-in fallback). `@hughescr/stryker-bun-runner` ships frequent
-// releases (18 versions between January and July 2026, latest 1.3.8) and is
-// built specifically for `bun:test` per-test coverage via Bun's Inspector
-// Protocol. Same evaluation `alrayyes/washy-washy-core`#67 already did; see
-// that repo's PR #72 for the full writeup.
+// releases and is built specifically for `bun:test` per-test coverage via
+// Bun's Inspector Protocol. Same evaluation `alrayyes/washy-washy-core`#67
+// already did; see that repo's PR #72 for the full writeup.
 //
-// `@stryker-mutator/core` is pinned to 9.6.1, not the current 10.0.0: the bun
-// runner still peer-depends on `^9.0.0` (`@stryker-mutator/core@10.0.0`
-// shipped 2026-08-14, after the runner's last release).
+// Pinned to 1.4.0, not 1.3.8: 1.3.8 has a confirmed bug where a mutant that
+// defeats the runner's own `testFiles` override lets `bun test` fall through
+// to auto-discovery and re-spawn itself from inside a spawn it already made,
+// with nothing to stop the nesting — unbounded process growth, not a slow
+// run (upstream's own A/B: "20% at 11min (ETA ~54min)" before the fix,
+// "completes in 7m52s" after, on the same machine and Stryker version). Hit
+// live in this repo's own CI on #249, the first PR to ever put
+// `src/i18n/ui.ts` (2210 mutants, 11 locale dictionaries) through the
+// mutation job: a clean 100%/0-timeout/2m28s run locally against 1.3.8
+// timed out on ~90%+ of mutants in CI regardless of `--concurrency` (tried
+// both 4 and 2 — lower concurrency made the *wall clock* worse, which is
+// what pointed at unbounded process growth rather than resource contention
+// as the actual mechanism). 1.4.0's "Stop runaway recursive bun test spawns
+// leaking process trees" is the fix; see
+// github.com/hughescr/stryker-bun-runner's 1.3.8...1.4.0 compare for the
+// full writeup, including the process-group/depth-limiting mechanism.
+//
+// `@stryker-mutator/core` stays pinned to 9.6.1 rather than jumping to the
+// current 10.0.0: 1.4.0 widened the runner's own peer range to
+// `^9.0.0 || ^10.0.0`, so a 10.0.0 upgrade is possible now, but it's a
+// separate, deliberate major-version bump this fix doesn't also make.
 //
 // Unlike washy-washy-core, this repo's pinned `typescript` (6.0.3) is the
 // classic compiler, not the Go rewrite — `require("typescript")` exposes the

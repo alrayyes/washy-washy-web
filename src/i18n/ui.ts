@@ -255,7 +255,7 @@ export interface Ui {
   "machine.useBundledMachineInstead": string;
   "machine.washerHeading": string;
 
-  // --- HeaderUpload.tsx ---
+  // --- HeaderUpload.svelte ---
   "upload.uploadConfig": string;
 
   // --- KeyboardNav.tsx + lib/keyboardNav.ts ---
@@ -269,7 +269,7 @@ export interface Ui {
   "keyboardNav.toggleHelp": string;
   "keyboardNav.closeHelp": string;
 
-  // --- ThemeToggle.tsx ---
+  // --- ThemeToggle.svelte ---
   "theme.switchToLight": string;
   "theme.switchToDark": string;
 

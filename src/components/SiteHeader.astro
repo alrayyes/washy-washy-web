@@ -8,11 +8,11 @@
  */
 import { docsHref, localeFromPath, matchTranslatedPage, relativeLocaleUrl } from "../i18n/locales";
 import { translator } from "../i18n/ui";
-import HeaderUpload from "./HeaderUpload";
+import HeaderUpload from "./HeaderUpload.svelte";
 import KeyboardNav from "./KeyboardNav";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./ThemeToggle.svelte";
 
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
