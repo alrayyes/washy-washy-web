@@ -83,6 +83,18 @@ interface Props {
  * `t`/`machine`/`variant` from this file's own instance scope — only
  * `CardActions` is a real, separately-instantiated component (it needs its
  * own independent state per card), and it takes `t` as an explicit prop.
+ *
+ * Every local binding inside a snippet/`{#each}` block below is `{@const}`,
+ * never bare `{const}` — both compile with no error, but only `{@const}`
+ * recomputes on a later reactive update. Confirmed the hard way: a bare
+ * `{const item = group[0] as ResolvedInstruction}` here rendered correctly
+ * on first paint but silently kept its *first* value forever after, for
+ * every card whose `{#each}` key (`clothingType`) doesn't itself change —
+ * e.g. `SheetViewer`'s post-mount `#config=` hash restoration replacing
+ * `items` with a freshly resolved custom chart, same `clothingType`s,
+ * different `notes`/`detergent`/etc. Nothing else in this file's own tests
+ * catches that class of bug: every unit test here renders once via
+ * `svelte/server`, with no later update to observe.
  */
 let { items, machine, variant, t, onDownloadCard, onShareCard }: Props = $props();
 
@@ -140,8 +152,8 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
     <p class="mb-2 text-xs text-muted">{t("sheet.loadsExplain")}</p>
     <div class="rounded-md border border-hairline px-3">
       {#each loadGroupsList as group, index ((group[0] as ResolvedInstruction).clothingType)}
-        {const first = group[0] as ResolvedInstruction}
-        {const joined = group.map((item) => item.clothingType).join("  +  ")}
+        {@const first = group[0] as ResolvedInstruction}
+        {@const joined = group.map((item) => item.clothingType).join("  +  ")}
         <div
           class={`flex items-start gap-2 py-2 ${
             index === loadGroupsList.length - 1 ? "" : "border-b border-hairline"
@@ -159,10 +171,10 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
 {/snippet}
 
 {#snippet legend()}
-  {const washer = machine.washer}
-  {const off = washer.programs[0] ?? ""}
-  {const example = washer.programs[1] ?? off}
-  {const hottest = hottestIronSetting(machine)}
+  {@const washer = machine.washer}
+  {@const off = washer.programs[0] ?? ""}
+  {@const example = washer.programs[1] ?? off}
+  {@const hottest = hottestIronSetting(machine)}
   <div class="mb-4 flex items-center gap-3 rounded-md bg-panel p-3">
     <div class="w-18 shrink-0 text-center">
       {#if variant === "iron"}
@@ -189,7 +201,7 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
     <span class="w-14 shrink-0 pt-0.5 text-xs text-body">{label}</span>
     <div class="flex flex-wrap gap-1">
       {#each values as value (value)}
-        {const on = selected.includes(value)}
+        {@const on = selected.includes(value)}
         <span
           class={`rounded border px-1.5 py-0.5 text-xs ${
             on
@@ -205,9 +217,9 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
 {/snippet}
 
 {#snippet controlPanel(item: ResolvedInstruction)}
-  {const washer = machine.washer}
-  {const position = washer.programs.indexOf(item.program)}
-  {const off = washer.programs[0] ?? ""}
+  {@const washer = machine.washer}
+  {@const position = washer.programs.indexOf(item.program)}
+  {@const off = washer.programs[0] ?? ""}
   <div class="flex gap-3 rounded-md border border-hairline bg-panel p-3">
     <div class="w-20 shrink-0 text-center">
       <ProgramDial program={item.program} washer={washer} size={78} />
@@ -223,8 +235,8 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
 {/snippet}
 
 {#snippet ironPanel(group: ResolvedInstruction[])}
-  {const item = group[0] as ResolvedInstruction}
-  {const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined}
+  {@const item = group[0] as ResolvedInstruction}
+  {@const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined}
   <div class="flex items-center gap-3 rounded-md border border-hairline bg-panel p-3">
     <IronDial
       setting={item.ironSetting}
@@ -254,13 +266,13 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
   reasoning as `field`'s own now-removed default.
 -->
 {#snippet prose(items: ResolvedInstruction[], pick: (item: ResolvedInstruction) => string, className: string = "")}
-  {const values = items.map(pick)}
-  {const textClass = "text-sm leading-relaxed text-body"}
+  {@const values = items.map(pick)}
+  {@const textClass = "text-sm leading-relaxed text-body"}
   {#if !values.every((value) => value === "")}
     {#if values.every((value) => value === values[0])}
       <p class={`${textClass} ${className}`}>{values[0]}</p>
     {:else}
-      {const speaking = items.filter((_, index) => values[index] !== "")}
+      {@const speaking = items.filter((_, index) => values[index] !== "")}
       <div class={className}>
         {#each speaking as item, index (item.clothingType)}
           <p class={`${textClass} ${index === 0 ? "" : "mt-0.5"}`}><span class="font-bold text-ink">{`${item.clothingType}: `}</span>{pick(item)}</p>
@@ -290,7 +302,7 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
   rather than picking one to speak for the whole card.
 -->
 {#snippet referenceField(items: ResolvedInstruction[])}
-  {const cited = items.filter((item) => item.referenceName !== "")}
+  {@const cited = items.filter((item) => item.referenceName !== "")}
   {#if cited.length > 0}
     <div class="mt-2">
       <p class="text-xs font-bold tracking-wide text-muted">{t("common.source")}</p>
@@ -322,11 +334,11 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
 {/snippet}
 
 {#snippet cardSnippet(group: ResolvedInstruction[], index: number)}
-  {const item = group[0] as ResolvedInstruction}
-  {const heading = group.map((member) => member.clothingType).join(" + ")}
-  {const names = namesOf(group)}
-  {const together = washesTogether(group)}
-  {const alsoWith = item.mixesWith.filter(
+  {@const item = group[0] as ResolvedInstruction}
+  {@const heading = group.map((member) => member.clothingType).join(" + ")}
+  {@const names = namesOf(group)}
+  {@const together = washesTogether(group)}
+  {@const alsoWith = item.mixesWith.filter(
     (name) => !names.has(name) && group.every((member) => member.mixesWith.includes(name)),
   )}
   <article class={CHART_CARD}>
@@ -378,8 +390,8 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
 {/snippet}
 
 {#snippet ironCardSnippet(group: ResolvedInstruction[], index: number)}
-  {const item = group[0] as ResolvedInstruction}
-  {const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined}
+  {@const item = group[0] as ResolvedInstruction}
+  {@const setting = item.ironing ? ironSetting(machine, item.ironSetting) : undefined}
   <article class={CHART_CARD}>
     <div class={CHART_CARD_HEADER}>
       <h3 class="text-base font-bold text-ink">
