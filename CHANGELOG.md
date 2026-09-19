@@ -1,3 +1,9 @@
+## [1.37.6](https://github.com/alrayyes/washy-washy-web/compare/v1.37.5...v1.37.6) (2026-09-19)
+
+### Bug Fixes
+
+* **deps:** bump @washy-washy/core from 1.5.0 to 1.5.6 ([72519e8](https://github.com/alrayyes/washy-washy-web/commit/72519e87c9cf3f672f4bee69c08755b64f0733e0))
+
 ## [1.37.5](https://github.com/alrayyes/washy-washy-web/compare/v1.37.4...v1.37.5) (2026-09-13)
 
 ### Bug Fixes
