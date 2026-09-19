@@ -1,3 +1,9 @@
+## [1.39.0](https://github.com/alrayyes/washy-washy-web/compare/v1.38.0...v1.39.0) (2026-09-19)
+
+### Features
+
+* **svelte:** port WarningBanner, ThemeToggle and HeaderUpload to Svelte ([#249](https://github.com/alrayyes/washy-washy-web/issues/249)) ([ebf66d1](https://github.com/alrayyes/washy-washy-web/commit/ebf66d119d5799a3b1613407a98fdb05a414e287)), closes [243/#245](https://github.com/243/washy-washy-web/issues/245) [#240](https://github.com/alrayyes/washy-washy-web/issues/240) [#243](https://github.com/alrayyes/washy-washy-web/issues/243)
+
 ## [1.38.0](https://github.com/alrayyes/washy-washy-web/compare/v1.37.8...v1.38.0) (2026-09-19)
 
 ### Features
