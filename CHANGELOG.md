@@ -1,3 +1,9 @@
+## [1.40.0](https://github.com/alrayyes/washy-washy-web/compare/v1.39.0...v1.40.0) (2026-09-19)
+
+### Features
+
+* **svelte:** port dials, Sheet and SheetViewer to Svelte ([#252](https://github.com/alrayyes/washy-washy-web/issues/252)) ([07b0941](https://github.com/alrayyes/washy-washy-web/commit/07b0941b79b2283b3551b77938470521caff7b8b)), closes [#245](https://github.com/alrayyes/washy-washy-web/issues/245) [#243](https://github.com/alrayyes/washy-washy-web/issues/243) [#243](https://github.com/alrayyes/washy-washy-web/issues/243) [#244](https://github.com/alrayyes/washy-washy-web/issues/244) [#245](https://github.com/alrayyes/washy-washy-web/issues/245)
+
 ## [1.39.0](https://github.com/alrayyes/washy-washy-web/compare/v1.38.0...v1.39.0) (2026-09-19)
 
 ### Features
