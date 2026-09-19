@@ -110,6 +110,18 @@ jobs:
   # components that turned out to be pure render logic. The rest of the
   # .tsx/.astro layer stays a deliberate, permanent exclusion — not debt —
   # for the same reason stryker.config.mjs documents.
+  #
+  # src/i18n/ui.ts is temporarily carved back out (#251): the first PR to
+  # ever touch it in CI (#249) hit a near-100% per-mutant timeout rate that
+  # doesn't reproduce locally (100%/0 timeouts, ~2 minutes) — tried and
+  # ruled out so far: concurrency tuning (made it worse, not better),
+  # upgrading @hughescr/stryker-bun-runner past a real, matching upstream
+  # bug ("runaway recursive bun test spawns", fixed in 1.4.0 — didn't help
+  # here), and a real Svelte/happy-dom test-isolation bug found during
+  # #243 (confirmed unrelated: doesn't reproduce with ui.ts's own,
+  # React-only test file). Still covered by the full local audit
+  # (`bun run mutation`, unaffected by this) — #251 tracks getting this
+  # back into CI once the actual cause is found.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -127,6 +139,7 @@ jobs:
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
+              ':(exclude)src/i18n/ui.ts' \
               src/components/Sheet.tsx src/components/dials.tsx src/components/SectionHeading.tsx \
             | grep -E '\.tsx?$' || true)
           {
