@@ -24,7 +24,7 @@
     "prepare": "lefthook install",
     "preview": "astro preview",
     "prose:sync": "bun run scripts/install-vale.ts && .tools/vale sync",
-    "test": "bun test test/",
+    "test": "bun --conditions=browser test test/",
     "test:e2e": "playwright test",
     "typecheck": "astro sync && tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
   },

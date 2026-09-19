@@ -9,15 +9,18 @@ import {
   variants,
   washGroups,
 } from "@washy-washy/core";
-import { renderToStaticMarkup } from "react-dom/server";
-import Sheet, { ironCardKey, sheetGroups } from "../src/components/Sheet";
+import { render as svelteRender } from "svelte/server";
+import Sheet, { ironCardKey, sheetGroups } from "../src/components/Sheet.svelte";
+import { DEFAULT_LOCALE } from "../src/i18n/locales";
+import { translator } from "../src/i18n/ui";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
+const t = translator(DEFAULT_LOCALE);
 const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
 const items = resolve(instructions);
 
 function render(variant: Variant, chart: ResolvedInstruction[] = items): string {
-  return renderToStaticMarkup(Sheet({ items: chart, machine, variant }));
+  return svelteRender(Sheet, { props: { items: chart, machine, variant, t } }).body;
 }
 
 describe("Sheet", () => {

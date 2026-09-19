@@ -1,26 +1,59 @@
 import { describe, expect, test } from "bun:test";
 import type { Instruction, Machine } from "@washy-washy/core";
 import { resolve } from "@washy-washy/core";
-import { renderToStaticMarkup } from "react-dom/server";
-import { IronDial, ProgramDial } from "../src/components/dials";
-import Sheet from "../src/components/Sheet";
+import type { Component } from "svelte";
+import { render as svelteRender } from "svelte/server";
+import IronDial from "../src/components/IronDial.svelte";
+import ProgramDial from "../src/components/ProgramDial.svelte";
+import Sheet from "../src/components/Sheet.svelte";
 import { translator } from "../src/i18n/ui";
 
 const translate = translator("en");
 
 /**
- * `react-dom/server` HTML-escapes text nodes (an apostrophe comes out as
- * `&#x27;`, among others), so a translated string with one never appears
- * verbatim in rendered markup. `t()` mirrors that escaping so
- * `.toContain(t(...))` compares like with like.
+ * Svelte's own SSR wraps every conditional/keyed block's own output in
+ * `<!--[-->`/`<!--]-->` (or `<!--[0-->`/`<!--[-1-->` for an if/else
+ * branch) hydration-boundary comments — not just around a component's root
+ * output, the way the dials stage first found it, but around *every* such
+ * block anywhere in the tree, including a bare, single-child conditional's
+ * own `<!---->` anchor. Two piles of content that are visually adjacent in
+ * the rendered page (a badge right after a joined clothing-type list, a
+ * numbered heading's "1. " right before its own text) can have one of
+ * these comments sitting between them in the raw SSR string, breaking a
+ * byte-exact `.toContain`/`.toBe` check that assumes tight adjacency. None
+ * of this file's own translated strings or fixture data ever contain a
+ * literal HTML comment, so stripping every `<!--...-->` before running
+ * content assertions can never eat real content — only Svelte's own
+ * hydration bookkeeping, which nothing in this file needs to see.
+ */
+function stripHydrationComments(html: string): string {
+  return html.replace(/<!--[\s\S]*?-->/g, "");
+}
+
+/** `svelte/server`'s `render()`, with hydration-boundary comments stripped. */
+function ssr(
+  // biome-ignore lint/suspicious/noExplicitAny: a generic helper shared by every component this file renders, each with its own distinct props shape
+  component: Component<any>,
+  props: Record<string, unknown>,
+): string {
+  return stripHydrationComments(svelteRender(component, { props }).body);
+}
+
+/**
+ * Svelte's own SSR (`svelte/server`'s `render()`) escapes text-node content
+ * far more narrowly than `react-dom/server` did — confirmed against
+ * Svelte's own `escape_html` (`svelte/src/escaping.js`): only `&` and `<`
+ * are replaced (`&amp;`/`&lt;`) in ordinary text content; `>`, `"` and `'`
+ * pass through untouched (attribute values additionally escape `"`, but
+ * none of this file's assertions compare attribute values through `t()`).
+ * None of this file's own translated strings contain `&` or `<`, so this
+ * currently never changes anything it's applied to — kept anyway so a
+ * future string that does needs no rediscovery, same discipline as the
+ * `<!--[-->` hydration-boundary discovery in the dials stage. `t()` mirrors
+ * that (narrower) escaping so `.toContain(t(...))` compares like with like.
  */
 function t(key: Parameters<typeof translate>[0], params?: Parameters<typeof translate>[1]): string {
-  return translate(key, params)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#x27;");
+  return translate(key, params).replaceAll("&", "&amp;").replaceAll("<", "&lt;");
 }
 
 const machine: Machine = {
@@ -274,7 +307,7 @@ const raw: Instruction[] = [
 const items = resolve(raw);
 
 function render(variant: "full" | "wash" | "iron" = "full"): string {
-  return renderToStaticMarkup(Sheet({ items, machine, variant }));
+  return ssr(Sheet, { items, machine, variant, t: translate });
 }
 
 describe("Masthead", () => {
@@ -305,6 +338,18 @@ describe("Loads", () => {
     expect(section).not.toContain(`Foxtrot<span`);
   });
 
+  test("each row shows its own programme, formatted temperature and total duration", () => {
+    const html = render("full");
+    const start = html.indexOf('class="rounded-md border border-hairline px-3"');
+    const section = html.slice(start, html.indexOf("</section>", start));
+    // formatTemperature("40") -> "40°"; Alpha/Beta/Delta/November all share
+    // Cottons at 40, and all share the fixture's default "~1:00" duration.
+    expect(section).toContain(
+      '<span class="w-18 shrink-0 text-xs font-bold text-accent-text">Cottons 40°</span>',
+    );
+    expect(section).toContain('<span class="shrink-0 text-xs text-muted">~1:00</span>');
+  });
+
   test("every load row but the last has a bottom border", () => {
     const html = render("full");
     const start = html.indexOf('class="rounded-md border border-hairline px-3"');
@@ -325,7 +370,7 @@ describe("Loads", () => {
 describe("Legend", () => {
   test("falls back to the only programme as its own example when there's just one", () => {
     const oneProgram: Machine = { ...machine, washer: { ...machine.washer, programs: ["Solo"] } };
-    const html = renderToStaticMarkup(Sheet({ items, machine: oneProgram, variant: "full" }));
+    const html = ssr(Sheet, { items, machine: oneProgram, variant: "full", t: translate });
 
     expect(html).toContain(t("sheet.legendWashExplain", { off: "Solo" }));
   });
@@ -356,19 +401,19 @@ describe("Legend", () => {
   });
 
   test("draws the programme dial on the second programme specifically, not the first", () => {
-    // Compared against dials.tsx's own component directly, not just a
-    // presence check — the only way to tell "drew the right dial" from
-    // "drew a dial" at all.
-    const expectedDial = renderToStaticMarkup(
-      ProgramDial({ program: "Synthetics", washer: machine.washer, size: 54 }),
-    );
+    // Compared against ProgramDial.svelte's own component directly, not
+    // just a presence check — the only way to tell "drew the right dial"
+    // from "drew a dial" at all.
+    const expectedDial = ssr(ProgramDial, {
+      program: "Synthetics",
+      washer: machine.washer,
+      size: 54,
+    });
     expect(render("full")).toContain(expectedDial);
   });
 
   test("draws the thermostat dial on the machine's own hottest (last) setting", () => {
-    const expectedDial = renderToStaticMarkup(
-      IronDial({ setting: "3", settings: machine.iron.settings, size: 54 }),
-    );
+    const expectedDial = ssr(IronDial, { setting: "3", settings: machine.iron.settings, size: 54 });
     expect(render("iron")).toContain(expectedDial);
   });
 
@@ -378,13 +423,13 @@ describe("Legend", () => {
       iron: { ...machine.iron, settings: [] },
     };
 
-    const full = renderToStaticMarkup(Sheet({ items, machine: bareMachine, variant: "full" }));
-    const iron = renderToStaticMarkup(Sheet({ items, machine: bareMachine, variant: "iron" }));
+    const full = ssr(Sheet, { items, machine: bareMachine, variant: "full", t: translate });
+    const iron = ssr(Sheet, { items, machine: bareMachine, variant: "iron", t: translate });
 
     expect(full).toContain(t("sheet.legendWashExplain", { off: "" }));
     // Both dials fall back to their own defaults (index/position 0) rather
     // than throwing on an empty programs/settings list.
-    expect(iron).toContain(renderToStaticMarkup(IronDial({ setting: "", settings: [], size: 54 })));
+    expect(iron).toContain(ssr(IronDial, { setting: "", settings: [], size: 54 }));
   });
 });
 
@@ -536,10 +581,13 @@ describe("SplitField / Prose", () => {
     const html = render("full");
     // Alpha/Beta's own DETERGENT field: uppercased label, and the
     // surrounding <div> Prose wraps disagreeing lines in has no class of
-    // its own (nothing was ever passed down from SplitField).
+    // its own (nothing was ever passed down from SplitField). Svelte's own
+    // SSR omits a `class` attribute entirely when its value is "" (unlike
+    // React, which always renders `class=""`) — same "no classes applied"
+    // outcome, just a bare `<div>` rather than an explicitly empty one.
     expect(html).toContain(`>${t("common.detergent").toUpperCase()}<`);
     expect(html).toContain(
-      '<div class=""><p class="text-sm leading-relaxed text-body "><span class="font-bold text-ink">Alpha: </span>',
+      '<div><p class="text-sm leading-relaxed text-body "><span class="font-bold text-ink">Alpha: </span>',
     );
   });
 
@@ -788,7 +836,7 @@ describe("ControlPanel / ChipRow", () => {
 
   test("falls back to an empty 'off' position when the washer has no programmes at all", () => {
     const noPrograms: Machine = { ...machine, washer: { ...machine.washer, programs: [] } };
-    const html = renderToStaticMarkup(Sheet({ items, machine: noPrograms, variant: "full" }));
+    const html = ssr(Sheet, { items, machine: noPrograms, variant: "full", t: translate });
 
     // The exact <p>, not a loose substring: a mutated, non-empty fallback
     // would still start with this same text, just with more after it.
@@ -819,5 +867,12 @@ describe("Card/IronCard numbering and heading", () => {
 
     expect(numbers[0]).toBe(1);
     expect(numbers).toEqual(numbers.map((_, i) => i + 1));
+  });
+
+  test("the card header shows the group's own total duration, next to the numbered heading", () => {
+    const html = render("full");
+    // Every fixture pile shares the same "~1:00" duration, so every card's
+    // own header carries it — a real value, not a blank/undefined one.
+    expect(html).toContain('<span class="text-xs font-bold text-accent-text">~1:00</span>');
   });
 });
