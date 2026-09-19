@@ -1,3 +1,9 @@
+## [1.41.0](https://github.com/alrayyes/washy-washy-web/compare/v1.40.0...v1.41.0) (2026-09-19)
+
+### Features
+
+* **svelte:** port KeyboardNav and useKeyboardNav to Svelte ([#253](https://github.com/alrayyes/washy-washy-web/issues/253)) ([3e593fa](https://github.com/alrayyes/washy-washy-web/commit/3e593fa24aa8a1a265f3dc0ab9d46913b909083f)), closes [#249](https://github.com/alrayyes/washy-washy-web/issues/249) [#249](https://github.com/alrayyes/washy-washy-web/issues/249) [#241](https://github.com/alrayyes/washy-washy-web/issues/241)
+
 ## [1.40.0](https://github.com/alrayyes/washy-washy-web/compare/v1.39.0...v1.40.0) (2026-09-19)
 
 ### Features
