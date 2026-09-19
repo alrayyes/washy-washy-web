@@ -15,9 +15,9 @@ static file server.
 `/config/machine`, `/privacy`, `/disclaimer`). Most of what's on them is
 plain server-rendered HTML — the header, the footer, page chrome — with the
 genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`
-and `MachineEditor` (still React — mid-migration to Svelte, see #239), and
-`SheetViewer`, `HeaderUpload`, `ThemeToggle`, `WarningBanner` and
-`KeyboardNav` (already Svelte — #240/#241/#243). An island hydrates
+(still React — mid-migration to Svelte, see #239), and `SheetViewer`,
+`HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav` and
+`MachineEditor` (already Svelte — #240/#241/#243/#244). An island hydrates
 independently of the rest of the page, and each one that has meaningful
 client-side state to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see

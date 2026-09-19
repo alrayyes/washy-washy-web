@@ -4,7 +4,7 @@ import { localeFromPath } from "../../i18n/locales";
 import { translator } from "../../i18n/ui";
 import Layout from "../../layouts/Layout.astro";
 import { buildChart } from "../../lib/chart";
-import MachineEditor from "../MachineEditor";
+import MachineEditor from "../MachineEditor.svelte";
 
 const locale = localeFromPath(Astro.url.pathname);
 const { items, machine } = buildChart(configSourceFor(locale));
