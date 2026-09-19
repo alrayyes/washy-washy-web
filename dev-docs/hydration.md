@@ -2,12 +2,12 @@
 
 `SheetViewer`, `ConfigViewer` and `MachineEditor` are all `client:load`
 islands: Astro server-renders their initial markup (the bundled example
-chart, no filters, nothing restored yet), then React (`ConfigViewer`) or
-Svelte's `onMount` (`SheetViewer`, `MachineEditor`) attaches to that markup in
-the browser once its bundle has loaded. Between those two moments the page
-looks fully interactive — the DOM nodes are there, a click or a keystroke on
-them "succeeds" in the sense that the browser doesn't reject it — but nothing
-is listening yet, since neither framework has attached its event handlers.
+chart, no filters, nothing restored yet), then Svelte's `onMount` attaches to
+that markup in the browser once its bundle has loaded. Between those two
+moments the page looks fully interactive — the DOM nodes are there, a click
+or a keystroke on them "succeeds" in the sense that the browser doesn't
+reject it — but nothing is listening yet, since Svelte hasn't attached its
+event handlers.
 
 That gap is a real race, not a theoretical one. A script driving the page —
 Playwright, or `scripts/capture-docs-media.ts`'s own screenshot automation —

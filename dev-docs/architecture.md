@@ -14,12 +14,13 @@ static file server.
 `src/pages/*.astro` are the app's own pages (the front page, `/config`,
 `/config/machine`, `/privacy`, `/disclaimer`). Most of what's on them is
 plain server-rendered HTML — the header, the footer, page chrome — with the
-genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`
-(still React — mid-migration to Svelte, see #239), and `SheetViewer`,
-`HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav` and
-`MachineEditor` (already Svelte — #240/#241/#243/#244). An island hydrates
-independently of the rest of the page, and each one that has meaningful
-client-side state to restore (from
+genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`,
+`SheetViewer`, `HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav`
+and `MachineEditor` — every island is Svelte now (#240/#241/#243/#244/#245).
+React itself is still a dependency until #246 drops `@astrojs/react` and the
+`react`/`react-dom` packages, the last step of the migration #239 tracks. An
+island hydrates independently of the rest of the page, and each one that has
+meaningful client-side state to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see
 [Island hydration](hydration.md) for why that convention exists and what
 depends on it.
@@ -62,6 +63,6 @@ full-parity decision.
 
 `@washy-washy/pdf` (the PDF rendering both this app and the CLI share) is
 dynamically imported only when a download button is actually clicked
-(`SheetViewer.tsx`'s `handleDownloadPhone`/`handleDownloadPrint`/
+(`SheetViewer.svelte`'s `handleDownloadPhone`/`handleDownloadPrint`/
 `handleDownloadCard`) — filtering the chart never pulls in `@react-pdf/
 renderer` or `pdf-lib`, both sizeable, for a render nobody asked for yet.
