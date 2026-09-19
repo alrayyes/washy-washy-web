@@ -42,7 +42,7 @@
     "@washy-washy/core": "1.5.6",
     "@washy-washy/pdf": "2.4.1",
     "astro": "7.3.2",
-    "react": "19.2.8",
+    "react": "19.3.0",
     "react-dom": "19.2.8",
     "tailwindcss": "4.3.3"
   },
@@ -63,7 +63,7 @@
     "@semantic-release/release-notes-generator": "14.1.1",
     "@stryker-mutator/core": "10.0.0",
     "@types/bun": "1.4.2",
-    "@types/react": "19.2.18",
+    "@types/react": "19.3.0",
     "@types/react-dom": "19.2.7",
     "conventional-changelog-conventionalcommits": "9.3.1",
     "happy-dom": "20.14.5",
