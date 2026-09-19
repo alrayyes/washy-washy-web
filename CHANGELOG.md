@@ -1,3 +1,9 @@
+## [1.42.0](https://github.com/alrayyes/washy-washy-web/compare/v1.41.0...v1.42.0) (2026-09-19)
+
+### Features
+
+* **svelte:** port MachineEditor to Svelte ([#254](https://github.com/alrayyes/washy-washy-web/issues/254)) ([84e7c26](https://github.com/alrayyes/washy-washy-web/commit/84e7c26c447f2e02d9ea33deec7eb56d170a5c4c)), closes [243/#245](https://github.com/243/washy-washy-web/issues/245) [#244](https://github.com/alrayyes/washy-washy-web/issues/244)
+
 ## [1.41.0](https://github.com/alrayyes/washy-washy-web/compare/v1.40.0...v1.41.0) (2026-09-19)
 
 ### Features
