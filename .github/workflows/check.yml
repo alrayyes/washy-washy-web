@@ -136,22 +136,9 @@ jobs:
           } >> "$GITHUB_OUTPUT"
       - name: Run mutation testing on the changed files
         if: steps.changed.outputs.files != ''
-        # --concurrency 2, not stryker.config.mjs's own 4: that default is
-        # tuned for a much beefier local machine (see its own comment,
-        # 31GiB RAM), and this GitHub-hosted runner can't sustain it —
-        # confirmed live on #249, where src/i18n/ui.ts's 2210 mutants (11
-        # locale dictionaries) hit a near-100% timeout rate in CI despite
-        # scoring a clean 100%/0 timeouts in 2m28s on that local machine.
-        # The CI log's dry run also showed repeated Bun Inspector Protocol
-        # WebSocket warnings from @hughescr/stryker-bun-runner ("id-collision
-        # bug", "wasClean=false") that the local run printed too but
-        # recovered from — lower concurrency means fewer concurrent
-        # inspector connections competing, which should reduce how often
-        # this runner-level flakiness actually surfaces as a timeout.
         run: >-
           bunx stryker run
           --mutate "$(echo "${{ steps.changed.outputs.files }}" | paste -sd, -)"
-          --concurrency 2
       - name: Nothing to mutate
         if: steps.changed.outputs.files == ''
         run: echo "No src/lib or src/i18n changes in this diff — nothing to mutate."
