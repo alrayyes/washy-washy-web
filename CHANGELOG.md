@@ -1,3 +1,9 @@
+## [1.38.0](https://github.com/alrayyes/washy-washy-web/compare/v1.37.8...v1.38.0) (2026-09-19)
+
+### Features
+
+* **svelte:** add Svelte integration and Svelte AI agent tooling ([#247](https://github.com/alrayyes/washy-washy-web/issues/247)) ([3bb9e0f](https://github.com/alrayyes/washy-washy-web/commit/3bb9e0ffcc2e39db0a3d2ad22fdd5638d6cd4441)), closes [#239](https://github.com/alrayyes/washy-washy-web/issues/239) [#239](https://github.com/alrayyes/washy-washy-web/issues/239)
+
 ## [1.37.8](https://github.com/alrayyes/washy-washy-web/compare/v1.37.7...v1.37.8) (2026-09-19)
 
 ### Bug Fixes
