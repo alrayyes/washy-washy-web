@@ -28,9 +28,10 @@ depends on it.
 `filter.ts`'s facet computation, `configShare.ts`'s hash encode/decode,
 `storage.ts`'s `localStorage` read/write, and so on — kept separate from the
 components so it's unit-testable without a browser (`test/*.test.ts`, `bun
-test`, no DOM). `src/hooks/` holds shared React hooks where more than one
-component would otherwise duplicate the same `useEffect` — currently just
-`useKeyboardNav`, which `KeyboardNav.tsx` wires into visible UI.
+test`, no DOM). `src/hooks/` holds shared reactive logic where more than one
+component would otherwise duplicate it — currently just `useKeyboardNav`
+(`.svelte.ts`, since it needs `$state` at module scope), which
+`KeyboardNav.svelte` wires into visible UI.
 
 ## One Starlight surface, one Astro project
 
