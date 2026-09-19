@@ -104,12 +104,14 @@ jobs:
   # for a given run — no ratchet, just a narrower set.
   #
   # #219 closed both of that issue's holes: src/lib and src/i18n now cover
-  # every file in each directory (including urlHistory.ts and
-  # TranslationProvider.tsx — see stryker.config.mjs's own comment for why
-  # both were excluded before and aren't anymore), plus the three .tsx
-  # components that turned out to be pure render logic. The rest of the
-  # .tsx/.astro layer stays a deliberate, permanent exclusion — not debt —
-  # for the same reason stryker.config.mjs documents.
+  # every file in each directory (including urlHistory.ts — see
+  # stryker.config.mjs's own comment for why it was excluded before and
+  # isn't anymore), plus the pure-render-logic components that used to be
+  # three .tsx files and are now their Svelte ports (dials.tsx/
+  # SectionHeading.tsx/TranslationProvider.tsx are all deleted — #245 was
+  # the last consumer). The rest of the .tsx/.astro layer stays a
+  # deliberate, permanent exclusion — not debt — for the same reason
+  # stryker.config.mjs documents.
   #
   # src/i18n/ui.ts is temporarily carved back out (#251): the first PR to
   # ever touch it in CI (#249) hit a near-100% per-mutant timeout rate that
@@ -140,7 +142,6 @@ jobs:
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
               ':(exclude)src/i18n/ui.ts' \
-              src/components/dials.tsx src/components/SectionHeading.tsx \
               src/components/ProgramDial.svelte src/components/IronDial.svelte \
               src/components/SectionHeading.svelte \
               src/components/Sheet.svelte src/components/CardActions.svelte \

@@ -55,7 +55,8 @@ export default {
   // #219's two holes, and what closed each:
   //
   // Hole 1 — every .tsx/.astro file was outside this glob entirely. Most of
-  // them still are: HeaderUpload/ConfigViewer/MachineEditor/SheetViewer/
+  // them still are, .svelte now rather than .tsx for the ones already
+  // ported (#239): HeaderUpload/ConfigViewer/MachineEditor/SheetViewer/
   // WarningBanner/KeyboardNav/ThemeToggle all read window/document/refs
   // directly (file uploads, clipboard, matchMedia, native <dialog>, scroll
   // position) and every .astro page needs Astro's own render pipeline, not
@@ -64,15 +65,18 @@ export default {
   // documents for e2e-covered DOM-interaction code. That's a deliberate,
   // permanent call: they stay e2e-only.
   //
-  // But four files turned out to have *no* DOM surface at all: Sheet.tsx
+  // But four files turned out to have *no* DOM surface at all — all four
+  // now deleted, their Svelte ports (or, for Sheet.tsx, nothing at all —
+  // ConfigViewer.tsx duplicated its own read-only rendering rather than
+  // importing it) taking their place in the list below: Sheet.tsx
   // (module-level, confirmed by grep — no window/document/useRef/useEffect
   // anywhere in it; test/sheet-render.test.ts has quietly unit-tested it via
   // `renderToStaticMarkup` since #21, years before mutation testing existed
   // here), dials.tsx's ProgramDial/IronDial (pure geometry-to-SVG functions),
   // SectionHeading.tsx (one string transform), and TranslationProvider.tsx
   // (a Context provider plus two hooks, no DOM types anywhere in its
-  // signature). None of these need a DOM shim (jsdom/happy-dom): React's own
-  // `react-dom/server` renders a real, correct markup string for a pure
+  // signature). None of these needed a DOM shim (jsdom/happy-dom): React's
+  // own `react-dom/server` rendered a real, correct markup string for a pure
   // component without ever touching a `window`. A DOM-capable layer for the
   // genuinely interactive components above was investigated and rejected —
   // getting those to a real 100% would mean re-deriving most of Playwright's
@@ -104,14 +108,14 @@ export default {
   mutate: [
     "src/lib/**/*.ts",
     "src/i18n/**/*.ts",
-    "src/i18n/TranslationProvider.tsx",
-    "src/components/dials.tsx",
-    "src/components/SectionHeading.tsx",
     // The Svelte ports of dials.tsx/SectionHeading.tsx (#243's first
-    // stage) — dialGeometry.ts is the plain-TS geometry math shared by
-    // both new dials, and the instrumenter has a native Svelte
-    // transformer/printer (transformers/svelte-transformer.js), so these
-    // mutate the same way any other pure-render source here does.
+    // stage) — dials.tsx, SectionHeading.tsx and TranslationProvider.tsx
+    // are all deleted now (#245 was their last consumer), so there's
+    // nothing left to list alongside these. dialGeometry.ts is the
+    // plain-TS geometry math shared by both new dials, and the
+    // instrumenter has a native Svelte transformer/printer
+    // (transformers/svelte-transformer.js), so these mutate the same way
+    // any other pure-render source here does.
     "src/lib/dialGeometry.ts",
     "src/components/ProgramDial.svelte",
     "src/components/IronDial.svelte",
