@@ -113,20 +113,47 @@ jobs:
   # deliberate, permanent exclusion — not debt — for the same reason
   # stryker.config.mjs documents.
   #
-  # src/i18n/ui.ts is temporarily carved back out (#251): the first PR to
-  # ever touch it in CI (#249) hit a near-100% per-mutant timeout rate that
-  # doesn't reproduce locally (100%/0 timeouts, ~2 minutes) — tried and
-  # ruled out so far: concurrency tuning (made it worse, not better),
-  # upgrading @hughescr/stryker-bun-runner past a real, matching upstream
-  # bug ("runaway recursive bun test spawns", fixed in 1.4.0 — didn't help
-  # here), and a real Svelte/happy-dom test-isolation bug found during
-  # #243 (confirmed unrelated: doesn't reproduce with ui.ts's own,
-  # React-only test file). Still covered by the full local audit
-  # (`bun run mutation`, unaffected by this) — #251 tracks getting this
-  # back into CI once the actual cause is found.
+  # src/i18n/ui.ts: #251 found the real cause, with real evidence from
+  # three dedicated CI runs (not local — this genuinely doesn't reproduce
+  # on a dev machine with cores to spare). Only its `en` dictionary (~200
+  # of the file's 2210 mutants) is expensive: test/sheet-render.test.ts,
+  # test/sheet-actions.test.ts and test/sheet-fields.test.ts all hardcode
+  # `translator("en")`, so per-test coverage correctly attributes every
+  # `en`-dictionary mutant to those three files too, not just
+  # test/ui.test.ts — and all three mount real Svelte components through
+  # test/support/svelteCompile.ts's preload plugin, which recompiles from
+  # scratch on every single spawned `bun test` process (no cross-process
+  # cache). A same-size slice of a different locale (`ru`, covered only by
+  # the lightweight test/ui.test.ts) confirmed the gap directly: 200
+  # mutants in 24 seconds locally, versus the `en` dictionary's ~9 seconds
+  # *per mutant* even when nothing else is running.
+  #
+  # On a real GitHub Actions runner (4 vCPUs) two or more of those heavy,
+  # Svelte-recompiling `bun test` processes running at once are enough to
+  # starve each other into blowing past their timeout — confirmed with
+  # three real CI runs against the same ~200-mutant `en` slice:
+  # concurrency 4 (the default) timed out 186/200 (93%); concurrency 2 was
+  # no better, 184/200 (92%), and slower besides (16m12s vs 8m20s) — ruling
+  # out a smooth contention curve; concurrency 1 timed out *none* of the
+  # 186 it got through before hitting this diagnostic job's own budget,
+  # each mutant a consistent ~9s. This never showed up locally because a
+  # dev machine has cores to spare beyond whatever `concurrency` asks for;
+  # a CI runner sized to exactly match `concurrency: 4` (this repo's own
+  # default, tuned for a 16-core dev machine, not a 4-vCPU runner) has
+  # none.
+  #
+  # The fix: force `--concurrency 1` for this job specifically whenever
+  # ui.ts is among the changed files, on top of stryker.config.mjs's own
+  # (correct-for-local) default. Only ui.ts's own mutation run pays the
+  # serialized cost, and only on the (rare) PR that touches it — every
+  # other file keeps the fast, fully-parallel default.
   mutation:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # Generous on purpose: a PR touching ui.ts's `en` dictionary runs its
+    # ~200 mutants serialized (~9s each, ~30 minutes) precisely because
+    # that's now a known, deliberate trade-off (reliable over fast) rather
+    # than something to keep shaving down — see the comment above.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -141,7 +168,6 @@ jobs:
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
-              ':(exclude)src/i18n/ui.ts' \
               src/components/ProgramDial.svelte src/components/IronDial.svelte \
               src/components/SectionHeading.svelte \
               src/components/Sheet.svelte src/components/CardActions.svelte \
@@ -151,11 +177,17 @@ jobs:
             echo "$FILES"
             echo "STRYKER_FILES_EOF"
           } >> "$GITHUB_OUTPUT"
+          if echo "$FILES" | grep -qx "src/i18n/ui.ts"; then
+            echo "concurrency=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "concurrency=4" >> "$GITHUB_OUTPUT"
+          fi
       - name: Run mutation testing on the changed files
         if: steps.changed.outputs.files != ''
         run: >-
           bunx stryker run
           --mutate "$(echo "${{ steps.changed.outputs.files }}" | paste -sd, -)"
+          --concurrency ${{ steps.changed.outputs.concurrency }}
       - name: Nothing to mutate
         if: steps.changed.outputs.files == ''
         run: echo "No src/lib or src/i18n changes in this diff — nothing to mutate."

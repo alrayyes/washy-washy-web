@@ -2932,6 +2932,15 @@ const ru: Ui = {
   "page.machine.h1": "Настройки стиральной машины и утюга",
 };
 
+/**
+ * `en`'s own mutants cost more to mutation-test than every other locale's:
+ * test/sheet-render.test.ts, test/sheet-actions.test.ts and
+ * test/sheet-fields.test.ts all hardcode `translator("en")`, so per-test
+ * coverage correctly attributes each `en`-dictionary mutant to those three
+ * Svelte-mounting files too, not just test/ui.test.ts — see
+ * `.github/workflows/check.yml`'s mutation job for what that costs in CI
+ * specifically, and why (#251).
+ */
 export const dictionaries: Record<Locale, Ui> = {
   en,
   ja,
