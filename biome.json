@@ -11,6 +11,7 @@
       "!**/.lighthouseci",
       "!**/reports",
       "!.claude/worktrees",
+      "!.claude/settings.local.json",
       "!styles/Google",
       "!styles/proselint"
     ]
