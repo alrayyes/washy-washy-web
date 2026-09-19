@@ -108,6 +108,15 @@ export default {
     "src/components/Sheet.tsx",
     "src/components/dials.tsx",
     "src/components/SectionHeading.tsx",
+    // The Svelte ports of dials.tsx/SectionHeading.tsx (#243's first
+    // stage) — dialGeometry.ts is the plain-TS geometry math shared by
+    // both new dials, and the instrumenter has a native Svelte
+    // transformer/printer (transformers/svelte-transformer.js), so these
+    // mutate the same way any other pure-render source here does.
+    "src/lib/dialGeometry.ts",
+    "src/components/ProgramDial.svelte",
+    "src/components/IronDial.svelte",
+    "src/components/SectionHeading.svelte",
   ],
   // Auto-discovery finds every *.test.ts *and* the Playwright specs under
   // e2e/ (which import from "@playwright/test", not "bun:test") and tries

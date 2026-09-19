@@ -141,7 +141,9 @@ jobs:
               src/lib src/i18n \
               ':(exclude)src/i18n/ui.ts' \
               src/components/Sheet.tsx src/components/dials.tsx src/components/SectionHeading.tsx \
-            | grep -E '\.tsx?$' || true)
+              src/components/ProgramDial.svelte src/components/IronDial.svelte \
+              src/components/SectionHeading.svelte \
+            | grep -E '\.(tsx?|svelte)$' || true)
           {
             echo "files<<STRYKER_FILES_EOF"
             echo "$FILES"
