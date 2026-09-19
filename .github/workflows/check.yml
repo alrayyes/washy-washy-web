@@ -301,6 +301,11 @@ jobs:
       # (#12) is plain Markdown, so it's named alongside them rather than
       # exempted — passing the directory is safe because it holds nothing but
       # genuine prose, unlike the repo root.
+      #
+      # .ltex.json disables ENGLISH_WORD_REPEAT_RULE for the same reason
+      # .vale.ini turns Vale.Repetition off: the product is called
+      # "washy-washy", a deliberate repeated word, not a typo either rule
+      # would otherwise be right to catch.
       - run: ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md src/content/docs/docs
 
   # Style. House voice, weasel words, wordiness, undefined jargon. Advice
