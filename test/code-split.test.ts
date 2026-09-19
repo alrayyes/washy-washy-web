@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-const SHEET_VIEWER = "src/components/SheetViewer.tsx";
+const SHEET_VIEWER = "src/components/SheetViewer.svelte";
 
 describe("SheetViewer", () => {
   test("does not statically import @washy-washy/pdf", async () => {

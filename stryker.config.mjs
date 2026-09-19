@@ -105,16 +105,43 @@ export default {
     "src/lib/**/*.ts",
     "src/i18n/**/*.ts",
     "src/i18n/TranslationProvider.tsx",
-    "src/components/Sheet.tsx",
     "src/components/dials.tsx",
     "src/components/SectionHeading.tsx",
+    // The Svelte ports of dials.tsx/SectionHeading.tsx (#243's first
+    // stage) — dialGeometry.ts is the plain-TS geometry math shared by
+    // both new dials, and the instrumenter has a native Svelte
+    // transformer/printer (transformers/svelte-transformer.js), so these
+    // mutate the same way any other pure-render source here does.
+    "src/lib/dialGeometry.ts",
+    "src/components/ProgramDial.svelte",
+    "src/components/IronDial.svelte",
+    "src/components/SectionHeading.svelte",
+    // Sheet.tsx's own Svelte port (#243's second stage) — Sheet.tsx itself
+    // is deleted once this lands (nothing else needs the React version),
+    // so it's replaced here rather than added alongside. CardActions.svelte
+    // is the one sub-component that became its own file instead of a
+    // snippet (see its own doc comment for why); everything else in the
+    // original Sheet.tsx is a snippet inside Sheet.svelte itself.
+    "src/components/Sheet.svelte",
+    "src/components/CardActions.svelte",
   ],
   // Auto-discovery finds every *.test.ts *and* the Playwright specs under
   // e2e/ (which import from "@playwright/test", not "bun:test") and tries
   // to run them as bun:test files, which fails outright. Restrict to the
   // same directory package.json's own "test" script uses.
+  //
+  // `bunArgs` mirrors that same script's own `--conditions=browser` (see
+  // `test/support/svelteCompile.ts`'s own comment on why it's needed at
+  // all): unlike `check.yml`'s own `bun test` invocation, Stryker's bun
+  // runner builds its invocation from scratch rather than running
+  // `package.json`'s "test" script, so this flag has to be repeated here
+  // explicitly or `test/sheet-actions.test.ts`'s own `mount`/`unmount`
+  // calls resolve to Svelte's server build and throw
+  // `lifecycle_function_unavailable` on every single test in that file —
+  // confirmed live.
   bun: {
     testFiles: ["test"],
+    bunArgs: ["--conditions=browser"],
   },
   // Default concurrency (nproc, 16 here) spawns that many concurrent `bun
   // test` children, each paying the full suite's module-load cost

@@ -1,0 +1,6 @@
+[test]
+# Compiles `.svelte` imports (server-rendered by default, client-rendered
+# for a `?client`-suffixed import) before `bun test` evaluates them — see
+# the preload file's own comment for why this is needed and why it's
+# scoped to `[test]` alone (#243).
+preload = ["./test/support/svelteCompile.ts"]

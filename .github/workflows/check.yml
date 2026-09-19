@@ -61,7 +61,7 @@ jobs:
       # Codecov Test Analytics (below) reads the JUnit file for
       # failure/flake history, coverage-reporter=lcov still feeds the
       # coverage upload.
-      - run: bun test test/ --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=junit.xml
+      - run: bun --conditions=browser test test/ --coverage --coverage-reporter=lcov --reporter=junit --reporter-outfile=junit.xml
       # Regular repo secrets, CODECOV_TOKEN included, aren't exposed to runs
       # triggered by dependabot[bot] on pull_request -- a GitHub security
       # boundary, not a config gap. Skip the upload there rather than fail
@@ -140,8 +140,11 @@ jobs:
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
               ':(exclude)src/i18n/ui.ts' \
-              src/components/Sheet.tsx src/components/dials.tsx src/components/SectionHeading.tsx \
-            | grep -E '\.tsx?$' || true)
+              src/components/dials.tsx src/components/SectionHeading.tsx \
+              src/components/ProgramDial.svelte src/components/IronDial.svelte \
+              src/components/SectionHeading.svelte \
+              src/components/Sheet.svelte src/components/CardActions.svelte \
+            | grep -E '\.(tsx?|svelte)$' || true)
           {
             echo "files<<STRYKER_FILES_EOF"
             echo "$FILES"

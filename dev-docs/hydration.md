@@ -2,18 +2,19 @@
 
 `SheetViewer`, `ConfigViewer` and `MachineEditor` are all `client:load`
 islands: Astro server-renders their initial markup (the bundled example
-chart, no filters, nothing restored yet), then React attaches to that markup
-in the browser once its bundle has loaded. Between those two moments the page
+chart, no filters, nothing restored yet), then React (`ConfigViewer`) or
+Svelte's `onMount` (`SheetViewer`, `MachineEditor`) attaches to that markup in
+the browser once its bundle has loaded. Between those two moments the page
 looks fully interactive — the DOM nodes are there, a click or a keystroke on
 them "succeeds" in the sense that the browser doesn't reject it — but nothing
-is listening yet, since React hasn't attached its event handlers.
+is listening yet, since neither framework has attached its event handlers.
 
 That gap is a real race, not a theoretical one. A script driving the page —
 Playwright, or `scripts/capture-docs-media.ts`'s own screenshot automation —
 that clicks a filter or fills a field before hydration finishes will find the
 DOM node mutated (a `<select>`'s value genuinely changed) but the change
-never reaches the component's own state, because the `onChange` handler
-wasn't wired up when it fired. This mostly doesn't show up locally, where
+never reaches the component's own state, because its change handler wasn't
+wired up when it fired. This mostly doesn't show up locally, where
 hydration is fast enough that the window rarely gets hit — and then fails
 intermittently in CI, where it's slower and more variable.
 

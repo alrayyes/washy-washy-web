@@ -11,7 +11,7 @@ import { richText } from "../../i18n/richText";
 import { translator } from "../../i18n/ui";
 import Layout from "../../layouts/Layout.astro";
 import { buildChart } from "../../lib/chart";
-import SheetViewer from "../SheetViewer";
+import SheetViewer from "../SheetViewer.svelte";
 
 const locale = localeFromPath(Astro.url.pathname);
 const { items, machine } = buildChart(configSourceFor(locale));
