@@ -1,3 +1,9 @@
+## [1.43.0](https://github.com/alrayyes/washy-washy-web/compare/v1.42.0...v1.43.0) (2026-09-19)
+
+### Features
+
+* **svelte:** port ConfigViewer to Svelte ([#255](https://github.com/alrayyes/washy-washy-web/issues/255)) ([0f7e636](https://github.com/alrayyes/washy-washy-web/commit/0f7e63633f587f45ed3cdf1d8a9e1d0532cd00e6)), closes [#246](https://github.com/alrayyes/washy-washy-web/issues/246) [#245](https://github.com/alrayyes/washy-washy-web/issues/245)
+
 ## [1.42.0](https://github.com/alrayyes/washy-washy-web/compare/v1.41.0...v1.42.0) (2026-09-19)
 
 ### Features
