@@ -161,10 +161,12 @@ jobs:
   mutation:
     runs-on: ubuntu-latest
     # Generous on purpose: a PR touching ui.ts's `en` dictionary runs its
-    # ~200 mutants serialized (~9s each, ~30 minutes) precisely because
-    # that's now a known, deliberate trade-off (reliable over fast) rather
-    # than something to keep shaving down — see the comment above.
-    timeout-minutes: 60
+    # ~200 mutants serialized (~9s each, ~30 minutes) plus the file's
+    # other ~2000 mutants also serialized (cheap individually, but no
+    # longer parallel) precisely because that's now a known, deliberate
+    # trade-off (reliable over fast) rather than something to keep
+    # shaving down — see the comment above.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
