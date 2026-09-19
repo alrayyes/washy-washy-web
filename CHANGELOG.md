@@ -1,3 +1,9 @@
+## [1.37.8](https://github.com/alrayyes/washy-washy-web/compare/v1.37.7...v1.37.8) (2026-09-19)
+
+### Bug Fixes
+
+* **deps:** bump @washy-washy/pdf from 2.3.8 to 2.4.1 ([70e96ed](https://github.com/alrayyes/washy-washy-web/commit/70e96ed417ac2660682a24dcf9902c19d3bf6368))
+
 ## [1.37.7](https://github.com/alrayyes/washy-washy-web/compare/v1.37.6...v1.37.7) (2026-09-19)
 
 ### Bug Fixes
