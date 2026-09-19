@@ -1,6 +1,8 @@
 [![check](https://github.com/alrayyes/washy-washy-web/actions/workflows/check.yml/badge.svg)](https://github.com/alrayyes/washy-washy-web/actions/workflows/check.yml)
 [![Codecov](https://codecov.io/gh/alrayyes/washy-washy-web/graph/badge.svg)](https://codecov.io/gh/alrayyes/washy-washy-web)
+[![Release](https://img.shields.io/github/v/release/alrayyes/washy-washy-web)](https://github.com/alrayyes/washy-washy-web/releases/latest)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![Live site](https://img.shields.io/badge/live-washy--washy.ryankes.eu-0891b2)](https://washy-washy.ryankes.eu/)
 
 # washy-washy-web
 
@@ -71,6 +73,7 @@ editors, and `/docs` — is available in:
 - Arabic (right-to-left)
 - Chinese (simplified)
 - Turkish
+- Russian
 - Jive — a joke locale, played for laughs
 - LinkedIn — a joke locale, played for laughs
 
