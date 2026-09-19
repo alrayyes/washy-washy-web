@@ -147,6 +147,17 @@ jobs:
   # (correct-for-local) default. Only ui.ts's own mutation run pays the
   # serialized cost, and only on the (rare) PR that touches it — every
   # other file keeps the fast, fully-parallel default.
+  #
+  # `--concurrency 1` alone wasn't enough on its own, confirmed by a real
+  # CI run against the full 2210-mutant file: still ~93% timeouts, no
+  # different from concurrency 2. The #250 typescript checker is why —
+  # Stryker "will always run checkers and test runners in parallel" (its
+  # own --help text), a *second* concurrent process regardless of
+  # `--concurrency`, silently reintroducing the same contention. 199/200
+  # of the `en` dictionary's own mutants are plain `StringLiteral` swaps
+  # that can never fail to compile (confirmed locally), so `--checkers ""`
+  # disables it for just this file's run — the fix needs both flags
+  # together, not `--concurrency 1` alone.
   mutation:
     runs-on: ubuntu-latest
     # Generous on purpose: a PR touching ui.ts's `en` dictionary runs its
@@ -179,8 +190,22 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           if echo "$FILES" | grep -qx "src/i18n/ui.ts"; then
             echo "concurrency=1" >> "$GITHUB_OUTPUT"
+            # Stryker "will always run checkers and test runners in
+            # parallel" (its own --help text) — the typescript checker
+            # (#250) is a *second* concurrent process regardless of
+            # --concurrency, which silently reintroduces the exact
+            # contention --concurrency 1 exists to remove. Confirmed live:
+            # a real CI run with the checker still enabled at concurrency
+            # 1 timed out 93% of the first 375 mutants, indistinguishable
+            # from concurrency 2's own 92% — the checker adds a second
+            # process either way. 199/200 of the en dictionary's own
+            # mutants are plain StringLiteral swaps that can never fail to
+            # compile (confirmed locally), so disabling the checker for
+            # just this file's run costs almost nothing.
+            echo "checkers=" >> "$GITHUB_OUTPUT"
           else
             echo "concurrency=4" >> "$GITHUB_OUTPUT"
+            echo "checkers=typescript" >> "$GITHUB_OUTPUT"
           fi
       - name: Run mutation testing on the changed files
         if: steps.changed.outputs.files != ''
@@ -188,6 +213,7 @@ jobs:
           bunx stryker run
           --mutate "$(echo "${{ steps.changed.outputs.files }}" | paste -sd, -)"
           --concurrency ${{ steps.changed.outputs.concurrency }}
+          --checkers "${{ steps.changed.outputs.checkers }}"
       - name: Nothing to mutate
         if: steps.changed.outputs.files == ''
         run: echo "No src/lib or src/i18n changes in this diff — nothing to mutate."
