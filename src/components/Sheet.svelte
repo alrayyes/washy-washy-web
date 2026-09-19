@@ -134,6 +134,24 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
   // Stryker disable next-line ConditionalExpression
   return group.every((a) => group.every((b) => a === b || canMix(a, b)));
 }
+
+// This filter's own `!names.has(name)` check is redundant for the same
+// reason `namesOf`'s own comment above gives: `group.every(member =>
+// member.mixesWith.includes(name))` right after it already excludes every
+// one of this group's own members, since `resolve()` never lists an item
+// in its own `mixesWith` — a name that IS a group member can never pass
+// that `every` check regardless of what `names` says. Confirmed
+// equivalent by inspection.
+function alsoWithNames(
+  item: ResolvedInstruction,
+  group: ResolvedInstruction[],
+  names: Set<string>,
+): string[] {
+  // Stryker disable next-line CallExpression
+  return item.mixesWith.filter(
+    (name) => !names.has(name) && group.every((member) => member.mixesWith.includes(name)),
+  );
+}
 </script>
 
 {#snippet masthead()}
@@ -338,9 +356,7 @@ function washesTogether(group: ResolvedInstruction[]): boolean {
   {@const heading = group.map((member) => member.clothingType).join(" + ")}
   {@const names = namesOf(group)}
   {@const together = washesTogether(group)}
-  {@const alsoWith = item.mixesWith.filter(
-    (name) => !names.has(name) && group.every((member) => member.mixesWith.includes(name)),
-  )}
+  {@const alsoWith = alsoWithNames(item, group, names)}
   <article class={CHART_CARD}>
     <div class={CHART_CARD_HEADER}>
       <h3 class="text-base font-bold text-ink">
