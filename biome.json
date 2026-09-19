@@ -24,7 +24,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "preset": "recommended"
+      "preset": "recommended",
+      "nursery": {
+        "useBaseline": {
+          "level": "warn",
+          "options": {
+            "available": "newly"
+          }
+        }
+      }
     }
   },
   "javascript": {
