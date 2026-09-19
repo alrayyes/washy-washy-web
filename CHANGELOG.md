@@ -1,3 +1,9 @@
+## [1.37.7](https://github.com/alrayyes/washy-washy-web/compare/v1.37.6...v1.37.7) (2026-09-19)
+
+### Bug Fixes
+
+* **deps:** bump astro from 7.3.1 to 7.3.2 ([36a040e](https://github.com/alrayyes/washy-washy-web/commit/36a040eda9f82abcacb558095a47480336350e42))
+
 ## [1.37.6](https://github.com/alrayyes/washy-washy-web/compare/v1.37.5...v1.37.6) (2026-09-19)
 
 ### Bug Fixes
