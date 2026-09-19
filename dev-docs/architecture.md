@@ -16,11 +16,11 @@ static file server.
 plain server-rendered HTML — the header, the footer, page chrome — with the
 genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`,
 `SheetViewer`, `HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav`
-and `MachineEditor` — every island is Svelte now (#240/#241/#243/#244/#245).
-React itself is still a dependency until #246 drops `@astrojs/react` and the
-`react`/`react-dom` packages, the last step of the migration #239 tracks. An
-island hydrates independently of the rest of the page, and each one that has
-meaningful client-side state to restore (from
+and `MachineEditor` — every island is Svelte
+(#239/#240/#241/#243/#244/#245/#246); React itself, `@astrojs/react` included,
+is gone from the dependency tree entirely. An island hydrates independently
+of the rest of the page, and each one that has meaningful client-side state
+to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see
 [Island hydration](hydration.md) for why that convention exists and what
 depends on it.

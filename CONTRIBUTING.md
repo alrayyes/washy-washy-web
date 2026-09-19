@@ -13,7 +13,7 @@ you need to actually get a checkout running.
 bun install
 ```
 
-Claude Code sessions in this repo get Svelte's own [MCP server](https://svelte.dev/docs/ai/overview) (`.mcp.json`, `AGENTS.md`) — Svelte/SvelteKit documentation lookup and static analysis for any Svelte component work (the ongoing React-to-Svelte island migration, #239).
+Claude Code sessions in this repo get Svelte's own [MCP server](https://svelte.dev/docs/ai/overview) (`.mcp.json`, `AGENTS.md`) — Svelte/SvelteKit documentation lookup and static analysis for any Svelte component work.
 
 ## Architecture
 
@@ -23,7 +23,7 @@ static assets with no Worker script and no server-side code
 machine config and every filter, lives in the visitor's own `localStorage`
 and never reaches a server.
 
-- The sheet viewer, config editor and machine editor are React islands
+- The sheet viewer, config editor and machine editor are Svelte islands
   (`client:load`) inside otherwise-static Astro pages. Each sets
   `data-hydrated="true"` once its listeners are attached — the e2e suite
   waits on that flag rather than racing hydration, and any Playwright script
@@ -40,7 +40,7 @@ and never reaches a server.
   foreground server. It's also the more honest test — a plain static file
   server is what Cloudflare actually serves.
 - `@washy-washy/pdf` is dynamically imported only when a download button is
-  clicked (`SheetViewer.tsx`'s `handleDownload`/`handleDownloadCard`), never
+  clicked (`SheetViewer.svelte`'s `handleDownload`/`handleDownloadCard`), never
   on page load or a filter change — filtering never triggers a render nobody
   asked for.
 

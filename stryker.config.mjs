@@ -149,7 +149,7 @@ export default {
   },
   // Default concurrency (nproc, 16 here) spawns that many concurrent `bun
   // test` children, each paying the full suite's module-load cost
-  // (pdf-lib, @washy-washy/pdf's PDF rendering, react-dom/server) — that's
+  // (pdf-lib, @washy-washy/pdf's PDF rendering, svelte/server) — that's
   // what OOM-killed an earlier run on this machine (31GiB RAM). 4 keeps
   // peak RSS well under budget at some cost to wall time.
   concurrency: 4,
