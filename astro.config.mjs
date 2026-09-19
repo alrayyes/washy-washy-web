@@ -4,6 +4,7 @@
 // client-side, as an island — the site itself stays plain HTML/JS.
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
+import svelte from "@astrojs/svelte";
 import codecovAstroPlugin from "@codecov/astro-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -30,8 +31,10 @@ export default defineConfig({
   // from Starlight's own (English-only for now, #144) i18n entirely.
   integrations: [
     // The sheet viewer (#44) is a React island — the same @react-pdf/renderer
-    // components src/documents.tsx uses, running client-side.
+    // components src/documents.tsx uses, running client-side. Islands are
+    // moving to Svelte one at a time (#239); this stays until #246 drops it.
     react(),
+    svelte(),
     // Content lives one level deeper than Starlight's own default
     // (src/content/docs/docs/, not src/content/docs/) specifically so its
     // pages land under /docs/... instead of taking over the site's root —
