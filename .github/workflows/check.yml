@@ -113,73 +113,49 @@ jobs:
   # deliberate, permanent exclusion — not debt — for the same reason
   # stryker.config.mjs documents.
   #
-  # src/i18n/ui.ts: #251 found the real cause, with real evidence from
-  # three dedicated CI runs (not local — this genuinely doesn't reproduce
-  # on a dev machine with cores to spare). Only its `en` dictionary (~200
-  # of the file's 2210 mutants) is expensive: test/sheet-render.test.ts,
-  # test/sheet-actions.test.ts and test/sheet-fields.test.ts all hardcode
-  # `translator("en")`, so per-test coverage correctly attributes every
-  # `en`-dictionary mutant to those three files too, not just
-  # test/ui.test.ts — and all three mount real Svelte components through
-  # test/support/svelteCompile.ts's preload plugin, which recompiles from
-  # scratch on every single spawned `bun test` process (no cross-process
-  # cache). A same-size slice of a different locale (`ru`, covered only by
-  # the lightweight test/ui.test.ts) confirmed the gap directly: 200
-  # mutants in 24 seconds locally, versus the `en` dictionary's ~9 seconds
-  # *per mutant* even when nothing else is running.
+  # src/i18n/ui.ts stays carved out — #251 spent five real CI runs (not
+  # local; this genuinely never reproduces on a dev machine with cores to
+  # spare) chasing this, and the honest conclusion is that it's a real,
+  # permanent constraint of this CI runner class, not a bug with a fix:
   #
-  # On a real GitHub Actions runner (4 vCPUs) two or more of those heavy,
-  # Svelte-recompiling `bun test` processes running at once are enough to
-  # starve each other into blowing past their timeout — confirmed with
-  # three real CI runs against the same ~200-mutant `en` slice:
-  # concurrency 4 (the default) timed out 186/200 (93%); concurrency 2 was
-  # no better, 184/200 (92%), and slower besides (16m12s vs 8m20s) — ruling
-  # out a smooth contention curve; concurrency 1 timed out *none* of the
-  # 186 it got through before hitting this diagnostic job's own budget,
-  # each mutant a consistent ~9s. This never showed up locally because a
-  # dev machine has cores to spare beyond whatever `concurrency` asks for;
-  # a CI runner sized to exactly match `concurrency: 4` (this repo's own
-  # default, tuned for a 16-core dev machine, not a 4-vCPU runner) has
-  # none.
+  # ui.ts (2210 mutants) is by far the largest mutation-testing target in
+  # this repo — everything else tops out in the hundreds. Each per-mutant
+  # `bun test` invocation Stryker spawns for it is measurably heavier to
+  # instrument and sandbox than for any smaller file, regardless of which
+  # specific mutant runs: a same-size slice of one locale dictionary
+  # (`en`, whose translated strings some Svelte-mounting tests also
+  # exercise) and a slice of a completely unrelated one (`ru`, touched
+  # only by the lightweight test/ui.test.ts) both showed the identical
+  # ~90% CI timeout rate, bad from the very first mutant tested, which
+  # ruled out "only en is expensive" as the explanation — it's ui.ts's
+  # own size, not its content. A real, unrelated file with a normal
+  # mutant count (Sheet.svelte + CardActions.svelte, 340 mutants) ran
+  # clean in the same job type, same runner, same everything else.
   #
-  # The fix needs two things together, confirmed by two separate real CI
-  # runs against the full 2210-mutant file (not just the `en` slice):
+  # On a real GitHub Actions runner (4 vCPUs), four such heavier
+  # invocations running at once — this repo's own `concurrency: 4`,
+  # correct for the 16-core dev machine it was tuned on — are enough to
+  # starve each other into blowing past their timeout. `--concurrency 1`
+  # (with the #250 typescript checker also disabled — it "will always run
+  # checkers and test runners in parallel" per Stryker's own --help text,
+  # a second concurrent process regardless of `--concurrency`) genuinely
+  # eliminates the false timeouts: confirmed live, 0 survived and 0 timed
+  # out across every mutant it got through. But real math from that same
+  # run — 540 mutants in 74 minutes — extrapolates to roughly 5 hours to
+  # cover the full file serialized, which is not a reasonable per-PR CI
+  # cost regardless of how the invocation is split (a two-pass split by
+  # dictionary was tried and didn't help: the "cheap" 2000 mutants showed
+  # the identical ~90% timeout rate under the normal, parallel settings
+  # that ran them cleanly in 20 minutes locally).
   #
-  # 1. `--concurrency 1` alone wasn't enough: still ~93% timeouts, no
-  #    different from concurrency 2. The #250 typescript checker is why —
-  #    Stryker "will always run checkers and test runners in parallel"
-  #    (its own --help text), a *second* concurrent process regardless of
-  #    `--concurrency`, silently reintroducing the same contention.
-  #    199/200 of the `en` dictionary's own mutants are plain
-  #    `StringLiteral` swaps that can never fail to compile (confirmed
-  #    locally), so `--checkers ""` disables it for just this run.
-  # 2. `--concurrency 1 --checkers ""` together genuinely eliminate the
-  #    false timeouts (confirmed: 540/2210 mutants tested, 0 survived, 0
-  #    timed out) — but applied to the *whole* file, this serializes the
-  #    ~2000 mutants that were never the problem too, on top of a fixed
-  #    per-mutant startup cost that no longer has anything to amortize
-  #    against. Real math from that same run: 540 mutants in 74 minutes,
-  #    extrapolating to ~5 hours for the full file. A same-size slice of
-  #    a different locale (`ru`, covered only by the lightweight
-  #    test/ui.test.ts, no Svelte compilation at all) already showed
-  #    these mutants are individually cheap; running all ~2000 of them
-  #    together, still parallel, confirmed it locally: 20 minutes, 0
-  #    timeouts.
-  #
-  # So the mutation run is split into two passes when ui.ts is touched:
-  # the `en` dictionary alone, isolated and serialized; everything else
-  # (ui.ts's other ~2000 mutants, plus any other file this PR also
-  # changed) at the normal, fully-parallel default. The boundary is found
-  # by grepping for `en`'s own declaration and the next one after it
-  # (`ja`), not a hardcoded line range — self-adjusting if ui.ts's own
-  # structure ever changes, rather than silently mutating the wrong slice.
+  # Still covered by the full local audit (`bun run mutation`, unaffected
+  # by any of this — a real dev machine has the CPU headroom this runner
+  # class doesn't) — this exclusion is a permanent, deliberate trade-off
+  # for this specific file, the same shape as the .tsx/.astro DOM-touching
+  # exclusion above, not lingering debt with an open fix to find.
   mutation:
     runs-on: ubuntu-latest
-    # Generous on purpose: the `en`-dictionary pass alone runs its ~200
-    # mutants serialized (~9s each, ~30 minutes) precisely because that's
-    # now a known, deliberate trade-off (reliable over fast) rather than
-    # something to keep shaving down — see the comment above.
-    timeout-minutes: 60
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -194,6 +170,7 @@ jobs:
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
+              ':(exclude)src/i18n/ui.ts' \
               src/components/ProgramDial.svelte src/components/IronDial.svelte \
               src/components/SectionHeading.svelte \
               src/components/Sheet.svelte src/components/CardActions.svelte \
@@ -203,47 +180,11 @@ jobs:
             echo "$FILES"
             echo "STRYKER_FILES_EOF"
           } >> "$GITHUB_OUTPUT"
-          if [ -z "$FILES" ]; then
-            exit 0
-          fi
-          if echo "$FILES" | grep -qx "src/i18n/ui.ts"; then
-            EN_START=$(grep -n "^const en: Ui = {" src/i18n/ui.ts | head -1 | cut -d: -f1)
-            EN_END_LINE=$(grep -n "^const ja: Ui = {" src/i18n/ui.ts | head -1 | cut -d: -f1)
-            REST=$(echo "$FILES" | grep -vx "src/i18n/ui.ts" | paste -sd, -)
-            if [ -n "$EN_START" ] && [ -n "$EN_END_LINE" ]; then
-              EN_END=$((EN_END_LINE - 1))
-              TOTAL=$(wc -l < src/i18n/ui.ts)
-              echo "en_range=src/i18n/ui.ts:${EN_START}-${EN_END}" >> "$GITHUB_OUTPUT"
-              UI_REST="src/i18n/ui.ts:1-$((EN_START - 1)),src/i18n/ui.ts:$((EN_END + 1))-${TOTAL}"
-              if [ -n "$REST" ]; then
-                echo "mutate_target=${REST},${UI_REST}" >> "$GITHUB_OUTPUT"
-              else
-                echo "mutate_target=${UI_REST}" >> "$GITHUB_OUTPUT"
-              fi
-            else
-              # The en/ja boundary markers didn't match — ui.ts's own
-              # structure changed in a way this grep no longer expects.
-              # Fall back to serializing the whole file rather than risk
-              # a silently wrong split; see the comment above this job.
-              echo "::warning::Could not find ui.ts's en/ja dictionary boundary — serializing the whole file at --concurrency 1 instead of just the en dictionary."
-              echo "en_range=src/i18n/ui.ts" >> "$GITHUB_OUTPUT"
-              echo "mutate_target=${REST}" >> "$GITHUB_OUTPUT"
-            fi
-          else
-            echo "mutate_target=$(echo "$FILES" | paste -sd, -)" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Run mutation testing on the changed files (excluding ui.ts's own en dictionary, if present)
-        if: steps.changed.outputs.mutate_target != ''
+      - name: Run mutation testing on the changed files
+        if: steps.changed.outputs.files != ''
         run: >-
           bunx stryker run
-          --mutate "${{ steps.changed.outputs.mutate_target }}"
-      - name: Run mutation testing on ui.ts's own en dictionary in isolation (see the comment above)
-        if: steps.changed.outputs.en_range != ''
-        run: >-
-          bunx stryker run
-          --mutate "${{ steps.changed.outputs.en_range }}"
-          --concurrency 1
-          --checkers ""
+          --mutate "$(echo "${{ steps.changed.outputs.files }}" | paste -sd, -)"
       - name: Nothing to mutate
         if: steps.changed.outputs.files == ''
         run: echo "No src/lib or src/i18n changes in this diff — nothing to mutate."

@@ -2933,13 +2933,15 @@ const ru: Ui = {
 };
 
 /**
- * `en`'s own mutants cost more to mutation-test than every other locale's:
- * test/sheet-render.test.ts, test/sheet-actions.test.ts and
- * test/sheet-fields.test.ts all hardcode `translator("en")`, so per-test
- * coverage correctly attributes each `en`-dictionary mutant to those three
- * Svelte-mounting files too, not just test/ui.test.ts — see
- * `.github/workflows/check.yml`'s mutation job for what that costs in CI
- * specifically, and why (#251).
+ * `en`'s own mutants genuinely cost more to mutation-test *locally* than
+ * every other locale's: test/sheet-render.test.ts, test/sheet-actions.test.ts
+ * and test/sheet-fields.test.ts all hardcode `translator("en")`, so
+ * per-test coverage correctly attributes each `en`-dictionary mutant to
+ * those three Svelte-mounting files too, not just test/ui.test.ts. This
+ * turned out *not* to be why this whole file is excluded from CI's own
+ * mutation job, though — every locale dictionary, not just `en`, hits the
+ * same wall there. See `.github/workflows/check.yml`'s mutation job for
+ * the real mechanism and why it's a permanent exclusion (#251).
  */
 export const dictionaries: Record<Locale, Ui> = {
   en,

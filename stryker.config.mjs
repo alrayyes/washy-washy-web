@@ -26,10 +26,12 @@
 // github.com/hughescr/stryker-bun-runner's 1.3.8...1.4.0 compare for the
 // full writeup, including the process-group/depth-limiting mechanism. It
 // did not, on its own, explain #249's actual CI timeout rate, though —
-// #251 found the real mechanism, and confirmed concurrency 2 still being
-// worse than 4 wasn't this bug either (retested fresh against 1.4.0, same
-// result): see `.github/workflows/check.yml`'s mutation job for what
-// that turned out to be and the fix it got.
+// #251 spent five real CI runs chasing the real mechanism (confirmed
+// concurrency 2 still being worse than 4 wasn't this bug either,
+// retested fresh against 1.4.0, same result) and concluded it's a real,
+// permanent constraint of this runner class, not a fixable bug: see
+// `.github/workflows/check.yml`'s mutation job for the full writeup and
+// why `src/i18n/ui.ts` stays excluded from CI's own mutation job.
 //
 // `@stryker-mutator/core` stays pinned to 9.6.1 rather than jumping to the
 // current 10.0.0: 1.4.0 widened the runner's own peer range to
