@@ -1,3 +1,9 @@
+## [1.44.1](https://github.com/alrayyes/washy-washy-web/compare/v1.44.0...v1.44.1) (2026-09-20)
+
+### Bug Fixes
+
+* **ci:** serialize ui.ts's mutation run, closing the [#251](https://github.com/alrayyes/washy-washy-web/issues/251) timeout gap ([#264](https://github.com/alrayyes/washy-washy-web/issues/264)) ([f76052a](https://github.com/alrayyes/washy-washy-web/commit/f76052a5739c24e55695c198ca6f40aeb0cf0e8a)), closes [#250](https://github.com/alrayyes/washy-washy-web/issues/250)
+
 ## [1.44.0](https://github.com/alrayyes/washy-washy-web/compare/v1.43.0...v1.44.0) (2026-09-19)
 
 ### Features
