@@ -1,3 +1,9 @@
+## [1.44.2](https://github.com/alrayyes/washy-washy-web/compare/v1.44.1...v1.44.2) (2026-09-20)
+
+### Bug Fixes
+
+* **ci:** rescope src/i18n/ui.ts mutation testing instead of excluding it ([a77328a](https://github.com/alrayyes/washy-washy-web/commit/a77328ab876d483e477f34b110516b3204641ae5)), closes [#251](https://github.com/alrayyes/washy-washy-web/issues/251) [#251](https://github.com/alrayyes/washy-washy-web/issues/251) [#265](https://github.com/alrayyes/washy-washy-web/issues/265)
+
 ## [1.44.1](https://github.com/alrayyes/washy-washy-web/compare/v1.44.0...v1.44.1) (2026-09-20)
 
 ### Bug Fixes
