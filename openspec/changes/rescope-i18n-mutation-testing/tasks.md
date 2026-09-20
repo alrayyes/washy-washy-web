@@ -28,7 +28,7 @@ Ui = {...}` blocks in `src/i18n/ui.ts` (`en`, `ja`, `es`, `de`,
 
 ## 3. Verify in real CI
 
-- [ ] 3.1 Push a PR that touches `src/i18n/ui.ts` (or includes a trivial,
+- [x] 3.1 Push a PR that touches `src/i18n/ui.ts` (or includes a trivial,
       reviewable change to it) and verify the mutation job runs against
       the file and completes within its job timeout with a 100% score,
       on a real GitHub Actions run - not just locally.
