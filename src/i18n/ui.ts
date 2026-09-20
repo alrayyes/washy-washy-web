@@ -285,6 +285,7 @@ export interface Ui {
 }
 
 const en: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Skip to content",
   "ribbon.forkMe": "Fork me on GitHub",
   "nav.home": "Home",
@@ -525,9 +526,11 @@ const en: Ui = {
   "page.machine.description":
     "The washing machine and iron's settings — programmes, temperatures, spins, and the iron's thermostat.",
   "page.machine.h1": "Washer & iron settings",
+  // Stryker restore StringLiteral
 };
 
 const ja: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "コンテンツへスキップ",
   "ribbon.forkMe": "GitHubでフォークしよう",
   "nav.home": "ホーム",
@@ -769,8 +772,10 @@ const ja: Ui = {
   "page.machine.description":
     "洗濯機とアイロンの設定 — プログラム、温度、脱水、そしてアイロンのサーモスタット。",
   "page.machine.h1": "洗濯機とアイロンの設定",
+  // Stryker restore StringLiteral
 };
 const es: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Saltar al contenido",
   "ribbon.forkMe": "Haz un fork en GitHub",
   "nav.home": "Inicio",
@@ -1013,8 +1018,10 @@ const es: Ui = {
   "page.machine.description":
     "Los ajustes de la lavadora y la plancha — programas, temperaturas, centrifugados y el termostato de la plancha.",
   "page.machine.h1": "Ajustes de lavadora y plancha",
+  // Stryker restore StringLiteral
 };
 const de: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Zum Inhalt springen",
   "ribbon.forkMe": "Fork mich auf GitHub",
   "nav.home": "Start",
@@ -1259,9 +1266,11 @@ const de: Ui = {
   "page.machine.description":
     "Die Einstellungen von Waschmaschine und Bügeleisen – Programme, Temperaturen, Schleuderzahlen und das Thermostat des Bügeleisens.",
   "page.machine.h1": "Einstellungen für Waschmaschine & Bügeleisen",
+  // Stryker restore StringLiteral
 };
 
 const fr: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Aller au contenu",
   "ribbon.forkMe": "Forke-moi sur GitHub",
   "nav.home": "Accueil",
@@ -1506,8 +1515,10 @@ const fr: Ui = {
   "page.machine.description":
     "Les réglages du lave-linge et du fer — programmes, températures, essorages, et le thermostat du fer.",
   "page.machine.h1": "Réglages du lave-linge et du fer",
+  // Stryker restore StringLiteral
 };
 const ar: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "تخطي إلى المحتوى",
   "ribbon.forkMe": "انسخ المشروع (Fork) على GitHub",
   "nav.home": "الرئيسية",
@@ -1738,8 +1749,10 @@ const ar: Ui = {
   "page.machine.description":
     "إعدادات الغسالة والمكواة — البرامج ودرجات الحرارة والعصرات، ومنظم حرارة المكواة.",
   "page.machine.h1": "إعدادات الغسالة والمكواة",
+  // Stryker restore StringLiteral
 };
 const zh: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "跳转到内容",
   "ribbon.forkMe": "在 GitHub 上 Fork 本项目",
   "nav.home": "首页",
@@ -1961,8 +1974,10 @@ const zh: Ui = {
   "page.machine.title": "Washy washy — 洗衣机与熨斗设置",
   "page.machine.description": "洗衣机与熨斗的设置——程序、温度、脱水转速，以及熨斗的温控旋钮。",
   "page.machine.h1": "洗衣机与熨斗设置",
+  // Stryker restore StringLiteral
 };
 const tr: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "İçeriğe geç",
   "ribbon.forkMe": "Beni GitHub'da fork'la",
   "nav.home": "Ana sayfa",
@@ -2195,8 +2210,10 @@ const tr: Ui = {
   "page.machine.description":
     "Çamaşır makinesi ve ütünün ayarları — programlar, sıcaklıklar, sıkma hızları ve ütünün termostatı.",
   "page.machine.h1": "Çamaşır makinesi ve ütü ayarları",
+  // Stryker restore StringLiteral
 };
 const jive: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Jump straight past the jibber-jabber to the good stuff",
   "ribbon.forkMe": "Fork me on GitHub, chump!",
   "nav.home": "Home Base",
@@ -2439,9 +2456,11 @@ const jive: Ui = {
   "page.machine.description":
     "Da washin' machine and iron's settings — programmes, heats, spins, and da iron's thermostat, dig it.",
   "page.machine.h1": "Washer & Iron Settings",
+  // Stryker restore StringLiteral
 };
 
 const linkedin: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Skip the fluff, straight to the value 🚀",
   "ribbon.forkMe": "Fork me on GitHub, let's sync 🤝",
   "nav.home": "Feed",
@@ -2685,10 +2704,12 @@ const linkedin: Ui = {
   "page.machine.description":
     "The washing machine and iron's settings — strategies, temp checks, spins, and the iron's thermostat.",
   "page.machine.h1": "Org & Alignment Settings",
+  // Stryker restore StringLiteral
 };
 
 /** Exported for test/ui.test.ts, which checks every locale carries the same keys. */
 const ru: Ui = {
+  // Stryker disable StringLiteral
   "skip.toContent": "Перейти к содержимому",
   "ribbon.forkMe": "Форкни на GitHub",
   "nav.home": "Главная",
@@ -2930,19 +2951,9 @@ const ru: Ui = {
   "page.machine.description":
     "Настройки стиральной машины и утюга — программы, температуры, отжимы и термостат утюга.",
   "page.machine.h1": "Настройки стиральной машины и утюга",
+  // Stryker restore StringLiteral
 };
 
-/**
- * `en`'s own mutants genuinely cost more to mutation-test *locally* than
- * every other locale's: test/sheet-render.test.ts, test/sheet-actions.test.ts
- * and test/sheet-fields.test.ts all hardcode `translator("en")`, so
- * per-test coverage correctly attributes each `en`-dictionary mutant to
- * those three Svelte-mounting files too, not just test/ui.test.ts. This
- * turned out *not* to be why this whole file is excluded from CI's own
- * mutation job, though — every locale dictionary, not just `en`, hits the
- * same wall there. See `.github/workflows/check.yml`'s mutation job for
- * the real mechanism and why it's a permanent exclusion (#251).
- */
 export const dictionaries: Record<Locale, Ui> = {
   en,
   ja,

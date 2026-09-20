@@ -113,46 +113,24 @@ jobs:
   # deliberate, permanent exclusion — not debt — for the same reason
   # stryker.config.mjs documents.
   #
-  # src/i18n/ui.ts stays carved out — #251 spent five real CI runs (not
-  # local; this genuinely never reproduces on a dev machine with cores to
-  # spare) chasing this, and the honest conclusion is that it's a real,
-  # permanent constraint of this CI runner class, not a bug with a fix:
-  #
-  # ui.ts (2210 mutants) is by far the largest mutation-testing target in
-  # this repo — everything else tops out in the hundreds. Each per-mutant
-  # `bun test` invocation Stryker spawns for it is measurably heavier to
-  # instrument and sandbox than for any smaller file, regardless of which
-  # specific mutant runs: a same-size slice of one locale dictionary
-  # (`en`, whose translated strings some Svelte-mounting tests also
-  # exercise) and a slice of a completely unrelated one (`ru`, touched
-  # only by the lightweight test/ui.test.ts) both showed the identical
-  # ~90% CI timeout rate, bad from the very first mutant tested, which
-  # ruled out "only en is expensive" as the explanation — it's ui.ts's
-  # own size, not its content. A real, unrelated file with a normal
-  # mutant count (Sheet.svelte + CardActions.svelte, 340 mutants) ran
-  # clean in the same job type, same runner, same everything else.
-  #
-  # On a real GitHub Actions runner (4 vCPUs), four such heavier
-  # invocations running at once — this repo's own `concurrency: 4`,
-  # correct for the 16-core dev machine it was tuned on — are enough to
-  # starve each other into blowing past their timeout. `--concurrency 1`
-  # (with the #250 typescript checker also disabled — it "will always run
-  # checkers and test runners in parallel" per Stryker's own --help text,
-  # a second concurrent process regardless of `--concurrency`) genuinely
-  # eliminates the false timeouts: confirmed live, 0 survived and 0 timed
-  # out across every mutant it got through. But real math from that same
-  # run — 540 mutants in 74 minutes — extrapolates to roughly 5 hours to
-  # cover the full file serialized, which is not a reasonable per-PR CI
-  # cost regardless of how the invocation is split (a two-pass split by
-  # dictionary was tried and didn't help: the "cheap" 2000 mutants showed
-  # the identical ~90% timeout rate under the normal, parallel settings
-  # that ran them cleanly in 20 minutes locally).
-  #
-  # Still covered by the full local audit (`bun run mutation`, unaffected
-  # by any of this — a real dev machine has the CPU headroom this runner
-  # class doesn't) — this exclusion is a permanent, deliberate trade-off
-  # for this specific file, the same shape as the .tsx/.astro DOM-touching
-  # exclusion above, not lingering debt with an open fix to find.
+  # src/i18n/ui.ts no longer needs a carve-out. #251 diagnosed the CI-only
+  # timeout on this file as a real, permanent constraint of this CI
+  # runner class against ui.ts's own size (2210 mutants, by far the
+  # largest target in this repo — everything else tops out in the
+  # hundreds) rather than a fixable bug, and #251's own companion PR
+  # excluded the file entirely as a stopgap. That mutant count was
+  # dominated by the 11 locale dictionaries' string literals, which
+  # test/ui.test.ts's key-parity and non-empty-value checks already
+  # covered without any help from mutation testing — Stryker never had
+  # real leverage over translated string content in the first place.
+  # #265 scoped Stryker's mutation of ui.ts down to `translator()` and its
+  # interpolation logic via inline `// Stryker disable StringLiteral` /
+  # `// Stryker restore StringLiteral` pairs around each locale
+  # dictionary — the same pattern already used in src/lib/storage.ts,
+  # src/lib/filter.ts and src/i18n/locales.ts — which dropped the file's
+  # real mutant count to roughly 20, back in line with every other file
+  # this job covers, and removed the reason for the exclusion above
+  # along with it.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -170,7 +148,6 @@ jobs:
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
           FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" -- \
               src/lib src/i18n \
-              ':(exclude)src/i18n/ui.ts' \
               src/components/ProgramDial.svelte src/components/IronDial.svelte \
               src/components/SectionHeading.svelte \
               src/components/Sheet.svelte src/components/CardActions.svelte \
