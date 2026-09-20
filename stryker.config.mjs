@@ -20,12 +20,18 @@
 // `src/i18n/ui.ts` (2210 mutants, 11 locale dictionaries) through the
 // mutation job: a clean 100%/0-timeout/2m28s run locally against 1.3.8
 // timed out on ~90%+ of mutants in CI regardless of `--concurrency` (tried
-// both 4 and 2 — lower concurrency made the *wall clock* worse, which is
-// what pointed at unbounded process growth rather than resource contention
-// as the actual mechanism). 1.4.0's "Stop runaway recursive bun test spawns
-// leaking process trees" is the fix; see
+// both 4 and 2 — lower concurrency made the *wall clock* worse). 1.4.0's
+// "Stop runaway recursive bun test spawns leaking process trees" is a
+// real, confirmed fix for a real bug; see
 // github.com/hughescr/stryker-bun-runner's 1.3.8...1.4.0 compare for the
-// full writeup, including the process-group/depth-limiting mechanism.
+// full writeup, including the process-group/depth-limiting mechanism. It
+// did not, on its own, explain #249's actual CI timeout rate, though —
+// #251 spent five real CI runs chasing the real mechanism (confirmed
+// concurrency 2 still being worse than 4 wasn't this bug either,
+// retested fresh against 1.4.0, same result) and concluded it's a real,
+// permanent constraint of this runner class, not a fixable bug: see
+// `.github/workflows/check.yml`'s mutation job for the full writeup and
+// why `src/i18n/ui.ts` stays excluded from CI's own mutation job.
 //
 // `@stryker-mutator/core` stays pinned to 9.6.1 rather than jumping to the
 // current 10.0.0: 1.4.0 widened the runner's own peer range to

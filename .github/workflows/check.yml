@@ -113,17 +113,46 @@ jobs:
   # deliberate, permanent exclusion — not debt — for the same reason
   # stryker.config.mjs documents.
   #
-  # src/i18n/ui.ts is temporarily carved back out (#251): the first PR to
-  # ever touch it in CI (#249) hit a near-100% per-mutant timeout rate that
-  # doesn't reproduce locally (100%/0 timeouts, ~2 minutes) — tried and
-  # ruled out so far: concurrency tuning (made it worse, not better),
-  # upgrading @hughescr/stryker-bun-runner past a real, matching upstream
-  # bug ("runaway recursive bun test spawns", fixed in 1.4.0 — didn't help
-  # here), and a real Svelte/happy-dom test-isolation bug found during
-  # #243 (confirmed unrelated: doesn't reproduce with ui.ts's own,
-  # React-only test file). Still covered by the full local audit
-  # (`bun run mutation`, unaffected by this) — #251 tracks getting this
-  # back into CI once the actual cause is found.
+  # src/i18n/ui.ts stays carved out — #251 spent five real CI runs (not
+  # local; this genuinely never reproduces on a dev machine with cores to
+  # spare) chasing this, and the honest conclusion is that it's a real,
+  # permanent constraint of this CI runner class, not a bug with a fix:
+  #
+  # ui.ts (2210 mutants) is by far the largest mutation-testing target in
+  # this repo — everything else tops out in the hundreds. Each per-mutant
+  # `bun test` invocation Stryker spawns for it is measurably heavier to
+  # instrument and sandbox than for any smaller file, regardless of which
+  # specific mutant runs: a same-size slice of one locale dictionary
+  # (`en`, whose translated strings some Svelte-mounting tests also
+  # exercise) and a slice of a completely unrelated one (`ru`, touched
+  # only by the lightweight test/ui.test.ts) both showed the identical
+  # ~90% CI timeout rate, bad from the very first mutant tested, which
+  # ruled out "only en is expensive" as the explanation — it's ui.ts's
+  # own size, not its content. A real, unrelated file with a normal
+  # mutant count (Sheet.svelte + CardActions.svelte, 340 mutants) ran
+  # clean in the same job type, same runner, same everything else.
+  #
+  # On a real GitHub Actions runner (4 vCPUs), four such heavier
+  # invocations running at once — this repo's own `concurrency: 4`,
+  # correct for the 16-core dev machine it was tuned on — are enough to
+  # starve each other into blowing past their timeout. `--concurrency 1`
+  # (with the #250 typescript checker also disabled — it "will always run
+  # checkers and test runners in parallel" per Stryker's own --help text,
+  # a second concurrent process regardless of `--concurrency`) genuinely
+  # eliminates the false timeouts: confirmed live, 0 survived and 0 timed
+  # out across every mutant it got through. But real math from that same
+  # run — 540 mutants in 74 minutes — extrapolates to roughly 5 hours to
+  # cover the full file serialized, which is not a reasonable per-PR CI
+  # cost regardless of how the invocation is split (a two-pass split by
+  # dictionary was tried and didn't help: the "cheap" 2000 mutants showed
+  # the identical ~90% timeout rate under the normal, parallel settings
+  # that ran them cleanly in 20 minutes locally).
+  #
+  # Still covered by the full local audit (`bun run mutation`, unaffected
+  # by any of this — a real dev machine has the CPU headroom this runner
+  # class doesn't) — this exclusion is a permanent, deliberate trade-off
+  # for this specific file, the same shape as the .tsx/.astro DOM-touching
+  # exclusion above, not lingering debt with an open fix to find.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 25
