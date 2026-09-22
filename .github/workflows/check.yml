@@ -49,6 +49,7 @@ jobs:
           --ignore GHSA-7pqw-9j4j-h8q3
           --ignore GHSA-rgj7-g3m4-5g8c
       - run: bun run lint
+      - run: bun run lint:tailwind
       - run: bun run lint:md
       - run: bun run lint:package-json
       - run: bun run lint:yaml
