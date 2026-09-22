@@ -1,3 +1,9 @@
+## [1.45.0](https://github.com/alrayyes/washy-washy-web/compare/v1.44.2...v1.45.0) (2026-09-22)
+
+### Features
+
+* **lint:** check Tailwind class usage with @shadcn/lint via Oxlint ([#268](https://github.com/alrayyes/washy-washy-web/issues/268)) ([4358d4f](https://github.com/alrayyes/washy-washy-web/commit/4358d4f035f72daa7e24ef170733a4e5aaf3e74d)), closes [alrayyes/dotfiles#636](https://github.com/alrayyes/dotfiles/issues/636) [#239](https://github.com/alrayyes/washy-washy-web/issues/239) [#267](https://github.com/alrayyes/washy-washy-web/issues/267) [#267](https://github.com/alrayyes/washy-washy-web/issues/267)
+
 ## [1.44.2](https://github.com/alrayyes/washy-washy-web/compare/v1.44.1...v1.44.2) (2026-09-20)
 
 ### Bug Fixes
