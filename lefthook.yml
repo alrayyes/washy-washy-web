@@ -61,6 +61,8 @@ pre-push:
   jobs:
     - name: biome
       run: bun run lint
+    - name: tailwind
+      run: bun run lint:tailwind
     - name: markdownlint
       run: bun run lint:md
     - name: package-json
