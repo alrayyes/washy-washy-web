@@ -48,7 +48,12 @@ ignores:
   # anywhere in the tree, which is enough for the main worktree itself
   # (hit for real from a leftover run here, #130) — but doesn't reach
   # past a nested worktree's own .git boundary, which is what the
-  # explicit .claude/worktrees/** entry below is for (#111).
+  # explicit .claude/** entry below is for (#111).
   - "**/test-results/**"
   - "**/playwright-report/**"
-  - ".claude/worktrees/**"
+  # Everything Claude Code itself installs or writes under .claude/ —
+  # worktrees, plugin/skill markdown (e.g. an OpenSpec plugin's own
+  # SKILL.md files), agent state — is that tool's content, not this
+  # project's prose, the same reasoning biome.json already applies to it
+  # for JS/TS/JSON.
+  - ".claude/**"
