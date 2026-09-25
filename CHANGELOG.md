@@ -1,3 +1,15 @@
+## [1.46.0](https://github.com/alrayyes/washy-washy-web/compare/v1.45.1...v1.46.0) (2026-09-25)
+
+### Features
+
+* **webmcp:** add WebMCP tool definitions for the chart, machine and PDF ([13ee13c](https://github.com/alrayyes/washy-washy-web/commit/13ee13cfad4354c06c003333ed44b28fdb08e0a8))
+* **webmcp:** register the tools against document.modelContext ([95a8609](https://github.com/alrayyes/washy-washy-web/commit/95a86090a896328422588a7191d10e85c4d5a492))
+
+### Bug Fixes
+
+* **lint:** allow WebMCP terms in ltex, reword Save as a verb ([76899b7](https://github.com/alrayyes/washy-washy-web/commit/76899b71a033fd5140d75d3b351f51d7ac545edf))
+* **lint:** exclude .claude/ from markdownlint, not just Biome ([14ef784](https://github.com/alrayyes/washy-washy-web/commit/14ef784432027c16c3c074ef18c0d12b8daa0ea3))
+
 ## [1.45.1](https://github.com/alrayyes/washy-washy-web/compare/v1.45.0...v1.45.1) (2026-09-25)
 
 ### Bug Fixes
