@@ -21,13 +21,13 @@ here already uses.
 
 ## The five tools
 
-| Tool                   | Does                                                                                                                                                                         |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `washy_get_config`     | Reads the active chart and machine — your own, or the bundled example.                                                                                                       |
-| `washy_validate_chart` | Checks chart rows against the active machine without saving anything.                                                                                                        |
-| `washy_set_chart`      | Replaces the active chart, validated first — the same as Save on [`/config`](https://washy-washy.ryankes.eu/config/).                                                        |
-| `washy_set_machine`    | Replaces the active washer and iron, re-validating the current chart against them — the same as Save on [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/). |
-| `washy_export_pdf`     | Renders the active chart as a PDF (phone or print layout), returned as data rather than downloaded.                                                                          |
+| Tool                   | Does                                                                                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `washy_get_config`     | Reads the active chart and machine — your own, or the bundled example.                                                                                                                |
+| `washy_validate_chart` | Checks chart rows against the active machine without saving anything.                                                                                                                 |
+| `washy_set_chart`      | Replaces the active chart, validated first — the same as clicking Save on [`/config`](https://washy-washy.ryankes.eu/config/).                                                        |
+| `washy_set_machine`    | Replaces the active washer and iron, re-validating the current chart against them — the same as clicking Save on [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/). |
+| `washy_export_pdf`     | Renders the active chart as a PDF (phone or print layout), returned as data rather than downloaded.                                                                                   |
 
 Every one of them runs through the same
 [`@washy-washy/core`](https://github.com/alrayyes/washy-washy-core)
