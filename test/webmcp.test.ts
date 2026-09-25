@@ -183,15 +183,22 @@ describe("washy_export_pdf", () => {
 
     expect(result.filename).toBe("washing-instructions-phone.pdf");
     const bytes = Uint8Array.from(atob(result.pdfBase64), (char) => char.charCodeAt(0));
-    expect((await PDFDocument.load(bytes)).getPageCount()).toBeGreaterThan(0);
+    const pdf = await PDFDocument.load(bytes);
+    expect(pdf.getPageCount()).toBeGreaterThan(0);
+    // Phone sheets are a fixed 244pt-wide strip, distinct from print's A4 — pins
+    // the layout branch actually taken, not just that some PDF came back.
+    expect(pdf.getPage(0).getWidth()).toBe(244);
   });
 
   test("renders the print layout with the cut suffix in the filename", async () => {
     const result = (await tool("washy_export_pdf").execute({
       layout: "print",
       cut: "wash",
-    })) as { filename: string };
+    })) as { pdfBase64: string; filename: string };
 
     expect(result.filename).toBe("washing-instructions-print-washing.pdf");
+    const bytes = Uint8Array.from(atob(result.pdfBase64), (char) => char.charCodeAt(0));
+    const pdf = await PDFDocument.load(bytes);
+    expect(pdf.getPage(0).getWidth()).toBeCloseTo(595.28, 1);
   });
 });
