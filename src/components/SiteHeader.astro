@@ -13,6 +13,7 @@ import KeyboardNav from "./KeyboardNav.svelte";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import Logo from "./Logo.astro";
 import ThemeToggle from "./ThemeToggle.svelte";
+import WebMcpBridge from "./WebMcpBridge.svelte";
 
 const CHROME_WIDTH = "max-w-[90rem]";
 const path = Astro.url.pathname;
@@ -94,5 +95,6 @@ const NAV_LINK_INACTIVE = "text-body";
     <HeaderUpload client:load locale={locale} />
     <ThemeToggle client:load locale={locale} />
     <KeyboardNav client:load locale={locale} />
+    <WebMcpBridge client:load locale={locale} />
   </div>
 </header>
