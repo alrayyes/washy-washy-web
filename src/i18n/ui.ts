@@ -42,6 +42,8 @@ export interface Ui {
   "footer.privacy": string;
   "footer.copyrightBefore": string;
   "footer.copyrightAfter": string;
+  /** Rich text: see i18n/richText.ts. `{version}` is the changelog's own latest heading (src/lib/changelog.ts), e.g. "1.45.1" — keep the token's `v` prefix and the link target as-is when translating. */
+  "footer.version": string;
   "home.title": string;
   "home.description": string;
   "home.h1": string;
@@ -299,6 +301,8 @@ const en: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Licensed under the ",
   "footer.copyrightAfter":
     " — provided as-is, with no warranty of any kind (see the licence, sections 15–16). Always check a garment's own care label; this chart reflects one household's settings, not a manufacturer's guarantee.",
+  "footer.version":
+    "Current version: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "A phone-friendly laundry chart: programme, temperature and spin for every pile, what can share a drum, and where the iron's thermostat goes.",
@@ -544,6 +548,8 @@ const ja: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes。本ソフトウェアは",
   "footer.copyrightAfter":
     "のもとで提供されており、いかなる保証もありません(ライセンス第15条・第16条を参照)。表示内容は必ず衣類本体のケアラベルで確認してください。このチャートは一世帯の設定を反映したものであり、メーカーによる保証ではありません。",
+  "footer.version":
+    "現在のバージョン: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "スマホで見やすい洗濯チャート。洗濯物の山ごとにコース・水温・脱水を、どれとどれを一緒に洗えるか、アイロンの温度設定まで一目でわかります。",
@@ -789,6 +795,8 @@ const es: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Publicado bajo la licencia ",
   "footer.copyrightAfter":
     " — se ofrece tal cual, sin garantía de ningún tipo (consulta las secciones 15 a 16 de la licencia). Revisa siempre la etiqueta de cuidado de cada prenda; esta tabla refleja los ajustes de una sola casa, no una garantía del fabricante.",
+  "footer.version":
+    "Versión actual: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "Una tabla de lavado pensada para el móvil: programa, temperatura y centrifugado para cada montón de ropa, qué se puede lavar junto y dónde poner el termostato de la plancha.",
@@ -1035,6 +1043,8 @@ const de: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Veröffentlicht unter der Lizenz ",
   "footer.copyrightAfter":
     " — bereitgestellt wie besehen, ohne jegliche Gewährleistung (siehe Lizenztext, Abschnitte 15–16). Prüfe immer das Pflegeetikett des jeweiligen Kleidungsstücks; diese Tabelle gibt die Einstellungen eines einzelnen Haushalts wieder, keine Herstellergarantie.",
+  "footer.version":
+    "Aktuelle Version: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "Eine handyfreundliche Waschtabelle: Programm, Temperatur und Schleuderzahl für jede Ladung, was zusammen in die Trommel darf und auf welche Stufe der Bügeleisen-Thermostat gehört.",
@@ -1284,6 +1294,8 @@ const fr: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Distribué sous licence ",
   "footer.copyrightAfter":
     " — fourni tel quel, sans garantie d'aucune sorte (voir la licence, sections 15 à 16). Vérifie toujours l'étiquette d'entretien du vêtement : ce tableau reflète les réglages d'un seul foyer, pas une garantie du fabricant.",
+  "footer.version":
+    "Version actuelle : [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "Un tableau de lavage pensé pour le téléphone : programme, température et essorage pour chaque pile de linge, ce qui peut partager un tambour, et le thermostat du fer à repasser.",
@@ -1532,6 +1544,8 @@ const ar: Ui = {
   "footer.copyrightBefore": "© 2026 رايان كيس. مرخّص بموجب ",
   "footer.copyrightAfter":
     " — يُقدَّم كما هو، دون أي ضمان من أي نوع (انظر الرخصة، البندين 15–16). تحقّق دائمًا من بطاقة العناية الخاصة بالقطعة؛ يعكس هذا الجدول إعدادات أسرة واحدة، لا ضمانًا من شركة مصنِّعة.",
+  "footer.version":
+    "الإصدار الحالي: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "جدول غسيل ملائم للهاتف: البرنامج ودرجة الحرارة والعصر لكل كومة، وما يمكن جمعه في أسطوانة واحدة، وموضع منظم حرارة المكواة.",
@@ -1766,6 +1780,8 @@ const zh: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes。根据 ",
   "footer.copyrightAfter":
     " 许可证提供——不附带任何形式的保证（详见许可协议第 15–16 条）。请务必查看衣物本身的洗涤标签；本图表反映的是某个家庭自己的设置，并非制造商的保证。",
+  "footer.version":
+    "当前版本：[v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "一份适合手机查看的洗衣图表：每一类衣物该用的程序、温度和脱水转速，哪些可以合用一个滚筒，以及熨斗温控旋钮该调到哪里。",
@@ -1991,6 +2007,8 @@ const tr: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Şu lisans altında sunulmuştur: ",
   "footer.copyrightAfter":
     " — olduğu gibi sunulur, hiçbir garanti içermez (bkz. lisansın 15–16. bölümleri). Her zaman giysinin kendi bakım etiketini kontrol edin; bu tablo bir haneye ait ayarları yansıtır, üretici garantisi değildir.",
+  "footer.version":
+    "Güncel sürüm: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "Telefon dostu bir çamaşır tablosu: her yığın için program, sıcaklık ve sıkma hızı, hangi yığınların aynı kazanı paylaşabileceği ve ütünün termostatının nereye ayarlanacağı.",
@@ -2227,6 +2245,8 @@ const jive: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. This here jam's licensed up solid under the ",
   "footer.copyrightAfter":
     " — served up as-is, with no warranty of any kind, you dig (peep sections 15–16 of the licence for the skinny). Always check your glad rags' own care label, chump — this chart's just reflectin' one crib's settings, not no manufacturer's guarantee.",
+  "footer.version":
+    "Straight outta the shop, this here's runnin' [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md), no doubt.",
   "home.title": "Washy washy",
   "home.description":
     "A phone-friendly laundry chart, solid: which programme, temperature and spin for every pile o' clothes, what can boogie together in one drum, and where that iron's thermostat oughta go.",
@@ -2474,6 +2494,8 @@ const linkedin: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Proud to announce this is licensed under the ",
   "footer.copyrightAfter":
     " — shipped as-is, no warranty, no SLA (see sections 15–16 of the licence, link in bio). Always double-click into your garment's own care label; this chart is one household's personal brand, not a manufacturer's guarantee. Agree? 👇",
+  "footer.version":
+    "🚀 Proud to be shipping [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md) — full changelog linked below for maximum transparency.",
   "home.title": "Washy washy",
   "home.description":
     "Humbled to unlock a mobile-first laundry roadmap: programme, temperature and spin for every deliverable, what can co-locate in one drum, and where the iron's thermostat lives. 10x your fresh-laundry KPIs.",
@@ -2723,6 +2745,8 @@ const ru: Ui = {
   "footer.copyrightBefore": "© 2026 Ryan Kes. Лицензия ",
   "footer.copyrightAfter":
     " — предоставляется «как есть», без каких-либо гарантий (см. текст лицензии, разделы 15–16). Всегда сверяйтесь с ярлыком по уходу за конкретной вещью; эта таблица отражает настройки одного домохозяйства, а не гарантию производителя.",
+  "footer.version":
+    "Текущая версия: [v{version}](https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md)",
   "home.title": "Washy washy",
   "home.description":
     "Таблица стирки, удобная для телефона: программа, температура и отжим для каждой стопки белья, что можно стирать вместе в одном барабане и на какое деление ставить термостат утюга.",
