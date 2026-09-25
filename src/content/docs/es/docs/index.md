@@ -25,3 +25,7 @@ Empieza por lo que se ajuste a lo que quieres hacer:
   — pega un prompt listo para copiar y pegar y fotos de tu lavadora y tu
   plancha, y obtén un archivo de configuración que esta aplicación puede
   cargar.
+- **[Herramientas WebMCP para agentes](/es/docs/webmcp/)** — las cinco
+  herramientas que este sitio registra para un navegador o extensión
+  compatible con WebMCP, para que un agente pueda leer, validar y editar tu
+  tabla y tu máquina directamente, sin copiar y pegar nada.

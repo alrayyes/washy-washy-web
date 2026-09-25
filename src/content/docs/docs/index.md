@@ -24,3 +24,6 @@ Start with whichever matches what you're trying to do:
 - **[Generate a config with an AI chat tool](/docs/ai-prompt/)** — paste a
   copy-pasteable prompt and photos of your washer and iron, and get back a
   config file this app can load.
+- **[WebMCP tools for agents](/docs/webmcp/)** — the five tools this site
+  registers for a WebMCP-aware browser or extension, so an agent can read,
+  validate and edit your chart and machine directly, no copy-pasting.

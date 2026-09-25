@@ -81,3 +81,7 @@ le téléchargement : une faute de frappe dans un nom de programme ou un champ
 manquant échoue à cet endroit, en nommant le champ précis, pour qu'une
 valeur inventée n'atteigne jamais la page que tu lirais debout devant la
 machine.
+
+Si ton outil de chat comprend [WebMCP](/fr/docs/webmcp/), il peut se passer
+de tout ce copier-coller et lire, valider et écrire ta configuration
+directement.

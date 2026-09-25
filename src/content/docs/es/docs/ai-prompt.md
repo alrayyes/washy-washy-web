@@ -78,3 +78,7 @@ lo pasa por el mismo `parseConfig` del que vino la descarga: una errata en
 el nombre de un programa o un campo que falte falla ahí, señalando el campo
 concreto, así que un valor inventado nunca llega a la página que leerías de
 pie frente a la máquina.
+
+Si tu herramienta de chat entiende [WebMCP](/es/docs/webmcp/) en su lugar,
+puede saltarse todo el copiar y pegar y leer, validar y escribir tu
+configuración directamente.

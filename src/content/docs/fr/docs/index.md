@@ -26,3 +26,7 @@ Commence par celle qui correspond à ce que tu veux faire :
   — colle un prompt prêt à l'emploi et des photos de ton lave-linge et de ton
   fer, et récupère un fichier de configuration que cette application peut
   charger.
+- **[Outils WebMCP pour les agents](/fr/docs/webmcp/)** — les cinq outils
+  que ce site enregistre pour un navigateur ou une extension compatible
+  WebMCP, afin qu'un agent puisse lire, valider et modifier directement ta
+  grille et ta machine, sans aucun copier-coller.

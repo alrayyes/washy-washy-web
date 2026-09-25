@@ -81,3 +81,7 @@ stammte: Ein Tippfehler in einem Programmnamen oder ein fehlendes Feld
 schlägt dort fehl, unter Nennung des konkreten Felds, sodass ein
 erfundener Wert nie die Seite erreicht, die du vor der Maschine stehend
 liest.
+
+Versteht dein Chat-Tool stattdessen [WebMCP](/de/docs/webmcp/), kann es
+sich das ganze Copy-Paste sparen und deine Konfiguration direkt lesen,
+prüfen und schreiben.
