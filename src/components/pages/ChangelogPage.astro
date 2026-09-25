@@ -1,0 +1,84 @@
+---
+/**
+ * Renders CHANGELOG.md as-is (src/content.config.ts's `changelog`
+ * collection) styled with the site's own chrome, instead of sending
+ * visitors to the raw file on GitHub. English only, on purpose — the
+ * changelog is generated from commit history and PR titles, never
+ * translated, so this page isn't locale-routed the way disclaimer/privacy
+ * are (#274 follow-up).
+ */
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const [entry] = await getCollection("changelog");
+const { Content } = await render(entry);
+---
+
+<Layout
+  title="Washy washy — changelog"
+  description="Every release, newest first, straight from CHANGELOG.md."
+>
+  <h1 class="mb-6 font-heading text-3xl font-bold text-ink sm:text-4xl">Changelog</h1>
+  <article class="docs-content">
+    <Content />
+  </article>
+</Layout>
+
+<style>
+  /* Same hand-rolled prose rules as src/pages/jive/docs/[...slug].astro and
+  src/pages/linkedin/docs/[...slug].astro — Starlight's own docs CSS only
+  loads for Starlight-routed pages, and none of these three are. */
+  .docs-content :global(h2) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .docs-content :global(h3) {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .docs-content :global(p),
+  .docs-content :global(ul),
+  .docs-content :global(ol) {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  .docs-content :global(ul),
+  .docs-content :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .docs-content :global(ul) {
+    list-style: disc;
+  }
+
+  .docs-content :global(li) {
+    margin-top: 0.25rem;
+  }
+
+  .docs-content :global(a) {
+    color: var(--color-accent-text);
+    text-decoration: underline;
+    text-decoration-color: var(--color-hairline);
+    text-underline-offset: 2px;
+  }
+
+  .docs-content :global(code) {
+    border-radius: 0.25rem;
+    background-color: var(--color-panel);
+    padding: 0.125rem 0.375rem;
+    font-size: 0.875em;
+  }
+</style>

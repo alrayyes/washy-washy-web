@@ -215,16 +215,28 @@ test("the footer's legal links reach real pages with the site's own chrome", asy
   await expect(page.locator("main").getByText(/no cookies, no analytics/)).toBeVisible();
 });
 
-test("the footer shows the current version, linked to the changelog", async ({ page }) => {
+test("the footer shows the current version, linked to the site's own changelog page", async ({
+  page,
+}) => {
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
 
   const versionLink = page.locator("footer").getByRole("link", { name: /^v\d+\.\d+\.\d+$/ });
   await expect(versionLink).toBeVisible();
-  await expect(versionLink).toHaveAttribute(
-    "href",
-    "https://github.com/alrayyes/washy-washy-web/blob/main/CHANGELOG.md",
-  );
+  await expect(versionLink).toHaveAttribute("href", "/changelog");
+
+  await versionLink.click();
+  await expect(page).toHaveURL(/\/changelog\/?$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Changelog" })).toBeVisible();
+  // Real release content, not a placeholder — the newest entry's own
+  // heading, rendered from CHANGELOG.md as-is.
+  await expect(
+    page
+      .locator("article")
+      .getByRole("link", { name: /^\d+\.\d+\.\d+$/ })
+      .first(),
+  ).toBeVisible();
+  await expectNoA11yViolations(page);
 });
 
 test("a skip-to-content link is the first tab stop on every page, and lands focus on main", async ({
