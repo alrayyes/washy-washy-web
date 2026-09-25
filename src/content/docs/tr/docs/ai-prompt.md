@@ -78,3 +78,7 @@ indirmenin geldiği aynı `parseConfig`'den geçer: bir program adındaki bir
 yazım hatası ya da eksik bir alan orada başarısız olur ve ilgili alanı
 adlandırır, böylece uydurma bir değer, makinenin önünde durup okuyacağınız
 sayfaya asla ulaşmaz.
+
+Kullandığınız sohbet aracı bunun yerine [WebMCP](/tr/docs/webmcp/)
+anlıyorsa, tüm bu kopyala-yapıştırdan vazgeçip yapılandırmanızı doğrudan
+okuyabilir, doğrulayabilir ve yazabilir.

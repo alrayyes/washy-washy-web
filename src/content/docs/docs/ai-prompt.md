@@ -74,3 +74,7 @@ it through the same `parseConfig` the download came from: a typo in a
 programme name or a missing field fails there, naming the specific field, so
 an invented value never reaches the page you'd stand in front of the machine
 reading.
+
+If your chat tool understands [WebMCP](/docs/webmcp/) instead, it can skip
+the copy-pasting altogether and read, validate and write your config
+directly.

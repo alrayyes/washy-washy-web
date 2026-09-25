@@ -182,6 +182,20 @@ export default defineConfig({
           },
           link: "/docs/ai-prompt/",
         },
+        {
+          label: "WebMCP tools for agents",
+          translations: {
+            ja: "エージェント向けWebMCPツール",
+            de: "WebMCP-Tools für Agenten",
+            es: "Herramientas WebMCP para agentes",
+            fr: "Outils WebMCP pour les agents",
+            ar: "أدوات WebMCP للوكلاء",
+            zh: "面向代理的 WebMCP 工具",
+            tr: "Aracılar için WebMCP araçları",
+            ru: "Инструменты WebMCP для агентов",
+          },
+          link: "/docs/webmcp/",
+        },
       ],
     }),
     // Codecov Bundle Analysis: build-time plugin, not a CI-time upload

@@ -27,3 +27,7 @@ Fang mit dem an, was zu deinem Vorhaben passt:
   — füge einen copy-paste-fertigen Prompt und Fotos deiner Waschmaschine und
   deines Bügeleisens ein und erhalte eine Konfigurationsdatei zurück, die
   diese App laden kann.
+- **[WebMCP-Tools für Agenten](/de/docs/webmcp/)** — die fünf Tools, die
+  diese Seite für einen WebMCP-fähigen Browser oder eine Erweiterung
+  registriert, damit ein Agent deine Wäschetabelle und Maschine direkt
+  lesen, prüfen und bearbeiten kann, ganz ohne Copy-Paste.

@@ -9,6 +9,9 @@
 The Astro web app for washy-washy: renders the same laundry chart the CLI
 turns into a PDF as a filterable, shareable web page instead, with an
 in-browser editor for both the chart and the machine it's checked against.
+It also registers [WebMCP](https://washy-washy.ryankes.eu/docs/webmcp/)
+tools, so a WebMCP-aware browser or extension can read, validate and edit
+that same chart and machine directly.
 
 Split out of [`washy-washy`](https://github.com/alrayyes/washy-washy)'s
 `apps/web` into its own repo so it can version and deploy independently of

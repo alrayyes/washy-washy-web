@@ -26,3 +26,7 @@ Ne yapmaya çalıştığınıza uygun olanla başlayın:
   — kopyala-yapıştırla kullanılabilecek bir prompt ile çamaşır makinenizin ve
   ütünüzün fotoğraflarını yapıştırın ve bu uygulamanın yükleyebileceği bir
   yapılandırma dosyası alın.
+- **[Aracılar için WebMCP araçları](/tr/docs/webmcp/)** — bu sitenin WebMCP
+  destekli bir tarayıcı veya uzantı için kaydettiği beş araç; bir
+  aracının çizelgeni ve makineni hiç kopyala-yapıştır yapmadan doğrudan
+  okumasını, doğrulamasını ve düzenlemesini sağlar.
