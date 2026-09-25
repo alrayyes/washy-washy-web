@@ -1,3 +1,9 @@
+## [1.47.0](https://github.com/alrayyes/washy-washy-web/compare/v1.46.0...v1.47.0) (2026-09-25)
+
+### Features
+
+* **footer:** show the current version, linked to the changelog ([#274](https://github.com/alrayyes/washy-washy-web/issues/274)) ([5802c8e](https://github.com/alrayyes/washy-washy-web/commit/5802c8e7d3a54247af5f4081d1f0b8de1ecaba30)), closes [#273](https://github.com/alrayyes/washy-washy-web/issues/273)
+
 ## [1.46.0](https://github.com/alrayyes/washy-washy-web/compare/v1.45.1...v1.46.0) (2026-09-25)
 
 ### Features
