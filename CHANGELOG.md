@@ -1,3 +1,9 @@
+## [1.45.1](https://github.com/alrayyes/washy-washy-web/compare/v1.45.0...v1.45.1) (2026-09-25)
+
+### Bug Fixes
+
+* **lint:** exclude .claude/ from markdownlint, not just Biome ([#272](https://github.com/alrayyes/washy-washy-web/issues/272)) ([be9f34d](https://github.com/alrayyes/washy-washy-web/commit/be9f34d12928b544e00337541ea872494e269322))
+
 ## [1.45.0](https://github.com/alrayyes/washy-washy-web/compare/v1.44.2...v1.45.0) (2026-09-22)
 
 ### Features
