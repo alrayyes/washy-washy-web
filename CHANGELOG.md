@@ -1,3 +1,9 @@
+## [1.48.0](https://github.com/alrayyes/washy-washy-web/compare/v1.47.0...v1.48.0) (2026-09-25)
+
+### Features
+
+* **footer:** render the changelog on-site instead of linking to raw markdown ([#276](https://github.com/alrayyes/washy-washy-web/issues/276)) ([8ca243d](https://github.com/alrayyes/washy-washy-web/commit/8ca243d8708892bad6ea33c9950fa52f24530d87)), closes [#275](https://github.com/alrayyes/washy-washy-web/issues/275)
+
 ## [1.47.0](https://github.com/alrayyes/washy-washy-web/compare/v1.46.0...v1.47.0) (2026-09-25)
 
 ### Features
