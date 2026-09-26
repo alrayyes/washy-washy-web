@@ -173,6 +173,16 @@ describe("washy_set_machine", () => {
   });
 });
 
+/**
+ * Runs under this repo's own `--conditions=browser` test flag (package.json's
+ * `test` script), which is what makes these the regression guard for
+ * package.json's `overrides["@react-pdf/renderer"]` pin: `@washy-washy/pdf`
+ * exactly depends on a `@react-pdf/renderer` version that pulls in
+ * `@react-pdf/pdfkit`'s browser build, which crashes on an unregistered
+ * standard font unless overridden back up to a version that depends on plain
+ * `pdfkit` instead. Dropping that override reproduces the crash right here —
+ * see #283 for the full trace and reasoning before touching it.
+ */
 describe("washy_export_pdf", () => {
   test("renders the phone layout for the active chart, base64-encoded", async () => {
     const result = (await tool("washy_export_pdf").execute({ layout: "phone" })) as {
