@@ -30,6 +30,7 @@
     "typecheck": "astro sync && tsc --noEmit && tsc --noEmit -p tsconfig.test.json"
   },
   "overrides": {
+    "@react-pdf/renderer": "4.9.0",
     "playwright-core": "1.63.0",
     "qs": "6.16.0",
     "smol-toml": "1.7.2"
@@ -42,7 +43,7 @@
     "@mcp-b/webmcp-polyfill": "5.1.0",
     "@tailwindcss/vite": "4.3.3",
     "@washy-washy/core": "1.5.6",
-    "@washy-washy/pdf": "2.4.1",
+    "@washy-washy/pdf": "2.4.3",
     "astro": "7.3.3",
     "svelte": "5.57.1",
     "tailwindcss": "4.3.3"
