@@ -1,0 +1,34 @@
+# Washy washy
+
+> Turns a laundry chart into a filterable, shareable web page — the same
+> chart the CLI renders as a phone PDF — with an in-browser editor for the
+> chart and the washer/iron it's checked against, and WebMCP tools so an
+> agent can read, validate and edit both directly.
+
+Chart your own laundry once, then read it standing in front of the machine
+instead of squinting at a spreadsheet: filter by cut and by pile, download
+the whole sheet as a PDF, or edit the chart and the machine description
+right in the page. A separate CLI reads the same chart and machine files
+and renders them as a PDF outside the browser; this site is the web app
+only.
+
+## Docs
+
+- [Docs home](https://washy-washy.ryankes.eu/docs/): where to start — the chart and machine files, using the web app, generating a config with AI, and the WebMCP tools.
+- [The chart and machine files](https://washy-washy.ryankes.eu/docs/chart-and-machine/): every field in a chart, how the machine file describes a washer and iron, and the mixing rules that decide what can share a drum.
+- [Using the web app](https://washy-washy.ryankes.eu/docs/web-app/): the front page's filters, what persists between visits, and how uploading a config relates to the bundled example.
+- [Generate a config with an AI chat tool](https://washy-washy.ryankes.eu/docs/ai-prompt/): a copy-pasteable prompt plus photos of a washer and iron, to get back a config file this app can load.
+- [WebMCP tools for agents](https://washy-washy.ryankes.eu/docs/webmcp/): the five tools this site registers for a WebMCP-aware browser or extension.
+
+## App
+
+- [Laundry chart](https://washy-washy.ryankes.eu/): the front page — filterable by cut and pile, downloadable as a PDF.
+- [Washing loads](https://washy-washy.ryankes.eu/config/): edit the chart's piles and loads in the browser.
+- [Washer & iron settings](https://washy-washy.ryankes.eu/config/machine/): edit the machine description the chart is checked against.
+- [Changelog](https://washy-washy.ryankes.eu/changelog/): what shipped in each release.
+
+## Project
+
+- [README](https://github.com/alrayyes/washy-washy-web#readme): what this app is, requirements, and how it relates to the CLI.
+- [Source repository](https://github.com/alrayyes/washy-washy-web): issues, pull requests, and the full history.
+- [washy-washy-cli](https://github.com/alrayyes/washy-washy-cli): the CLI that reads the same chart and machine files and renders them as a PDF.
