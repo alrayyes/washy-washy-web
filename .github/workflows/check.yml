@@ -30,7 +30,7 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      # Six ignored advisories, all transitive and all dev-only (never
+      # Seven ignored advisories, all transitive and all dev-only (never
       # shipped) - `bun audit fix` can't reach any of them:
       #   - Five (incl. the two extract-zip IDs) run through @lhci/cli
       #     (Lighthouse CI) - extract-zip has no published fix at all, and
@@ -39,7 +39,12 @@ jobs:
       #     which pins sharp@0.35.2 exactly - astro's own sharp already
       #     resolves to the fixed 0.35.4, this is only miniflare's local
       #     dev-server copy.
-      # Revisit when @lhci/cli/miniflare bump their own pinned dependencies.
+      #   - GHSA-r3ph-w7gj-g6xm (js-yaml 5.x, affects >=5.0.0 <=5.4.0) runs
+      #     through markdownlint-cli2, which resolves 5.2.2. The direct
+      #     dependency and astro's copy stay on 4.x (dependabot.yml holds
+      #     the major back), so only the markdown linter is affected.
+      # Revisit when @lhci/cli/miniflare bump their own pinned dependencies,
+      # or markdownlint-cli2 moves past js-yaml 5.4.0.
       - run: >-
           bun audit
           --ignore GHSA-jmr9-qjv8-65gv
@@ -48,6 +53,7 @@ jobs:
           --ignore GHSA-w5hq-g745-h8pq
           --ignore GHSA-7pqw-9j4j-h8q3
           --ignore GHSA-rgj7-g3m4-5g8c
+          --ignore GHSA-r3ph-w7gj-g6xm
       - run: bun run lint
       - run: bun run lint:tailwind
       - run: bun run lint:md
