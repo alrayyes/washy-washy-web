@@ -1,3 +1,9 @@
+## [1.48.4](https://github.com/alrayyes/washy-washy-web/compare/v1.48.3...v1.48.4) (2026-10-02)
+
+### Bug Fixes
+
+* **deps:** clear the new bun audit advisories ([#291](https://github.com/alrayyes/washy-washy-web/issues/291)) ([420ad9a](https://github.com/alrayyes/washy-washy-web/commit/420ad9adcff3dd61bf2e8deab915f01747e149ac)), closes [#290](https://github.com/alrayyes/washy-washy-web/issues/290)
+
 ## [1.48.3](https://github.com/alrayyes/washy-washy-web/compare/v1.48.2...v1.48.3) (2026-09-26)
 
 ### Bug Fixes
