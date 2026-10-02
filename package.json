@@ -31,6 +31,8 @@
   },
   "overrides": {
     "@react-pdf/renderer": "4.9.0",
+    "basic-ftp": "6.2.1",
+    "markdown-it": "14.3.2",
     "playwright-core": "1.63.0",
     "qs": "6.16.0",
     "smol-toml": "1.7.2"
@@ -79,6 +81,6 @@
     "semantic-release": "25.0.9",
     "sort-package-json": "4.0.0",
     "typescript": "6.0.3",
-    "wrangler": "4.135.0"
+    "wrangler": "4.147.0"
   }
 }
