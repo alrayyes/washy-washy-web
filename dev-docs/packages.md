@@ -37,6 +37,37 @@ how a PDF renders happens in the shared package first, gets published, then
 gets picked up here as an exact-pinned version bump — never patched locally
 against a vendored copy.
 
+## Why `@react-pdf/renderer` is overridden to 4.9.0
+
+`package.json` pins `@react-pdf/renderer` to `4.9.0` in `overrides`, whatever
+`@washy-washy/pdf` itself declares. This is the one place the "never patched
+locally" rule above bends, and it's deliberate.
+
+`@washy-washy/pdf` 2.4.3 pinned `@react-pdf/renderer` to `4.7.0`, to force the
+`@react-pdf/pdfkit` fork over raw `pdfkit`. `washy-washy-cli` needs that,
+because raw `pdfkit` breaks inside a flattened `bun build --compile`
+executable ([washy-washy-pdf#109](https://github.com/alrayyes/washy-washy-pdf/issues/109)).
+The fork's browser build needs an explicit `registerStdFonts(...)` call that
+nothing in `@react-pdf/renderer` makes, so any bundle that resolves the
+`browser` export condition dies on first render with
+`Standard font "Helvetica" is not registered`.
+
+This repo ships a static bundle for real browsers and never a compiled
+executable, so it can use the raw-`pdfkit` line. `4.9.0` depends on
+`pdfkit@0.20.1` and works under `bun test --conditions=browser` and in
+Chromium.
+
+When Dependabot proposes anything above `4.9.0`, check first that it still
+depends on raw `pdfkit`:
+
+```sh
+npm view @react-pdf/renderer@<version> dependencies
+```
+
+If the override is ever removed, `bun test --conditions=browser
+test/webmcp.test.ts` is the regression guard for this bug. Issue #283 stays
+open until then.
+
 ## Sharing translations with washy-washy-pdf
 
 Whenever a new locale lands here — a new dictionary in `src/i18n/ui.ts` plus
