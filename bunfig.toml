@@ -3,7 +3,7 @@
 # every `bun add`.
 exact = true
 # Wait 7 days before resolving a newly published version. Matches
-# Dependabot's 7-day cooldown, and semgrep requires it on an [install]
+# Dependabot's 7-day cooldown, and semgrep requires it on the install
 # section.
 minimumReleaseAge = 604800
 
