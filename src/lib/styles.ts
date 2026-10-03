@@ -51,10 +51,12 @@ export const LINK =
   "underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent";
 
 /**
- * A single pile's card — used identically by Sheet.tsx's read-only sheet
- * and ConfigViewer.tsx's editable chart, which is why they have to look
- * exactly alike: same data, same shape, edit vs. display is the only
- * difference (#60).
+ * A single pile's card — the shell Sheet.svelte's read-only sheet and
+ * ConfigViewer.svelte's editable chart share: same data, same border, same
+ * padding (#60). Inside, both lead with programme, temperature and spin
+ * (#288, #302). They differ on purpose after that: the sheet folds the rest
+ * behind Details, the editor leaves every field open so none costs an extra
+ * tap.
  */
 export const CHART_CARD = "rounded-lg border border-line p-4";
 export const CHART_CARD_HEADER =
