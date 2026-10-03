@@ -20,6 +20,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+# No job here is a person committing, so the repo's git hooks have nothing to
+# guard. Any job that runs `git commit` itself would otherwise fire them in a
+# container that may lack the tools they call.
+env:
+  LEFTHOOK: "0"
+
 jobs:
   check:
     runs-on: ubuntu-latest
