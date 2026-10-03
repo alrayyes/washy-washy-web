@@ -75,10 +75,13 @@ import SectionHeading from "./SectionHeading.svelte";
 
 const SECTION = "mb-6";
 const SUB_PANEL = "rounded-md border border-hairline bg-panel p-3";
-const CHIP_BUTTON = "rounded border px-1.5 py-0.5 text-xs";
+// min-h-11/min-w-11 is 44px: the tap-target floor (#302), the same one the
+// front-page card holds to (#288).
+const CHIP_BUTTON =
+  "inline-flex min-h-11 min-w-11 items-center justify-center rounded border px-2 py-0.5 text-sm";
 const CHIP_BUTTON_ON = "border-accent bg-accent font-bold text-white";
 const CHIP_BUTTON_OFF = "border-hairline bg-surface text-muted hover:border-line";
-const PILL_BUTTON = "rounded px-1.5 py-0.5 text-xs font-bold text-white";
+const PILL_BUTTON = "min-h-11 rounded px-3 py-0.5 text-xs font-bold text-white";
 
 interface Props {
   items: Instruction[];
@@ -253,7 +256,7 @@ function handleClear() {
   maxLength: number | undefined,
 )}
   <textarea
-    class={`${TEXT_INPUT} resize-none`}
+    class={`${TEXT_INPUT} min-h-11 resize-none`}
     rows="2"
     {name}
     {value}
@@ -293,7 +296,7 @@ function handleClear() {
             {value}
             checked={value === selected}
             onchange={() => onSelect(value)}
-            class="absolute inset-0 cursor-pointer opacity-0"
+            class="absolute -inset-px cursor-pointer opacity-0"
             data-testid={`chip-${field}-${value}`}
           />
           {value}
@@ -366,7 +369,7 @@ function handleClear() {
     <div class="flex items-center gap-1">
       <span aria-hidden="true" class="text-body">~</span>
       <input
-        class={`${TEXT_INPUT} w-16! min-w-0! ${invalid ? "border-no focus:border-no" : ""}`}
+        class={`${TEXT_INPUT} min-h-11 w-16! min-w-0! ${invalid ? "border-no focus:border-no" : ""}`}
         type="text"
         inputmode="text"
         {name}
@@ -422,7 +425,12 @@ function handleClear() {
       <p class="text-xs font-bold tracking-wide text-muted">{t("common.source")}</p>
       <p class="text-sm leading-relaxed text-body">
         {#if link !== ""}
-          <a href={link} target="_blank" rel="noopener noreferrer" class={LINK}>{name}</a>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`${LINK} inline-flex min-h-11 items-center`}
+          >{name}</a>
         {:else}
           {name}
         {/if}
@@ -469,7 +477,7 @@ function handleClear() {
           <!-- svelte-ignore a11y_missing_content -->
           <h3 class="min-w-0 flex-1">
             <input
-              class={`${TEXT_INPUT} min-w-0! truncate text-base font-bold text-ink`}
+              class={`${TEXT_INPUT} min-h-11 min-w-0! truncate text-base font-bold text-ink`}
               type="text"
               name="clothing_type"
               aria-label={t("common.pile")}
@@ -483,38 +491,31 @@ function handleClear() {
           )}
         </div>
 
-        <div class="mb-3 flex flex-wrap items-center gap-2">
-          {@render pillToggle(
-            row.fabric_softener === "yes",
-            t("common.softenerOk"),
-            t("common.noSoftener"),
-            "fabric_softener",
-            () => set("fabric_softener", row.fabric_softener === "yes" ? "no" : "yes"),
-          )}
-          <span class="text-xs font-bold text-ink">
-            {row.program}
-            {row.temperature === "koud" ? "koud" : `${row.temperature} °C`} ·
-            {row.spin === "0" ? t("common.noSpin") : `${row.spin} rpm`}
-          </span>
-        </div>
-
-        <div class={`flex gap-3 ${SUB_PANEL}`}>
-          <div class="w-20 shrink-0 text-center">
-            <ProgramDial program={row.program} {washer} size={78} />
-            <select
-              class="mt-1 w-full rounded border border-line bg-transparent px-0 text-center text-xs font-bold text-ink focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              name="program"
-              aria-label={t("common.programme")}
-              value={row.program}
-              onchange={(event) => set("program", event.currentTarget.value)}
-            >
-              {#each washer.programs as program (program)}
-                <option value={program}>{program}</option>
-              {/each}
-            </select>
-            <p class="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
+        <!-- The three settings the machine is actually set to, grouped and
+        first, same as the front-page card (#288): programme and dial, then
+        temperature and spin. Everything below stays open - an editor needs
+        every field reachable without an extra tap (#302). -->
+        <div data-testid="card-settings" class={SUB_PANEL}>
+          <div class="flex items-center gap-3">
+            <div class="w-20 shrink-0 text-center">
+              <ProgramDial program={row.program} {washer} size={78} />
+            </div>
+            <div class="min-w-0 flex-1">
+              <select
+                class="min-h-11 w-full rounded border border-line bg-transparent px-1 text-lg font-bold text-ink focus:border-accent focus:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                name="program"
+                aria-label={t("common.programme")}
+                value={row.program}
+                onchange={(event) => set("program", event.currentTarget.value)}
+              >
+                {#each washer.programs as program (program)}
+                  <option value={program}>{program}</option>
+                {/each}
+              </select>
+              <p class="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
+            </div>
           </div>
-          <div class="flex flex-1 flex-col justify-center">
+          <div class="mt-3">
             {@render chipSelectRow(
               t("common.temp"),
               "temperature",
@@ -531,19 +532,31 @@ function handleClear() {
               row.spin,
               (value) => set("spin", value),
             )}
-            {@render chipMultiRow(
-              t("common.buttons"),
-              "options",
-              washer.options,
-              splitPipe(row.options),
-              (value) => {
-                const next = new Set(splitPipe(row.options));
-                if (next.has(value)) next.delete(value);
-                else next.add(value);
-                set("options", [...next].join("|"));
-              },
-            )}
           </div>
+        </div>
+
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+          {@render pillToggle(
+            row.fabric_softener === "yes",
+            t("common.softenerOk"),
+            t("common.noSoftener"),
+            "fabric_softener",
+            () => set("fabric_softener", row.fabric_softener === "yes" ? "no" : "yes"),
+          )}
+        </div>
+        <div class="mt-2">
+          {@render chipMultiRow(
+            t("common.buttons"),
+            "options",
+            washer.options,
+            splitPipe(row.options),
+            (value) => {
+              const next = new Set(splitPipe(row.options));
+              if (next.has(value)) next.delete(value);
+              else next.add(value);
+              set("options", [...next].join("|"));
+            },
+          )}
         </div>
 
         {@render editableSplitField(
@@ -734,7 +747,7 @@ function handleClear() {
               onchange={() => {
                 sortField = option.value;
               }}
-              class="absolute inset-0 cursor-pointer opacity-0"
+              class="absolute -inset-px cursor-pointer opacity-0"
             />
             {option.label}
           </label>
