@@ -2,8 +2,9 @@
 # Pin new dependencies to exact versions by default, without --exact on
 # every `bun add`.
 exact = true
-# Wait 7 days before resolving a newly published version (supply-chain
-# hygiene, and what semgrep expects of an [install] section).
+# Wait 7 days before resolving a newly published version. Matches
+# Dependabot's 7-day cooldown, and semgrep requires it on an [install]
+# section.
 minimumReleaseAge = 604800
 
 [test]
