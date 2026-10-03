@@ -202,6 +202,14 @@
   background-color: var(--color-ink);
 }
 
+/* Below md the header's menu button sits where the ribbon does; the GitHub
+ * link is in that menu instead (SiteHeader.astro, #288). */
+@media (max-width: 767px) {
+  .gh-ribbon {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .gh-ribbon {
     width: 130px;

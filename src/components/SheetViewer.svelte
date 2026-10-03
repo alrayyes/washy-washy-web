@@ -2,7 +2,15 @@
 import type { Variant } from "@washy-washy/core/browser";
 
 const FIELD_INPUT =
-  "mt-1 block w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
+  "mt-1 block min-h-11 w-full min-w-0 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
+
+const SEARCH_INPUT =
+  "block min-h-11 w-full min-w-0 flex-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
+
+const PILL =
+  "inline-flex min-h-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
+const PILL_ON = `${PILL} border-accent bg-accent text-white`;
+const PILL_OFF = `${PILL} border-line bg-surface text-ink hover:bg-panel`;
 
 const STEM = "washing-instructions";
 const SUFFIX: Record<Variant, string> = { full: "", wash: "-washing", iron: "-ironing" };
@@ -75,6 +83,7 @@ const CUT_LABEL = $derived.by(
 
 let cut = $state<Variant>("full");
 let pileQuery = $state("");
+let filtersOpen = $state(false);
 let advanced = $state<AdvancedFilters>({ ...emptyAdvancedFilters });
 let downloadingPhone = $state(false);
 let phoneDownloadError = $state<string | null>(null);
@@ -203,6 +212,7 @@ $effect(() => {
   writeUrlFilters(snapshot);
 });
 
+const activeAdvancedCount = $derived(Object.values(advanced).filter((value) => value !== "").length);
 const sourceItems = $derived(customItems ?? bundledItems);
 const filtered = $derived.by(() => filterAdvanced(filterByPile(sourceItems, pileQuery), advanced));
 // Which Programme/Temperature/Spin values could still narrow the chart to
@@ -358,119 +368,124 @@ async function handleShareSheet() {
 </script>
 
 <div class="flex flex-col gap-6" data-hydrated={hydrated}>
-  <fieldset class="rounded-lg border border-hairline bg-panel p-4">
-    <legend class="px-1 text-sm font-semibold text-ink">
-      {t("sheetViewer.filterChart")}
-    </legend>
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
-      <div class="flex-1">
-        <span class={`block ${FIELD_LABEL}`}>
-          <label for="filter-cut">{t("sheetViewer.cutLabel")}</label>
-          <HelpBubble id="filter-cut-help" text={t("sheetViewer.cutHelp")} {t} />
+  <!-- Phone-first (#288): a search box, the cut as pills and one Filters
+  button are all that show on load. The four narrowing filters sit behind
+  that button, closed on every page load like the <details> they replaced
+  (#8) — only their *values* persist, never whether the panel was open.
+  The cut and pile help text stays for screen readers, as descriptions of
+  the controls it used to be a "?" bubble beside. -->
+  <fieldset data-testid="filters" class="flex flex-col gap-3 rounded-lg border border-hairline bg-panel p-3">
+    <legend class="sr-only">{t("sheetViewer.filterChart")}</legend>
+    <p id="filter-pile-help" class="sr-only">{t("sheetViewer.pileHelp")}</p>
+    <p id="filter-cut-help" class="sr-only">{t("sheetViewer.cutHelp")}</p>
+    <div class="flex items-center gap-2">
+      <label class="sr-only" for="filter-pile">{t("common.pile")}</label>
+      <input
+        id="filter-pile"
+        class={SEARCH_INPUT}
+        type="search"
+        placeholder={t("sheetViewer.pileSearchPlaceholder")}
+        aria-describedby="filter-pile-help"
+        bind:value={pileQuery}
+      />
+      <button
+        type="button"
+        class={`${BUTTON_SECONDARY} shrink-0 gap-2`}
+        aria-expanded={filtersOpen}
+        aria-controls="filter-panel"
+        onclick={() => (filtersOpen = !filtersOpen)}
+      >
+        {t("sheetViewer.filters")}
+        {#if activeAdvancedCount > 0}
+          <span class="rounded-full bg-accent px-2 text-xs font-bold text-white">{activeAdvancedCount}</span>
+        {/if}
+      </button>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+      role="group"
+      aria-label={t("sheetViewer.cutLabel")}
+      aria-describedby="filter-cut-help"
+    >
+      {#each variants as variant (variant)}
+        <button
+          type="button"
+          data-testid={`cut-${variant}`}
+          aria-pressed={cut === variant}
+          class={cut === variant ? PILL_ON : PILL_OFF}
+          onclick={() => (cut = variant)}
+        >
+          {CUT_LABEL[variant]}
+        </button>
+      {/each}
+    </div>
+
+    <div id="filter-panel" hidden={!filtersOpen} class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div class="relative">
+        <span class={`flex items-center ${FIELD_LABEL}`}>
+          <label for="filter-program">{t("common.programme")}</label>
+          <HelpBubble id="filter-program-help" text={t("sheetViewer.programmeHelp")} {t} />
         </span>
-        <select id="filter-cut" class={FIELD_INPUT} bind:value={cut}>
-          {#each variants as variant (variant)}
-            <option value={variant}>{CUT_LABEL[variant]}</option>
+        <select
+          id="filter-program"
+          class={FIELD_INPUT}
+          disabled={programOptions.length === 0}
+          bind:value={advanced.program}
+        >
+          <option value="">{t("sheetViewer.anyProgramme")}</option>
+          {#each programOptions as program (program)}
+            <option value={program}>{program}</option>
           {/each}
         </select>
       </div>
-      <div class="flex-1">
-        <span class={`block ${FIELD_LABEL}`}>
-          <label for="filter-pile">{t("common.pile")}</label>
-          <HelpBubble id="filter-pile-help" text={t("sheetViewer.pileHelp")} {t} />
+      <div class="relative">
+        <span class={`flex items-center ${FIELD_LABEL}`}>
+          <label for="filter-temperature">{t("sheetViewer.temperatureLabel")}</label>
+          <HelpBubble id="filter-temperature-help" text={t("sheetViewer.temperatureHelp")} {t} />
+        </span>
+        <select
+          id="filter-temperature"
+          class={FIELD_INPUT}
+          disabled={temperatureOptions.length === 0}
+          bind:value={advanced.temperature}
+        >
+          <option value="">{t("sheetViewer.anyTemperature")}</option>
+          {#each temperatureOptions as temperature (temperature)}
+            <option value={temperature}>{formatTemperature(temperature)}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="relative">
+        <span class={`flex items-center ${FIELD_LABEL}`}>
+          <label for="filter-spin">{t("sheetViewer.spinLabel")}</label>
+          <HelpBubble id="filter-spin-help" text={t("sheetViewer.spinHelp")} {t} />
+        </span>
+        <select
+          id="filter-spin"
+          class={FIELD_INPUT}
+          disabled={spinOptions.length === 0}
+          bind:value={advanced.spin}
+        >
+          <option value="">{t("sheetViewer.anySpin")}</option>
+          {#each spinOptions as spin (spin)}
+            <option value={spin}>{spin === "0" ? t("common.noSpin") : `${spin} rpm`}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="relative">
+        <span class={`flex items-center ${FIELD_LABEL}`}>
+          <label for="filter-detergent">{t("common.detergent")}</label>
+          <HelpBubble id="filter-detergent-help" text={t("sheetViewer.detergentHelp")} {t} />
         </span>
         <input
-          id="filter-pile"
+          id="filter-detergent"
           class={FIELD_INPUT}
           type="search"
-          placeholder={t("sheetViewer.pileSearchPlaceholder")}
-          bind:value={pileQuery}
+          placeholder={t("sheetViewer.detergentSearchPlaceholder")}
+          bind:value={advanced.detergentQuery}
         />
       </div>
     </div>
-
-    <!-- A plain, uncontrolled <details> — closed on every page load with
-    no state or effect needed for it: nothing here ever sets `open`,
-    so hydration always starts from the same closed markup the server
-    rendered (#8). Only the *values* inside persist across visits, not
-    whether this was left open. -->
-    <details class="mt-3">
-      <summary
-        class="cursor-pointer text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      >
-        {t("sheetViewer.advanced")}
-      </summary>
-      <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div>
-          <span class={`block ${FIELD_LABEL}`}>
-            <label for="filter-program">{t("common.programme")}</label>
-            <HelpBubble id="filter-program-help" text={t("sheetViewer.programmeHelp")} {t} />
-          </span>
-          <select
-            id="filter-program"
-            class={FIELD_INPUT}
-            disabled={programOptions.length === 0}
-            bind:value={advanced.program}
-          >
-            <option value="">{t("sheetViewer.anyProgramme")}</option>
-            {#each programOptions as program (program)}
-              <option value={program}>{program}</option>
-            {/each}
-          </select>
-        </div>
-        <div>
-          <span class={`block ${FIELD_LABEL}`}>
-            <label for="filter-temperature">{t("sheetViewer.temperatureLabel")}</label>
-            <HelpBubble
-              id="filter-temperature-help"
-              text={t("sheetViewer.temperatureHelp")}
-              {t}
-            />
-          </span>
-          <select
-            id="filter-temperature"
-            class={FIELD_INPUT}
-            disabled={temperatureOptions.length === 0}
-            bind:value={advanced.temperature}
-          >
-            <option value="">{t("sheetViewer.anyTemperature")}</option>
-            {#each temperatureOptions as temperature (temperature)}
-              <option value={temperature}>{formatTemperature(temperature)}</option>
-            {/each}
-          </select>
-        </div>
-        <div>
-          <span class={`block ${FIELD_LABEL}`}>
-            <label for="filter-spin">{t("sheetViewer.spinLabel")}</label>
-            <HelpBubble id="filter-spin-help" text={t("sheetViewer.spinHelp")} {t} />
-          </span>
-          <select
-            id="filter-spin"
-            class={FIELD_INPUT}
-            disabled={spinOptions.length === 0}
-            bind:value={advanced.spin}
-          >
-            <option value="">{t("sheetViewer.anySpin")}</option>
-            {#each spinOptions as spin (spin)}
-              <option value={spin}>{spin === "0" ? t("common.noSpin") : `${spin} rpm`}</option>
-            {/each}
-          </select>
-        </div>
-        <div>
-          <span class={`block ${FIELD_LABEL}`}>
-            <label for="filter-detergent">{t("common.detergent")}</label>
-            <HelpBubble id="filter-detergent-help" text={t("sheetViewer.detergentHelp")} {t} />
-          </span>
-          <input
-            id="filter-detergent"
-            class={FIELD_INPUT}
-            type="search"
-            placeholder={t("sheetViewer.detergentSearchPlaceholder")}
-            bind:value={advanced.detergentQuery}
-          />
-        </div>
-      </div>
-    </details>
   </fieldset>
 
   {#if configHashError}
@@ -478,17 +493,6 @@ async function handleShareSheet() {
       {t("sheetViewer.sharedConfigError", { error: configHashError })}
     </p>
   {/if}
-  <p class="text-sm text-body">
-    {customItems ? t("common.showingOwnConfig") : t("sheetViewer.showingBundledChart")}
-    {t("sheetViewer.uploadEditPrefix")}
-    <a
-      href={relativeLocaleUrl(locale, "/config")}
-      class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-    >
-      {t("common.washingLoadsPageLink")}
-    </a>.
-  </p>
-
   {#if filtered.length === 0}
     <p class="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
       {#if pileQuery !== "" && hasActiveAdvancedFilters(advanced)}
@@ -528,6 +532,14 @@ async function handleShareSheet() {
         {shareStatus === t("common.copied") ? t("common.copied") : t("sheetViewer.shareThisView")}
       </button>
     </div>
+    <Sheet
+      items={filtered}
+      machine={activeMachine}
+      variant={cut}
+      {t}
+      onDownloadCard={handleDownloadCard}
+      onShareCard={handleShareCard}
+    />
     <p aria-live="polite" role="status" data-testid="share-sheet-status" class="sr-only">
       {shareStatus}
     </p>
@@ -556,13 +568,17 @@ async function handleShareSheet() {
         {t("sheetViewer.couldntRenderPrint", { chars: printDownloadDropped.join(" ") })}
       </p>
     {/if}
-    <Sheet
-      items={filtered}
-      machine={activeMachine}
-      variant={cut}
-      {t}
-      onDownloadCard={handleDownloadCard}
-      onShareCard={handleShareCard}
-    />
   {/if}
+
+  <!-- After the cards: on a phone the first screen is the load itself (#288). -->
+  <p class="text-sm text-body">
+    {customItems ? t("common.showingOwnConfig") : t("sheetViewer.showingBundledChart")}
+    {t("sheetViewer.uploadEditPrefix")}
+    <a
+      href={relativeLocaleUrl(locale, "/config")}
+      class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+    >
+      {t("common.washingLoadsPageLink")}
+    </a>.
+  </p>
 </div>

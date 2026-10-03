@@ -45,7 +45,7 @@ function handleChange(event: Event) {
 <div class="relative">
   <button
     type="button"
-    class="inline-flex min-h-9 items-center justify-center rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+    class="inline-flex min-h-11 items-center justify-center rounded-md border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
     onclick={() => inputEl?.click()}
   >
     {t("upload.uploadConfig")}

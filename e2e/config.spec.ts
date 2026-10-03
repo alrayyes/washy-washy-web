@@ -345,6 +345,7 @@ test("editing a chart field and saving applies it across the site", async ({ pag
   // localStorage-backed config (customConfig.ts).
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
+  await page.getByTestId("card-details").first().getByText("Details", { exact: true }).click();
   await expect(page.getByText("E2E Custom Detergent Note")).toBeVisible();
 });
 

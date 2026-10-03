@@ -36,6 +36,8 @@ export interface Ui {
   "nav.washingLoads": string;
   "nav.washerIron": string;
   "nav.docs": string;
+  /** The phone header's menu button: opens the nav, language, upload and GitHub link (#288). "Site menu", not "Menu": the docs pages have Starlight's own sidebar "Menu" toggle beside it. Short, it shares a 390px row. */
+  "nav.menu": string;
   "switcher.label": string;
   "footer.github": string;
   "footer.disclaimer": string;
@@ -113,7 +115,8 @@ export interface Ui {
   "sheetViewer.cutHelp": string;
   "sheetViewer.pileHelp": string;
   "sheetViewer.pileSearchPlaceholder": string;
-  "sheetViewer.advanced": string;
+  /** The single button that opens the programme/temperature/spin/detergent filters on the front page (#288). Replaces the "Advanced" disclosure; keep it to one word, it shares a 390px row with the search box. */
+  "sheetViewer.filters": string;
   "sheetViewer.programmeHelp": string;
   "sheetViewer.anyProgramme": string;
   "sheetViewer.temperatureLabel": string;
@@ -164,6 +167,8 @@ export interface Ui {
   /** Appended only for the "full" variant. */
   "sheet.legendWashExplainFullSuffix": string;
   "sheet.washHeading": string;
+  /** The summary of a card's collapsed section (#288): detergent, wash-together, drying, ironing, notes and the full button list. One word; the card leads with programme, temperature and spin. */
+  "sheet.details": string;
   "sheet.washTogetherWithLabel": string;
   "sheet.washTogetherEachOther": string;
   /** "each other, and {names}" */
@@ -294,6 +299,7 @@ const en: Ui = {
   "nav.washingLoads": "Washing loads",
   "nav.washerIron": "Washer & iron",
   "nav.docs": "Docs",
+  "nav.menu": "Site menu",
   "switcher.label": "Language",
   "footer.github": "Washy washy on GitHub",
   "footer.disclaimer": "Disclaimer",
@@ -375,7 +381,7 @@ const en: Ui = {
     "Which parts of the chart to show: everything, washing only, or ironing only.",
   "sheetViewer.pileHelp": 'Type part of a pile’s name, like "towels", to show just that card.',
   "sheetViewer.pileSearchPlaceholder": "Search by pile name…",
-  "sheetViewer.advanced": "Advanced",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only piles using this programme.",
   "sheetViewer.anyProgramme": "Any programme",
   "sheetViewer.temperatureLabel": "Temperature",
@@ -424,6 +430,7 @@ const en: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On the iron, the blue band is the zone where it makes steam.",
   "sheet.washHeading": "Wash",
+  "sheet.details": "Details",
   "sheet.washTogetherWithLabel": "Wash together with",
   "sheet.washTogetherEachOther": "each other",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -540,6 +547,7 @@ const ja: Ui = {
   "nav.washingLoads": "洗濯物",
   "nav.washerIron": "洗濯機とアイロン",
   "nav.docs": "ドキュメント",
+  "nav.menu": "サイトメニュー",
   "switcher.label": "言語",
   "footer.github": "GitHubのwashy washy",
   "footer.disclaimer": "免責事項",
@@ -622,7 +630,7 @@ const ja: Ui = {
   "sheetViewer.pileHelp":
     "「タオル」のように山の名前の一部を入力すると、そのカードだけを表示します。",
   "sheetViewer.pileSearchPlaceholder": "山の名前で検索…",
-  "sheetViewer.advanced": "詳細設定",
+  "sheetViewer.filters": "フィルター",
   "sheetViewer.programmeHelp": "このプログラムを使用する山だけを表示します。",
   "sheetViewer.anyProgramme": "すべてのプログラム",
   "sheetViewer.temperatureLabel": "温度",
@@ -671,6 +679,7 @@ const ja: Ui = {
     "ダイヤルは洗濯機についているとおりに描かれています: 12時の位置が{off}で、赤い矢印は合わせるべき位置です。チップは表示が切り替わるすべての値を示し、目的の値が塗りつぶされています。",
   "sheet.legendWashExplainFullSuffix": " アイロンでは、青い帯がスチームの出る範囲です。",
   "sheet.washHeading": "洗濯",
+  "sheet.details": "詳細",
   "sheet.washTogetherWithLabel": "一緒に洗う相手",
   "sheet.washTogetherEachOther": "お互い",
   "sheet.washTogetherEachOtherAnd": "お互い、そして{names}",
@@ -786,6 +795,7 @@ const es: Ui = {
   "nav.washingLoads": "Cargas de lavado",
   "nav.washerIron": "Lavadora y plancha",
   "nav.docs": "Documentación",
+  "nav.menu": "Menú del sitio",
   "switcher.label": "Idioma",
   "footer.github": "Washy washy en GitHub",
   "footer.disclaimer": "Aviso legal",
@@ -867,7 +877,7 @@ const es: Ui = {
   "sheetViewer.pileHelp":
     "Escribe parte del nombre de un montón, como «toallas», para mostrar solo esa tarjeta.",
   "sheetViewer.pileSearchPlaceholder": "Buscar por nombre de montón…",
-  "sheetViewer.advanced": "Avanzado",
+  "sheetViewer.filters": "Filtros",
   "sheetViewer.programmeHelp": "Muestra solo los montones que usan este programa.",
   "sheetViewer.anyProgramme": "Cualquier programa",
   "sheetViewer.temperatureLabel": "Temperatura",
@@ -916,6 +926,7 @@ const es: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " En la plancha, la banda azul es la zona donde genera vapor.",
   "sheet.washHeading": "Lavado",
+  "sheet.details": "Detalles",
   "sheet.washTogetherWithLabel": "Lavar junto con",
   "sheet.washTogetherEachOther": "entre sí",
   "sheet.washTogetherEachOtherAnd": "entre sí y con {names}",
@@ -1033,6 +1044,7 @@ const de: Ui = {
   "nav.washingLoads": "Waschladungen",
   "nav.washerIron": "Waschmaschine & Bügeleisen",
   "nav.docs": "Dokumentation",
+  "nav.menu": "Seitenmenü",
   "switcher.label": "Sprache",
   "footer.github": "Washy washy auf GitHub",
   "footer.disclaimer": "Haftungsausschluss",
@@ -1115,7 +1127,7 @@ const de: Ui = {
   "sheetViewer.pileHelp":
     "Gib einen Teil des Namens eines Stapels ein, z. B. „Handtücher“, um nur diese Karte anzuzeigen.",
   "sheetViewer.pileSearchPlaceholder": "Nach Stapelname suchen…",
-  "sheetViewer.advanced": "Erweitert",
+  "sheetViewer.filters": "Filter",
   "sheetViewer.programmeHelp": "Nur Stapel anzeigen, die dieses Programm verwenden.",
   "sheetViewer.anyProgramme": "Beliebiges Programm",
   "sheetViewer.temperatureLabel": "Temperatur",
@@ -1165,6 +1177,7 @@ const de: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " Beim Bügeleisen ist das blaue Band die Zone, in der Dampf entsteht.",
   "sheet.washHeading": "Waschen",
+  "sheet.details": "Details",
   "sheet.washTogetherWithLabel": "Zusammen waschen mit",
   "sheet.washTogetherEachOther": "einander",
   "sheet.washTogetherEachOtherAnd": "einander und {names}",
@@ -1283,6 +1296,7 @@ const fr: Ui = {
   "nav.washingLoads": "Charges de lavage",
   "nav.washerIron": "Lave-linge & fer",
   "nav.docs": "Docs",
+  "nav.menu": "Menu du site",
   "switcher.label": "Langue",
   "footer.github": "Washy washy sur GitHub",
   "footer.disclaimer": "Avertissement",
@@ -1365,7 +1379,7 @@ const fr: Ui = {
   "sheetViewer.pileHelp":
     "Tape une partie du nom d'une pile, comme « serviettes », pour n'afficher que cette carte.",
   "sheetViewer.pileSearchPlaceholder": "Rechercher par nom de pile…",
-  "sheetViewer.advanced": "Avancé",
+  "sheetViewer.filters": "Filtres",
   "sheetViewer.programmeHelp": "N'afficher que les piles utilisant ce programme.",
   "sheetViewer.anyProgramme": "Tous les programmes",
   "sheetViewer.temperatureLabel": "Température",
@@ -1415,6 +1429,7 @@ const fr: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " Sur le fer, la bande bleue est la zone où il produit de la vapeur.",
   "sheet.washHeading": "Lavage",
+  "sheet.details": "Détails",
   "sheet.washTogetherWithLabel": "Laver avec",
   "sheet.washTogetherEachOther": "entre elles",
   "sheet.washTogetherEachOtherAnd": "entre elles, et {names}",
@@ -1532,6 +1547,7 @@ const ar: Ui = {
   "nav.washingLoads": "أحمال الغسيل",
   "nav.washerIron": "الغسالة والمكواة",
   "nav.docs": "الوثائق",
+  "nav.menu": "قائمة الموقع",
   "switcher.label": "اللغة",
   "footer.github": "Washy washy على GitHub",
   "footer.disclaimer": "إخلاء المسؤولية",
@@ -1610,7 +1626,7 @@ const ar: Ui = {
   "sheetViewer.cutHelp": "أي أجزاء الجدول تُعرض: الكل، أو الغسيل فقط، أو الكي فقط.",
   "sheetViewer.pileHelp": 'اكتب جزءًا من اسم الكومة، مثل "مناشف"، لعرض تلك البطاقة فقط.',
   "sheetViewer.pileSearchPlaceholder": "ابحث باسم الكومة…",
-  "sheetViewer.advanced": "متقدّم",
+  "sheetViewer.filters": "عوامل التصفية",
   "sheetViewer.programmeHelp": "عرض الكومات التي تستخدم هذا البرنامج فقط.",
   "sheetViewer.anyProgramme": "أي برنامج",
   "sheetViewer.temperatureLabel": "درجة الحرارة",
@@ -1658,6 +1674,7 @@ const ar: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " وعلى المكواة، الشريط الأزرق هو المنطقة التي يُصدر فيها بخارًا.",
   "sheet.washHeading": "الغسيل",
+  "sheet.details": "التفاصيل",
   "sheet.washTogetherWithLabel": "يُغسل مع",
   "sheet.washTogetherEachOther": "بعضها بعضًا",
   "sheet.washTogetherEachOtherAnd": "بعضها بعضًا، و{names}",
@@ -1767,6 +1784,7 @@ const zh: Ui = {
   "nav.washingLoads": "洗衣清单",
   "nav.washerIron": "洗衣机与熨斗",
   "nav.docs": "文档",
+  "nav.menu": "站点菜单",
   "switcher.label": "语言",
   "footer.github": "GitHub 上的 Washy washy",
   "footer.disclaimer": "免责声明",
@@ -1843,7 +1861,7 @@ const zh: Ui = {
   "sheetViewer.cutHelp": "选择图表的显示范围：全部、仅洗涤或仅熨烫。",
   "sheetViewer.pileHelp": "输入类别名称的一部分，例如“毛巾”，即可只显示对应卡片。",
   "sheetViewer.pileSearchPlaceholder": "按类别名称搜索…",
-  "sheetViewer.advanced": "高级",
+  "sheetViewer.filters": "筛选",
   "sheetViewer.programmeHelp": "仅显示使用该程序的类别。",
   "sheetViewer.anyProgramme": "任意程序",
   "sheetViewer.temperatureLabel": "温度",
@@ -1886,6 +1904,7 @@ const zh: Ui = {
     "刻度盘的画法与它在机器上的实际样子一致：十二点方向是{off}，红色指针指示应转到的位置。色块列出了显示屏会经过的每一个数值，你要的那个会被填色标出。",
   "sheet.legendWashExplainFullSuffix": " 在熨斗刻度盘上，蓝色区域是会产生蒸汽的范围。",
   "sheet.washHeading": "洗涤",
+  "sheet.details": "详情",
   "sheet.washTogetherWithLabel": "一起洗涤的对象",
   "sheet.washTogetherEachOther": "彼此之间",
   "sheet.washTogetherEachOtherAnd": "彼此之间，以及{names}",
@@ -1993,6 +2012,7 @@ const tr: Ui = {
   "nav.washingLoads": "Çamaşır yükleri",
   "nav.washerIron": "Çamaşır makinesi ve ütü",
   "nav.docs": "Belgeler",
+  "nav.menu": "Site menüsü",
   "switcher.label": "Dil",
   "footer.github": "Washy washy GitHub'da",
   "footer.disclaimer": "Sorumluluk reddi",
@@ -2073,7 +2093,7 @@ const tr: Ui = {
   "sheetViewer.pileHelp":
     'Sadece o kartı göstermek için bir yığının adının bir kısmını yazın, örneğin "havlular".',
   "sheetViewer.pileSearchPlaceholder": "Yığın adına göre ara…",
-  "sheetViewer.advanced": "Gelişmiş",
+  "sheetViewer.filters": "Filtreler",
   "sheetViewer.programmeHelp": "Sadece bu programı kullanan yığınları göster.",
   "sheetViewer.anyProgramme": "Herhangi bir program",
   "sheetViewer.temperatureLabel": "Sıcaklık",
@@ -2121,6 +2141,7 @@ const tr: Ui = {
     "Kadranlar, makinenin üzerinde durdukları haliyle çizilmiştir: saat on iki yönü {off} konumudur, kırmızı ok ise çevrilecek konumu gösterir. Çipler, ekranın geçtiği her değeri gösterir; istediğiniz değer doldurulmuş olarak işaretlenir.",
   "sheet.legendWashExplainFullSuffix": " Ütüde, mavi bant buhar yaptığı bölgedir.",
   "sheet.washHeading": "Yıkama",
+  "sheet.details": "Ayrıntılar",
   "sheet.washTogetherWithLabel": "Şunlarla birlikte yıka",
   "sheet.washTogetherEachOther": "birbirleriyle",
   "sheet.washTogetherEachOtherAnd": "birbirleriyle ve {names} ile",
@@ -2230,6 +2251,7 @@ const jive: Ui = {
   "nav.washingLoads": "Wash Piles",
   "nav.washerIron": "Washer & Iron, Jack",
   "nav.docs": "The Docs, Jack",
+  "nav.menu": "Site menu",
   "switcher.label": "Jibber-Jabber",
   "footer.github": "Washy washy, straight outta sight on GitHub",
   "footer.disclaimer": "The Fine Print",
@@ -2313,7 +2335,7 @@ const jive: Ui = {
   "sheetViewer.pileHelp":
     'Type part of a pile\'s handle, like "towels", and just dat card show up, you dig?',
   "sheetViewer.pileSearchPlaceholder": "Search by pile handle…",
-  "sheetViewer.advanced": "Advanced stuff",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only piles rollin' wit' dis programme.",
   "sheetViewer.anyProgramme": "Any ol' programme",
   "sheetViewer.temperatureLabel": "Heat",
@@ -2362,6 +2384,7 @@ const jive: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On da iron, dat blue band's da zone where it's makin' steam.",
   "sheet.washHeading": "Wash",
+  "sheet.details": "The deets",
   "sheet.washTogetherWithLabel": "Wash together wit'",
   "sheet.washTogetherEachOther": "each other, dig it",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -2479,6 +2502,7 @@ const linkedin: Ui = {
   "nav.washingLoads": "Deliverables",
   "nav.washerIron": "Ops & Alignment",
   "nav.docs": "Playbook",
+  "nav.menu": "Site menu",
   "switcher.label": "Network",
   "footer.github": "Washy washy — open to work on GitHub",
   "footer.disclaimer": "Thought Leadership Disclaimer",
@@ -2562,7 +2586,7 @@ const linkedin: Ui = {
   "sheetViewer.pileHelp":
     'Type part of a deliverable\'s personal brand, like "towels", to surface just that card.',
   "sheetViewer.pileSearchPlaceholder": "Search by deliverable…",
-  "sheetViewer.advanced": "Advanced (for power users)",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only deliverables running this strategy.",
   "sheetViewer.anyProgramme": "Any strategy",
   "sheetViewer.temperatureLabel": "Temp Check",
@@ -2611,6 +2635,7 @@ const linkedin: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On the iron, the blue band is the growth zone where it produces steam.",
   "sheet.washHeading": "Execute",
+  "sheet.details": "Deep dive",
   "sheet.washTogetherWithLabel": "Co-locate in one wash with",
   "sheet.washTogetherEachOther": "each other — great synergy",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -2730,6 +2755,7 @@ const ru: Ui = {
   "nav.washingLoads": "Загрузки стирки",
   "nav.washerIron": "Стиральная машина и утюг",
   "nav.docs": "Документация",
+  "nav.menu": "Меню сайта",
   "switcher.label": "Язык",
   "footer.github": "Washy washy на GitHub",
   "footer.disclaimer": "Отказ от ответственности",
@@ -2811,7 +2837,7 @@ const ru: Ui = {
   "sheetViewer.pileHelp":
     "Введите часть названия стопки, например «полотенца», чтобы показать только эту карточку.",
   "sheetViewer.pileSearchPlaceholder": "Поиск по названию стопки…",
-  "sheetViewer.advanced": "Дополнительно",
+  "sheetViewer.filters": "Фильтры",
   "sheetViewer.programmeHelp": "Показывать только стопки, использующие эту программу.",
   "sheetViewer.anyProgramme": "Любая программа",
   "sheetViewer.temperatureLabel": "Температура",
@@ -2860,6 +2886,7 @@ const ru: Ui = {
     "Регуляторы нарисованы так, как они расположены на машине: двенадцать часов — это {off}, а красная стрелка показывает, куда его повернуть. Метки показывают каждое значение, через которое проходит дисплей, закрашено — нужное вам.",
   "sheet.legendWashExplainFullSuffix": " На утюге синяя полоса — зона, где образуется пар.",
   "sheet.washHeading": "Стирка",
+  "sheet.details": "Подробности",
   "sheet.washTogetherWithLabel": "Стирать вместе с",
   "sheet.washTogetherEachOther": "друг с другом",
   "sheet.washTogetherEachOtherAnd": "друг с другом и с {names}",

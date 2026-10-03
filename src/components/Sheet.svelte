@@ -155,9 +155,14 @@ function alsoWithNames(
 </script>
 
 {#snippet masthead()}
-  <header class="mb-4">
-    <h2 class="text-xl font-bold text-ink sm:text-2xl">{t("sheet.washingInstructions")}</h2>
-    <p class="mt-1 text-sm text-muted">{t(SUBTITLE_KEY[variant])}</p>
+  <h2 class="mb-3 text-xl font-bold text-ink sm:text-2xl">{t("sheet.washingInstructions")}</h2>
+{/snippet}
+
+<!-- Which chart and which machine this is. Below the cards, not above
+  them: on a phone the first screen belongs to the load (#288). -->
+{#snippet about()}
+  <header class="mt-4">
+    <p class="text-sm text-muted">{t(SUBTITLE_KEY[variant])}</p>
     <p class="text-sm text-muted">
       {machine.washer.name}, {machine.washer.capacity} · {machine.iron.name}
     </p>
@@ -236,18 +241,50 @@ function alsoWithNames(
 
 {#snippet controlPanel(item: ResolvedInstruction)}
   {@const washer = machine.washer}
+  <div class="rounded-md border border-hairline bg-panel p-3">
+    {@render chipRow(t("common.temp"), washer.temperatures, [item.temperature])}
+    {@render chipRow(t("common.spinRpm"), washer.spins, [item.spin])}
+    {@render chipRow(t("common.buttons"), washer.options, item.options)}
+  </div>
+{/snippet}
+
+<!--
+  The three things you read standing at the machine (#288): the programme on
+  the dial, the temperature and the spin. The two numbers are the largest
+  text on the card, the unit sits beside each at a smaller size but never
+  clips (`whitespace-nowrap` on the pair, so "°C" cannot drop away from
+  the digits), and the dial stays, drawn small. The softener badge rides with
+  the programme because it is part of the same "what do I set" read.
+-->
+{#snippet keySettings(item: ResolvedInstruction)}
+  <!-- No `text-base` anywhere in here: this theme has a `base` *colour*
+  (bg-base), so `text-base` sets white text, not a 1rem size. -->
+  {@const washer = machine.washer}
   {@const position = washer.programs.indexOf(item.program)}
   {@const off = washer.programs[0] ?? ""}
-  <div class="flex gap-3 rounded-md border border-hairline bg-panel p-3">
-    <div class="w-20 shrink-0 text-center">
-      <ProgramDial program={item.program} washer={washer} size={78} />
-      <p class="mt-1 text-xs font-bold text-ink">{item.program}</p>
-      <p class="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
+  {@const cold = item.temperature === "koud"}
+  <div class="flex items-center gap-3">
+    <div class="shrink-0">
+      <ProgramDial program={item.program} washer={washer} size={72} />
     </div>
-    <div class="flex flex-1 flex-col justify-center">
-      {@render chipRow(t("common.temp"), washer.temperatures, [item.temperature])}
-      {@render chipRow(t("common.spinRpm"), washer.spins, [item.spin])}
-      {@render chipRow(t("common.buttons"), washer.options, item.options)}
+    <div class="min-w-0 flex-1">
+      <p data-testid="card-programme" class="text-lg font-bold text-ink">{item.program}</p>
+      <p class="text-xs text-body">{t("common.clockwiseFrom", { position, off })}</p>
+      <div class="mt-1">{@render softenerBadge(item.fabricSoftener)}</div>
+    </div>
+  </div>
+  <div class="mt-3 grid grid-cols-2 gap-3">
+    <div class="rounded-md border border-hairline bg-panel px-3 py-2">
+      <p class="text-xs font-bold tracking-wide text-body uppercase">{t("common.temp")}</p>
+      <p data-testid="card-temperature" class="font-heading text-3xl leading-tight font-bold whitespace-nowrap text-ink">
+        {cold ? "koud" : item.temperature}{#if !cold}&nbsp;<span class="text-lg">°C</span>{/if}
+      </p>
+    </div>
+    <div class="rounded-md border border-hairline bg-panel px-3 py-2">
+      <p class="text-xs font-bold tracking-wide text-body uppercase">{t("sheetViewer.spinLabel")}</p>
+      <p data-testid="card-spin" class="font-heading text-3xl leading-tight font-bold text-ink">
+        {#if item.spin === "0"}{t("common.noSpin")}{:else}<span class="whitespace-nowrap">{item.spin}&nbsp;<span class="text-lg">rpm</span></span>{/if}
+      </p>
     </div>
   </div>
 {/snippet}
@@ -358,11 +395,11 @@ function alsoWithNames(
   {@const together = washesTogether(group)}
   {@const alsoWith = alsoWithNames(item, group, names)}
   <article class={CHART_CARD}>
-    <div class={CHART_CARD_HEADER}>
-      <h3 class="text-base font-bold text-ink">
+    <div class="mb-3 border-b border-ink pb-1.5">
+      <h3 class="text-lg font-bold text-ink">
         {index}. {heading}
       </h3>
-      <div class="flex shrink-0 items-center gap-2">
+      <div class="mt-1 flex flex-wrap items-center justify-between gap-2">
         <span class="text-xs font-bold text-accent-text">{durationsOf(group)}</span>
         {#if onDownloadCard && onShareCard}
           <CardActions {group} onDownload={onDownloadCard} onShare={onShareCard} {t} />
@@ -371,37 +408,41 @@ function alsoWithNames(
     </div>
 
     <SectionHeading text={t("sheet.washHeading")} />
-    <div class="mb-3 flex items-center gap-2">
-      {@render softenerBadge(item.fabricSoftener)}
-      <span class="text-xs font-bold text-ink">{item.program} {item.temperature === "koud" ? "koud" : `${item.temperature} °C`} · {item.spin === "0" ? t("common.noSpin") : `${item.spin} rpm`}</span>
-    </div>
+    {@render keySettings(item)}
 
-    {@render controlPanel(item)}
+    <details data-testid="card-details" class="mt-3 border-t border-hairline">
+      <summary
+        class="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
+        {t("sheet.details")}
+      </summary>
+      {@render controlPanel(item)}
 
-    {@render splitField(t("common.detergent"), group, (member) => member.detergent)}
-    {@render field(
-      t("sheet.washTogetherWithLabel"),
-      group.length > 1 && together
-        ? alsoWith.length > 0
-          ? t("sheet.washTogetherEachOtherAnd", { names: alsoWith.join(", ") })
-          : t("sheet.washTogetherEachOther")
-        : group.length > 1
-          ? t("sheet.washSeparately")
-          : alsoWith.length > 0
-            ? alsoWith.join(", ")
-            : t("sheet.washAlone"),
-    )}
-    {@render splitField(t("sheet.dryingLabel"), group, (member) => member.drying)}
+      {@render splitField(t("common.detergent"), group, (member) => member.detergent)}
+      {@render field(
+        t("sheet.washTogetherWithLabel"),
+        group.length > 1 && together
+          ? alsoWith.length > 0
+            ? t("sheet.washTogetherEachOtherAnd", { names: alsoWith.join(", ") })
+            : t("sheet.washTogetherEachOther")
+          : group.length > 1
+            ? t("sheet.washSeparately")
+            : alsoWith.length > 0
+              ? alsoWith.join(", ")
+              : t("sheet.washAlone"),
+      )}
+      {@render splitField(t("sheet.dryingLabel"), group, (member) => member.drying)}
 
-    {#if variant !== "wash"}
-      <div class="mt-3">
-        <SectionHeading text={t("common.iron")} />
-        {@render ironPanel(group)}
-      </div>
-    {/if}
+      {#if variant !== "wash"}
+        <div class="mt-3">
+          <SectionHeading text={t("common.iron")} />
+          {@render ironPanel(group)}
+        </div>
+      {/if}
 
-    {@render splitField(t("common.notes"), group, (member) => member.notes)}
-    {@render referenceField(group)}
+      {@render splitField(t("common.notes"), group, (member) => member.notes)}
+      {@render referenceField(group)}
+    </details>
   </article>
 {/snippet}
 
@@ -459,10 +500,6 @@ function alsoWithNames(
 
 <div>
   {@render masthead()}
-  {#if variant !== "iron"}
-    {@render loads()}
-  {/if}
-  {@render legend()}
   <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
     {#each groups as group, index (variant === "iron" ? ironCardKey(group[0] as ResolvedInstruction) : (group[0] as ResolvedInstruction).clothingType)}
       {#if variant === "iron"}
@@ -475,4 +512,9 @@ function alsoWithNames(
   {#if variant !== "iron"}
     {@render durationsDisclaimer()}
   {/if}
+  {@render about()}
+  {#if variant !== "iron"}
+    <div class="mt-4">{@render loads()}</div>
+  {/if}
+  {@render legend()}
 </div>

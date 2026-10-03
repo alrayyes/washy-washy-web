@@ -1,11 +1,3 @@
-<script module lang="ts">
-// w-48 in px, plus a little slack for the box's own border/shadow — the
-// threshold this file's toggle handler checks available space against
-// before deciding whether the tooltip needs to open from the right
-// edge instead of the left (#59).
-const TOOLTIP_WIDTH = 208;
-</script>
-
 <script lang="ts">
 import type { TranslationParams, Ui } from "../i18n/ui";
 
@@ -24,53 +16,50 @@ interface Props {
  *
  * A real component, not a snippet, ported from SheetViewer.tsx (#243):
  * `SheetViewer.svelte`'s filter fieldset instantiates this once per
- * Advanced field (cut, pile, programme, temperature, spin, detergent), and each
- * instance needs its own independent `open`/`alignRight` state — a snippet
+ * filter field (programme, temperature, spin, detergent), and each
+ * instance needs its own independent `open` state — a snippet
  * has no state of its own, so every call site would share one copy of it
  * instead of each getting its own (same reasoning that made `CardActions`
  * a real component in the previous stage, not a snippet inside `Sheet`).
+ *
+ * The tooltip spans its field (`inset-x-0` against the field's `relative`
+ * wrapper in SheetViewer) instead of floating at a fixed width beside the
+ * button: with a 44px tap target the button can sit anywhere along the
+ * label, and no fixed-width box fits on a 320px screen from every position.
  */
 let { id, text, t }: Props = $props();
 
 let open = $state(false);
-let alignRight = $state(false);
-
-// Reads the button's own position off the click event's `currentTarget`
-// rather than keeping a `bind:this` ref around for it — nothing else
-// here ever needs the element outside this one handler.
-function toggleOpen(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
-  const next = !open;
-  if (next) {
-    const { left } = event.currentTarget.getBoundingClientRect();
-    alignRight = window.innerWidth - left < TOOLTIP_WIDTH;
-  }
-  open = next;
-}
 
 function handleKeydown(event: KeyboardEvent) {
   if (event.key === "Escape") open = false;
 }
 </script>
 
-<span class="relative inline-block normal-case">
+<span class="normal-case">
   <button
     type="button"
-    class="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-line text-xs font-bold text-body hover:bg-accent hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    class="group -my-2 inline-flex h-11 w-11 items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
     aria-label={t("common.whatDoesThisDo")}
     aria-expanded={open}
     aria-controls={id}
     aria-describedby={open ? id : undefined}
-    onclick={toggleOpen}
+    onclick={() => (open = !open)}
     onblur={() => (open = false)}
     onkeydown={handleKeydown}
   >
-    ?
+    <!-- The 44x44 button is the tap target (#288); the small disc inside is
+    only what you see, so the hit area grows without the label row doing so. -->
+    <span
+      class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-line text-xs font-bold text-body group-hover:bg-accent group-hover:text-white"
+      aria-hidden="true">?</span
+    >
   </button>
   {#if open}
     <span
       {id}
       role="tooltip"
-      class={`absolute top-full z-10 mt-1 w-48 max-w-[80vw] rounded-md border border-line bg-surface p-2 text-xs font-normal text-body shadow-md ${alignRight ? "right-0" : "left-0"}`}
+      class="absolute inset-x-0 top-full z-10 mt-1 rounded-md border border-line bg-surface p-2 text-xs font-normal text-body shadow-md"
     >
       {text}
     </span>

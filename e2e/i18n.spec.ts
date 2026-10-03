@@ -201,7 +201,7 @@ test("Chinese chrome and docs are translated, and the bundled demo data comes ou
   await expect(page.locator("html")).toHaveAttribute("lang", "zh");
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("你的洗衣图表");
-  await page.locator("summary", { hasText: "高级" }).click();
+  await page.locator('[aria-controls="filter-panel"]').click();
   await expect(page.locator("#filter-program option")).toContainText(["棉织物"]);
 
   await page.goto("/zh/docs/");
@@ -333,7 +333,7 @@ test("the bundled example chart and machine are translated too, not just the chr
   // and stay cross-referenced correctly between the machine and the chart
   // (#144 follow-up) — src/i18n/configSource.ts.
   await gotoHydrated(page, "/de/");
-  await page.locator("summary", { hasText: "Erweitert" }).click();
+  await page.locator('[aria-controls="filter-panel"]').click();
   await expect(page.locator("#filter-program option")).toContainText(["Baumwolle"]);
 
   // Jive: the joke locale gets its own rewritten demo data too, consistent

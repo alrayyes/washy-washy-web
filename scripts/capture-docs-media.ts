@@ -69,8 +69,8 @@ const SHOTS: Shot[] = [
     viewport: PHONE,
     file: "sheet-filters.png",
     act: async (page, t) => {
-      await page.selectOption("#filter-cut", "wash");
-      await page.locator("summary", { hasText: t("sheetViewer.advanced") }).click();
+      await page.getByTestId("cut-wash").click();
+      await page.getByRole("button", { name: t("sheetViewer.filters") }).click();
     },
   },
   {

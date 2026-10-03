@@ -21,6 +21,10 @@ present on every page — and the fuller upload/download section on
 store it in the browser's `localStorage`. From then on, every page reads
 that config instead of the bundled one, until you clear it.
 
+On a phone the header keeps only the brand, the light/dark toggle and a
+"Site menu" button. The page links, language selector, "Upload config" and
+the GitHub link are behind that button.
+
 Editing on `/config` or [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 works the same way: a save writes the edited config to the same storage.
 Nothing here is sent to a server — a config never leaves your browser, and a
@@ -36,8 +40,8 @@ someone else.
 
 ## Theme toggle
 
-The header also has a light/dark toggle, next to "Upload config" on every
-page. Left alone, the site follows your OS or browser's
+The header also has a light/dark toggle, on every page. It stays on the
+header's top row on a phone, outside the "Site menu". Left alone, the site follows your OS or browser's
 `prefers-color-scheme` setting, same as before this existed. Clicking it sets
 an explicit choice instead, stored in `localStorage`, which then overrides
 that OS setting on every page and every future visit — until you click it
@@ -62,17 +66,25 @@ using a mouse or a screen reader instead of the keyboard. None of these
 shortcuts fire while you're typing into a text field, a textarea, a select
 or anything else editable — normal typing always wins.
 
+## Reading a card
+
+Each card on the front page leads with what you set on the machine: the
+programme (with its dial), then the temperature and the spin speed in large
+type. Detergent, which piles wash together, drying, ironing, notes and
+sources sit under a **Details** line on the card, closed until you tap it.
+
 ## Filters
 
-The front page filters by which cut you want (full chart, washing only,
-ironing only) and by a free-text pile search, plus an "Advanced" disclosure
-— closed by default — for filtering by an exact programme, temperature or
-spin, and a detergent search. All of them narrow the same list; a pile has
-to match every active filter to show.
+The front page shows a pile search box, three pills for the cut you want
+(everything, washing only, ironing only) and one **Filters** button. The
+button opens a panel — closed on every page load — for filtering by an exact
+programme, temperature or spin, and a detergent search; a small number on the
+button says how many of those are active. All of them narrow the same list; a
+pile has to match every active filter to show.
 
 The programme, temperature and spin selects only ever offer values that
 would still leave at least one pile showing, given the pile search and
-whatever else you've already picked in Advanced — so you can't pick a
+whatever else you've already picked in Filters — so you can't pick a
 combination that lands you on an empty chart. The lists update live as you
 change other filters, and if a field has nothing left that could match, it
 disables itself instead of showing empty options.
@@ -84,8 +96,8 @@ parameters, and a URL carrying any of them wins outright over whatever was
 saved from a previous visit — see Share below for the button that hands that
 URL off.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="The Advanced filters open, with washing-only selected" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="The Advanced filters open, with washing-only selected" />
+<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="The Filters panel open, with washing-only selected" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="The Filters panel open, with washing-only selected" />
 
 ## Share
 

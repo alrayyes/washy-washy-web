@@ -75,10 +75,14 @@ test("the mobile menu toggle opens the sidebar and reaches another page — with
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto("/docs/chart-and-machine/");
 
+  // The site nav sits behind the header's own "Site menu" button on a phone
+  // (#288), so it is opened here, then the sidebar's separate "Menu" toggle
+  // is still found by its exact name.
+  await page.getByRole("button", { name: "Site menu" }).click();
   const nav = page.getByRole("navigation", { name: "Site" });
   await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
 
-  const toggle = page.getByRole("button", { name: /menu/i });
+  const toggle = page.getByRole("button", { name: /^menu$/i });
   await toggle.click();
 
   const sidebar = page.getByRole("navigation", { name: "Main" });
