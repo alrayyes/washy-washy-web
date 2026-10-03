@@ -1,3 +1,9 @@
+## [1.50.0](https://github.com/alrayyes/washy-washy-web/compare/v1.49.0...v1.50.0) (2026-10-03)
+
+### Features
+
+* **config:** lead each editable card with programme, temperature and spin ([a66f1bd](https://github.com/alrayyes/washy-washy-web/commit/a66f1bd195e526063531c57f479401061294e378)), closes [#288](https://github.com/alrayyes/washy-washy-web/issues/288) [#302](https://github.com/alrayyes/washy-washy-web/issues/302)
+
 ## [1.49.0](https://github.com/alrayyes/washy-washy-web/compare/v1.48.7...v1.49.0) (2026-10-03)
 
 ### Features
