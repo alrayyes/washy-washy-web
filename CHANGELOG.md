@@ -1,3 +1,9 @@
+## [1.48.5](https://github.com/alrayyes/washy-washy-web/compare/v1.48.4...v1.48.5) (2026-10-03)
+
+### Bug Fixes
+
+* **deps:** ignore the unfixed http-cache-semantics and braces advisories ([9797591](https://github.com/alrayyes/washy-washy-web/commit/9797591deb043fb2130af0d622df32d6ae6ba58d)), closes [#298](https://github.com/alrayyes/washy-washy-web/issues/298)
+
 ## [1.48.4](https://github.com/alrayyes/washy-washy-web/compare/v1.48.3...v1.48.4) (2026-10-02)
 
 ### Bug Fixes
