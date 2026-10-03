@@ -1,3 +1,9 @@
+## [1.51.0](https://github.com/alrayyes/washy-washy-web/compare/v1.50.0...v1.51.0) (2026-10-03)
+
+### Features
+
+* **sheet:** fold the phone's download and share actions behind one menu button ([18b797c](https://github.com/alrayyes/washy-washy-web/commit/18b797ced4acec3f03d4930ec9222a5622acd40d))
+
 ## [1.50.0](https://github.com/alrayyes/washy-washy-web/compare/v1.49.0...v1.50.0) (2026-10-03)
 
 ### Features
