@@ -14,10 +14,10 @@ actually getting a checkout running. This is where the "why" that doesn't
 fit in a `CONTRIBUTING.md` bullet lives instead.
 
 - **[Architecture](architecture.md)** — the static-site shape and where
-  React islands sit inside it.
+  the Svelte islands sit inside it.
 - **[Package relationships](packages.md)** — how this repo relates to
   `washy-washy-cli` and the shared `@washy-washy/core`/`@washy-washy/pdf`
   packages.
 - **[Island hydration](hydration.md)** — the `data-hydrated` convention
-  every React island and every Playwright test relies on, and the race it
+  every Svelte island and every Playwright test relies on, and the race it
   exists to avoid.
