@@ -517,6 +517,13 @@ describe("Card temperature/spin display", () => {
     expect(readouts(render("full"), "card-spin")).toContain("800 rpm");
   });
 
+  test("each readout is labelled, and the collapsed section has its summary", () => {
+    const html = render("full");
+    expect(html).toContain(`uppercase">${t("common.temp")}</p>`);
+    expect(html).toContain(`uppercase">${t("sheetViewer.spinLabel")}</p>`);
+    expect(html).toContain(t("sheet.details"));
+  });
+
   test("the programme the dial is set to is named on the card", () => {
     expect(readouts(render("full"), "card-programme")).toContain("Cottons");
   });
