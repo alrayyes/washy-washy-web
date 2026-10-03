@@ -30,12 +30,19 @@ declare global {
   var document: any;
 }
 
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { cardGroups, type ResolvedInstruction, resolve } from "@washy-washy/core";
 import { mount, tick, unmount } from "svelte";
 import Sheet from "../src/components/Sheet.svelte?client";
 import { translator } from "../src/i18n/ui";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
+
+// Mounting a Svelte component under happy-dom costs a second or two on an idle
+// machine (the first mount also compiles), and the pre-push hook runs this
+// beside eight other jobs, where one test hit 20s. bun's 5s default also
+// covers the beforeEach/afterEach hooks here. One minute fails a hung test
+// without failing a busy machine; the assertions are unchanged. See #322.
+setDefaultTimeout(60_000);
 
 const t = translator("en");
 const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
