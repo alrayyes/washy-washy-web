@@ -91,6 +91,8 @@ let phoneDownloadDropped = $state<string[]>([]);
 let downloadingPrint = $state(false);
 let printDownloadError = $state<string | null>(null);
 let printDownloadDropped = $state<string[]>([]);
+let actionsOpen = $state(false);
+let actionsButton = $state<HTMLButtonElement>();
 let shareStatus = $state("");
 let shareError = $state<string | null>(null);
 let configHashError = $state<string | null>(null);
@@ -229,6 +231,12 @@ const temperatureOptions = $derived(
 const spinOptions = $derived(
   facetOptions(activeMachine.washer.spins, facets.spins, advanced.spin),
 );
+
+function handleActionsKeydown(event: KeyboardEvent) {
+  if (event.key !== "Escape" || !actionsOpen) return;
+  actionsOpen = false;
+  actionsButton?.focus();
+}
 
 function savePdf(pdf: Uint8Array, filename: string) {
   // TS's DOM lib types BlobPart as ArrayBuffer-backed only, while
@@ -504,33 +512,57 @@ async function handleShareSheet() {
       {/if}
     </p>
   {:else}
-    <div class="flex flex-wrap items-center gap-3">
+    <!-- Below `md` the three actions sit behind one button so they cost the
+    first screen a single row (#303); the same elements are an inline row
+    again at `md` and up. Same open/close pattern as the site menu in
+    SiteHeader.astro. -->
+    <div
+      data-testid="pdf-actions-bar"
+      class="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center"
+      role="presentation"
+      onkeydown={handleActionsKeydown}
+    >
       <button
-        class={BUTTON_PRIMARY}
         type="button"
-        data-testid="download-phone"
-        onclick={handleDownloadPhone}
-        disabled={downloadingPhone}
+        bind:this={actionsButton}
+        aria-expanded={actionsOpen}
+        aria-controls="pdf-actions"
+        class={`${BUTTON_SECONDARY} self-start md:hidden`}
+        onclick={() => (actionsOpen = !actionsOpen)}
       >
-        {downloadingPhone ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadForPhone")}
+        {t("sheetViewer.actionsMenu")}
       </button>
-      <button
-        class={BUTTON_PRIMARY}
-        type="button"
-        data-testid="download-print"
-        onclick={handleDownloadPrint}
-        disabled={downloadingPrint}
+      <div
+        id="pdf-actions"
+        class={`flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center ${actionsOpen ? "" : "max-md:hidden"}`}
       >
-        {downloadingPrint ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadToPrint")}
-      </button>
-      <button
-        class={BUTTON_SECONDARY}
-        type="button"
-        data-testid="share-sheet"
-        onclick={handleShareSheet}
-      >
-        {shareStatus === t("common.copied") ? t("common.copied") : t("sheetViewer.shareThisView")}
-      </button>
+        <button
+          class={BUTTON_PRIMARY}
+          type="button"
+          data-testid="download-phone"
+          onclick={handleDownloadPhone}
+          disabled={downloadingPhone}
+        >
+          {downloadingPhone ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadForPhone")}
+        </button>
+        <button
+          class={BUTTON_PRIMARY}
+          type="button"
+          data-testid="download-print"
+          onclick={handleDownloadPrint}
+          disabled={downloadingPrint}
+        >
+          {downloadingPrint ? t("sheetViewer.preparingPdf") : t("sheetViewer.downloadToPrint")}
+        </button>
+        <button
+          class={BUTTON_SECONDARY}
+          type="button"
+          data-testid="share-sheet"
+          onclick={handleShareSheet}
+        >
+          {shareStatus === t("common.copied") ? t("common.copied") : t("sheetViewer.shareThisView")}
+        </button>
+      </div>
     </div>
     <Sheet
       items={filtered}
