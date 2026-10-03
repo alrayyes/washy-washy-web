@@ -64,11 +64,14 @@ bun run lint:fix     # biome check --write .
 bun run lint:md       # prettier --check + markdownlint-cli2
 bun run lint:yaml     # prettier --check
 bun run lint:prose    # vale, error-level only (bun run prose:sync first)
+scripts/lint-ltex.sh  # LTeX grammar and spelling, needs Docker (or ltex-cli-plus on PATH)
 ```
 
 [Lefthook](https://github.com/evilmartians/lefthook) runs the fast checks on
 `pre-commit` and `commit-msg`, and the full check/typecheck/lint set on
-`pre-push` — the same commands CI runs, so the two can't drift.
+`pre-push` — the same commands CI runs, so the two can't drift. That includes
+LTeX, which `pre-push` runs through the same script as CI, so pushing needs
+Docker.
 
 ```sh
 bun run prepare       # lefthook install, run automatically after bun install
