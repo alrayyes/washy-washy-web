@@ -37,6 +37,7 @@
       "vendored",
       "washy",
       "washy-washy-cli",
+      "washy-washy-pdf",
       "wrangler"
     ]
   },

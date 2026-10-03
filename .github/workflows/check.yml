@@ -320,20 +320,14 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends git nodejs
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      # It reports findings with exit code 3, not 1, so a step testing for a
-      # specific code would pass a failing document. Let the shell judge
-      # non-zero. The files are named rather than passing `.`: LTeX traverses
-      # recursively and reads plain text as prose, so a bare dot lints the
-      # committed Vale vocabulary as though it were a document. The docs site
-      # (#12) is plain Markdown, so it's named alongside them rather than
-      # exempted — passing the directory is safe because it holds nothing but
-      # genuine prose, unlike the repo root.
+      # The pre-push hook calls the same script, which holds the file list and
+      # the exit-code note (3 on findings, so any non-zero fails).
       #
       # .ltex.json disables ENGLISH_WORD_REPEAT_RULE for the same reason
       # .vale.ini turns Vale.Repetition off: the product is called
       # "washy-washy", a deliberate repeated word, not a typo either rule
       # would otherwise be right to catch.
-      - run: ltex-cli-plus --client-configuration=.ltex.json README.md CONTRIBUTING.md SECURITY.md src/content/docs/docs
+      - run: scripts/lint-ltex.sh
 
   # Style. House voice, weasel words, wordiness, undefined jargon. Advice
   # rather than a verdict: Vale exits non-zero only on error-severity alerts,

@@ -39,8 +39,7 @@ pre-commit:
     # Error level only. Vale's warnings are style advice, and advice that blocks
     # a commit is how you teach someone to reach for --no-verify; `bun run
     # lint:prose:advice` and the CI job are where the full read lives. LTeX is
-    # deliberately absent — a ~300 MB download with its own Java runtime is more
-    # than a commit should wait on, so it runs in CI and in the editor over LSP.
+    # absent here and runs on pre-push and in CI instead, from one script.
     #
     # .tools/vale and the style packages are downloaded, not committed, so a
     # fresh clone has neither. The installer is idempotent and costs a process
@@ -84,3 +83,6 @@ pre-push:
       run: bun run check
     - name: test
       run: bun run test
+    - name: ltex
+      glob: "*.md"
+      run: scripts/lint-ltex.sh
