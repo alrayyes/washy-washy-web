@@ -68,7 +68,12 @@ bun run lint:prose    # vale, error-level only (bun run prose:sync first)
 
 [Lefthook](https://github.com/evilmartians/lefthook) runs the fast checks on
 `pre-commit` and `commit-msg`, and the full check/typecheck/lint set on
-`pre-push` — the same commands CI runs, so the two can't drift.
+`pre-push` — the same commands CI runs, so the two can't drift. Hooks print
+nothing on success and the full linter output on failure (`output: [failure]`).
+
+The Vale pre-commit job installs the pinned binary into `.tools/` and fetches
+the style packages the first time it runs, so a fresh clone needs no manual
+`bun run prose:sync`. Run that yourself only to refresh the packages.
 
 ```sh
 bun run prepare       # lefthook install, run automatically after bun install
