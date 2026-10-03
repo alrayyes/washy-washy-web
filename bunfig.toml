@@ -1,3 +1,8 @@
+[install]
+# Pin new dependencies to exact versions by default, without --exact on
+# every `bun add`.
+exact = true
+
 [test]
 # Compiles `.svelte` imports (server-rendered by default, client-rendered
 # for a `?client`-suffixed import) before `bun test` evaluates them — see
