@@ -71,7 +71,12 @@ scripts/lint-ltex.sh  # LTeX grammar and spelling, needs Docker (or ltex-cli-plu
 `pre-commit` and `commit-msg`, and the full check/typecheck/lint set on
 `pre-push` — the same commands CI runs, so the two can't drift. That includes
 LTeX, which `pre-push` runs through the same script as CI, so pushing needs
-Docker.
+Docker. Hooks print nothing on success and the full linter output on failure
+(`output: [failure]`).
+
+The Vale pre-commit job installs the pinned binary into `.tools/` and fetches
+the style packages the first time it runs, so a fresh clone needs no manual
+`bun run prose:sync`. Run that yourself only to refresh the packages.
 
 ```sh
 bun run prepare       # lefthook install, run automatically after bun install

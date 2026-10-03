@@ -1,3 +1,7 @@
+# Silent on a clean run, full detail when a job fails.
+output:
+  - failure
+
 # Same commands CI runs, so the hook and the gate cannot drift.
 pre-commit:
   parallel: true
@@ -36,11 +40,16 @@ pre-commit:
     # a commit is how you teach someone to reach for --no-verify; `bun run
     # lint:prose:advice` and the CI job are where the full read lives. LTeX is
     # absent here and runs on pre-push and in CI instead, from one script.
+    #
+    # .tools/vale and the style packages are downloaded, not committed, so a
+    # fresh clone has neither. The installer is idempotent and costs a process
+    # start when the pinned binary is there; `vale sync` runs only while the
+    # packages are missing, so a normal commit never touches the network.
     - name: vale
       glob: "*.md"
       exclude:
         - CHANGELOG.md
-      run: .tools/vale --minAlertLevel=error {staged_files}
+      run: bun run scripts/install-vale.ts && { test -d styles/Google || .tools/vale sync; } && .tools/vale --minAlertLevel=error {staged_files}
 
 commit-msg:
   jobs:
