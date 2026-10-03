@@ -74,6 +74,11 @@ LTeX, which `pre-push` runs through the same script as CI, so pushing needs
 Docker. Hooks print nothing on success and the full linter output on failure
 (`output: [failure]`).
 
+`pre-push` runs its jobs in parallel, so a busy machine slows the unit tests.
+Tests that render a PDF or mount a component set a one-minute timeout with
+`setDefaultTimeout` instead of Bun's five-second default. Give a new slow test one
+rather than skipping the hook.
+
 The Vale pre-commit job installs the pinned binary into `.tools/` and fetches
 the style packages the first time it runs, so a fresh clone needs no manual
 `bun run prose:sync`. Run that yourself only to refresh the packages.
