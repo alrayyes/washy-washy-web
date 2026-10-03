@@ -83,8 +83,15 @@ request's full range.
 ## Branching, review and release
 
 Work lands through a pull request — no direct pushes to `main`. One
-logical change per commit and per PR. `main` is protected: PRs require the
-`check` workflow to pass.
+logical change per commit and per PR. `main` is protected: a PR needs these
+checks green before it can merge.
+
+- `check`, `mutation` and `e2e`, from `.github/workflows/check.yml`
+- `commits`, `ltex`, `dependency-review` and `semgrep`, from the same file
+- `pr-title`, from `.github/workflows/pr-title.yml`
+
+`lighthouse` and `vale` (the advisory prose run) also run on every PR but
+aren't required.
 
 Versioning is automatic: [semantic-release](https://semantic-release.gitbook.io/)
 reads the Conventional Commits on `main` and cuts a version, changelog and
