@@ -21,6 +21,10 @@ present on every page — and the fuller upload/download section on
 store it in the browser's `localStorage`. From then on, every page reads
 that config instead of the bundled one, until you clear it.
 
+On a phone the header keeps only the brand, the light/dark toggle and a
+"Site menu" button. The page links, language selector, "Upload config" and
+the GitHub link are behind that button.
+
 Editing on `/config` or [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 works the same way: a save writes the edited config to the same storage.
 Nothing here is sent to a server — a config never leaves your browser, and a
@@ -36,8 +40,8 @@ someone else.
 
 ## Theme toggle
 
-The header also has a light/dark toggle, next to "Upload config" on every
-page. Left alone, the site follows your OS or browser's
+The header also has a light/dark toggle, on every page. It stays on the
+header's top row on a phone, outside the "Site menu". Left alone, the site follows your OS or browser's
 `prefers-color-scheme` setting, same as before this existed. Clicking it sets
 an explicit choice instead, stored in `localStorage`, which then overrides
 that OS setting on every page and every future visit — until you click it

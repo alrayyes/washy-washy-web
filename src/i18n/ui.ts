@@ -36,6 +36,8 @@ export interface Ui {
   "nav.washingLoads": string;
   "nav.washerIron": string;
   "nav.docs": string;
+  /** The phone header's menu button: opens the nav, language, upload and GitHub link (#288). "Site menu", not "Menu": the docs pages have Starlight's own sidebar "Menu" toggle beside it. Short, it shares a 390px row. */
+  "nav.menu": string;
   "switcher.label": string;
   "footer.github": string;
   "footer.disclaimer": string;
@@ -294,6 +296,7 @@ const en: Ui = {
   "nav.washingLoads": "Washing loads",
   "nav.washerIron": "Washer & iron",
   "nav.docs": "Docs",
+  "nav.menu": "Site menu",
   "switcher.label": "Language",
   "footer.github": "Washy washy on GitHub",
   "footer.disclaimer": "Disclaimer",
@@ -540,6 +543,7 @@ const ja: Ui = {
   "nav.washingLoads": "洗濯物",
   "nav.washerIron": "洗濯機とアイロン",
   "nav.docs": "ドキュメント",
+  "nav.menu": "サイトメニュー",
   "switcher.label": "言語",
   "footer.github": "GitHubのwashy washy",
   "footer.disclaimer": "免責事項",
@@ -786,6 +790,7 @@ const es: Ui = {
   "nav.washingLoads": "Cargas de lavado",
   "nav.washerIron": "Lavadora y plancha",
   "nav.docs": "Documentación",
+  "nav.menu": "Menú del sitio",
   "switcher.label": "Idioma",
   "footer.github": "Washy washy en GitHub",
   "footer.disclaimer": "Aviso legal",
@@ -1033,6 +1038,7 @@ const de: Ui = {
   "nav.washingLoads": "Waschladungen",
   "nav.washerIron": "Waschmaschine & Bügeleisen",
   "nav.docs": "Dokumentation",
+  "nav.menu": "Seitenmenü",
   "switcher.label": "Sprache",
   "footer.github": "Washy washy auf GitHub",
   "footer.disclaimer": "Haftungsausschluss",
@@ -1283,6 +1289,7 @@ const fr: Ui = {
   "nav.washingLoads": "Charges de lavage",
   "nav.washerIron": "Lave-linge & fer",
   "nav.docs": "Docs",
+  "nav.menu": "Menu du site",
   "switcher.label": "Langue",
   "footer.github": "Washy washy sur GitHub",
   "footer.disclaimer": "Avertissement",
@@ -1532,6 +1539,7 @@ const ar: Ui = {
   "nav.washingLoads": "أحمال الغسيل",
   "nav.washerIron": "الغسالة والمكواة",
   "nav.docs": "الوثائق",
+  "nav.menu": "قائمة الموقع",
   "switcher.label": "اللغة",
   "footer.github": "Washy washy على GitHub",
   "footer.disclaimer": "إخلاء المسؤولية",
@@ -1767,6 +1775,7 @@ const zh: Ui = {
   "nav.washingLoads": "洗衣清单",
   "nav.washerIron": "洗衣机与熨斗",
   "nav.docs": "文档",
+  "nav.menu": "站点菜单",
   "switcher.label": "语言",
   "footer.github": "GitHub 上的 Washy washy",
   "footer.disclaimer": "免责声明",
@@ -1993,6 +2002,7 @@ const tr: Ui = {
   "nav.washingLoads": "Çamaşır yükleri",
   "nav.washerIron": "Çamaşır makinesi ve ütü",
   "nav.docs": "Belgeler",
+  "nav.menu": "Site menüsü",
   "switcher.label": "Dil",
   "footer.github": "Washy washy GitHub'da",
   "footer.disclaimer": "Sorumluluk reddi",
@@ -2230,6 +2240,7 @@ const jive: Ui = {
   "nav.washingLoads": "Wash Piles",
   "nav.washerIron": "Washer & Iron, Jack",
   "nav.docs": "The Docs, Jack",
+  "nav.menu": "Site menu",
   "switcher.label": "Jibber-Jabber",
   "footer.github": "Washy washy, straight outta sight on GitHub",
   "footer.disclaimer": "The Fine Print",
@@ -2479,6 +2490,7 @@ const linkedin: Ui = {
   "nav.washingLoads": "Deliverables",
   "nav.washerIron": "Ops & Alignment",
   "nav.docs": "Playbook",
+  "nav.menu": "Site menu",
   "switcher.label": "Network",
   "footer.github": "Washy washy — open to work on GitHub",
   "footer.disclaimer": "Thought Leadership Disclaimer",
@@ -2730,6 +2742,7 @@ const ru: Ui = {
   "nav.washingLoads": "Загрузки стирки",
   "nav.washerIron": "Стиральная машина и утюг",
   "nav.docs": "Документация",
+  "nav.menu": "Меню сайта",
   "switcher.label": "Язык",
   "footer.github": "Washy washy на GitHub",
   "footer.disclaimer": "Отказ от ответственности",

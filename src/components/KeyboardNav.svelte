@@ -55,7 +55,7 @@ $effect(() => {
   type="button"
   data-testid="keyboard-help-trigger"
   aria-label={t("keyboardNav.title")}
-  class="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-line bg-surface p-1.5 text-sm font-bold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+  class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-line bg-surface p-1.5 text-sm font-bold text-ink shadow-sm hover:bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
   onclick={openHelp}
 >
   <span aria-hidden="true">?</span>
