@@ -1,3 +1,11 @@
+## [1.49.0](https://github.com/alrayyes/washy-washy-web/compare/v1.48.7...v1.49.0) (2026-10-03)
+
+### Features
+
+* **filters:** show only search, cut pills and a Filters button on load ([dea2c17](https://github.com/alrayyes/washy-washy-web/commit/dea2c17695911d6ac1f30060fa6fa4719ea1217c)), closes [#288](https://github.com/alrayyes/washy-washy-web/issues/288)
+* **header:** fold the phone header's controls behind a menu button ([9f711be](https://github.com/alrayyes/washy-washy-web/commit/9f711be5362679c648e7e7cdfb912f9df9af40e2)), closes [#288](https://github.com/alrayyes/washy-washy-web/issues/288)
+* **sheet:** lead each card with programme, temperature and spin ([88cce42](https://github.com/alrayyes/washy-washy-web/commit/88cce42e8840e29f609a6f02d799da1e5151b8e1)), closes [#288](https://github.com/alrayyes/washy-washy-web/issues/288)
+
 ## [1.48.7](https://github.com/alrayyes/washy-washy-web/compare/v1.48.6...v1.48.7) (2026-10-03)
 
 ### Bug Fixes
