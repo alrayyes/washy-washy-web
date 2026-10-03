@@ -140,6 +140,8 @@ export interface Ui {
   "sheetViewer.downloadForPhone": string;
   "sheetViewer.downloadToPrint": string;
   "sheetViewer.shareThisView": string;
+  /** The phone's one button for the PDF downloads and the share action, which sit behind it below `md` (#303). */
+  "sheetViewer.actionsMenu": string;
   /** "Could not share this view: {error}" */
   "sheetViewer.couldNotShare": string;
   /** "Could not generate the phone PDF: {error}" */
@@ -407,6 +409,7 @@ const en: Ui = {
   "sheetViewer.downloadForPhone": "Download for phone",
   "sheetViewer.downloadToPrint": "Download to print",
   "sheetViewer.shareThisView": "Share this view",
+  "sheetViewer.actionsMenu": "Download and share",
   "sheetViewer.couldNotShare": "Could not share this view: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Could not generate the phone PDF: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Could not generate the print PDF: {error}",
@@ -657,6 +660,7 @@ const ja: Ui = {
   "sheetViewer.downloadForPhone": "スマホ用にダウンロード",
   "sheetViewer.downloadToPrint": "印刷用にダウンロード",
   "sheetViewer.shareThisView": "この表示を共有",
+  "sheetViewer.actionsMenu": "ダウンロードと共有",
   "sheetViewer.couldNotShare": "この表示を共有できませんでした: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "スマホ用PDFを生成できませんでした: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "印刷用PDFを生成できませんでした: {error}",
@@ -903,6 +907,7 @@ const es: Ui = {
   "sheetViewer.downloadForPhone": "Descargar para el móvil",
   "sheetViewer.downloadToPrint": "Descargar para imprimir",
   "sheetViewer.shareThisView": "Compartir esta vista",
+  "sheetViewer.actionsMenu": "Descargar y compartir",
   "sheetViewer.couldNotShare": "No se pudo compartir esta vista: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "No se pudo generar el PDF para el móvil: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "No se pudo generar el PDF para imprimir: {error}",
@@ -1154,6 +1159,7 @@ const de: Ui = {
   "sheetViewer.downloadForPhone": "Für Handy herunterladen",
   "sheetViewer.downloadToPrint": "Zum Drucken herunterladen",
   "sheetViewer.shareThisView": "Diese Ansicht teilen",
+  "sheetViewer.actionsMenu": "Herunterladen und teilen",
   "sheetViewer.couldNotShare": "Diese Ansicht konnte nicht geteilt werden: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Das Handy-PDF konnte nicht erstellt werden: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Das Druck-PDF konnte nicht erstellt werden: {error}",
@@ -1406,6 +1412,7 @@ const fr: Ui = {
   "sheetViewer.downloadForPhone": "Télécharger pour téléphone",
   "sheetViewer.downloadToPrint": "Télécharger pour impression",
   "sheetViewer.shareThisView": "Partager cette vue",
+  "sheetViewer.actionsMenu": "Télécharger et partager",
   "sheetViewer.couldNotShare": "Impossible de partager cette vue : {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Impossible de générer le PDF téléphone : {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Impossible de générer le PDF d'impression : {error}",
@@ -1652,6 +1659,7 @@ const ar: Ui = {
   "sheetViewer.downloadForPhone": "تنزيل للهاتف",
   "sheetViewer.downloadToPrint": "تنزيل للطباعة",
   "sheetViewer.shareThisView": "مشاركة هذا العرض",
+  "sheetViewer.actionsMenu": "التنزيل والمشاركة",
   "sheetViewer.couldNotShare": "تعذّرت مشاركة هذا العرض: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "تعذّر إنشاء ملف PDF للهاتف: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "تعذّر إنشاء ملف PDF للطباعة: {error}",
@@ -1883,6 +1891,7 @@ const zh: Ui = {
   "sheetViewer.downloadForPhone": "下载手机版",
   "sheetViewer.downloadToPrint": "下载打印版",
   "sheetViewer.shareThisView": "分享此视图",
+  "sheetViewer.actionsMenu": "下载与分享",
   "sheetViewer.couldNotShare": "无法分享此视图：{error}",
   "sheetViewer.couldNotGeneratePhonePdf": "无法生成手机版 PDF：{error}",
   "sheetViewer.couldNotGeneratePrintPdf": "无法生成打印版 PDF：{error}",
@@ -2120,6 +2129,7 @@ const tr: Ui = {
   "sheetViewer.downloadForPhone": "Telefon için indir",
   "sheetViewer.downloadToPrint": "Yazdırmak için indir",
   "sheetViewer.shareThisView": "Bu görünümü paylaş",
+  "sheetViewer.actionsMenu": "İndir ve paylaş",
   "sheetViewer.couldNotShare": "Bu görünüm paylaşılamadı: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Telefon PDF'i oluşturulamadı: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Yazdırma PDF'i oluşturulamadı: {error}",
@@ -2361,6 +2371,7 @@ const jive: Ui = {
   "sheetViewer.downloadForPhone": "Snag it fo' yo' phone",
   "sheetViewer.downloadToPrint": "Snag it to print",
   "sheetViewer.shareThisView": "Pass round dis view",
+  "sheetViewer.actionsMenu": "Grab and pass round",
   "sheetViewer.couldNotShare": "Couldn't pass dis view round, jack: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Couldn't cook up da phone PDF, chump: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Couldn't cook up da print PDF, chump: {error}",
@@ -2612,6 +2623,7 @@ const linkedin: Ui = {
   "sheetViewer.downloadForPhone": "Export for mobile",
   "sheetViewer.downloadToPrint": "Export to print",
   "sheetViewer.shareThisView": "Share this win",
+  "sheetViewer.actionsMenu": "Export and socialise",
   "sheetViewer.couldNotShare": "Could not share this win: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Could not compile the mobile deck: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Could not compile the print deck: {error}",
@@ -2864,6 +2876,7 @@ const ru: Ui = {
   "sheetViewer.downloadForPhone": "Скачать для телефона",
   "sheetViewer.downloadToPrint": "Скачать для печати",
   "sheetViewer.shareThisView": "Поделиться этим видом",
+  "sheetViewer.actionsMenu": "Скачать и поделиться",
   "sheetViewer.couldNotShare": "Не удалось поделиться этим видом: {error}",
   "sheetViewer.couldNotGeneratePhonePdf": "Не удалось создать PDF для телефона: {error}",
   "sheetViewer.couldNotGeneratePrintPdf": "Не удалось создать PDF для печати: {error}",

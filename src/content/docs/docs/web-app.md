@@ -135,7 +135,9 @@ The front page has two download buttons, both scoped to whatever's currently
 filtered onto the page and rendered client-side with the same
 [`@washy-washy/pdf`](https://github.com/alrayyes/washy-washy-pdf) the CLI's
 `bun run generate` uses. Neither generates anything until you click it —
-filtering the page never triggers a render in the background.
+filtering the page never triggers a render in the background. On a phone
+the two buttons, and the one that shares this view, sit behind a single
+"Download and share" button above the cards; press Escape to close it.
 
 - **Download for phone** writes the same narrow, single scrolling page the
   CLI produces — meant for reading off your phone next to the machine.
