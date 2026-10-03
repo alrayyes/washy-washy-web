@@ -22,6 +22,8 @@ scarf down the same `{ machine, chart }` JSON file (dig
 and stash it away in the browser's `localStorage`. From there on, every page reads off
 that jive 'stead of the boxed-in one — until ya wipe it clean.
 
+On a phone the header holds down just the brand, the light/dark switch and a "Site menu" button, dig. The page links, the language picker, "Upload config, dig it" and the GitHub link all hide behind that button.
+
 Fixin' things up on `/config` or [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 jives the same way: hit save and it lays the fixed-up jive down in that same stash. Ain't
 nothin' here gettin' shipped off to no server — your jive never once steps outside your
@@ -37,8 +39,7 @@ your round trip for fixin' up a copy someplace else, or slidin' your jive to som
 
 ## The Light 'n Dark Switch
 
-The header's also packin' a light/dark switch, sittin' right next to "Upload config" on
-every page, no jive. Leave it be and the site just follows whatever your OS or browser's
+The header's also packin' a light/dark switch, sittin' on every page, no jive. On a phone it holds down the header's top row, outside the "Site menu". Leave it be and the site just follows whatever your OS or browser's
 `prefers-color-scheme` setting's already sayin' — same deal as before this switch ever
 showed up. Give it a click and you're layin' down your own say-so instead, stashed in
 `localStorage`, and that overrides the OS setting on every page and every visit from
@@ -63,17 +64,17 @@ workin' a mouse or a screen reader 'stead of the keyboard. None of these shortcu
 while you're typin' into a text field, a textarea, a select, or anything else you can
 scribble in — regular typin' always wins out, no jive.
 
+## Readin' a Card
+
+Every card on the front page leads off with what ya set on the machine: the programme (dial and all), then the temperature and spin in big type, Jack. The detergent, which piles wash together, drying, ironin', notes and sources sit under "The deets" line on the card, shut tight till ya tap it.
+
 ## Siftin' and Sortin'
 
-The front page sifts things down by which cut you're after (the whole chart, washin'
-only, ironin' only) and by a free-text pile search, plus an "Advanced" flap — shut by
-default, no jive — for narrowin' down to an exact programme, temperature or spin, plus a
-detergent search. Every last one of 'em's workin' the same list, Jack; a pile's gotta
-square up with every filter that's jumpin' before it shows its face.
+The front page shows a pile search box, three pills for the cut you're after (everything, washin' only, ironin' only) and one **Filters** button, no jive. That button throws open a panel — shut on every page load — for narrowin' down to an exact programme, temperature or spin, plus a detergent search; a little number on the button tells ya how many of 'em are jumpin'. Every last one of 'em's workin' the same list, Jack; a pile's gotta square up with every filter that's jumpin' before it shows its face.
 
 Them programme, temperature and spin picks only ever lay out values that'd still leave
 at least one pile standin', countin' the pile search and whatever else you already
-locked down in Advanced — so ya can't cook up no combination that dumps ya on a flat-out
+locked down in Filters — so ya can't cook up no combination that dumps ya on a flat-out
 empty chart. The lists get hip and update live soon as ya touch another filter, and if a
 field ain't got nothin' left that could match up, it shuts itself clean off 'stead of
 showin' ya empty air.
@@ -84,8 +85,8 @@ filtered look is also somethin' ya can pass along: the address bar's totin' `cut
 packin' one of them wins straight-out over whatever got saved from the last time through
 — check Sharin' the Jive down below for the button that hands that URL off.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-filters-light.png" alt="The Advanced flap thrown wide open, washin'-only picked out" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-filters-dark.png" alt="The Advanced flap thrown wide open, washin'-only picked out" />
+<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-filters-light.png" alt="The Filters panel thrown wide open, washin'-only picked out" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-filters-dark.png" alt="The Filters panel thrown wide open, washin'-only picked out" />
 
 ## Sharin' the Jive
 

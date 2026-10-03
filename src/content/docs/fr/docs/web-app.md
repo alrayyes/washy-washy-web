@@ -23,6 +23,8 @@ valident, et le stockent dans le `localStorage` du navigateur. À partir de
 là, chaque page lit cette configuration au lieu de celle fournie par défaut,
 jusqu'à ce que tu l'effaces.
 
+Sur téléphone, l'en-tête ne garde que la marque, la bascule clair/sombre et un bouton « Menu du site ». Les liens de pages, le sélecteur de langue, « Importer une config » et le lien GitHub se trouvent derrière ce bouton.
+
 Modifier sur `/config` ou [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 fonctionne de la même façon : un enregistrement écrit la configuration
 modifiée dans le même stockage. Rien n'est envoyé à un serveur ici — une
@@ -40,8 +42,7 @@ d'autre.
 
 ## Bascule de thème
 
-L'en-tête a aussi une bascule clair/sombre, juste à côté de « Importer une
-configuration » sur chaque page. Si tu n'y touches pas, le site suit le
+L'en-tête a aussi une bascule clair/sombre, sur chaque page. Sur téléphone, elle reste sur la première ligne de l'en-tête, hors du « Menu du site ». Si tu n'y touches pas, le site suit le
 réglage `prefers-color-scheme` de ton système ou de ton navigateur, comme
 avant que cette fonction existe. Cliquer dessus fixe un choix explicite à la
 place, stocké dans `localStorage`, qui prend alors le pas sur ce réglage
@@ -70,17 +71,17 @@ Aucun de ces raccourcis ne se déclenche pendant que tu tapes dans un champ
 de texte, une zone de texte, un menu déroulant ou tout autre élément
 modifiable — la saisie normale l'emporte toujours.
 
+## Lire une carte
+
+Chaque carte de la page d'accueil commence par ce que tu règles sur la machine : le programme (avec son cadran), puis la température et l'essorage en gros caractères. Le détergent, les tas qui se lavent ensemble, le séchage, le repassage, les notes et les sources se trouvent sous une ligne **Détails** de la carte, fermée tant que tu ne la touches pas.
+
 ## Filtres
 
-La page d'accueil filtre par coupe voulue (grille complète, lavage
-seulement, repassage seulement) et par une recherche libre de tas, plus un
-volet « Avancé » — fermé par défaut — pour filtrer par programme, température
-ou essorage précis, et une recherche de détergent. Tous réduisent la même
-liste ; un tas doit correspondre à tous les filtres actifs pour s'afficher.
+La page d'accueil affiche une zone de recherche de tas, trois pastilles pour la coupe voulue (tout, lavage uniquement, repassage uniquement) et un seul bouton **Filtres**. Le bouton ouvre un panneau — fermé à chaque chargement de page — pour filtrer par programme, température ou essorage précis, et une recherche de détergent ; un petit nombre sur le bouton indique combien d'entre eux sont actifs. Tous réduisent la même liste ; un tas doit correspondre à tous les filtres actifs pour s'afficher.
 
 Les sélecteurs de programme, température et essorage n'offrent jamais que
 des valeurs qui laisseraient encore au moins un tas affiché, compte tenu de
-la recherche de tas et de ce que tu as déjà choisi dans Avancé — tu ne peux
+la recherche de tas et de ce que tu as déjà choisi dans Filtres — tu ne peux
 donc pas tomber sur une combinaison qui te laisse une grille vide. Les
 listes se mettent à jour en direct au fur et à mesure que tu changes
 d'autres filtres, et si un champ n'a plus rien qui puisse correspondre, il
@@ -93,8 +94,8 @@ paramètres de requête, et une URL qui en porte l'emporte toujours sur ce qui
 avait été enregistré lors d'une visite précédente — voir Partager ci-dessous
 pour le bouton qui transmet cette URL.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/fr/sheet-filters-light.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/fr/sheet-filters-dark.png" alt="Le volet Avancé ouvert, avec lavage seulement sélectionné" />
+<img class="theme-shot" data-variant="light" src="/docs/media/fr/sheet-filters-light.png" alt="Le panneau Filtres ouvert, avec lavage seulement sélectionné" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/fr/sheet-filters-dark.png" alt="Le panneau Filtres ouvert, avec lavage seulement sélectionné" />
 
 ## Partager
 

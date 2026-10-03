@@ -23,6 +23,8 @@ aceptan ambos el mismo archivo JSON `{ machine, chart }` (ver
 lo guardan en el `localStorage` del navegador. A partir de ahí, cada página
 lee esa configuración en lugar de la incluida, hasta que la borres.
 
+En un teléfono la cabecera solo conserva la marca, el interruptor claro/oscuro y un botón "Menú del sitio". Los enlaces a las páginas, el selector de idioma, "Subir configuración" y el enlace a GitHub están detrás de ese botón.
+
 Editar en `/config` o en [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 funciona igual: guardar escribe la configuración editada en el mismo
 almacenamiento. Nada de esto se envía a un servidor — una configuración
@@ -40,8 +42,7 @@ persona.
 
 ## Alternar tema
 
-La cabecera también tiene un interruptor claro/oscuro, junto a "Upload
-config" en todas las páginas. Si lo dejas tal cual, el sitio sigue el ajuste
+La cabecera también tiene un interruptor claro/oscuro, en todas las páginas. En un teléfono se queda en la fila superior de la cabecera, fuera del "Menú del sitio". Si lo dejas tal cual, el sitio sigue el ajuste
 `prefers-color-scheme` de tu sistema operativo o navegador, igual que antes
 de que existiera esto. Al hacer clic se fija una elección explícita en su
 lugar, guardada en `localStorage`, que a partir de entonces prevalece sobre
@@ -70,18 +71,17 @@ estos atajos se activa mientras escribes en un campo de texto, un área de
 texto, un desplegable o cualquier otro elemento editable — escribir con
 normalidad siempre gana.
 
+## Leer una tarjeta
+
+Cada tarjeta de la página principal empieza por lo que ajustas en la máquina: el programa (con su dial), y después la temperatura y el centrifugado en letra grande. El detergente, qué montones se lavan juntos, el secado, el planchado, las notas y las fuentes quedan bajo una línea **Detalles** de la tarjeta, cerrada hasta que la pulsas.
+
 ## Filtros
 
-La página principal filtra por el corte que quieras (guía completa, solo
-lavado, solo planchado) y por una búsqueda de montones en texto libre, más
-un desplegable "Advanced" — cerrado por defecto — para filtrar por un
-programa, temperatura o centrifugado exactos, y una búsqueda de detergente.
-Todos estrechan la misma lista; un montón tiene que coincidir con todos los
-filtros activos para mostrarse.
+La página principal muestra un cuadro de búsqueda de montones, tres botones para el corte que quieras (todo, solo lavado, solo planchado) y un único botón **Filtros**. El botón abre un panel — cerrado en cada carga de página — para filtrar por un programa, temperatura o centrifugado exactos, y una búsqueda de detergente; un número pequeño en el botón indica cuántos de ellos están activos. Todos estrechan la misma lista; un montón tiene que coincidir con todos los filtros activos para mostrarse.
 
 Los selectores de programa, temperatura y centrifugado solo ofrecen valores
 que dejarían al menos un montón visible, dada la búsqueda de montones y lo
-que ya hayas elegido en Advanced — así que no puedes elegir una combinación
+que ya hayas elegido en Filtros — así que no puedes elegir una combinación
 que te deje con una guía vacía. Las listas se actualizan en vivo a medida
 que cambias otros filtros, y si a un campo no le queda nada que pudiera
 coincidir, se desactiva en lugar de mostrar opciones vacías.
@@ -93,8 +93,8 @@ direcciones lleva `cut`, `pile`, `program`, `temperature`, `spin` y
 ellos prevalece siempre sobre lo que se guardó de una visita anterior — ver
 Compartir más abajo para el botón que entrega esa URL.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/es/sheet-filters-light.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/es/sheet-filters-dark.png" alt="Los filtros Advanced abiertos, con solo lavado seleccionado" />
+<img class="theme-shot" data-variant="light" src="/docs/media/es/sheet-filters-light.png" alt="El panel Filtros abierto, con solo lavado seleccionado" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/es/sheet-filters-dark.png" alt="El panel Filtros abierto, con solo lavado seleccionado" />
 
 ## Compartir
 

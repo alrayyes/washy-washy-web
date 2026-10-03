@@ -22,6 +22,8 @@ sayfasındaki daha kapsamlı yükleme/indirme bölümü, ikisi de aynı
 tarayıcının `localStorage`'ında saklar. O andan itibaren, siz temizleyene
 kadar her sayfa yerleşik yapılandırma yerine bu yapılandırmayı okur.
 
+Telefonda başlıkta yalnızca marka, açık/koyu tema değiştirici ve bir "Site menüsü" düğmesi kalır. Sayfa bağlantıları, dil seçici, "Yapılandırma yükle" ve GitHub bağlantısı bu düğmenin arkasındadır.
+
 `/config` veya [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 üzerinde düzenleme yapmak da aynı şekilde çalışır: bir kaydetme işlemi,
 düzenlenen yapılandırmayı aynı depolama alanına yazar. Burada hiçbir şey bir
@@ -39,8 +41,7 @@ ya da yapılandırmanızı başka birine vermenin gidiş-dönüş yoludur.
 
 ## Tema değiştirici
 
-Başlıkta ayrıca, her sayfada "Upload config" düğmesinin yanında bir
-açık/koyu tema değiştirici bulunur. Dokunulmadığı sürece site, bu özellik
+Başlıkta ayrıca, her sayfada bir açık/koyu tema değiştirici bulunur. Telefonda başlığın üst satırında, "Site menüsü"nün dışında kalır. Dokunulmadığı sürece site, bu özellik
 var olmadan önceki gibi işletim sisteminizin ya da tarayıcınızın
 `prefers-color-scheme` ayarını izler. Tıklamak bunun yerine `localStorage`'da
 saklanan açık bir seçim belirler; bu seçim de siz tekrar tıklayana kadar her
@@ -66,17 +67,15 @@ başlıktaki `?` düğmesinden de açılır. Bir metin alanına, bir textarea'ya
 bir seçime (select) ya da düzenlenebilir başka bir şeye yazarken bu
 kısayolların hiçbiri tetiklenmez — normal yazma her zaman kazanır.
 
+## Bir kartı okumak
+
+Ana sayfadaki her kart, makinede ayarladığınız şeyle başlar: program (kadranıyla birlikte), ardından sıcaklık ve sıkma hızı büyük puntoyla. Deterjan, hangi yığınların birlikte yıkandığı, kurutma, ütüleme, notlar ve kaynaklar kartın **Ayrıntılar** satırının altındadır; dokunana kadar kapalı kalır.
+
 ## Filtreler
 
-Ana sayfa, istediğiniz kesime göre (tam çizelge, yalnızca yıkama, yalnızca
-ütü) ve serbest metinli bir yığın aramasına göre filtreler; ayrıca
-varsayılan olarak kapalı olan bir "Advanced" (gelişmiş) açılır bölümü, tam
-bir program, sıcaklık ya da sıkma hızına göre filtrelemeyi ve bir deterjan
-aramasını sağlar. Bunların hepsi aynı listeyi daraltır; bir yığının
-görünmesi için etkin olan her filtreyle eşleşmesi gerekir.
+Ana sayfada bir yığın arama kutusu, istediğiniz kesim için üç seçenek düğmesi (hepsi, yalnızca yıkama, yalnızca ütü) ve tek bir **Filtreler** düğmesi bulunur. Düğme, sayfa her yüklendiğinde kapalı olan bir panel açar; bu panelde tam bir program, sıcaklık ya da sıkma hızına göre filtreleme ve deterjan araması yapılır, düğmenin üzerindeki küçük bir sayı da bunlardan kaçının etkin olduğunu gösterir. Bunların hepsi aynı listeyi daraltır; bir yığının görünmesi için etkin olan her filtreyle eşleşmesi gerekir.
 
-Program, sıcaklık ve sıkma hızı seçim kutuları, yığın araması ve Advanced
-bölümünde zaten seçtiğiniz diğer her şey göz önüne alındığında, yine de en
+Program, sıcaklık ve sıkma hızı seçim kutuları, yığın araması ve Filtreler panelinde zaten seçtiğiniz diğer her şey göz önüne alındığında, yine de en
 az bir yığını görünür bırakacak değerleri sunar — böylece sizi boş bir
 çizelgeye götürecek bir kombinasyon seçemezsiniz. Diğer filtreleri
 değiştirdikçe listeler canlı olarak güncellenir ve bir alanda eşleşebilecek
@@ -91,8 +90,8 @@ bunlardan herhangi birini taşıyan bir URL, önceki bir ziyaretten kaydedilmiş
 olana kesin olarak üstün gelir — bu URL'yi paylaşan düğme için aşağıdaki
 Paylaşım bölümüne bakın.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/sheet-filters-light.png" alt="Advanced filtreleri açık, yalnızca yıkama seçili" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/sheet-filters-dark.png" alt="Advanced filtreleri açık, yalnızca yıkama seçili" />
+<img class="theme-shot" data-variant="light" src="/docs/media/tr/sheet-filters-light.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/tr/sheet-filters-dark.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
 
 ## Paylaşım
 

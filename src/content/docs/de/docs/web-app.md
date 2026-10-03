@@ -24,6 +24,8 @@ Upload/Download-Bereich auf
 sie und speichern sie im `localStorage` des Browsers. Von da an liest jede
 Seite diese Konfiguration statt der mitgelieferten, bis du sie löschst.
 
+Auf dem Smartphone zeigt die Kopfzeile nur die Marke, den Hell/Dunkel-Umschalter und einen Button „Seitenmenü". Die Seitenlinks, die Sprachauswahl, „Konfiguration hochladen" und der GitHub-Link liegen hinter diesem Button.
+
 Das Bearbeiten auf `/config` oder
 [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 funktioniert genauso: Ein Speichern schreibt die bearbeitete Konfiguration
@@ -42,8 +44,7 @@ weiterzugeben.
 
 ## Theme-Umschalter
 
-Die Kopfzeile hat außerdem einen Hell/Dunkel-Umschalter, neben „Upload
-config" auf jeder Seite. Unangetastet folgt die Seite der
+Die Kopfzeile hat außerdem einen Hell/Dunkel-Umschalter, auf jeder Seite. Auf dem Smartphone bleibt er in der oberen Zeile der Kopfzeile, außerhalb des „Seitenmenü". Unangetastet folgt die Seite der
 `prefers-color-scheme`-Einstellung deines Betriebssystems oder Browsers,
 genau wie bevor es diesen Umschalter gab. Ein Klick darauf setzt
 stattdessen eine explizite Wahl, gespeichert in `localStorage`, die diese
@@ -73,18 +74,16 @@ nutzen. Keines dieser Kürzel löst aus, während du in ein Textfeld, eine
 Textarea, ein Auswahlfeld oder etwas anderes Bearbeitbares tippst —
 normales Tippen hat immer Vorrang.
 
+## Eine Karte lesen
+
+Jede Karte auf der Startseite beginnt mit dem, was du an der Maschine einstellst: das Programm (mit seinem Drehregler), dann Temperatur und Schleuderzahl in großer Schrift. Waschmittel, welche Stapel zusammen gewaschen werden, Trocknen, Bügeln, Notizen und Quellen stehen unter einer Zeile **Details** auf der Karte, die zugeklappt bleibt, bis du darauf tippst.
+
 ## Filter
 
-Die Startseite filtert danach, welche Ansicht du willst (vollständige
-Tabelle, nur Waschen, nur Bügeln) und über eine Freitext-Stapelsuche, dazu
-ein „Advanced"-Aufklappbereich — standardmäßig geschlossen — zum Filtern
-nach genauem Programm, genauer Temperatur oder Schleuderzahl sowie einer
-Waschmittelsuche. Alle schränken dieselbe Liste ein; ein Stapel muss jedem
-aktiven Filter entsprechen, um angezeigt zu werden.
+Die Startseite zeigt ein Suchfeld für Stapel, drei Schaltflächen für die gewünschte Ansicht (alles, nur Waschen, nur Bügeln) und einen einzigen Button **Filter**. Der Button öffnet ein Panel — bei jedem Laden der Seite geschlossen — zum Filtern nach genauem Programm, genauer Temperatur oder Schleuderzahl sowie einer Waschmittelsuche; eine kleine Zahl am Button zeigt, wie viele davon aktiv sind. Alle schränken dieselbe Liste ein; ein Stapel muss jedem aktiven Filter entsprechen, um angezeigt zu werden.
 
 Die Auswahlfelder für Programm, Temperatur und Schleuderzahl bieten immer
-nur Werte an, bei denen angesichts der Stapelsuche und allem, was du in
-Advanced bereits ausgewählt hast, noch mindestens ein Stapel übrig bleibt —
+nur Werte an, bei denen angesichts der Stapelsuche und allem, was du in den Filtern bereits ausgewählt hast, noch mindestens ein Stapel übrig bleibt —
 so kannst du keine Kombination wählen, die dich auf einer leeren Tabelle
 landen lässt. Die Listen aktualisieren sich live, während du andere Filter
 änderst, und wenn für ein Feld nichts Passendes mehr übrig ist,
@@ -97,8 +96,8 @@ Query-Parameter mit, und eine URL, die einen davon enthält, gewinnt
 uneingeschränkt gegenüber allem, was von einem früheren Besuch gespeichert
 war — siehe „Teilen" weiter unten für den Button, der diese URL weitergibt.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/de/sheet-filters-light.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/de/sheet-filters-dark.png" alt="Die geöffneten Advanced-Filter mit ausgewählter Option 'nur Waschen'" />
+<img class="theme-shot" data-variant="light" src="/docs/media/de/sheet-filters-light.png" alt="Das geöffnete Filter-Panel mit ausgewählter Option 'nur Waschen'" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/de/sheet-filters-dark.png" alt="Das geöffnete Filter-Panel mit ausgewählter Option 'nur Waschen'" />
 
 ## Teilen
 
