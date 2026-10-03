@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import {
   type Config,
   configToJson,
@@ -9,6 +9,12 @@ import { PDFDocument } from "pdf-lib";
 import { readCustomConfig } from "../src/lib/customConfig";
 import { createWebMcpTools } from "../src/lib/webmcp";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
+
+// Real PDF rendering (react-pdf layout plus font work) takes 1 to 4s on an idle
+// machine. bun's 5s default leaves no room for the pre-push hook running it
+// beside eight other jobs, where it measured 20s. One minute fails a hung test
+// without failing a busy machine; the assertions are unchanged. See #322.
+setDefaultTimeout(60_000);
 
 /** `bun:test` has no `localStorage` global — a browser API — so stand one in. */
 class MemoryStorage implements Pick<Storage, "getItem" | "setItem" | "removeItem"> {

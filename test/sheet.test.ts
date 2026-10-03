@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, setDefaultTimeout, test } from "bun:test";
 import { resolve, variants } from "@washy-washy/core";
 import { renderPhone } from "@washy-washy/pdf";
 import { PDFDocument } from "pdf-lib";
@@ -285,6 +285,13 @@ describe("facetOptions", () => {
     expect(facetOptions(machineValues, [], "")).toEqual([]);
   });
 });
+
+// The renderPhone tests below are the slow ones.
+// Real PDF rendering (react-pdf layout plus font work) takes 1 to 4s on an idle
+// machine. bun's 5s default leaves no room for the pre-push hook running it
+// beside eight other jobs, where it measured 20s. One minute fails a hung test
+// without failing a busy machine; the assertions are unchanged. See #322.
+setDefaultTimeout(60_000);
 
 describe("renderPhone from the web chart", () => {
   for (const variant of variants) {
