@@ -68,15 +68,16 @@ or anything else editable — normal typing always wins.
 
 ## Filters
 
-The front page filters by which cut you want (full chart, washing only,
-ironing only) and by a free-text pile search, plus an "Advanced" disclosure
-— closed by default — for filtering by an exact programme, temperature or
-spin, and a detergent search. All of them narrow the same list; a pile has
-to match every active filter to show.
+The front page shows a pile search box, three pills for the cut you want
+(everything, washing only, ironing only) and one **Filters** button. The
+button opens a panel — closed on every page load — for filtering by an exact
+programme, temperature or spin, and a detergent search; a small number on the
+button says how many of those are active. All of them narrow the same list; a
+pile has to match every active filter to show.
 
 The programme, temperature and spin selects only ever offer values that
 would still leave at least one pile showing, given the pile search and
-whatever else you've already picked in Advanced — so you can't pick a
+whatever else you've already picked in Filters — so you can't pick a
 combination that lands you on an empty chart. The lists update live as you
 change other filters, and if a field has nothing left that could match, it
 disables itself instead of showing empty options.
@@ -88,8 +89,8 @@ parameters, and a URL carrying any of them wins outright over whatever was
 saved from a previous visit — see Share below for the button that hands that
 URL off.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="The Advanced filters open, with washing-only selected" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="The Advanced filters open, with washing-only selected" />
+<img class="theme-shot" data-variant="light" src="/docs/media/sheet-filters-light.png" alt="The Filters panel open, with washing-only selected" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/sheet-filters-dark.png" alt="The Filters panel open, with washing-only selected" />
 
 ## Share
 

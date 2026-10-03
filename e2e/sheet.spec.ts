@@ -21,6 +21,16 @@ async function goto(page: Page, path = "/") {
   await page.waitForSelector('[data-hydrated="true"]');
 }
 
+/** The cut pills (#288) replaced the old Cut <select>. */
+async function setCut(page: Page, cut: "full" | "wash" | "iron") {
+  await page.getByTestId(`cut-${cut}`).click();
+}
+
+/** The Filters button (#288) replaced the old Advanced <details>. */
+async function openFilters(page: Page) {
+  await page.locator('[aria-controls="filter-panel"]').click();
+}
+
 /**
  * Uploads a config through the config page's own upload input (there's also
  * a global one in the header now, #80 — this helper deliberately exercises
@@ -61,7 +71,7 @@ test("cut filter switches which sheet renders", async ({ page }) => {
   const cards = page.locator("article");
   const fullCount = await cards.count();
 
-  await page.locator("#filter-cut").selectOption("iron");
+  await setCut(page, "iron");
 
   // The ironing cut groups by thermostat position rather than one card per
   // pile, so the count is expected to change, not just the content.
@@ -87,17 +97,17 @@ test("pile search narrows the cards, and a non-match says so", async ({ page }) 
   await expect(cards).toHaveCount(0);
 });
 
-test("the Advanced disclosure is closed by default and filters combine with pile search as AND", async ({
+test("the Filters panel is closed by default and filters combine with pile search as AND", async ({
   page,
 }) => {
   await goto(page);
   const cards = page.locator("article");
   const allCount = await cards.count();
 
-  await expect(page.locator("details")).not.toHaveAttribute("open", "");
+  await expect(page.locator("#filter-panel")).toBeHidden();
 
-  await page.getByText("Advanced", { exact: true }).click();
-  await expect(page.locator("details")).toHaveAttribute("open", "");
+  await openFilters(page);
+  await expect(page.locator("#filter-panel")).toBeVisible();
 
   // The first card's own programme — guaranteed to be one a real pile
   // uses, unlike an arbitrary <option> (index 0 of washer.programs is
@@ -127,16 +137,17 @@ test("the Advanced disclosure is closed by default and filters combine with pile
   // closed again — that part is never remembered (#8).
   await page.reload();
   await page.waitForSelector('[data-hydrated="true"]');
-  await expect(page.locator("details")).not.toHaveAttribute("open", "");
+  await expect(page.locator("#filter-panel")).toBeHidden();
+  await openFilters(page);
   await expect(page.locator("#filter-program")).toHaveValue(program as string);
   await expect(page.locator("#filter-pile")).toHaveValue("sock");
 });
 
-test("every Advanced option offered, picked alone, still shows at least one pile", async ({
+test("every Filters option offered, picked alone, still shows at least one pile", async ({
   page,
 }) => {
   await goto(page);
-  await page.getByText("Advanced", { exact: true }).click();
+  await openFilters(page);
 
   for (const id of ["#filter-program", "#filter-temperature", "#filter-spin"]) {
     const select = page.locator(id);
@@ -165,7 +176,7 @@ test("picking a Programme narrows Temperature and Spin live, and every option th
   page,
 }) => {
   await goto(page);
-  await page.getByText("Advanced", { exact: true }).click();
+  await openFilters(page);
 
   const programSelect = page.locator("#filter-program");
   const programValues = await programSelect
@@ -192,11 +203,11 @@ test("picking a Programme narrows Temperature and Spin live, and every option th
   }
 });
 
-test("a detergent search matching nothing disables every Advanced select, and the panel still passes accessibility", async ({
+test("a detergent search matching nothing disables every Filters select, and the panel still passes accessibility", async ({
   page,
 }) => {
   await goto(page);
-  await page.getByText("Advanced", { exact: true }).click();
+  await openFilters(page);
 
   await page.fill("#filter-detergent", "zzznonexistentdetergentzzz");
 
@@ -210,7 +221,8 @@ test("a detergent search matching nothing disables every Advanced select, and th
 test("a filter's help bubble announces its text without opening the field", async ({ page }) => {
   await goto(page);
 
-  const cutSelect = page.locator("#filter-cut");
+  await openFilters(page);
+  const cutSelect = page.locator("#filter-program");
   const helpButton = page.getByRole("button", { name: "What does this do?" }).first();
 
   await expect(helpButton).toHaveAttribute("aria-expanded", "false");
@@ -234,6 +246,7 @@ test("a filter's help bubble announces its text without opening the field", asyn
 test("every help bubble stays inside a 320px viewport when opened", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
   await goto(page);
+  await openFilters(page);
 
   const buttons = page.getByRole("button", { name: "What does this do?" });
   const count = await buttons.count();
@@ -366,7 +379,7 @@ test("the page's own Share copies the current URL, filter state included, when t
     Object.defineProperty(navigator, "share", { value: undefined, configurable: true });
   });
   await goto(page);
-  await page.selectOption("#filter-cut", "wash");
+  await setCut(page, "wash");
 
   await page.getByTestId("share-sheet").click();
   await expect(page.getByTestId("share-sheet")).toHaveText("Copied!");
@@ -596,14 +609,14 @@ test("filters and an uploaded config both survive a reload", async ({ page }) =>
   config.chart[0].clothing_type = "Persisted E2E Pile";
 
   await uploadConfig(page, config);
-  await page.locator("#filter-cut").selectOption("wash");
+  await setCut(page, "wash");
   await page.fill("#filter-pile", "Persisted E2E Pile");
   await expect(page.locator("article")).toHaveCount(1);
 
   await page.reload();
   await page.waitForSelector('[data-hydrated="true"]');
 
-  await expect(page.locator("#filter-cut")).toHaveValue("wash");
+  await expect(page.getByTestId("cut-wash")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#filter-pile")).toHaveValue("Persisted E2E Pile");
   await expect(page.getByText("Showing your own config.")).toBeVisible();
   await expect(page.locator("article")).toHaveCount(1);
@@ -619,7 +632,7 @@ test("opening a URL with filter state applies it immediately, no click needed", 
   // grouping behaviour separately.
   await goto(page, "/?cut=wash&pile=towels");
 
-  await expect(page.locator("#filter-cut")).toHaveValue("wash");
+  await expect(page.getByTestId("cut-wash")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#filter-pile")).toHaveValue("towels");
   const headings = await page.locator("article h3").allInnerTexts();
   expect(headings.length).toBeGreaterThan(0);
@@ -633,7 +646,7 @@ test("changing filters updates the URL, without spamming browser history", async
 
   const historyLength = await page.evaluate(() => history.length);
 
-  await page.locator("#filter-cut").selectOption("wash");
+  await setCut(page, "wash");
   await expect(page).toHaveURL(/[?&]cut=wash/);
   await page.fill("#filter-pile", "sock");
   await expect(page).toHaveURL(/[?&]pile=sock/);
@@ -644,7 +657,7 @@ test("changing filters updates the URL, without spamming browser history", async
 
   // Back to the defaults: the params drop out rather than sitting there as
   // ?cut=full&pile= noise.
-  await page.locator("#filter-cut").selectOption("full");
+  await setCut(page, "full");
   await page.fill("#filter-pile", "");
   await expect(page).toHaveURL(/^[^?]*\/?$/);
 });
@@ -652,13 +665,13 @@ test("changing filters updates the URL, without spamming browser history", async
 test("a URL's filter state wins over a previous visit's saved filters", async ({ page }) => {
   // A previous, unrelated visit: washing only, searching for "denim".
   await goto(page);
-  await page.locator("#filter-cut").selectOption("wash");
+  await setCut(page, "wash");
   await page.fill("#filter-pile", "denim");
 
   // A shared link arrives with different state — it should win outright,
   // not merge with what's saved.
   await goto(page, "/?cut=iron&pile=towels");
 
-  await expect(page.locator("#filter-cut")).toHaveValue("iron");
+  await expect(page.getByTestId("cut-iron")).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#filter-pile")).toHaveValue("towels");
 });

@@ -115,7 +115,8 @@ export interface Ui {
   "sheetViewer.cutHelp": string;
   "sheetViewer.pileHelp": string;
   "sheetViewer.pileSearchPlaceholder": string;
-  "sheetViewer.advanced": string;
+  /** The single button that opens the programme/temperature/spin/detergent filters on the front page (#288). Replaces the "Advanced" disclosure; keep it to one word, it shares a 390px row with the search box. */
+  "sheetViewer.filters": string;
   "sheetViewer.programmeHelp": string;
   "sheetViewer.anyProgramme": string;
   "sheetViewer.temperatureLabel": string;
@@ -378,7 +379,7 @@ const en: Ui = {
     "Which parts of the chart to show: everything, washing only, or ironing only.",
   "sheetViewer.pileHelp": 'Type part of a pile’s name, like "towels", to show just that card.',
   "sheetViewer.pileSearchPlaceholder": "Search by pile name…",
-  "sheetViewer.advanced": "Advanced",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only piles using this programme.",
   "sheetViewer.anyProgramme": "Any programme",
   "sheetViewer.temperatureLabel": "Temperature",
@@ -626,7 +627,7 @@ const ja: Ui = {
   "sheetViewer.pileHelp":
     "「タオル」のように山の名前の一部を入力すると、そのカードだけを表示します。",
   "sheetViewer.pileSearchPlaceholder": "山の名前で検索…",
-  "sheetViewer.advanced": "詳細設定",
+  "sheetViewer.filters": "フィルター",
   "sheetViewer.programmeHelp": "このプログラムを使用する山だけを表示します。",
   "sheetViewer.anyProgramme": "すべてのプログラム",
   "sheetViewer.temperatureLabel": "温度",
@@ -872,7 +873,7 @@ const es: Ui = {
   "sheetViewer.pileHelp":
     "Escribe parte del nombre de un montón, como «toallas», para mostrar solo esa tarjeta.",
   "sheetViewer.pileSearchPlaceholder": "Buscar por nombre de montón…",
-  "sheetViewer.advanced": "Avanzado",
+  "sheetViewer.filters": "Filtros",
   "sheetViewer.programmeHelp": "Muestra solo los montones que usan este programa.",
   "sheetViewer.anyProgramme": "Cualquier programa",
   "sheetViewer.temperatureLabel": "Temperatura",
@@ -1121,7 +1122,7 @@ const de: Ui = {
   "sheetViewer.pileHelp":
     "Gib einen Teil des Namens eines Stapels ein, z. B. „Handtücher“, um nur diese Karte anzuzeigen.",
   "sheetViewer.pileSearchPlaceholder": "Nach Stapelname suchen…",
-  "sheetViewer.advanced": "Erweitert",
+  "sheetViewer.filters": "Filter",
   "sheetViewer.programmeHelp": "Nur Stapel anzeigen, die dieses Programm verwenden.",
   "sheetViewer.anyProgramme": "Beliebiges Programm",
   "sheetViewer.temperatureLabel": "Temperatur",
@@ -1372,7 +1373,7 @@ const fr: Ui = {
   "sheetViewer.pileHelp":
     "Tape une partie du nom d'une pile, comme « serviettes », pour n'afficher que cette carte.",
   "sheetViewer.pileSearchPlaceholder": "Rechercher par nom de pile…",
-  "sheetViewer.advanced": "Avancé",
+  "sheetViewer.filters": "Filtres",
   "sheetViewer.programmeHelp": "N'afficher que les piles utilisant ce programme.",
   "sheetViewer.anyProgramme": "Tous les programmes",
   "sheetViewer.temperatureLabel": "Température",
@@ -1618,7 +1619,7 @@ const ar: Ui = {
   "sheetViewer.cutHelp": "أي أجزاء الجدول تُعرض: الكل، أو الغسيل فقط، أو الكي فقط.",
   "sheetViewer.pileHelp": 'اكتب جزءًا من اسم الكومة، مثل "مناشف"، لعرض تلك البطاقة فقط.',
   "sheetViewer.pileSearchPlaceholder": "ابحث باسم الكومة…",
-  "sheetViewer.advanced": "متقدّم",
+  "sheetViewer.filters": "عوامل التصفية",
   "sheetViewer.programmeHelp": "عرض الكومات التي تستخدم هذا البرنامج فقط.",
   "sheetViewer.anyProgramme": "أي برنامج",
   "sheetViewer.temperatureLabel": "درجة الحرارة",
@@ -1852,7 +1853,7 @@ const zh: Ui = {
   "sheetViewer.cutHelp": "选择图表的显示范围：全部、仅洗涤或仅熨烫。",
   "sheetViewer.pileHelp": "输入类别名称的一部分，例如“毛巾”，即可只显示对应卡片。",
   "sheetViewer.pileSearchPlaceholder": "按类别名称搜索…",
-  "sheetViewer.advanced": "高级",
+  "sheetViewer.filters": "筛选",
   "sheetViewer.programmeHelp": "仅显示使用该程序的类别。",
   "sheetViewer.anyProgramme": "任意程序",
   "sheetViewer.temperatureLabel": "温度",
@@ -2083,7 +2084,7 @@ const tr: Ui = {
   "sheetViewer.pileHelp":
     'Sadece o kartı göstermek için bir yığının adının bir kısmını yazın, örneğin "havlular".',
   "sheetViewer.pileSearchPlaceholder": "Yığın adına göre ara…",
-  "sheetViewer.advanced": "Gelişmiş",
+  "sheetViewer.filters": "Filtreler",
   "sheetViewer.programmeHelp": "Sadece bu programı kullanan yığınları göster.",
   "sheetViewer.anyProgramme": "Herhangi bir program",
   "sheetViewer.temperatureLabel": "Sıcaklık",
@@ -2324,7 +2325,7 @@ const jive: Ui = {
   "sheetViewer.pileHelp":
     'Type part of a pile\'s handle, like "towels", and just dat card show up, you dig?',
   "sheetViewer.pileSearchPlaceholder": "Search by pile handle…",
-  "sheetViewer.advanced": "Advanced stuff",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only piles rollin' wit' dis programme.",
   "sheetViewer.anyProgramme": "Any ol' programme",
   "sheetViewer.temperatureLabel": "Heat",
@@ -2574,7 +2575,7 @@ const linkedin: Ui = {
   "sheetViewer.pileHelp":
     'Type part of a deliverable\'s personal brand, like "towels", to surface just that card.',
   "sheetViewer.pileSearchPlaceholder": "Search by deliverable…",
-  "sheetViewer.advanced": "Advanced (for power users)",
+  "sheetViewer.filters": "Filters",
   "sheetViewer.programmeHelp": "Show only deliverables running this strategy.",
   "sheetViewer.anyProgramme": "Any strategy",
   "sheetViewer.temperatureLabel": "Temp Check",
@@ -2824,7 +2825,7 @@ const ru: Ui = {
   "sheetViewer.pileHelp":
     "Введите часть названия стопки, например «полотенца», чтобы показать только эту карточку.",
   "sheetViewer.pileSearchPlaceholder": "Поиск по названию стопки…",
-  "sheetViewer.advanced": "Дополнительно",
+  "sheetViewer.filters": "Фильтры",
   "sheetViewer.programmeHelp": "Показывать только стопки, использующие эту программу.",
   "sheetViewer.anyProgramme": "Любая программа",
   "sheetViewer.temperatureLabel": "Температура",
