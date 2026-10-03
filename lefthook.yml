@@ -1,3 +1,7 @@
+# Silent on a clean run, full detail when a job fails.
+output:
+  - failure
+
 # Same commands CI runs, so the hook and the gate cannot drift.
 pre-commit:
   parallel: true
