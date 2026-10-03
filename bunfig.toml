@@ -2,6 +2,9 @@
 # Pin new dependencies to exact versions by default, without --exact on
 # every `bun add`.
 exact = true
+# Wait 7 days before resolving a newly published version (supply-chain
+# hygiene, and what semgrep expects of an [install] section).
+minimumReleaseAge = 604800
 
 [test]
 # Compiles `.svelte` imports (server-rendered by default, client-rendered
