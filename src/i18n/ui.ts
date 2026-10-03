@@ -167,6 +167,8 @@ export interface Ui {
   /** Appended only for the "full" variant. */
   "sheet.legendWashExplainFullSuffix": string;
   "sheet.washHeading": string;
+  /** The summary of a card's collapsed section (#288): detergent, wash-together, drying, ironing, notes and the full button list. One word; the card leads with programme, temperature and spin. */
+  "sheet.details": string;
   "sheet.washTogetherWithLabel": string;
   "sheet.washTogetherEachOther": string;
   /** "each other, and {names}" */
@@ -428,6 +430,7 @@ const en: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On the iron, the blue band is the zone where it makes steam.",
   "sheet.washHeading": "Wash",
+  "sheet.details": "Details",
   "sheet.washTogetherWithLabel": "Wash together with",
   "sheet.washTogetherEachOther": "each other",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -676,6 +679,7 @@ const ja: Ui = {
     "ダイヤルは洗濯機についているとおりに描かれています: 12時の位置が{off}で、赤い矢印は合わせるべき位置です。チップは表示が切り替わるすべての値を示し、目的の値が塗りつぶされています。",
   "sheet.legendWashExplainFullSuffix": " アイロンでは、青い帯がスチームの出る範囲です。",
   "sheet.washHeading": "洗濯",
+  "sheet.details": "詳細",
   "sheet.washTogetherWithLabel": "一緒に洗う相手",
   "sheet.washTogetherEachOther": "お互い",
   "sheet.washTogetherEachOtherAnd": "お互い、そして{names}",
@@ -922,6 +926,7 @@ const es: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " En la plancha, la banda azul es la zona donde genera vapor.",
   "sheet.washHeading": "Lavado",
+  "sheet.details": "Detalles",
   "sheet.washTogetherWithLabel": "Lavar junto con",
   "sheet.washTogetherEachOther": "entre sí",
   "sheet.washTogetherEachOtherAnd": "entre sí y con {names}",
@@ -1172,6 +1177,7 @@ const de: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " Beim Bügeleisen ist das blaue Band die Zone, in der Dampf entsteht.",
   "sheet.washHeading": "Waschen",
+  "sheet.details": "Details",
   "sheet.washTogetherWithLabel": "Zusammen waschen mit",
   "sheet.washTogetherEachOther": "einander",
   "sheet.washTogetherEachOtherAnd": "einander und {names}",
@@ -1423,6 +1429,7 @@ const fr: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " Sur le fer, la bande bleue est la zone où il produit de la vapeur.",
   "sheet.washHeading": "Lavage",
+  "sheet.details": "Détails",
   "sheet.washTogetherWithLabel": "Laver avec",
   "sheet.washTogetherEachOther": "entre elles",
   "sheet.washTogetherEachOtherAnd": "entre elles, et {names}",
@@ -1667,6 +1674,7 @@ const ar: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " وعلى المكواة، الشريط الأزرق هو المنطقة التي يُصدر فيها بخارًا.",
   "sheet.washHeading": "الغسيل",
+  "sheet.details": "التفاصيل",
   "sheet.washTogetherWithLabel": "يُغسل مع",
   "sheet.washTogetherEachOther": "بعضها بعضًا",
   "sheet.washTogetherEachOtherAnd": "بعضها بعضًا، و{names}",
@@ -1896,6 +1904,7 @@ const zh: Ui = {
     "刻度盘的画法与它在机器上的实际样子一致：十二点方向是{off}，红色指针指示应转到的位置。色块列出了显示屏会经过的每一个数值，你要的那个会被填色标出。",
   "sheet.legendWashExplainFullSuffix": " 在熨斗刻度盘上，蓝色区域是会产生蒸汽的范围。",
   "sheet.washHeading": "洗涤",
+  "sheet.details": "详情",
   "sheet.washTogetherWithLabel": "一起洗涤的对象",
   "sheet.washTogetherEachOther": "彼此之间",
   "sheet.washTogetherEachOtherAnd": "彼此之间，以及{names}",
@@ -2132,6 +2141,7 @@ const tr: Ui = {
     "Kadranlar, makinenin üzerinde durdukları haliyle çizilmiştir: saat on iki yönü {off} konumudur, kırmızı ok ise çevrilecek konumu gösterir. Çipler, ekranın geçtiği her değeri gösterir; istediğiniz değer doldurulmuş olarak işaretlenir.",
   "sheet.legendWashExplainFullSuffix": " Ütüde, mavi bant buhar yaptığı bölgedir.",
   "sheet.washHeading": "Yıkama",
+  "sheet.details": "Ayrıntılar",
   "sheet.washTogetherWithLabel": "Şunlarla birlikte yıka",
   "sheet.washTogetherEachOther": "birbirleriyle",
   "sheet.washTogetherEachOtherAnd": "birbirleriyle ve {names} ile",
@@ -2374,6 +2384,7 @@ const jive: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On da iron, dat blue band's da zone where it's makin' steam.",
   "sheet.washHeading": "Wash",
+  "sheet.details": "The deets",
   "sheet.washTogetherWithLabel": "Wash together wit'",
   "sheet.washTogetherEachOther": "each other, dig it",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -2624,6 +2635,7 @@ const linkedin: Ui = {
   "sheet.legendWashExplainFullSuffix":
     " On the iron, the blue band is the growth zone where it produces steam.",
   "sheet.washHeading": "Execute",
+  "sheet.details": "Deep dive",
   "sheet.washTogetherWithLabel": "Co-locate in one wash with",
   "sheet.washTogetherEachOther": "each other — great synergy",
   "sheet.washTogetherEachOtherAnd": "each other, and {names}",
@@ -2874,6 +2886,7 @@ const ru: Ui = {
     "Регуляторы нарисованы так, как они расположены на машине: двенадцать часов — это {off}, а красная стрелка показывает, куда его повернуть. Метки показывают каждое значение, через которое проходит дисплей, закрашено — нужное вам.",
   "sheet.legendWashExplainFullSuffix": " На утюге синяя полоса — зона, где образуется пар.",
   "sheet.washHeading": "Стирка",
+  "sheet.details": "Подробности",
   "sheet.washTogetherWithLabel": "Стирать вместе с",
   "sheet.washTogetherEachOther": "друг с другом",
   "sheet.washTogetherEachOtherAnd": "друг с другом и с {names}",

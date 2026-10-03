@@ -26,6 +26,17 @@ async function setCut(page: Page, cut: "full" | "wash" | "iron") {
   await page.getByTestId(`cut-${cut}`).click();
 }
 
+/**
+ * Opens every card's collapsed Details (#288) — detergent, drying, ironing,
+ * notes and sources are behind it on a phone-first card, and a closed
+ * <details> hides them from `toBeVisible` and `getByRole` alike.
+ */
+async function expandCards(page: Page) {
+  await page.locator('details[data-testid="card-details"]').evaluateAll((all) => {
+    for (const details of all) (details as HTMLDetailsElement).open = true;
+  });
+}
+
 /** The Filters button (#288) replaced the old Advanced <details>. */
 async function openFilters(page: Page) {
   await page.locator('[aria-controls="filter-panel"]').click();
@@ -113,7 +124,7 @@ test("the Filters panel is closed by default and filters combine with pile searc
   // uses, unlike an arbitrary <option> (index 0 of washer.programs is
   // conventionally "Off", the dial's parked position, which no pile
   // actually uses).
-  const program = await cards.first().locator("p.mt-1.text-xs.font-bold.text-ink").innerText();
+  const program = await cards.first().getByTestId("card-programme").innerText();
   await page.selectOption("#filter-program", program);
   await expect(cards).not.toHaveCount(allCount);
   const programCount = await cards.count();
@@ -500,6 +511,7 @@ test("with a custom config active, Share carries the whole machine/chart in the 
   await freshPage.waitForSelector('[data-hydrated="true"]');
 
   await expect(freshPage.getByText("Showing your own config.")).toBeVisible();
+  await expandCards(freshPage);
   await expect(freshPage.locator("main").getByText("E2E shared-config note")).toBeVisible();
   // Consumed: the (long) hash is gone from the address bar once the
   // config's been read and persisted, so a reload or a re-share doesn't
@@ -565,6 +577,7 @@ test("a row's cited source shows as a link that opens safely, and stays hidden w
 
   await page.fill("#filter-pile", "E2E Cited Pile");
   const card = page.locator("article").first();
+  await expandCards(page);
   await expect(card).toContainText("SOURCE");
   const link = card.getByRole("link", { name: "Which?" });
   await expect(link).toHaveAttribute("href", "https://example.com/wash-guide");

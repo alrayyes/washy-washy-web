@@ -490,27 +490,35 @@ describe("Card mixing — every pile, not just one", () => {
 });
 
 describe("Card temperature/spin display", () => {
-  test("'koud' shows as-is, not '°C', and the no-spin label replaces 'rpm'", () => {
-    // Golf: temperature "koud", spin "0" — both special-cased, in one line.
-    const html = render("full");
-    expect(html).toContain(
-      `<span class="text-xs font-bold text-ink">Cottons koud · ${t("common.noSpin")}</span>`,
+  /** The visible text of every `data-testid` element, tags and comment markers stripped. */
+  function readouts(html: string, testid: string): string[] {
+    const matches = html.matchAll(new RegExp(`data-testid="${testid}"[^>]*>([\\s\\S]*?)</p>`, "g"));
+    return [...matches].map((match) =>
+      (match[1] ?? "")
+        .replace(/<!--.*?-->/g, "")
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
     );
+  }
+
+  test("'koud' shows as-is, not '°C', and the no-spin label replaces 'rpm'", () => {
+    // Golf: temperature "koud", spin "0" — both special-cased.
+    const html = render("full");
+    expect(readouts(html, "card-temperature")).toContain("koud");
+    expect(readouts(html, "card-spin")).toContain(t("common.noSpin"));
   });
 
   test("a real temperature always shows °C", () => {
-    const html = render("full");
-    expect(html).toContain("40 °C");
-  });
-
-  test("spin '0' shows the no-spin label instead of 'rpm'", () => {
-    const html = render("full");
-    expect(html).toContain(t("common.noSpin"));
+    expect(readouts(render("full"), "card-temperature")).toContain("40 °C");
   });
 
   test("a real spin speed shows rpm", () => {
-    const html = render("full");
-    expect(html).toContain("800 rpm");
+    expect(readouts(render("full"), "card-spin")).toContain("800 rpm");
+  });
+
+  test("the programme the dial is set to is named on the card", () => {
+    expect(readouts(render("full"), "card-programme")).toContain("Cottons");
   });
 });
 

@@ -66,6 +66,13 @@ using a mouse or a screen reader instead of the keyboard. None of these
 shortcuts fire while you're typing into a text field, a textarea, a select
 or anything else editable — normal typing always wins.
 
+## Reading a card
+
+Each card on the front page leads with what you set on the machine: the
+programme (with its dial), then the temperature and the spin speed in large
+type. Detergent, which piles wash together, drying, ironing, notes and
+sources sit under a **Details** line on the card, closed until you tap it.
+
 ## Filters
 
 The front page shows a pile search box, three pills for the cut you want

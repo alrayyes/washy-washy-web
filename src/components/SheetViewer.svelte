@@ -8,7 +8,7 @@ const SEARCH_INPUT =
   "block min-h-11 w-full min-w-0 flex-1 rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-sm focus:border-accent focus:ring-1 focus:ring-accent focus:outline-none";
 
 const PILL =
-  "inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
+  "inline-flex min-h-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2";
 const PILL_ON = `${PILL} border-accent bg-accent text-white`;
 const PILL_OFF = `${PILL} border-line bg-surface text-ink hover:bg-panel`;
 
@@ -493,17 +493,6 @@ async function handleShareSheet() {
       {t("sheetViewer.sharedConfigError", { error: configHashError })}
     </p>
   {/if}
-  <p class="text-sm text-body">
-    {customItems ? t("common.showingOwnConfig") : t("sheetViewer.showingBundledChart")}
-    {t("sheetViewer.uploadEditPrefix")}
-    <a
-      href={relativeLocaleUrl(locale, "/config")}
-      class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
-    >
-      {t("common.washingLoadsPageLink")}
-    </a>.
-  </p>
-
   {#if filtered.length === 0}
     <p class="rounded-lg border border-hairline bg-panel p-6 text-center text-sm text-body">
       {#if pileQuery !== "" && hasActiveAdvancedFilters(advanced)}
@@ -543,6 +532,14 @@ async function handleShareSheet() {
         {shareStatus === t("common.copied") ? t("common.copied") : t("sheetViewer.shareThisView")}
       </button>
     </div>
+    <Sheet
+      items={filtered}
+      machine={activeMachine}
+      variant={cut}
+      {t}
+      onDownloadCard={handleDownloadCard}
+      onShareCard={handleShareCard}
+    />
     <p aria-live="polite" role="status" data-testid="share-sheet-status" class="sr-only">
       {shareStatus}
     </p>
@@ -571,13 +568,17 @@ async function handleShareSheet() {
         {t("sheetViewer.couldntRenderPrint", { chars: printDownloadDropped.join(" ") })}
       </p>
     {/if}
-    <Sheet
-      items={filtered}
-      machine={activeMachine}
-      variant={cut}
-      {t}
-      onDownloadCard={handleDownloadCard}
-      onShareCard={handleShareCard}
-    />
   {/if}
+
+  <!-- After the cards: on a phone the first screen is the load itself (#288). -->
+  <p class="text-sm text-body">
+    {customItems ? t("common.showingOwnConfig") : t("sheetViewer.showingBundledChart")}
+    {t("sheetViewer.uploadEditPrefix")}
+    <a
+      href={relativeLocaleUrl(locale, "/config")}
+      class="underline decoration-hairline underline-offset-2 hover:text-accent-text hover:decoration-accent"
+    >
+      {t("common.washingLoadsPageLink")}
+    </a>.
+  </p>
 </div>

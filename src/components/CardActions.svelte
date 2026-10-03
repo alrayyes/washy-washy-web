@@ -31,7 +31,7 @@ let shareStatus = $state("");
 let shareError = $state<string | null>(null);
 
 const CARD_ACTION =
-  "rounded border border-line bg-surface px-1.5 py-0.5 text-xs font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex min-h-11 min-w-11 items-center justify-center rounded border border-line bg-surface px-3 text-sm font-semibold text-body hover:border-accent hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-60";
 
 async function handleDownload() {
   downloading = true;
@@ -67,7 +67,7 @@ async function handleShare() {
 </script>
 
 <div class="flex flex-col items-end gap-1">
-  <div class="flex shrink-0 gap-1.5">
+  <div class="flex shrink-0 gap-2">
     <button type="button" class={CARD_ACTION} onclick={handleShare}>
       {copied ? t("common.copied") : t("sheet.copyLink")}
     </button>
