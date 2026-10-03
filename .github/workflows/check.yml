@@ -30,7 +30,7 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      # Seven ignored advisories, all transitive and all dev-only (never
+      # Nine ignored advisories, all transitive and all dev-only (never
       # shipped) - `bun audit fix` can't reach any of them:
       #   - Five (incl. the two extract-zip IDs) run through @lhci/cli
       #     (Lighthouse CI) - extract-zip has no published fix at all, and
@@ -43,8 +43,14 @@ jobs:
       #     through markdownlint-cli2, which resolves 5.2.2. The direct
       #     dependency and astro's copy stay on 4.x (dependabot.yml holds
       #     the major back), so only the markdown linter is affected.
+      #   - GHSA-ch52-4w7c-c8xp (http-cache-semantics <=4.2.0) and
+      #     GHSA-vfj7-8cjw-p6xm (braces <=3.0.3) have no published fix yet.
+      #     http-cache-semantics is a build-time client cache (astro,
+      #     npm), not a shared cache serving other users; braces is only
+      #     reached through lint and release tooling.
       # Revisit when @lhci/cli/miniflare bump their own pinned dependencies,
-      # or markdownlint-cli2 moves past js-yaml 5.4.0.
+      # markdownlint-cli2 moves past js-yaml 5.4.0, or either package above
+      # publishes a patched release.
       - run: >-
           bun audit
           --ignore GHSA-jmr9-qjv8-65gv
@@ -54,6 +60,8 @@ jobs:
           --ignore GHSA-7pqw-9j4j-h8q3
           --ignore GHSA-rgj7-g3m4-5g8c
           --ignore GHSA-r3ph-w7gj-g6xm
+          --ignore GHSA-ch52-4w7c-c8xp
+          --ignore GHSA-vfj7-8cjw-p6xm
       - run: bun run lint
       - run: bun run lint:tailwind
       - run: bun run lint:md
