@@ -23,6 +23,8 @@ Onboarding a config replaces it. The "Onboard config" button in the header
 it, and store it in the browser's `localStorage`. From then on, every page
 reads that config instead of the bundled one, until you offboard it.
 
+On a phone the header keeps only the brand, the light/dark toggle and a "Site menu" button. The page links, the language selector, "Onboard config" and the GitHub link live behind it.
+
 Editing on `/config` or [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)
 works the same way: shipping writes the edited config to the same storage.
 Nothing here is sent to a server — a config never leaves your browser, and
@@ -39,8 +41,7 @@ your config to a fellow founder.
 
 ## Dark Mode: My Unpopular Opinion
 
-The header also has a light/dark toggle, next to "Onboard config" on every
-page. Left alone, the site follows your OS or browser's
+The header also has a light/dark toggle, on every page. On a phone it stays on the header's top row, outside the "Site menu". Left alone, the site follows your OS or browser's
 `prefers-color-scheme` setting — same as before this existed, respecting
 your existing infrastructure. Clicking it sets an explicit choice instead,
 stored in `localStorage`, which then overrides that OS setting on every
@@ -68,18 +69,17 @@ isn't optional, it's table stakes. None of these shortcuts fire while
 you're typing into a text field, a textarea, a select or anything else
 editable — normal typing always wins.
 
+## Reading a Card
+
+Each card on the front page leads with the headline: the programme (with its dial), then temperature and spin in large type. Detergent, which piles wash together, drying, ironing, notes and sources sit under a "Deep dive" line on the card, collapsed until you tap it. Lead with the outcome, details on demand.
+
 ## Filtering: How I 10x'd My Search
 
-The front page filters by which cut you want (full stack, wash-only,
-alignment-only) and by a free-text deliverable search, plus an "Advanced"
-disclosure — closed by default — for filtering by an exact strategy, temp
-check or spin, and a solution search. All of them narrow the same list; a
-deliverable has to match every active filter to show. This is what
-"data-driven" actually looks like.
+The front page shows a deliverable search box, three pills for the scope you want (full stack, wash-only, alignment-only) and one **Filters** button. The button opens a panel — closed on every page load — for filtering by an exact strategy, temp check or spin, and a solution search; a small number on the button says how many of those are active. All of them narrow the same list; a deliverable has to match every active filter to show. This is what "data-driven" actually looks like.
 
 The strategy, temperature and spin selects only ever offer values that
 would still leave at least one deliverable showing, given the deliverable
-search and whatever else you've already picked in Advanced — so you can't
+search and whatever else you've already picked in Filters — so you can't
 pick a combination that lands you on an empty roadmap. The lists update
 live as you change other filters, and if a field has nothing left that
 could match, it disables itself instead of showing empty options. No dead
@@ -92,8 +92,8 @@ parameters, and a URL carrying any of them wins outright over whatever was
 saved from a previous session — see Share below for the button that hands
 that URL off.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/linkedin/sheet-filters-light.png" alt="The Advanced filters open, with washing-only selected" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-filters-dark.png" alt="The Advanced filters open, with washing-only selected" />
+<img class="theme-shot" data-variant="light" src="/docs/media/linkedin/sheet-filters-light.png" alt="The Filters panel open, with washing-only selected" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-filters-dark.png" alt="The Filters panel open, with washing-only selected" />
 
 ## Share This Win
 
