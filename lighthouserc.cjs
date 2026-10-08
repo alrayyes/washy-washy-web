@@ -28,6 +28,14 @@ module.exports = {
         "categories:accessibility": ["error", { minScore: 0.95 }],
         "categories:best-practices": ["error", { minScore: 0.95 }],
         "categories:seo": ["error", { minScore: 0.95 }],
+        // Lighthouse 13 insights. Cache and compression are off: this audit serves
+        // dist/ with scripts/serve-dist.ts, which sends neither header, so
+        // public/_headers is covered by test/headers.test.ts instead.
+        "cache-insight": "off",
+        "document-latency-insight": "off",
+        "render-blocking-insight": "warn",
+        "network-dependency-tree-insight": "warn",
+        "unused-javascript": "warn",
       },
     },
     upload: {
