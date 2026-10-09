@@ -1,3 +1,9 @@
+## [1.52.0](https://github.com/alrayyes/washy-washy-web/compare/v1.51.1...v1.52.0) (2026-10-09)
+
+### Features
+
+* **ci:** publish the test, coverage and Lighthouse reports ([#327](https://github.com/alrayyes/washy-washy-web/issues/327)) ([33dd88c](https://github.com/alrayyes/washy-washy-web/commit/33dd88c85fd5529e712a977b791c1d95695b740c))
+
 ## [1.51.1](https://github.com/alrayyes/washy-washy-web/compare/v1.51.0...v1.51.1) (2026-10-09)
 
 ### Bug Fixes
