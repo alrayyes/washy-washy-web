@@ -96,6 +96,20 @@ Optional, both unset by default:
   disables tracking entirely, and the `/privacy` page's own text adjusts
   to match at build time either way.
 
+## Reports
+
+Every push to `main` that passes the pipeline publishes its reports at
+[apis.ryankes.eu/washy-washy-web/reports](https://apis.ryankes.eu/washy-washy-web/reports/):
+
+- [Test results](https://apis.ryankes.eu/washy-washy-web/reports/tests/) for the unit and
+  end-to-end suites, as JUnit XML.
+- [Coverage](https://apis.ryankes.eu/washy-washy-web/reports/coverage/) as an HTML view, with
+  [`coverage.xml`](https://apis.ryankes.eu/washy-washy-web/reports/coverage/coverage.xml)
+  in Cobertura format and Bun's own `lcov.info` beside it. Only the unit tests feed it, so it
+  leaves out the DOM code the end-to-end suite covers.
+- [Lighthouse](https://apis.ryankes.eu/washy-washy-web/reports/lighthouse/) HTML and JSON
+  for each audited page.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
