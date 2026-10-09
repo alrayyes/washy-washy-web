@@ -44,8 +44,8 @@ description: 图表中的每个字段、机器文件如何描述你的洗衣机�
 
 网页应用自带的 [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/) 编辑器写入的正是同一种结构——在那里调整程序列表的顺序，效果与调整 JSON 数组的顺序完全一样：
 
-<img class="theme-shot" data-variant="light" src="/docs/media/zh/machine-editor-light.png" alt="机器编辑器中的脱水转速、按钮和熨斗挡位表格" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/zh/machine-editor-dark.png" alt="机器编辑器中的脱水转速、按钮和熨斗挡位表格" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/zh/machine-editor-light.png" alt="机器编辑器中的脱水转速、按钮和熨斗挡位表格" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/zh/machine-editor-dark.png" alt="机器编辑器中的脱水转速、按钮和熨斗挡位表格" />
 
 ```json
 {

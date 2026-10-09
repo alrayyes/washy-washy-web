@@ -64,8 +64,8 @@ description: Каждое поле вашей таблицы стирки, ка�
 записывает именно эту форму — изменение порядка списка программ там даёт
 ровно тот же результат, что и изменение порядка в JSON-массиве:
 
-<img class="theme-shot" data-variant="light" src="/docs/media/ru/machine-editor-light.png" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/ru/machine-editor-dark.png" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ru/machine-editor-light.png" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/ru/machine-editor-dark.png" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
 
 ```json
 {

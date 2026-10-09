@@ -17,8 +17,8 @@ description: 首页上的筛选器、哪些内容会在多次访问之间保留�
 
 `/config` 上还有一个下载链接，它会把当前生效的配置——不论是内置的还是自定义的——原样导出为与上传时相同的 JSON 结构。这就完成了一个往返：你可以在别处编辑这份副本，或者把配置交给别人。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/zh/config-chart-cards-light.png" alt="配置页面：只读的机器摘要、上传/下载控件，以及每一堆衣物对应的可编辑卡片" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/zh/config-chart-cards-dark.png" alt="配置页面：只读的机器摘要、上传/下载控件，以及每一堆衣物对应的可编辑卡片" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/zh/config-chart-cards-light.png" alt="配置页面：只读的机器摘要、上传/下载控件，以及每一堆衣物对应的可编辑卡片" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/zh/config-chart-cards-dark.png" alt="配置页面：只读的机器摘要、上传/下载控件，以及每一堆衣物对应的可编辑卡片" />
 
 ## 主题切换
 
@@ -48,8 +48,8 @@ description: 首页上的筛选器、哪些内容会在多次访问之间保留�
 
 筛选条件会像配置一样保存在 `localStorage` 中，在多次访问之间保留。筛选后的视图也是可以分享的：地址栏会把 `cut`、`pile`、`program`、`temperature`、`spin` 和 `detergent` 作为查询参数带上，并且只要 URL 中带有其中任何一个参数，就会直接覆盖上次访问保存下来的内容——关于把这个 URL 分享出去的按钮，见下方的"分享"一节。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/zh/sheet-filters-light.png" alt="展开的筛选面板，已选择仅洗涤" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/zh/sheet-filters-dark.png" alt="展开的筛选面板，已选择仅洗涤" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/zh/sheet-filters-light.png" alt="展开的筛选面板，已选择仅洗涤" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/zh/sheet-filters-dark.png" alt="展开的筛选面板，已选择仅洗涤" />
 
 ## 分享
 
@@ -68,7 +68,7 @@ PDF 下载按钮旁边是**分享此视图**按钮，它会原样发送当前页
 
 单张卡片也有自己的**下载**按钮，一次只下载一堆衣物。它只有手机版式——打印版式总是会绘制整张速查表加上每一堆衣物的卡片，因此无法像手机版式那样把范围缩小到单独一堆衣物。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/zh/sheet-pdf-download-light.png" alt="单张卡片自带的下载和复制链接按钮" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/zh/sheet-pdf-download-dark.png" alt="单张卡片自带的下载和复制链接按钮" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/zh/sheet-pdf-download-light.png" alt="单张卡片自带的下载和复制链接按钮" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/zh/sheet-pdf-download-dark.png" alt="单张卡片自带的下载和复制链接按钮" />
 
 **复制链接**，位于卡片下载按钮旁边，会把该筛选视图的 URL 放到你的剪贴板中——用的是与上方页面级分享按钮相同的剪贴板回退方式，只是范围限定在这一张卡片上。

@@ -5,8 +5,8 @@ description: أنشئ مخطط الغسيل الخاص بك، واستخدم ع�
 
 يحوّل Washy washy مخطط الغسيل إلى شيء يمكنك فعلاً قراءته وأنت واقف أمام الغسالة: صفحة مناسبة للهاتف، قابلة للتصفية حسب الفئة وحسب الكومة. وهناك أداة منفصلة تُدعى [CLI](https://github.com/alrayyes/washy-washy-cli) تقرأ المخطط ووصف الجهاز نفسيهما وتُصدرهما كملف PDF بدلاً من ذلك — يغطي هذا الموقع تطبيق الويب فقط؛ ولـCLI ملف README خاص بها لتثبيتها وتشغيلها.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/ar/sheet-overview-light.png" alt="الصفحة الرئيسية: مخطط غسيل بعوامل تصفية حسب الفئة والكومة، وزر لتنزيل الورقة كاملة بصيغة PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/ar/sheet-overview-dark.png" alt="الصفحة الرئيسية: مخطط غسيل بعوامل تصفية حسب الفئة والكومة، وزر لتنزيل الورقة كاملة بصيغة PDF" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ar/sheet-overview-light.png" alt="الصفحة الرئيسية: مخطط غسيل بعوامل تصفية حسب الفئة والكومة، وزر لتنزيل الورقة كاملة بصيغة PDF" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/ar/sheet-overview-dark.png" alt="الصفحة الرئيسية: مخطط غسيل بعوامل تصفية حسب الفئة والكومة، وزر لتنزيل الورقة كاملة بصيغة PDF" />
 
 ابدأ بالصفحة التي تناسب ما تريد فعله:
 

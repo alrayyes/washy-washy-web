@@ -36,8 +36,8 @@ götürür.
 indirme bağlantısı da bulunur. Bu, bir kopyayı başka bir yerde düzenlemenin
 ya da yapılandırmanızı başka birine vermenin gidiş-dönüş yoludur.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/config-chart-cards-light.png" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/config-chart-cards-dark.png" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/tr/config-chart-cards-light.png" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/tr/config-chart-cards-dark.png" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
 
 ## Tema değiştirici
 
@@ -90,8 +90,8 @@ bunlardan herhangi birini taşıyan bir URL, önceki bir ziyaretten kaydedilmiş
 olana kesin olarak üstün gelir — bu URL'yi paylaşan düğme için aşağıdaki
 Paylaşım bölümüne bakın.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/sheet-filters-light.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/sheet-filters-dark.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/tr/sheet-filters-light.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/tr/sheet-filters-dark.png" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
 
 ## Paylaşım
 
@@ -145,8 +145,8 @@ referans tablosunu ve her yığının kartını çizer, dolayısıyla telefon
 biçiminin yapabildiği gibi bunu tek bir yığına indirgemenin bir yolu
 yoktur.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/sheet-pdf-download-light.png" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/sheet-pdf-download-dark.png" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/tr/sheet-pdf-download-light.png" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/tr/sheet-pdf-download-dark.png" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
 
 Bir kartın indirme düğmesinin yanındaki **Copy link**, o filtrelenmiş
 görünümün URL'sini panonuza koyar — yukarıdaki sayfa düzeyindeki Share

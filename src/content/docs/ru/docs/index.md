@@ -11,8 +11,8 @@ Washy washy превращает таблицу стирки в то, что м�
 только веб-приложение; у CLI есть собственный README по установке и
 запуску.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/ru/sheet-overview-light.png" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/ru/sheet-overview-dark.png" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ru/sheet-overview-light.png" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/ru/sheet-overview-dark.png" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
 
 Начните с того, что подходит вашей задаче:
 

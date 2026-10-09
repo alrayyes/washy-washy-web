@@ -10,8 +10,8 @@ aynı çizelgeyi ve makine tanımını okur ve bunu PDF olarak oluşturur — bu
 yalnızca web uygulamasını kapsar; CLI'nin kurulumu ve çalıştırılması için
 kendi README dosyası vardır.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/sheet-overview-light.png" alt="Ana sayfa: kesim ve yığın filtreleri olan bir çamaşır çizelgesi ve tüm sayfayı PDF olarak indirmek için bir düğme" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/sheet-overview-dark.png" alt="Ana sayfa: kesim ve yığın filtreleri olan bir çamaşır çizelgesi ve tüm sayfayı PDF olarak indirmek için bir düğme" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/tr/sheet-overview-light.png" alt="Ana sayfa: kesim ve yığın filtreleri olan bir çamaşır çizelgesi ve tüm sayfayı PDF olarak indirmek için bir düğme" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/tr/sheet-overview-dark.png" alt="Ana sayfa: kesim ve yığın filtreleri olan bir çamaşır çizelgesi ve tüm sayfayı PDF olarak indirmek için bir düğme" />
 
 Ne yapmaya çalıştığınıza uygun olanla başlayın:
 

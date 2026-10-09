@@ -62,8 +62,8 @@ Web uygulamasının kendi [`/config/machine`](https://washy-washy.ryankes.eu/con
 düzenleyicisi de aynı şekli yazar — oradaki program listesini yeniden
 sıralamak, JSON dizisini yeniden sıralamakla tamamen aynı şeyi yapar:
 
-<img class="theme-shot" data-variant="light" src="/docs/media/tr/machine-editor-light.png" alt="Makine düzenleyicisinin sıkma hızları, düğmeler ve ütü ayarları tablosu" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/tr/machine-editor-dark.png" alt="Makine düzenleyicisinin sıkma hızları, düğmeler ve ütü ayarları tablosu" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/tr/machine-editor-light.png" alt="Makine düzenleyicisinin sıkma hızları, düğmeler ve ütü ayarları tablosu" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/tr/machine-editor-dark.png" alt="Makine düzenleyicisinin sıkma hızları, düğmeler ve ütü ayarları tablosu" />
 
 ```json
 {
