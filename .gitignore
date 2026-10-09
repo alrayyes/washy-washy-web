@@ -47,3 +47,7 @@ blob-report
 .tools
 styles/Google
 styles/proselint
+
+# assembled reports (scripts/assemble-reports.ts) and the artifacts it reads
+site
+reports-in
