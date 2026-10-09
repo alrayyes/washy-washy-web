@@ -11,8 +11,8 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: "bun run build && bun scripts/serve-dist.ts",
-      startServerReadyPattern: "Serving",
+      startServerCommand: "bun run build && bunx wrangler dev --port 4321 --ip 127.0.0.1",
+      startServerReadyPattern: "Ready on",
       startServerReadyTimeout: 60_000,
       url: [
         "http://localhost:4321/",
@@ -28,12 +28,14 @@ module.exports = {
         "categories:accessibility": ["error", { minScore: 0.95 }],
         "categories:best-practices": ["error", { minScore: 0.95 }],
         "categories:seo": ["error", { minScore: 0.95 }],
-        // Lighthouse 13 insights. Cache and compression are off: this audit serves
-        // dist/ with scripts/serve-dist.ts, which sends neither header, so
-        // public/_headers is covered by test/headers.test.ts instead.
-        "cache-insight": "off",
-        "document-latency-insight": "off",
-        "render-blocking-insight": "warn",
+        // Lighthouse 13 insights, graded against wrangler dev, which applies
+        // public/_headers and compresses the way Cloudflare's edge does.
+        "cache-insight": "error",
+        "document-latency-insight": "error",
+        "render-blocking-insight": "error",
+        // Warn only: Lighthouse fails this insight for any critical chain of
+        // two requests, so HTML plus one module script already trips it and a
+        // page with any JavaScript cannot pass. Watch the report instead.
         "network-dependency-tree-insight": "warn",
         "unused-javascript": "warn",
       },

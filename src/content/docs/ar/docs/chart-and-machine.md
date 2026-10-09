@@ -44,8 +44,8 @@ description: كل حقل في مخططك، وكيفية وصف ملف الجها
 
 محرر [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/) الخاص بتطبيق الويب يكتب هذا الشكل نفسه — وإعادة ترتيب قائمة البرامج هناك تفعل بالضبط ما تفعله إعادة ترتيب مصفوفة JSON:
 
-<img class="theme-shot" data-variant="light" src="/docs/media/ar/machine-editor-light.png" alt="جدول سرعات العصر والأزرار وإعدادات المكواة في محرر الجهاز" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/ar/machine-editor-dark.png" alt="جدول سرعات العصر والأزرار وإعدادات المكواة في محرر الجهاز" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ar/machine-editor-light.png" alt="جدول سرعات العصر والأزرار وإعدادات المكواة في محرر الجهاز" />
+<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/ar/machine-editor-dark.png" alt="جدول سرعات العصر والأزرار وإعدادات المكواة في محرر الجهاز" />
 
 ```json
 {

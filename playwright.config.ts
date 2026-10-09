@@ -18,10 +18,21 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    command: "bun run build && bun scripts/serve-dist.ts",
-    url: "http://localhost:4321",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command: "bun run build && bun scripts/serve-dist.ts",
+      url: "http://localhost:4321",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+    // Cloudflare's own asset server, for e2e/delivery.spec.ts: it applies
+    // public/_headers and compresses, which the file server above doesn't.
+    // Listed second so it starts once the first has built dist/.
+    {
+      command: "bunx wrangler dev --port 4322 --ip 127.0.0.1",
+      url: "http://127.0.0.1:4322",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

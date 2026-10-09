@@ -5,8 +5,8 @@ description: 记录你自己的洗衣图表，并使用网页应用的筛选、�
 
 Washy washy 把一份洗衣图表变成一个你站在洗衣机前就能真正看懂的东西：一个适合手机浏览的页面，可以按范围和按衣物堆筛选。另有一个独立的 [CLI](https://github.com/alrayyes/washy-washy-cli) 会读取同一份图表和机器描述，并将其渲染为 PDF——本站只介绍网页应用；CLI 的安装和运行方法见它自己的 README。
 
-<img class="theme-shot" data-variant="light" src="/docs/media/zh/sheet-overview-light.png" alt="首页：带有范围和衣物堆筛选的洗衣图表，以及一个将整份表格下载为 PDF 的按钮" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/zh/sheet-overview-dark.png" alt="首页：带有范围和衣物堆筛选的洗衣图表，以及一个将整份表格下载为 PDF 的按钮" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/zh/sheet-overview-light.png" alt="首页：带有范围和衣物堆筛选的洗衣图表，以及一个将整份表格下载为 PDF 的按钮" />
+<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/zh/sheet-overview-dark.png" alt="首页：带有范围和衣物堆筛选的洗衣图表，以及一个将整份表格下载为 PDF 的按钮" />
 
 从最符合你需求的部分开始：
 

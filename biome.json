@@ -9,6 +9,7 @@
       "!**/test-results",
       "!**/playwright-report",
       "!**/.lighthouseci",
+      "!**/.wrangler",
       "!**/reports",
       "!.claude/worktrees",
       "!.claude/settings.local.json",

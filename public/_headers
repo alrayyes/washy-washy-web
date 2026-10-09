@@ -1,6 +1,11 @@
 # Cloudflare Workers static assets read this file from the build output.
-# Astro fingerprints everything under /_astro/, so it can be cached for a year
-# and never revalidated. Pages (and sw.js) keep Cloudflare's default,
-# public, max-age=0, must-revalidate, which is right for HTML and the service worker.
+# Everything revalidates by default: no-cache keeps the ETag round trip but
+# never serves a stale page, and the service worker (sw.js) needs the same.
+# Astro fingerprints everything under /_astro/, so that one path is cached for
+# a year and never revalidated. The "!" detaches the default above, since
+# matching rules otherwise merge their values into one header.
+/*
+  Cache-Control: no-cache
 /_astro/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable

@@ -120,6 +120,12 @@
  * accessibility tree too, so identical alt text on both never
  * double-announces.
  */
+.theme-shot {
+  /* width and height attributes reserve the space; these keep the ratio. */
+  height: auto;
+  max-width: 100%;
+}
+
 .theme-shot[data-variant="dark"] {
   display: none;
 }
