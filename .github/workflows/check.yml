@@ -99,13 +99,17 @@ jobs:
       # viewer reads, and genhtml gives a browsable view. bun writes neither,
       # only lcov.info. Runs on pull requests too, so a broken conversion fails
       # before the merge rather than on main. The pipx pin is by hand: no bot
-      # reads it.
+      # reads it. bun names a component's client build `Foo.svelte?client`,
+      # which genhtml can't open, so both tools read a normalised copy and
+      # lcov.info itself is published untouched.
       - name: Coverage as Cobertura XML and an HTML view
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends lcov
-          pipx run --spec lcov_cobertura==2.1.1 lcov_cobertura coverage/lcov.info --output coverage/coverage.xml
-          genhtml coverage/lcov.info --output-directory coverage/html
+          bun scripts/normalise-lcov.ts coverage/lcov.info coverage/lcov.normalised.info
+          pipx run --spec lcov_cobertura==2.1.1 lcov_cobertura coverage/lcov.normalised.info --output coverage/coverage.xml
+          genhtml coverage/lcov.normalised.info --output-directory coverage/html
+          rm coverage/lcov.normalised.info
       # Only the unit tests: the e2e and Lighthouse jobs keep their own.
       # Pull requests keep it for a day too, so the reports job can assemble
       # them; only the deploy is main-only.
