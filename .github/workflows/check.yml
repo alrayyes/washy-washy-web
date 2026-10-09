@@ -36,7 +36,7 @@ jobs:
         with:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
-      # Nine ignored advisories, all transitive and all dev-only (never
+      # Thirteen ignored advisories, all transitive and all dev-only (never
       # shipped) - `bun audit fix` can't reach any of them:
       #   - Five (incl. the two extract-zip IDs) run through @lhci/cli
       #     (Lighthouse CI) - extract-zip has no published fix at all, and
@@ -54,6 +54,14 @@ jobs:
       #     http-cache-semantics is a build-time client cache (astro,
       #     npm), not a shared cache serving other users; braces is only
       #     reached through lint and release tooling.
+      #   - GHSA-xw65-4hp5-5hc7, GHSA-8r5x-fm3f-whwj and GHSA-p8wg-vrv2-v86f
+      #     (handlebars <=4.7.9) run through semantic-release's changelog
+      #     writer, which only renders our own release notes. The fix,
+      #     4.7.10, came out on 2026-10-05 and the 7-day minimumReleaseAge
+      #     blocks it until 2026-10-12: override it then and drop all three.
+      #   - GHSA-hp3w-g68c-fv3c (sprintf-js <=1.1.3, the latest release) has
+      #     no published fix. It runs through argparse, in the markdown and
+      #     YAML linters only.
       # Revisit when @lhci/cli/miniflare bump their own pinned dependencies,
       # markdownlint-cli2 moves past js-yaml 5.4.0, or either package above
       # publishes a patched release.
@@ -68,6 +76,10 @@ jobs:
           --ignore GHSA-r3ph-w7gj-g6xm
           --ignore GHSA-ch52-4w7c-c8xp
           --ignore GHSA-vfj7-8cjw-p6xm
+          --ignore GHSA-xw65-4hp5-5hc7
+          --ignore GHSA-8r5x-fm3f-whwj
+          --ignore GHSA-p8wg-vrv2-v86f
+          --ignore GHSA-hp3w-g68c-fv3c
       - run: bun run lint
       - run: bun run lint:tailwind
       - run: bun run lint:md
