@@ -41,15 +41,15 @@ pre-commit:
     # lint:prose:advice` and the CI job are where the full read lives. LTeX is
     # absent here and runs on pre-push and in CI instead, from one script.
     #
-    # .tools/vale and the style packages are downloaded, not committed, so a
-    # fresh clone has neither. The installer is idempotent and costs a process
-    # start when the pinned binary is there; `vale sync` runs only while the
-    # packages are missing, so a normal commit never touches the network.
+    # .tools/vale and the style packages are downloaded, not committed, and a
+    # commit never fetches them: `bun run prose:sync` does that once, and the
+    # pre-push job below does it if you haven't. Without them this job fails
+    # loudly rather than skipping.
     - name: vale
       glob: "*.md"
       exclude:
         - CHANGELOG.md
-      run: bun run scripts/install-vale.ts && { test -d styles/Google || .tools/vale sync; } && .tools/vale --minAlertLevel=error {staged_files}
+      run: .tools/vale --minAlertLevel=error {staged_files}
 
 commit-msg:
   jobs:
@@ -83,6 +83,10 @@ pre-push:
       run: bun run check
     - name: test
       run: bun run test
+    # Installs the pinned binary and style packages when they're missing, so
+    # a push is where the download happens, not a commit.
+    - name: vale
+      run: bun run scripts/install-vale.ts && { test -d styles/Google || .tools/vale sync; } && bun run lint:prose
     - name: ltex
       glob: "*.md"
       run: scripts/lint-ltex.sh
