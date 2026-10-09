@@ -41,10 +41,11 @@ and never reaches a server.
   server is what Cloudflare actually serves.
 - Cache and compression headers come from Cloudflare, so a file server can't
   test them. `public/_headers` sets `no-cache` for everything and a year-long
-  `immutable` lifetime for `/_astro/*`. `e2e/delivery.spec.ts` and `bun run
-lighthouse` run against `wrangler dev` (port 4322 and 4321), which applies
-  that file and compresses the way the edge does. `astro.config.mjs` inlines
-  the stylesheet (about 7 KB compressed) so it doesn't block first paint.
+  `immutable` lifetime for `/_astro/*`. `e2e/delivery.spec.ts` and the
+  Lighthouse run use `wrangler dev` (ports 4322 and 4321), which applies that
+  file and compresses the way the edge does. `astro.config.mjs` puts the
+  stylesheet (about 7 KB compressed) inside each page, so it never blocks first
+  paint.
 - `@washy-washy/pdf` is dynamically imported only when a download button is
   clicked (`SheetViewer.svelte`'s `handleDownload`/`handleDownloadCard`), never
   on page load or a filter change — filtering never triggers a render nobody
