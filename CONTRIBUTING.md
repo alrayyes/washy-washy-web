@@ -79,9 +79,11 @@ Tests that render a PDF or mount a component set a one-minute timeout with
 `setDefaultTimeout` instead of Bun's five-second default. Give a new slow test one
 rather than skipping the hook.
 
-The Vale pre-commit job installs the pinned binary into `.tools/` and fetches
-the style packages the first time it runs, so a fresh clone needs no manual
-`bun run prose:sync`. Run that yourself only to refresh the packages.
+The Vale pre-commit job only reads the staged Markdown and never touches the
+network. The pinned binary in `.tools/` and the style packages come from
+`bun run prose:sync`; the first `pre-push` runs it for you if you haven't, so
+run it yourself before your first commit that touches Markdown, and again to
+refresh the packages.
 
 ```sh
 bun run prepare       # lefthook install, run automatically after bun install
