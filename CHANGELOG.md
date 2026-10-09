@@ -1,3 +1,14 @@
+## [1.52.1](https://github.com/alrayyes/washy-washy-web/compare/v1.52.0...v1.52.1) (2026-10-09)
+
+### Bug Fixes
+
+* **docs:** give every docs screenshot a width and height ([fc819dd](https://github.com/alrayyes/washy-washy-web/commit/fc819dd1f6a1a93fbcc97024a3a62b30e85edd31)), closes [#324](https://github.com/alrayyes/washy-washy-web/issues/324)
+
+### Performance Improvements
+
+* inline the stylesheet instead of linking it ([e36709f](https://github.com/alrayyes/washy-washy-web/commit/e36709fdfc8a93c11c6dfc1b5d4be1fa08911b7e)), closes [#324](https://github.com/alrayyes/washy-washy-web/issues/324)
+* revalidate pages with no-cache and test delivery headers on wrangler ([e71035a](https://github.com/alrayyes/washy-washy-web/commit/e71035a6a727c6e33c6446507b8969dbb8cd61a1))
+
 ## [1.52.0](https://github.com/alrayyes/washy-washy-web/compare/v1.51.1...v1.52.0) (2026-10-09)
 
 ### Features
