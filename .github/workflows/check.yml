@@ -110,7 +110,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends lcov
           bun scripts/normalise-lcov.ts coverage/lcov.info coverage/lcov.normalised.info
           pipx run --spec lcov_cobertura==2.1.1 lcov_cobertura coverage/lcov.normalised.info --output coverage/coverage.xml
-          genhtml coverage/lcov.normalised.info --output-directory coverage/html --ignore-errors unmapped,range
+          genhtml coverage/lcov.normalised.info --output-directory coverage/html --ignore-errors unmapped
           rm coverage/lcov.normalised.info
       # Only the unit tests: the e2e and Lighthouse jobs keep their own.
       # Pull requests keep it for a day too, so the reports job can assemble
