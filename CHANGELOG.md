@@ -1,3 +1,13 @@
+## [1.51.1](https://github.com/alrayyes/washy-washy-web/compare/v1.51.0...v1.51.1) (2026-10-09)
+
+### Bug Fixes
+
+* **deps:** override patched transitives, ignore two unfixable advisories ([a111824](https://github.com/alrayyes/washy-washy-web/commit/a1118243eb9beeb4d5ced243bed023600a1ad0cd))
+
+### Performance Improvements
+
+* cache fingerprinted assets and assert Lighthouse insights ([d5046ca](https://github.com/alrayyes/washy-washy-web/commit/d5046ca227d4846cbeba9e5a9f992380120b013f))
+
 ## [1.51.0](https://github.com/alrayyes/washy-washy-web/compare/v1.50.0...v1.51.0) (2026-10-03)
 
 ### Features
