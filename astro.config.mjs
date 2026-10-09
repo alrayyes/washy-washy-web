@@ -19,6 +19,12 @@ const umami = readUmamiConfig(process.env);
 export default defineConfig({
   site: "https://washy-washy.ryankes.eu",
   output: "static",
+  // The whole app stylesheet is about 7 KB compressed. As a linked file it
+  // blocks first paint and hides the font request behind a second round trip
+  // (render-blocking and network-dependency-tree insights); inlined, neither
+  // happens. Pages are no-cache anyway, so there is no long-lived copy of the
+  // CSS to lose.
+  build: { inlineStylesheets: "always" },
   // No Astro `i18n` config here on purpose: Starlight (below) introspects
   // the root i18n config at build time and validates every locale through
   // `Intl.Locale`/`Intl.DisplayNames` — which rejects "jive"'s and
