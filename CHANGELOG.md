@@ -1,3 +1,9 @@
+## [1.53.0](https://github.com/alrayyes/washy-washy-web/compare/v1.52.4...v1.53.0) (2026-10-10)
+
+### Features
+
+* **release:** attach page screenshots to each release and show them in the README ([79c31da](https://github.com/alrayyes/washy-washy-web/commit/79c31da998bb44ab709dd5816667c058b108272c)), closes [#341](https://github.com/alrayyes/washy-washy-web/issues/341)
+
 ## [1.52.4](https://github.com/alrayyes/washy-washy-web/compare/v1.52.3...v1.52.4) (2026-10-10)
 
 ### Bug Fixes
