@@ -60,6 +60,7 @@ and never reaches a server.
   file and compresses the way the edge does. `astro.config.mjs` puts the
   stylesheet (about 7 KB compressed) inside each page, so it never blocks first
   paint.
+- Unknown URLs get `src/pages/404.astro`, served with a 404 status because `wrangler.jsonc` sets `assets.not_found_handling` to `"404-page"`. Starlight's own 404 route is off (`disable404Route`), or it would build the same file. The file server in `scripts/serve-dist.ts` doesn't read that setting, so `e2e/not-found.spec.ts` runs against `wrangler dev`.
 - `@washy-washy/pdf` is dynamically imported only when a download button is
   clicked (`SheetViewer.svelte`'s `handleDownload`/`handleDownloadCard`), never
   on page load or a filter change — filtering never triggers a render nobody
