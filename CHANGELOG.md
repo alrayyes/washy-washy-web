@@ -1,3 +1,9 @@
+## [1.53.1](https://github.com/alrayyes/washy-washy-web/compare/v1.53.0...v1.53.1) (2026-10-10)
+
+### Bug Fixes
+
+* **site:** serve a branded 404 page for unknown URLs ([66f651b](https://github.com/alrayyes/washy-washy-web/commit/66f651bda7f707540d3cba22feb875d9abc0b864)), closes [#343](https://github.com/alrayyes/washy-washy-web/issues/343)
+
 ## [1.53.0](https://github.com/alrayyes/washy-washy-web/compare/v1.52.4...v1.53.0) (2026-10-10)
 
 ### Features
