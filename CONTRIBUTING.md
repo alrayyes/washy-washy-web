@@ -15,6 +15,20 @@ bun install
 
 Claude Code sessions in this repo get Svelte's own [MCP server](https://svelte.dev/docs/ai/overview) (`.mcp.json`, `AGENTS.md`) — Svelte/SvelteKit documentation lookup and static analysis for any Svelte component work.
 
+## Pinned overrides
+
+`package.json` pins `@react-pdf/renderer` to 4.9.0 under `overrides`, whatever `@washy-washy/pdf` asks for. Leave it alone unless you've read this.
+
+`@washy-washy/pdf` depends on an exact `@react-pdf/renderer` that pulls in the `@react-pdf/pdfkit` fork. The fork was chosen for the CLI, where plain `pdfkit` breaks inside a `bun build --compile` executable. This site runs in a real browser, and the fork's browser build throws `Standard font "Helvetica" is not registered` on the first render, because nothing calls `registerStdFonts()`. Version 4.9.0 depends on plain `pdfkit`, which has no such requirement.
+
+Before you bump the override, or drop it, check what the new version depends on:
+
+```sh
+npm view @react-pdf/renderer@<version> dependencies
+```
+
+Removing the override reproduces the crash in `bun test --conditions=browser` (`test/webmcp.test.ts`, the `washy_export_pdf` tests), so that run is the guard. Keep this section while the override stands, and delete it with the override.
+
 ## Architecture
 
 Static Astro site (`output: "static"`), deployed to Cloudflare Workers as
