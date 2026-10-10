@@ -1,3 +1,10 @@
+## [1.52.4](https://github.com/alrayyes/washy-washy-web/compare/v1.52.3...v1.52.4) (2026-10-10)
+
+### Bug Fixes
+
+* **hooks:** lint only staged Markdown in pre-commit ([33f6935](https://github.com/alrayyes/washy-washy-web/commit/33f69357595ee889541cae97c60259d2c7568d51)), closes [#330](https://github.com/alrayyes/washy-washy-web/issues/330)
+* **lint:** skip .claude in the Vale prose lint ([64c1b1b](https://github.com/alrayyes/washy-washy-web/commit/64c1b1b702b3a233e87d8a93d78e248f3b27651d)), closes [#337](https://github.com/alrayyes/washy-washy-web/issues/337)
+
 ## [1.52.3](https://github.com/alrayyes/washy-washy-web/compare/v1.52.2...v1.52.3) (2026-10-10)
 
 ### Bug Fixes
