@@ -23,17 +23,19 @@ concurrency:
 
 jobs:
   release:
-    # event == 'push' (not just conclusion == 'success') is the actual guard
+    # event in (push, workflow_dispatch), not just conclusion == 'success', is
+    # the actual guard
     # against the "pwn request" pattern workflow_run is infamous for: without
     # it, a pull_request-triggered `check` run — including one from a fork —
     # could complete successfully and trigger this job, which checks out
     # workflow_run.head_sha (untrusted, attacker-controlled on a fork PR) and
     # runs `bun install` (arbitrary lifecycle scripts) plus semantic-release
-    # with a repo-write RELEASE_TOKEN. Restricting to `push` means the only
-    # thing that can ever reach this job is `check.yml`'s own push-to-main
-    # trigger — i.e. a commit already merged into this repo, never a PR's
-    # unreviewed head. See GitHub Security Lab's "Preventing pwn requests".
-    if: github.event.workflow_run.event == 'push' && github.event.workflow_run.conclusion == 'success'
+    # with a repo-write RELEASE_TOKEN. Restricting to those two means the only
+    # thing that can ever reach this job is `check.yml`'s own push-to-main or a
+    # dispatch (which needs write access and is only sent for main), i.e. a
+    # commit already merged into this repo, never a PR's unreviewed head. See
+    # GitHub Security Lab's "Preventing pwn requests".
+    if: contains(fromJSON('["push", "workflow_dispatch"]'), github.event.workflow_run.event) && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
