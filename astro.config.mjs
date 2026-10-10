@@ -42,6 +42,9 @@ export default defineConfig({
     // the documented way to run Starlight at a subpath alongside an
     // existing app's own pages (#12).
     starlight({
+      // The site has its own src/pages/404.astro. Starlight's would be built
+      // at the same route, in docs chrome, and the two would collide.
+      disable404Route: true,
       locales: {
         root: { label: "English", lang: "en" },
         ja: { label: "日本語", lang: "ja" },
