@@ -24,11 +24,14 @@ jobs:
     # branch named to look like Dependabot's from reaching it.
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    # No elevated GITHUB_TOKEN permissions needed here: RELEASE_TOKEN (a
-    # real PAT, see below) does the actual merge, so this job never touches
-    # the implicit token at all -- the workflow-level contents: read default
-    # is unused too, but there's nothing to check out.
+    timeout-minutes: 45
+    # The merge is armed as github-actions, not as a person, so GitHub doesn't
+    # subscribe the repo owner to every Dependabot thread (#336). Auto-merge
+    # needs write on contents and pull requests to be armed at all.
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
     steps:
       # A semver-major bump can pass every check and still change behaviour
       # the tests don't cover, so it stays open for a human to read. Only
@@ -46,14 +49,15 @@ jobs:
       # required checks on main have passed. Without a ruleset naming those
       # checks it merges the moment the branch is mergeable, red or not.
       #
-      # RELEASE_TOKEN, not GITHUB_TOKEN: a GITHUB_TOKEN-authored squash-merge
-      # commit trips GitHub's anti-recursion guard, so check.yml's own
-      # push-to-main trigger never fires for it and release.yml (which only
-      # runs via workflow_run off check) never sees the merge either. A
-      # fix: dependency bump merged this way sat unreleased on main for
-      # days until an unrelated human-authored push happened to sweep it
-      # up (#212) -- RELEASE_TOKEN authors the commit as a real account,
-      # same fix as release.yml's own checkout step uses this token for.
+      # GITHUB_TOKEN, not the owner's RELEASE_TOKEN: a PAT makes its owner the
+      # person who armed auto-merge, which subscribes them to the thread and
+      # notifies them of every comment, rebase and merge (#336).
+      #
+      # The cost is that a GITHUB_TOKEN merge fires no push-triggered run, so
+      # check.yml never runs on the merge commit and release.yml never sees it
+      # (#212). So this job stays alive until the merge lands, then dispatches
+      # check.yml on main, which release.yml follows. workflow_dispatch is
+      # exempt from the guard, so the release is as prompt as after a push.
       - name: Wave it through once the checks are green
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         run: |
@@ -62,4 +66,20 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_TITLE: ${{ github.event.pull_request.title }}
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start the release run once it has merged
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        run: |
+          for _ in $(seq 1 80); do
+            state=$(gh pr view "$PR_URL" --json state --jq .state)
+            case "$state" in
+              MERGED) gh workflow run check.yml --ref main; exit 0 ;;
+              CLOSED) exit 0 ;;
+            esac
+            sleep 30
+          done
+          echo "::warning::Not merged after 40 minutes; nothing dispatched."
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

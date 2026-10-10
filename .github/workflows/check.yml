@@ -10,6 +10,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  # dependabot-auto-merge.yml dispatches this after a Dependabot merge: a
+  # GITHUB_TOKEN merge fires no push run (#212, #336), and release.yml follows
+  # this workflow.
+  workflow_dispatch:
 
 permissions:
   contents: read
