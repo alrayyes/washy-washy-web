@@ -1,3 +1,9 @@
+## [1.52.3](https://github.com/alrayyes/washy-washy-web/compare/v1.52.2...v1.52.3) (2026-10-10)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/starlight from 0.42.4 to 0.42.5 ([0a9f424](https://github.com/alrayyes/washy-washy-web/commit/0a9f424099d1ddb1479f6c00377eb3a3a74326ed))
+
 ## [1.52.2](https://github.com/alrayyes/washy-washy-web/compare/v1.52.1...v1.52.2) (2026-10-10)
 
 ### Bug Fixes
