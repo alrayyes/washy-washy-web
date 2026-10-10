@@ -25,30 +25,9 @@ import { mkdir } from "node:fs/promises";
 import { type Browser, chromium, type Page } from "@playwright/test";
 import { DOCS_LOCALES, type Locale, relativeLocaleUrl } from "../src/i18n/locales";
 import { translator } from "../src/i18n/ui";
+import { BASE_URL, waitForHydration, withBuiltSite } from "./capture-support";
 
-const DIST = new URL("../dist/", import.meta.url);
 const MEDIA_DIR = new URL("../public/docs/media/", import.meta.url);
-const PORT = 4321;
-const BASE_URL = `http://localhost:${PORT}`;
-
-async function waitForServer(url: string, timeoutMs = 15_000) {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) return;
-    } catch {
-      // Not up yet — keep polling.
-    }
-    await Bun.sleep(200);
-  }
-  throw new Error(`Server at ${url} did not come up within ${timeoutMs}ms`);
-}
-
-/** React islands (`client:load`) hydrate after first paint — this flag is the e2e suite's own signal that listeners are attached. */
-async function waitForHydration(page: Page) {
-  await page.waitForSelector('[data-hydrated="true"]');
-}
 
 interface Shot {
   /** Locale-unprefixed — resolved per locale via relativeLocaleUrl. */
@@ -124,19 +103,7 @@ async function shoot(
 async function main() {
   await mkdir(MEDIA_DIR, { recursive: true });
 
-  console.log("Building...");
-  const build = Bun.spawnSync(["bun", "run", "build"], { stdout: "inherit", stderr: "inherit" });
-  if (build.exitCode !== 0) throw new Error("astro build failed");
-
-  console.log(`Serving ${DIST.pathname}...`);
-  const server = Bun.spawn(["bun", "scripts/serve-dist.ts"], {
-    stdout: "inherit",
-    stderr: "inherit",
-  });
-
-  try {
-    await waitForServer(BASE_URL);
-
+  await withBuiltSite(async () => {
     const browser = await chromium.launch();
     try {
       const locales: Locale[] = ["en", ...DOCS_LOCALES.filter((locale) => locale !== "en")];
@@ -150,9 +117,7 @@ async function main() {
     } finally {
       await browser.close();
     }
-  } finally {
-    server.kill();
-  }
+  });
 
   console.log(`Wrote screenshots to ${MEDIA_DIR.pathname}`);
 }

@@ -4,7 +4,11 @@
     ["@semantic-release/commit-analyzer", { "preset": "conventionalcommits" }],
     ["@semantic-release/release-notes-generator", { "preset": "conventionalcommits" }],
     "@semantic-release/changelog",
-    "@semantic-release/github",
+    [
+      "@semantic-release/exec",
+      { "prepareCmd": "bunx playwright install --with-deps chromium && bun run readme:shots" }
+    ],
+    ["@semantic-release/github", { "assets": [{ "path": "screenshots/*.png" }] }],
     [
       "@semantic-release/git",
       {
