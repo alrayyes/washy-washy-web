@@ -4,6 +4,9 @@ node_modules
 # output
 dist
 
+# README screenshots, captured by the release job and attached to the release
+screenshots
+
 # code coverage
 coverage
 *.lcov

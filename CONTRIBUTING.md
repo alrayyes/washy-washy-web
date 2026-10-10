@@ -75,6 +75,7 @@ bun run test          # bun:test, unit tests under test/
 bun run test:e2e     # Playwright, against a real astro build
 bun run lighthouse   # Category scores plus cache, latency and render-blocking insights, see lighthouserc.cjs
 bun run docs:media   # Regenerate the /docs page screenshots; commit the result by hand
+bun run readme:shots # Capture the README's release screenshots into screenshots/ (not committed)
 ```
 
 ## Linting and hooks
@@ -134,3 +135,5 @@ reads the Conventional Commits on `main` and cuts a version, changelog and
 GitHub release — nobody picks a version by hand. Cloudflare's own GitHub
 integration handles the actual deploy on every push to `main`, and posts a
 preview URL on every pull request.
+
+On a release, the same job also builds the site and captures a light and a dark screenshot of every English page except the footer's (disclaimer and privacy), then attaches the 18 PNGs to the GitHub release. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.

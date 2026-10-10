@@ -63,6 +63,55 @@ bun run build      # static build to dist/
 bun run test:e2e   # Playwright, against a real astro build
 ```
 
+## Screenshots
+
+Every page except the footer's legal pages, taken from the latest release. The images follow your GitHub colour scheme.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/home-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/home-light.png" alt="Washing instructions for a pile of laundry" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/config-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/config-light.png" alt="Editing the washing chart" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/machine-editor-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/machine-editor-light.png" alt="Editing washer and iron settings" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/changelog-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/changelog-light.png" alt="The changelog" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-light.png" alt="The documentation home page" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-web-app-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-web-app-light.png" alt="Documentation: the web app" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-chart-and-machine-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-chart-and-machine-light.png" alt="Documentation: the chart and the machine" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-ai-prompt-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-ai-prompt-light.png" alt="Documentation: the AI prompt" width="640" />
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-webmcp-dark.png" />
+  <img src="https://github.com/alrayyes/washy-washy-web/releases/latest/download/docs-webmcp-light.png" alt="Documentation: WebMCP" width="640" />
+</picture>
+
 ## Languages
 
 Every page — home, disclaimer, privacy, the washing loads and washer/iron
