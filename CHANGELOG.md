@@ -1,3 +1,9 @@
+## [1.52.2](https://github.com/alrayyes/washy-washy-web/compare/v1.52.1...v1.52.2) (2026-10-10)
+
+### Bug Fixes
+
+* **deps:** bump @washy-washy/pdf from 2.4.5 to 2.5.2 ([816282b](https://github.com/alrayyes/washy-washy-web/commit/816282b29593cb46d124a8e1f10b585e7c0eb9f9))
+
 ## [1.52.1](https://github.com/alrayyes/washy-washy-web/compare/v1.52.0...v1.52.1) (2026-10-09)
 
 ### Bug Fixes
