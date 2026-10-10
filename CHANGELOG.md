@@ -1,3 +1,9 @@
+## [1.53.2](https://github.com/alrayyes/washy-washy-web/compare/v1.53.1...v1.53.2) (2026-10-10)
+
+### Bug Fixes
+
+* **ci:** arm Dependabot auto-merge as github-actions so it stops subscribing the owner ([d9ffa3a](https://github.com/alrayyes/washy-washy-web/commit/d9ffa3a19f691b8fdf5a1a9763d6cf60f221bb39)), closes [#212](https://github.com/alrayyes/washy-washy-web/issues/212) [#336](https://github.com/alrayyes/washy-washy-web/issues/336)
+
 ## [1.53.1](https://github.com/alrayyes/washy-washy-web/compare/v1.53.0...v1.53.1) (2026-10-10)
 
 ### Bug Fixes
