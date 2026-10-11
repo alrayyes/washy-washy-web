@@ -1,3 +1,13 @@
+## [1.53.3](https://github.com/alrayyes/washy-washy-web/compare/v1.53.2...v1.53.3) (2026-10-11)
+
+### Bug Fixes
+
+* **site:** stop the home intro shifting while the chart streams in ([08b3b64](https://github.com/alrayyes/washy-washy-web/commit/08b3b640e551a51c4551c9110606393c270f2cd5)), closes [#346](https://github.com/alrayyes/washy-washy-web/issues/346)
+
+### Performance Improvements
+
+* **docs:** serve 2x WebP screenshots and prioritise the LCP one ([6db0921](https://github.com/alrayyes/washy-washy-web/commit/6db0921d028951077feb161e2c35ea5c5976c688)), closes [#346](https://github.com/alrayyes/washy-washy-web/issues/346)
+
 ## [1.53.2](https://github.com/alrayyes/washy-washy-web/compare/v1.53.1...v1.53.2) (2026-10-10)
 
 ### Bug Fixes
