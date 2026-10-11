@@ -19,15 +19,19 @@ const t = translator(locale);
 ---
 
 <Layout title={t("home.title")} description={t("home.description")} translationKey="home">
-  {/* A flex column only so the intro can drop below the chart on a phone
-  (`max-md:order-last`): the first screen there is the load, not the
-  pitch (#288). From md up the order is the source order. */}
+  {/* A flex column so the intro can sit below the chart on a phone: the
+  first screen there is the load, not the pitch (#288). The intro comes after
+  the island in the source, so the streamed HTML never paints it above a
+  still-growing chart and shoves it down (CLS, #346); from md up `order`
+  puts it back between the heading and the chart. */}
   <div class="flex flex-col">
     <h1 class="mb-3 font-heading text-3xl font-bold text-ink sm:text-4xl md:mb-2">{t("home.h1")}</h1>
+    <div class="md:order-2">
+      <SheetViewer client:load items={items} machine={machine} locale={locale} />
+    </div>
     <p
-      class="text-body max-md:order-last max-md:mt-6 md:mb-6"
+      class="mt-6 text-body md:order-1 md:mt-0 md:mb-6"
       set:html={richText(t("home.intro"))}
     />
-    <SheetViewer client:load items={items} machine={machine} locale={locale} />
   </div>
 </Layout>
