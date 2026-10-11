@@ -23,6 +23,7 @@
  */
 import { mkdir } from "node:fs/promises";
 import { type Browser, chromium, type Page } from "@playwright/test";
+import sharp from "sharp";
 import { DOCS_LOCALES, type Locale, relativeLocaleUrl } from "../src/i18n/locales";
 import { translator } from "../src/i18n/ui";
 import { BASE_URL, waitForHydration, withBuiltSite } from "./capture-support";
@@ -88,7 +89,12 @@ async function shoot(
   colorScheme: (typeof COLOR_SCHEMES)[number],
   locale: Locale,
 ) {
-  const page = await browser.newPage({ viewport: shot.viewport, colorScheme });
+  // 2x: Lighthouse's image-size-responsive wants pixels for dense screens.
+  const page = await browser.newPage({
+    viewport: shot.viewport,
+    colorScheme,
+    deviceScaleFactor: 2,
+  });
   const t = translator(locale);
   await page.goto(`${BASE_URL}${relativeLocaleUrl(locale, shot.path)}`);
   await waitForHydration(page);
@@ -96,7 +102,10 @@ async function shoot(
   const stem = shot.file.replace(/\.png$/, "");
   const dir = locale === "en" ? MEDIA_DIR : new URL(`${locale}/`, MEDIA_DIR);
   await mkdir(dir, { recursive: true });
-  await page.screenshot({ path: new URL(`${stem}-${colorScheme}.png`, dir).pathname });
+  const png = await page.screenshot();
+  await sharp(png)
+    .webp({ quality: 80 })
+    .toFile(new URL(`${stem}-${colorScheme}.webp`, dir).pathname);
   await page.close();
 }
 

@@ -34,8 +34,8 @@ boxed-in jive.
 now — boxed-in or your own — back out as that same JSON shape you'd be uploadin'. That's
 your round trip for fixin' up a copy someplace else, or slidin' your jive to some other cat.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/jive/config-chart-cards-light.png" alt="The config page, Jack: a look-don't-touch machine rundown, upload/download switches, and every pile struttin' as its own fixable card" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/jive/config-chart-cards-dark.png" alt="The config page, Jack: a look-don't-touch machine rundown, upload/download switches, and every pile struttin' as its own fixable card" />
+<img class="theme-shot" data-variant="light" src="/docs/media/jive/config-chart-cards-light.webp" alt="The config page, Jack: a look-don't-touch machine rundown, upload/download switches, and every pile struttin' as its own fixable card" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/jive/config-chart-cards-dark.webp" alt="The config page, Jack: a look-don't-touch machine rundown, upload/download switches, and every pile struttin' as its own fixable card" />
 
 ## The Light 'n Dark Switch
 
@@ -85,8 +85,8 @@ filtered look is also somethin' ya can pass along: the address bar's totin' `cut
 packin' one of them wins straight-out over whatever got saved from the last time through
 — check Sharin' the Jive down below for the button that hands that URL off.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-filters-light.png" alt="The Filters panel thrown wide open, washin'-only picked out" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-filters-dark.png" alt="The Filters panel thrown wide open, washin'-only picked out" />
+<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-filters-light.webp" alt="The Filters panel thrown wide open, washin'-only picked out" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-filters-dark.webp" alt="The Filters panel thrown wide open, washin'-only picked out" />
 
 ## Sharin' the Jive
 
@@ -134,8 +134,8 @@ It's phone format only, dig — the print layout always draws up the whole refer
 plus every pile's card, so ain't no way to scope it down to just the one pile the way the
 phone format can.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-pdf-download-light.png" alt="A single card's own Download and Copy link buttons, right there for the takin'" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-pdf-download-dark.png" alt="A single card's own Download and Copy link buttons, right there for the takin'" />
+<img class="theme-shot" data-variant="light" src="/docs/media/jive/sheet-pdf-download-light.webp" alt="A single card's own Download and Copy link buttons, right there for the takin'" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/jive/sheet-pdf-download-dark.webp" alt="A single card's own Download and Copy link buttons, right there for the takin'" />
 
 **Copy link**, sittin' right next to a card's download button, lays that filtered view's
 URL down on your clipboard — same clipboard fallback the page-level Share button up

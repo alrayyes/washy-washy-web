@@ -64,8 +64,8 @@ De web app's own
 be writin' dis same shape — shufflin' de programme list up in there do
 exactly what shufflin' de JSON array would, no jive:
 
-<img class="theme-shot" data-variant="light" src="/docs/media/jive/machine-editor-light.png" alt="De machine editor's spin speeds, buttons 'n iron settings table, laid out solid" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/jive/machine-editor-dark.png" alt="De machine editor's spin speeds, buttons 'n iron settings table, laid out solid" />
+<img class="theme-shot" data-variant="light" src="/docs/media/jive/machine-editor-light.webp" alt="De machine editor's spin speeds, buttons 'n iron settings table, laid out solid" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/jive/machine-editor-dark.webp" alt="De machine editor's spin speeds, buttons 'n iron settings table, laid out solid" />
 
 ```json
 {

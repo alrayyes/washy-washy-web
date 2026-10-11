@@ -12,8 +12,8 @@ product line — that reads the same chart and machine description and
 renders it as a PDF instead. This page covers the web platform only; the
 CLI has its own README for installing and running it.
 
-<img class="theme-shot" data-variant="light" src="/docs/media/linkedin/sheet-overview-light.png" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-overview-dark.png" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" src="/docs/media/linkedin/sheet-overview-light.webp" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
+<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-overview-dark.webp" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
 
 Here's where to start, depending on what you're trying to unlock:
 
