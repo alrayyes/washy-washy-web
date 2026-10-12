@@ -215,6 +215,8 @@ export interface Ui {
   "config.chartHeading": string;
   "config.chartEditHelp": string;
   "config.sortBy": string;
+  /** "Show more piles ({shown} of {total} shown)" — the button under the chart cards. */
+  "config.showMore": string;
   "config.chartOrder": string;
   "config.ironedLabel": string;
   "config.ironingNotesAriaLabel": string;
@@ -474,6 +476,7 @@ const en: Ui = {
   "config.chartEditHelp":
     "Every field is editable. Save checks each row against the machine above, the same way an upload does — an unknown value is called out by row and column, not silently accepted.",
   "config.sortBy": "Sort by",
+  "config.showMore": "Show more piles ({shown} of {total} shown)",
   "config.chartOrder": "Chart order",
   "config.ironedLabel": "IRONED",
   "config.ironingNotesAriaLabel": "Ironing notes",
@@ -724,6 +727,7 @@ const ja: Ui = {
   "config.chartEditHelp":
     "すべての項目を編集できます。保存時には、アップロード時と同様に各行を上の洗濯機の設定と照合します — 不明な値は黙って受け入れられず、行と列で指摘されます。",
   "config.sortBy": "並べ替え",
+  "config.showMore": "さらに表示（{total} 件中 {shown} 件を表示中）",
   "config.chartOrder": "チャート順",
   "config.ironedLabel": "アイロン済み",
   "config.ironingNotesAriaLabel": "アイロンメモ",
@@ -973,6 +977,7 @@ const es: Ui = {
   "config.chartEditHelp":
     "Todos los campos son editables. Al guardar se comprueba cada fila contra la máquina de arriba, igual que al subir un archivo — un valor desconocido se señala por fila y columna, no se acepta en silencio.",
   "config.sortBy": "Ordenar por",
+  "config.showMore": "Mostrar más montones (se muestran {shown} de {total})",
   "config.chartOrder": "Orden de la tabla",
   "config.ironedLabel": "PLANCHADO",
   "config.ironingNotesAriaLabel": "Notas de planchado",
@@ -1225,6 +1230,7 @@ const de: Ui = {
   "config.chartEditHelp":
     "Jedes Feld ist bearbeitbar. Beim Speichern wird jede Zeile gegen die Maschine oben geprüft, genau wie bei einem Upload – ein unbekannter Wert wird nach Zeile und Spalte benannt, nicht stillschweigend akzeptiert.",
   "config.sortBy": "Sortieren nach",
+  "config.showMore": "Mehr Stapel anzeigen ({shown} von {total} angezeigt)",
   "config.chartOrder": "Tabellenreihenfolge",
   "config.ironedLabel": "GEBÜGELT",
   "config.ironingNotesAriaLabel": "Bügelhinweise",
@@ -1478,6 +1484,7 @@ const fr: Ui = {
   "config.chartEditHelp":
     "Chaque champ est modifiable. L'enregistrement vérifie chaque ligne par rapport à la machine ci-dessus, comme le ferait un import — une valeur inconnue est signalée par ligne et colonne, jamais acceptée en silence.",
   "config.sortBy": "Trier par",
+  "config.showMore": "Afficher plus de piles ({shown} sur {total} affichées)",
   "config.chartOrder": "Ordre du tableau",
   "config.ironedLabel": "REPASSÉ",
   "config.ironingNotesAriaLabel": "Notes de repassage",
@@ -1722,6 +1729,7 @@ const ar: Ui = {
   "config.chartEditHelp":
     "كل حقل قابل للتعديل. يتحقق الحفظ من كل صف مقابل الغسالة أعلاه، تمامًا كما يفعل الرفع — أي قيمة غير معروفة يُشار إليها بالصف والعمود، لا أن تُقبل بصمت.",
   "config.sortBy": "الترتيب حسب",
+  "config.showMore": "عرض المزيد من الأكوام (عرض {shown} من {total})",
   "config.chartOrder": "ترتيب الجدول",
   "config.ironedLabel": "مكوي",
   "config.ironingNotesAriaLabel": "ملاحظات الكي",
@@ -1953,6 +1961,7 @@ const zh: Ui = {
   "config.chartEditHelp":
     "每个字段都可编辑。保存时会像上传一样，对照上方的机器设置逐行检查——未知的值会按行和列具体指出，而不会被默默接受。",
   "config.sortBy": "排序方式",
+  "config.showMore": "显示更多衣物堆（已显示 {shown}/{total}）",
   "config.chartOrder": "图表顺序",
   "config.ironedLabel": "已熨烫",
   "config.ironingNotesAriaLabel": "熨烫备注",
@@ -2191,6 +2200,7 @@ const tr: Ui = {
   "config.chartEditHelp":
     "Her alan düzenlenebilir. Kaydetmek, bir yüklemenin yaptığı gibi her satırı yukarıdaki makineye göre denetler — bilinmeyen bir değer sessizce kabul edilmez, satır ve sütun belirtilerek bildirilir.",
   "config.sortBy": "Sıralama ölçütü",
+  "config.showMore": "Daha fazla yığın göster ({total} içinden {shown} gösteriliyor)",
   "config.chartOrder": "Tablo sırası",
   "config.ironedLabel": "ÜTÜLENDİ",
   "config.ironingNotesAriaLabel": "Ütüleme notları",
@@ -2437,6 +2447,7 @@ const jive: Ui = {
   "config.chartEditHelp":
     "Every field's yours to tinker wit'. Savin' checks each row against da machine up top, same as an upload do — a value it don't recognize gets called out by row and column, ain't slippin' through quiet, chump.",
   "config.sortBy": "Sort by",
+  "config.showMore": "Show mo' piles ({shown} of {total} showin')",
   "config.chartOrder": "Chart order",
   "config.ironedLabel": "IRONED",
   "config.ironingNotesAriaLabel": "Ironin' notes",
@@ -2689,6 +2700,7 @@ const linkedin: Ui = {
   "config.chartEditHelp":
     "Every field is editable. Shipping checks each row against the org above, the same way onboarding does — an unrecognized value gets called out by row and column, never silently accepted. Radical transparency.",
   "config.sortBy": "Sort by",
+  "config.showMore": "Show more deliverables ({shown} of {total} shown)",
   "config.chartOrder": "Roadmap order",
   "config.ironedLabel": "ALIGNED",
   "config.ironingNotesAriaLabel": "Alignment notes",
@@ -2940,6 +2952,7 @@ const ru: Ui = {
   "config.chartEditHelp":
     "Каждое поле можно редактировать. При сохранении каждая строка проверяется по машине выше, так же как и при загрузке файла — неизвестное значение указывается по строке и столбцу, а не принимается молча.",
   "config.sortBy": "Сортировать по",
+  "config.showMore": "Показать больше стопок (показано {shown} из {total})",
   "config.chartOrder": "Порядок в таблице",
   "config.ironedLabel": "ГЛАЖЕНО",
   "config.ironingNotesAriaLabel": "Заметки о глажке",

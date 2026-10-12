@@ -46,9 +46,10 @@ import {
   RowError,
   rowsFromInstructions,
 } from "@washy-washy/core/browser";
-import { onMount } from "svelte";
+import { onMount, tick } from "svelte";
 import { type Locale, relativeLocaleUrl } from "../i18n/locales";
 import { translator } from "../i18n/ui";
+import { CONFIG_CARD_BATCH } from "../lib/configCards";
 import {
   clearCustomConfig,
   readCustomConfig,
@@ -146,6 +147,28 @@ let sortedIndices = $derived.by(() => {
 });
 let displayRows = $derived(sortedIndices.map((i) => draftRows[i]));
 
+// Only the first batch of cards is in the DOM (#348): they're all open (#302),
+// so each is ~145 elements and the full chart blows Lighthouse's DOM budget.
+// The cut is a prefix of the *sorted* order, so sorting keeps the count and
+// an index into `visibleRows` is still an index into `sortedIndices`. Save
+// validates `draftRows`, not what's drawn, so hidden rows are still checked.
+let visibleCount = $state(CONFIG_CARD_BATCH);
+let visibleRows = $derived(displayRows.slice(0, visibleCount));
+let root = $state<HTMLElement>();
+
+async function showMoreCards() {
+  const firstNew = visibleCount;
+  visibleCount += CONFIG_CARD_BATCH;
+  await tick();
+  // The button is removed once everything is shown, so hand focus to the
+  // first card that just appeared rather than dropping it on <body>.
+  root
+    ?.querySelectorAll<HTMLInputElement>(
+      '[data-testid="chart-cards"] > article input[name="clothing_type"]',
+    )
+    [firstNew]?.focus();
+}
+
 function handleSave() {
   try {
     // instructionsFromRows doesn't validate duration at all — it's free
@@ -182,6 +205,7 @@ function handleUpload(event: Event) {
     .then((config) => {
       customConfig = config;
       draftRows = rowsFromInstructions(config.chart);
+      visibleCount = CONFIG_CARD_BATCH;
       uploadError = null;
     })
     .catch((reason) => {
@@ -193,6 +217,7 @@ function handleClear() {
   clearCustomConfig();
   customConfig = null;
   draftRows = rowsFromInstructions(bundledItems);
+  visibleCount = CONFIG_CARD_BATCH;
   saveError = null;
   uploadError = null;
 }
@@ -689,7 +714,7 @@ function handleClear() {
   </div>
 {/snippet}
 
-<div data-hydrated={hydrated}>
+<div data-hydrated={hydrated} bind:this={root}>
   <p class="mb-1 text-sm text-body">
     {customConfig ? t("common.showingOwnConfig") : t("config.showingBundledConfig")}
   </p>
@@ -754,9 +779,21 @@ function handleClear() {
         {/each}
       </div>
     </div>
-    {@render chartCards(displayRows, activeConfig.machine, (index, key, value) =>
+    {@render chartCards(visibleRows, activeConfig.machine, (index, key, value) =>
       handleCellChange(sortedIndices[index], key, value),
     )}
+    {#if visibleCount < displayRows.length}
+      <div class="mt-3">
+        <button
+          type="button"
+          class={BUTTON_SECONDARY}
+          data-testid="show-more-cards"
+          onclick={showMoreCards}
+        >
+          {t("config.showMore", { shown: visibleCount, total: displayRows.length })}
+        </button>
+      </div>
+    {/if}
     <div class="mt-3 flex flex-wrap items-center gap-3">
       <button type="button" class={BUTTON_PRIMARY} onclick={handleSave}>
         {t("common.saveChanges")}
