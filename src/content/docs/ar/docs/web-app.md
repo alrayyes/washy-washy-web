@@ -17,8 +17,8 @@ description: عوامل التصفية في الصفحة الرئيسية، وم
 
 تحتوي `/config` أيضًا على رابط تنزيل، يكتب الإعداد النشط حاليًا — سواء كان مرفقًا أو مخصّصًا — على هيئة ملف JSON بالشكل نفسه الذي كنت سترفعه. وهذه هي الرحلة الكاملة ذهابًا وإيابًا لتعديل نسخة في مكان آخر، أو لتسليم إعدادك لشخص آخر.
 
-<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ar/config-chart-cards-light.webp" alt="صفحة الإعداد: ملخص للجهاز للقراءة فقط، وعناصر تحكم للرفع والتنزيل، وكل كومة كبطاقة قابلة للتعديل" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/ar/config-chart-cards-dark.webp" alt="صفحة الإعداد: ملخص للجهاز للقراءة فقط، وعناصر تحكم للرفع والتنزيل، وكل كومة كبطاقة قابلة للتعديل" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ar/config-chart-cards-light-1x.webp" srcset="/docs/media/ar/config-chart-cards-light-1x.webp 1x, /docs/media/ar/config-chart-cards-light.webp 2x" alt="صفحة الإعداد: ملخص للجهاز للقراءة فقط، وعناصر تحكم للرفع والتنزيل، وكل كومة كبطاقة قابلة للتعديل" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/ar/config-chart-cards-dark-1x.webp" srcset="/docs/media/ar/config-chart-cards-dark-1x.webp 1x, /docs/media/ar/config-chart-cards-dark.webp 2x" alt="صفحة الإعداد: ملخص للجهاز للقراءة فقط، وعناصر تحكم للرفع والتنزيل، وكل كومة كبطاقة قابلة للتعديل" />
 
 ## مبدّل المظهر
 
@@ -48,8 +48,8 @@ description: عوامل التصفية في الصفحة الرئيسية، وم
 
 تبقى عوامل التصفية محفوظة في `localStorage` بين الزيارات، بنفس طريقة الإعداد. كما يمكن مشاركة العرض المُصفَّى: يحمل شريط العنوان `cut` و`pile` و`program` و`temperature` و`spin` و`detergent` كمعاملات استعلام، وأي رابط يحمل أيًا منها يتغلّب تمامًا على ما كان محفوظًا من زيارة سابقة — انظر قسم "المشاركة" أدناه لمعرفة الزر الذي يُرسل هذا الرابط.
 
-<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ar/sheet-filters-light.webp" alt="لوحة عوامل التصفية مفتوحة، مع اختيار الغسيل فقط" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ar/sheet-filters-dark.webp" alt="لوحة عوامل التصفية مفتوحة، مع اختيار الغسيل فقط" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ar/sheet-filters-light-1x.webp" srcset="/docs/media/ar/sheet-filters-light-1x.webp 1x, /docs/media/ar/sheet-filters-light.webp 2x" alt="لوحة عوامل التصفية مفتوحة، مع اختيار الغسيل فقط" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ar/sheet-filters-dark-1x.webp" srcset="/docs/media/ar/sheet-filters-dark-1x.webp 1x, /docs/media/ar/sheet-filters-dark.webp 2x" alt="لوحة عوامل التصفية مفتوحة، مع اختيار الغسيل فقط" />
 
 ## المشاركة
 
@@ -68,7 +68,7 @@ description: عوامل التصفية في الصفحة الرئيسية، وم
 
 تحتوي البطاقة الواحدة أيضًا على زر **تنزيل** خاص بها، لكومة واحدة في كل مرة. وهو بصيغة الهاتف فقط — إذ يرسم تخطيط الطباعة دائمًا الجدول المرجعي كاملاً إضافة إلى بطاقة كل كومة، فلا توجد طريقة لحصره في كومة واحدة فقط كما تفعل صيغة الهاتف.
 
-<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ar/sheet-pdf-download-light.webp" alt="زرا التنزيل ونسخ الرابط الخاصان ببطاقة واحدة" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ar/sheet-pdf-download-dark.webp" alt="زرا التنزيل ونسخ الرابط الخاصان ببطاقة واحدة" />
+<img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ar/sheet-pdf-download-light-1x.webp" srcset="/docs/media/ar/sheet-pdf-download-light-1x.webp 1x, /docs/media/ar/sheet-pdf-download-light.webp 2x" alt="زرا التنزيل ونسخ الرابط الخاصان ببطاقة واحدة" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ar/sheet-pdf-download-dark-1x.webp" srcset="/docs/media/ar/sheet-pdf-download-dark-1x.webp 1x, /docs/media/ar/sheet-pdf-download-dark.webp 2x" alt="زرا التنزيل ونسخ الرابط الخاصان ببطاقة واحدة" />
 
 **نسخ الرابط**، بجانب زر تنزيل البطاقة، يضع رابط ذلك العرض المُصفَّى في حافظتك — وهو نفس أسلوب النسخ الاحتياطي إلى الحافظة الذي يستخدمه زر المشاركة على مستوى الصفحة أعلاه، لكن مقتصرًا على بطاقة واحدة.

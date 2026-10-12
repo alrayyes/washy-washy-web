@@ -10,8 +10,8 @@ reads the same chart and machine description and renders it as a PDF instead
 — this site covers the web app only; the CLI has its own README for
 installing and running it.
 
-<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/sheet-overview-light.webp" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/sheet-overview-dark.webp" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/sheet-overview-light-1x.webp" srcset="/docs/media/sheet-overview-light-1x.webp 1x, /docs/media/sheet-overview-light.webp 2x" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/sheet-overview-dark-1x.webp" srcset="/docs/media/sheet-overview-dark-1x.webp 1x, /docs/media/sheet-overview-dark.webp 2x" alt="The front page: a laundry chart with cut and pile filters, and a button to download the whole sheet as a PDF" />
 
 Start with whichever matches what you're trying to do:
 

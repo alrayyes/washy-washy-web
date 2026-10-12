@@ -63,8 +63,8 @@ El propio editor [`/config/machine`](https://washy-washy.ryankes.eu/config/machi
 de la aplicación web escribe esta misma forma — reordenar ahí la lista de
 programas hace exactamente lo mismo que reordenar el array JSON:
 
-<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/es/machine-editor-light.webp" alt="La tabla de velocidades de centrifugado, botones y ajustes de plancha del editor de máquina" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/es/machine-editor-dark.webp" alt="La tabla de velocidades de centrifugado, botones y ajustes de plancha del editor de máquina" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/es/machine-editor-light-1x.webp" srcset="/docs/media/es/machine-editor-light-1x.webp 1x, /docs/media/es/machine-editor-light.webp 2x" alt="La tabla de velocidades de centrifugado, botones y ajustes de plancha del editor de máquina" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/es/machine-editor-dark-1x.webp" srcset="/docs/media/es/machine-editor-dark-1x.webp 1x, /docs/media/es/machine-editor-dark.webp 2x" alt="La tabla de velocidades de centrifugado, botones y ajustes de plancha del editor de máquina" />
 
 ```json
 {

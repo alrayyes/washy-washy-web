@@ -10,8 +10,8 @@ séparé lit la même grille et la même description de machine et les rend en
 PDF à la place — ce site ne couvre que l'application web ; le CLI a son
 propre README pour l'installer et le lancer.
 
-<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/fr/sheet-overview-light.webp" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/fr/sheet-overview-dark.webp" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/fr/sheet-overview-light-1x.webp" srcset="/docs/media/fr/sheet-overview-light-1x.webp 1x, /docs/media/fr/sheet-overview-light.webp 2x" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/fr/sheet-overview-dark-1x.webp" srcset="/docs/media/fr/sheet-overview-dark-1x.webp 1x, /docs/media/fr/sheet-overview-dark.webp 2x" alt="La page d'accueil : une grille de lavage avec des filtres de coupe et de tas, et un bouton pour télécharger toute la feuille en PDF" />
 
 Commence par celle qui correspond à ce que tu veux faire :
 
