@@ -39,7 +39,7 @@ JSON-формате, который вы бы загрузили. Это спо�
 другом месте или передать вашу конфигурацию кому-то ещё.
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ru/config-chart-cards-light.webp" alt="Страница конфигурации: сводка машины только для чтения, элементы управления загрузкой/скачиванием и каждая стопка в виде редактируемой карточки" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/ru/config-chart-cards-dark.webp" alt="Страница конфигурации: сводка машины только для чтения, элементы управления загрузкой/скачиванием и каждая стопка в виде редактируемой карточки" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/ru/config-chart-cards-dark.webp" alt="Страница конфигурации: сводка машины только для чтения, элементы управления загрузкой/скачиванием и каждая стопка в виде редактируемой карточки" />
 
 ## Переключатель темы
 
@@ -95,7 +95,7 @@ JSON-формате, который вы бы загрузили. Это спо�
 «Поделиться» ниже про кнопку, которая передаёт этот URL.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ru/sheet-filters-light.webp" alt="Открытая панель «Фильтры» с выбранным вариантом «только стирка»" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/ru/sheet-filters-dark.webp" alt="Открытая панель «Фильтры» с выбранным вариантом «только стирка»" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ru/sheet-filters-dark.webp" alt="Открытая панель «Фильтры» с выбранным вариантом «только стирка»" />
 
 ## Поделиться
 
@@ -152,7 +152,7 @@ JSON-формате, который вы бы загрузили. Это спо�
 поэтому ограничить его одной стопкой, как в телефонном формате, нельзя.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/ru/sheet-pdf-download-light.webp" alt="Собственные кнопки скачивания и копирования ссылки отдельной карточки" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/ru/sheet-pdf-download-dark.webp" alt="Собственные кнопки скачивания и копирования ссылки отдельной карточки" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ru/sheet-pdf-download-dark.webp" alt="Собственные кнопки скачивания и копирования ссылки отдельной карточки" />
 
 **Copy link**, рядом с кнопкой скачивания карточки, помещает URL этого
 отфильтрованного вида в буфер обмена — тот же резервный способ через

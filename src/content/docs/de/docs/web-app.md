@@ -40,7 +40,7 @@ Kopie zu bearbeiten oder deine Konfiguration an jemand anderen
 weiterzugeben.
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/de/config-chart-cards-light.webp" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/de/config-chart-cards-dark.webp" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/de/config-chart-cards-dark.webp" alt="Die Konfigurationsseite: schreibgeschützte Maschinenübersicht, Upload/Download-Steuerelemente und jeder Stapel als bearbeitbare Karte" />
 
 ## Theme-Umschalter
 
@@ -97,7 +97,7 @@ uneingeschränkt gegenüber allem, was von einem früheren Besuch gespeichert
 war — siehe „Teilen" weiter unten für den Button, der diese URL weitergibt.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/de/sheet-filters-light.webp" alt="Das geöffnete Filter-Panel mit ausgewählter Option 'nur Waschen'" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/de/sheet-filters-dark.webp" alt="Das geöffnete Filter-Panel mit ausgewählter Option 'nur Waschen'" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/de/sheet-filters-dark.webp" alt="Das geöffnete Filter-Panel mit ausgewählter Option 'nur Waschen'" />
 
 ## Teilen
 
@@ -156,7 +156,7 @@ sodass es sich nicht wie beim Handy-Format auf nur einen Stapel eingrenzen
 lässt.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/de/sheet-pdf-download-light.webp" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/de/sheet-pdf-download-dark.webp" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/de/sheet-pdf-download-dark.webp" alt="Die eigenen Download- und Copy-link-Buttons einer einzelnen Karte" />
 
 **Copy link**, neben dem Download-Button einer Karte, legt die URL dieser
 gefilterten Ansicht in deine Zwischenablage — derselbe

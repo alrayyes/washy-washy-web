@@ -62,7 +62,7 @@ editor writes this same shape — reordering the programme list there does
 exactly what reordering the JSON array would:
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/machine-editor-light.webp" alt="The machine editor's spin speeds, buttons and iron settings table" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/machine-editor-dark.webp" alt="The machine editor's spin speeds, buttons and iron settings table" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/machine-editor-dark.webp" alt="The machine editor's spin speeds, buttons and iron settings table" />
 
 ```json
 {

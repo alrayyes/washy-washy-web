@@ -38,7 +38,7 @@ ailleurs sur une copie, ou pour transmettre ta configuration à quelqu'un
 d'autre.
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/fr/config-chart-cards-light.webp" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/fr/config-chart-cards-dark.webp" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/fr/config-chart-cards-dark.webp" alt="La page de configuration : résumé de la machine en lecture seule, contrôles d'import/export, et chaque tas sous forme de carte modifiable" />
 
 ## Bascule de thème
 
@@ -95,7 +95,7 @@ avait été enregistré lors d'une visite précédente — voir Partager ci-dess
 pour le bouton qui transmet cette URL.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/fr/sheet-filters-light.webp" alt="Le panneau Filtres ouvert, avec lavage seulement sélectionné" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/fr/sheet-filters-dark.webp" alt="Le panneau Filtres ouvert, avec lavage seulement sélectionné" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/fr/sheet-filters-dark.webp" alt="Le panneau Filtres ouvert, avec lavage seulement sélectionné" />
 
 ## Partager
 
@@ -153,7 +153,7 @@ chaque tas, donc il n'y a aucun moyen de la limiter à un seul tas comme le
 permet le format téléphone.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/fr/sheet-pdf-download-light.webp" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/fr/sheet-pdf-download-dark.webp" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/fr/sheet-pdf-download-dark.webp" alt="Les boutons Télécharger et Copier le lien propres à une seule carte" />
 
 **Copier le lien**, à côté du bouton de téléchargement d'une carte, met
 l'URL de cette vue filtrée dans ton presse-papiers — le même repli vers le

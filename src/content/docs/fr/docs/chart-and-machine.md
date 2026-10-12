@@ -65,7 +65,7 @@ des programmes là-bas fait exactement ce que réordonner le tableau JSON
 ferait :
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/fr/machine-editor-light.webp" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/fr/machine-editor-dark.webp" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/fr/machine-editor-dark.webp" alt="Le tableau des vitesses d'essorage, boutons et réglages du fer dans l'éditeur de machine" />
 
 ```json
 {

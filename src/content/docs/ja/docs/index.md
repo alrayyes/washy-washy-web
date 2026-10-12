@@ -6,7 +6,7 @@ description: 自分の洗濯物チャートを作り、ウェブアプリのフ�
 Washy washy は洗濯表示を、洗濯機の前に立ったまま実際に読めるものに変えます。スマホ向けのページで、生地の種類と量ごとに絞り込みができます。別の[CLI](https://github.com/alrayyes/washy-washy-cli)が同じチャートと洗濯機の記述を読み込み、PDFとして出力します — このサイトが扱うのはウェブアプリのみです。CLIのインストールと実行方法は、CLI自身のREADMEにあります。
 
 <img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/ja/sheet-overview-light.webp" alt="トップページ：カットと量のフィルター付きの洗濯チャート、シート全体をPDFでダウンロードするボタン" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/ja/sheet-overview-dark.webp" alt="トップページ：カットと量のフィルター付きの洗濯チャート、シート全体をPDFでダウンロードするボタン" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ja/sheet-overview-dark.webp" alt="トップページ：カットと量のフィルター付きの洗濯チャート、シート全体をPDFでダウンロードするボタン" />
 
 やりたいことに合わせて、以下から選んでください。
 
