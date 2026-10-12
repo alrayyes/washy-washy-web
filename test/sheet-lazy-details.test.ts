@@ -92,4 +92,9 @@ describe("card details (mounted)", () => {
     await setOpen(0, false);
     expect(hasBody(0)).toBe(true);
   });
+
+  test("a toggle on a card that is still closed renders nothing", async () => {
+    await setOpen(0, false);
+    expect(hasBody(0)).toBe(false);
+  });
 });
