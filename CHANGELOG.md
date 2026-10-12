@@ -1,3 +1,9 @@
+## [1.53.6](https://github.com/alrayyes/washy-washy-web/compare/v1.53.5...v1.53.6) (2026-10-12)
+
+### Performance Improvements
+
+* **site:** render /config chart cards in batches behind a Show more button ([#352](https://github.com/alrayyes/washy-washy-web/issues/352)) ([fa7e4ca](https://github.com/alrayyes/washy-washy-web/commit/fa7e4cad0c11e9f536ee161cde53c135617edf5b)), closes [#302](https://github.com/alrayyes/washy-washy-web/issues/302) [#348](https://github.com/alrayyes/washy-washy-web/issues/348)
+
 ## [1.53.5](https://github.com/alrayyes/washy-washy-web/compare/v1.53.4...v1.53.5) (2026-10-12)
 
 ### Performance Improvements
