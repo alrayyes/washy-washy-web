@@ -37,7 +37,7 @@ onboard. That's the round trip for editing a copy elsewhere, or handing
 your config to a fellow founder.
 
 <img class="theme-shot" data-variant="light" src="/docs/media/linkedin/config-chart-cards-light.webp" alt="The config page: read-only machine summary, upload/download controls, and every pile as an editable card" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/config-chart-cards-dark.webp" alt="The config page: read-only machine summary, upload/download controls, and every pile as an editable card" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" src="/docs/media/linkedin/config-chart-cards-dark.webp" alt="The config page: read-only machine summary, upload/download controls, and every pile as an editable card" />
 
 ## Dark Mode: My Unpopular Opinion
 
@@ -93,7 +93,7 @@ saved from a previous session — see Share below for the button that hands
 that URL off.
 
 <img class="theme-shot" data-variant="light" src="/docs/media/linkedin/sheet-filters-light.webp" alt="The Filters panel open, with washing-only selected" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-filters-dark.webp" alt="The Filters panel open, with washing-only selected" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" src="/docs/media/linkedin/sheet-filters-dark.webp" alt="The Filters panel open, with washing-only selected" />
 
 ## Share This Win
 
@@ -148,7 +148,7 @@ reference table plus every deliverable's card, so there's no way to scope
 it down to just one the way the mobile format can.
 
 <img class="theme-shot" data-variant="light" src="/docs/media/linkedin/sheet-pdf-download-light.webp" alt="A single card's own Download and Copy link buttons" />
-<img class="theme-shot" data-variant="dark" src="/docs/media/linkedin/sheet-pdf-download-dark.webp" alt="A single card's own Download and Copy link buttons" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" src="/docs/media/linkedin/sheet-pdf-download-dark.webp" alt="A single card's own Download and Copy link buttons" />
 
 **Copy link**, next to a card's export button, puts that filtered view's
 URL on your clipboard — the same clipboard fallback the page-level Share

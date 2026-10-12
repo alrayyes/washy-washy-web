@@ -37,7 +37,7 @@ indirme bağlantısı da bulunur. Bu, bir kopyayı başka bir yerde düzenlemeni
 ya da yapılandırmanızı başka birine vermenin gidiş-dönüş yoludur.
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/tr/config-chart-cards-light.webp" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/tr/config-chart-cards-dark.webp" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/tr/config-chart-cards-dark.webp" alt="Yapılandırma sayfası: salt okunur makine özeti, yükleme/indirme denetimleri ve düzenlenebilir kart olarak her yığın" />
 
 ## Tema değiştirici
 
@@ -91,7 +91,7 @@ olana kesin olarak üstün gelir — bu URL'yi paylaşan düğme için aşağıd
 Paylaşım bölümüne bakın.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/tr/sheet-filters-light.webp" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/tr/sheet-filters-dark.webp" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/tr/sheet-filters-dark.webp" alt="Filtreler paneli açık, yalnızca yıkama seçili" />
 
 ## Paylaşım
 
@@ -146,7 +146,7 @@ biçiminin yapabildiği gibi bunu tek bir yığına indirgemenin bir yolu
 yoktur.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/tr/sheet-pdf-download-light.webp" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/tr/sheet-pdf-download-dark.webp" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/tr/sheet-pdf-download-dark.webp" alt="Tek bir kartın kendi Download ve Copy link düğmeleri" />
 
 Bir kartın indirme düğmesinin yanındaki **Copy link**, o filtrelenmiş
 görünümün URL'sini panonuza koyar — yukarıdaki sayfa düzeyindeki Share

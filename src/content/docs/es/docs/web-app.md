@@ -38,7 +38,7 @@ editar una copia en otro sitio, o para pasarle tu configuración a otra
 persona.
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/es/config-chart-cards-light.webp" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/es/config-chart-cards-dark.webp" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/es/config-chart-cards-dark.webp" alt="La página de configuración: resumen de máquina de solo lectura, controles de subida/descarga, y cada montón como una tarjeta editable" />
 
 ## Alternar tema
 
@@ -94,7 +94,7 @@ ellos prevalece siempre sobre lo que se guardó de una visita anterior — ver
 Compartir más abajo para el botón que entrega esa URL.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/es/sheet-filters-light.webp" alt="El panel Filtros abierto, con solo lavado seleccionado" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/es/sheet-filters-dark.webp" alt="El panel Filtros abierto, con solo lavado seleccionado" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/es/sheet-filters-dark.webp" alt="El panel Filtros abierto, con solo lavado seleccionado" />
 
 ## Compartir
 
@@ -151,7 +151,7 @@ no hay forma de acotarlo a un solo montón como sí puede hacer el formato
 móvil.
 
 <img class="theme-shot" data-variant="light" width="390" height="844" src="/docs/media/es/sheet-pdf-download-light.webp" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
-<img class="theme-shot" data-variant="dark" width="390" height="844" src="/docs/media/es/sheet-pdf-download-dark.webp" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/es/sheet-pdf-download-dark.webp" alt="Los botones propios de Download y Copy link de una sola tarjeta" />
 
 **Copy link**, junto al botón de descarga de una tarjeta, pone la URL de
 esa vista filtrada en tu portapapeles — el mismo recurso de portapapeles

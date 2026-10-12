@@ -65,7 +65,7 @@ description: Каждое поле вашей таблицы стирки, ка�
 ровно тот же результат, что и изменение порядка в JSON-массиве:
 
 <img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/ru/machine-editor-light.webp" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
-<img class="theme-shot" data-variant="dark" width="1280" height="800" src="/docs/media/ru/machine-editor-dark.webp" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/ru/machine-editor-dark.webp" alt="Таблица скоростей отжима, кнопок и настроек утюга в редакторе машины" />
 
 ```json
 {
