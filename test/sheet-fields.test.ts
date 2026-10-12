@@ -307,7 +307,7 @@ const raw: Instruction[] = [
 const items = resolve(raw);
 
 function render(variant: "full" | "wash" | "iron" = "full"): string {
-  return ssr(Sheet, { items, machine, variant, t: translate });
+  return ssr(Sheet, { items, machine, variant, t: translate, eager: true });
 }
 
 describe("Masthead", () => {
@@ -370,7 +370,13 @@ describe("Loads", () => {
 describe("Legend", () => {
   test("falls back to the only programme as its own example when there's just one", () => {
     const oneProgram: Machine = { ...machine, washer: { ...machine.washer, programs: ["Solo"] } };
-    const html = ssr(Sheet, { items, machine: oneProgram, variant: "full", t: translate });
+    const html = ssr(Sheet, {
+      items,
+      machine: oneProgram,
+      variant: "full",
+      t: translate,
+      eager: true,
+    });
 
     expect(html).toContain(t("sheet.legendWashExplain", { off: "Solo" }));
   });
@@ -423,8 +429,20 @@ describe("Legend", () => {
       iron: { ...machine.iron, settings: [] },
     };
 
-    const full = ssr(Sheet, { items, machine: bareMachine, variant: "full", t: translate });
-    const iron = ssr(Sheet, { items, machine: bareMachine, variant: "iron", t: translate });
+    const full = ssr(Sheet, {
+      items,
+      machine: bareMachine,
+      variant: "full",
+      t: translate,
+      eager: true,
+    });
+    const iron = ssr(Sheet, {
+      items,
+      machine: bareMachine,
+      variant: "iron",
+      t: translate,
+      eager: true,
+    });
 
     expect(full).toContain(t("sheet.legendWashExplain", { off: "" }));
     // Both dials fall back to their own defaults (index/position 0) rather
@@ -851,7 +869,13 @@ describe("ControlPanel / ChipRow", () => {
 
   test("falls back to an empty 'off' position when the washer has no programmes at all", () => {
     const noPrograms: Machine = { ...machine, washer: { ...machine.washer, programs: [] } };
-    const html = ssr(Sheet, { items, machine: noPrograms, variant: "full", t: translate });
+    const html = ssr(Sheet, {
+      items,
+      machine: noPrograms,
+      variant: "full",
+      t: translate,
+      eager: true,
+    });
 
     // The exact <p>, not a loose substring: a mutated, non-empty fallback
     // would still start with this same text, just with more after it.

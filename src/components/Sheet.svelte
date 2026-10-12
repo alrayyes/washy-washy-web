@@ -45,6 +45,7 @@ import {
   type ResolvedInstruction,
   type Variant,
 } from "@washy-washy/core/browser";
+import { SvelteSet } from "svelte/reactivity";
 import type { TranslationParams, Ui } from "../i18n/ui";
 import { CHART_CARD, CHART_CARD_HEADER, LINK } from "../lib/styles";
 import CardActions from "./CardActions.svelte";
@@ -65,6 +66,12 @@ interface Props {
    */
   onDownloadCard?: (group: ResolvedInstruction[]) => Promise<string[]>;
   onShareCard?: (group: ResolvedInstruction[]) => Promise<void>;
+  /**
+   * Render every card's Details body without waiting for it to be opened.
+   * Server-rendered tests can't open a `<details>`, so they set this to
+   * assert on the body; the site never does.
+   */
+  eager?: boolean;
 }
 
 /**
@@ -96,7 +103,12 @@ interface Props {
  * catches that class of bug: every unit test here renders once via
  * `svelte/server`, with no later update to observe.
  */
-let { items, machine, variant, t, onDownloadCard, onShareCard }: Props = $props();
+let { items, machine, variant, t, onDownloadCard, onShareCard, eager = false }: Props = $props();
+
+// A card's Details body is most of the page's DOM (#348), so it renders only
+// once that card's <details> has been opened, and stays rendered after that
+// so closing it again loses nothing. Keyed like the `{#each}` below.
+const opened = new SvelteSet<string>();
 
 let groups = $derived(sheetGroups(items, machine, variant));
 let loadGroupsList = $derived(loadGroups(items));
@@ -410,38 +422,46 @@ function alsoWithNames(
     <SectionHeading text={t("sheet.washHeading")} />
     {@render keySettings(item)}
 
-    <details data-testid="card-details" class="mt-3 border-t border-hairline">
+    <details
+      data-testid="card-details"
+      class="mt-3 border-t border-hairline"
+      ontoggle={(event) => {
+        if (event.currentTarget.open) opened.add(item.clothingType);
+      }}
+    >
       <summary
         class="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         {t("sheet.details")}
       </summary>
-      {@render controlPanel(item)}
+      {#if eager || opened.has(item.clothingType)}
+        {@render controlPanel(item)}
 
-      {@render splitField(t("common.detergent"), group, (member) => member.detergent)}
-      {@render field(
-        t("sheet.washTogetherWithLabel"),
-        group.length > 1 && together
-          ? alsoWith.length > 0
-            ? t("sheet.washTogetherEachOtherAnd", { names: alsoWith.join(", ") })
-            : t("sheet.washTogetherEachOther")
-          : group.length > 1
-            ? t("sheet.washSeparately")
-            : alsoWith.length > 0
-              ? alsoWith.join(", ")
-              : t("sheet.washAlone"),
-      )}
-      {@render splitField(t("sheet.dryingLabel"), group, (member) => member.drying)}
+        {@render splitField(t("common.detergent"), group, (member) => member.detergent)}
+        {@render field(
+          t("sheet.washTogetherWithLabel"),
+          group.length > 1 && together
+            ? alsoWith.length > 0
+              ? t("sheet.washTogetherEachOtherAnd", { names: alsoWith.join(", ") })
+              : t("sheet.washTogetherEachOther")
+            : group.length > 1
+              ? t("sheet.washSeparately")
+              : alsoWith.length > 0
+                ? alsoWith.join(", ")
+                : t("sheet.washAlone"),
+        )}
+        {@render splitField(t("sheet.dryingLabel"), group, (member) => member.drying)}
 
-      {#if variant !== "wash"}
-        <div class="mt-3">
-          <SectionHeading text={t("common.iron")} />
-          {@render ironPanel(group)}
-        </div>
+        {#if variant !== "wash"}
+          <div class="mt-3">
+            <SectionHeading text={t("common.iron")} />
+            {@render ironPanel(group)}
+          </div>
+        {/if}
+
+        {@render splitField(t("common.notes"), group, (member) => member.notes)}
+        {@render referenceField(group)}
       {/if}
-
-      {@render splitField(t("common.notes"), group, (member) => member.notes)}
-      {@render referenceField(group)}
     </details>
   </article>
 {/snippet}

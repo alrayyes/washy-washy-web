@@ -20,7 +20,7 @@ const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
 const items = resolve(instructions);
 
 function render(variant: Variant, chart: ResolvedInstruction[] = items): string {
-  return svelteRender(Sheet, { props: { items: chart, machine, variant, t } }).body;
+  return svelteRender(Sheet, { props: { items: chart, machine, variant, t, eager: true } }).body;
 }
 
 describe("Sheet", () => {
