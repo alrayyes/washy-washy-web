@@ -1,3 +1,9 @@
+## [1.53.4](https://github.com/alrayyes/washy-washy-web/compare/v1.53.3...v1.53.4) (2026-10-12)
+
+### Performance Improvements
+
+* **docs:** lazy-load the hidden dark-theme screenshot ([0cebb86](https://github.com/alrayyes/washy-washy-web/commit/0cebb860c56d33324b9bea5892f484da8f9614e9)), closes [#348](https://github.com/alrayyes/washy-washy-web/issues/348)
+
 ## [1.53.3](https://github.com/alrayyes/washy-washy-web/compare/v1.53.2...v1.53.3) (2026-10-11)
 
 ### Bug Fixes
