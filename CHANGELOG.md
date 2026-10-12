@@ -1,3 +1,10 @@
+## [1.53.5](https://github.com/alrayyes/washy-washy-web/compare/v1.53.4...v1.53.5) (2026-10-12)
+
+### Performance Improvements
+
+* **docs:** offer 1x and 2x screenshots through srcset ([1ffc3b1](https://github.com/alrayyes/washy-washy-web/commit/1ffc3b1c41a5f083911e5c030cd187148a507e87)), closes [#348](https://github.com/alrayyes/washy-washy-web/issues/348)
+* **site:** render a chart card's details body only once it is opened ([81e9a4d](https://github.com/alrayyes/washy-washy-web/commit/81e9a4db60dfd1d6cf4735e758a734f1df57192d)), closes [#348](https://github.com/alrayyes/washy-washy-web/issues/348)
+
 ## [1.53.4](https://github.com/alrayyes/washy-washy-web/compare/v1.53.3...v1.53.4) (2026-10-12)
 
 ### Performance Improvements
