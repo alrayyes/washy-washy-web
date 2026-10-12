@@ -10,6 +10,12 @@ async function goto(page: Page) {
   await page.waitForSelector('[data-hydrated="true"]');
 }
 
+/** Clicks "Show more" until every chart card is in the DOM (#348). */
+async function showAllCards(page: Page) {
+  const more = page.getByRole("button", { name: /Show more piles/ });
+  while ((await more.count()) > 0) await more.click();
+}
+
 /** The config page's own download link — the current active config, as `{ machine, chart }`. */
 async function downloadedConfig(page: Page) {
   const href = await page.locator('a[download="washy-washy.json"]').getAttribute("href");
@@ -107,6 +113,8 @@ test("sorting by pile reorders the cards, and an in-progress edit survives it", 
     .getByRole("radio", { name: "Pile" })
     .click();
 
+  // "Zzz..." sorts last, which is past the first batch of cards (#348).
+  await showAllCards(page);
   const names = await pileNames(page);
   expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
   // Sorting reorders the cards, it doesn't reset them — the edit above is
@@ -554,4 +562,48 @@ test("an uploaded config with a value the machine doesn't have names the row and
   await expect(page.getByRole("alert")).toContainText("99");
   // The bad upload never took: still the bundled config, not a half-applied one.
   await expect(page.getByText("Showing the bundled example config.")).toBeVisible();
+});
+
+test("the chart cards load in batches behind a keyboard-reachable Show more button (#348)", async ({
+  page,
+}) => {
+  // Three axe scans over a long page: slow under a parallel run.
+  test.slow();
+  await goto(page);
+
+  const cards = page.locator('[data-testid="chart-cards"] > article');
+  const total = (await downloadedConfig(page)).chart.length;
+  await expect(cards).toHaveCount(8);
+  // Lighthouse's dom-size budget: the whole page, not just the cards.
+  expect(await page.evaluate(() => document.querySelectorAll("*").length)).toBeLessThan(1400);
+
+  const more = page.getByRole("button", { name: `Show more piles (8 of ${total} shown)` });
+  await more.focus();
+  await expect(more).toBeFocused();
+  await expectNoA11yViolations(page);
+
+  await page.keyboard.press("Enter");
+  await expect(cards).toHaveCount(16);
+  await expect(cards.nth(8).locator('input[name="clothing_type"]')).toBeFocused();
+  await expectNoA11yViolations(page);
+
+  await page.getByRole("button", { name: /Show more piles/ }).click();
+  await expect(cards).toHaveCount(total);
+  await expect(page.getByRole("button", { name: /Show more piles/ })).toHaveCount(0);
+  await expectNoA11yViolations(page);
+});
+
+test("sorting keeps the revealed cards, in sorted order (#348)", async ({ page }) => {
+  await goto(page);
+
+  const cards = page.locator('[data-testid="chart-cards"] > article');
+  await page.getByRole("button", { name: /Show more piles/ }).click();
+  await page
+    .getByRole("radiogroup", { name: "Sort by" })
+    .getByRole("radio", { name: "Pile" })
+    .click();
+
+  await expect(cards).toHaveCount(16);
+  const names = await pileNames(page);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
 });
