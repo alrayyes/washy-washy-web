@@ -103,9 +103,13 @@ async function shoot(
   const dir = locale === "en" ? MEDIA_DIR : new URL(`${locale}/`, MEDIA_DIR);
   await mkdir(dir, { recursive: true });
   const png = await page.screenshot();
+  const out = new URL(`${stem}-${colorScheme}.webp`, dir).pathname;
+  await sharp(png).webp({ quality: 80 }).toFile(out);
+  // The 1x copy is the img's src; srcset offers the 2x one to dense screens.
   await sharp(png)
+    .resize({ width: shot.viewport.width })
     .webp({ quality: 80 })
-    .toFile(new URL(`${stem}-${colorScheme}.webp`, dir).pathname);
+    .toFile(out.replace(/\.webp$/, "-1x.webp"));
   await page.close();
 }
 

@@ -65,8 +65,8 @@ Der [`/config/machine`](https://washy-washy.ryankes.eu/config/machine/)-Editor
 der Web-App selbst schreibt genau diese Form — die Programmliste dort
 umzusortieren bewirkt genau dasselbe wie das Umsortieren des JSON-Arrays:
 
-<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/de/machine-editor-light.webp" alt="Die Tabelle mit Schleuderzahlen, Tasten und Bügeleinstellungen des Maschinen-Editors" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/de/machine-editor-dark.webp" alt="Die Tabelle mit Schleuderzahlen, Tasten und Bügeleinstellungen des Maschinen-Editors" />
+<img class="theme-shot" data-variant="light" width="1280" height="800" src="/docs/media/de/machine-editor-light-1x.webp" srcset="/docs/media/de/machine-editor-light-1x.webp 1x, /docs/media/de/machine-editor-light.webp 2x" alt="Die Tabelle mit Schleuderzahlen, Tasten und Bügeleinstellungen des Maschinen-Editors" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="1280" height="800" src="/docs/media/de/machine-editor-dark-1x.webp" srcset="/docs/media/de/machine-editor-dark-1x.webp 1x, /docs/media/de/machine-editor-dark.webp 2x" alt="Die Tabelle mit Schleuderzahlen, Tasten und Bügeleinstellungen des Maschinen-Editors" />
 
 ```json
 {

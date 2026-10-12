@@ -11,8 +11,8 @@ Washy washy превращает таблицу стирки в то, что м�
 только веб-приложение; у CLI есть собственный README по установке и
 запуску.
 
-<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/ru/sheet-overview-light.webp" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ru/sheet-overview-dark.webp" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/ru/sheet-overview-light-1x.webp" srcset="/docs/media/ru/sheet-overview-light-1x.webp 1x, /docs/media/ru/sheet-overview-light.webp 2x" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/ru/sheet-overview-dark-1x.webp" srcset="/docs/media/ru/sheet-overview-dark-1x.webp 1x, /docs/media/ru/sheet-overview-dark.webp 2x" alt="Главная страница: таблица стирки с фильтрами по срезу и стопке, и кнопка для скачивания всего листа в виде PDF" />
 
 Начните с того, что подходит вашей задаче:
 

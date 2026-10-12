@@ -10,8 +10,8 @@ aparte lee la misma guía y descripción de máquina, y la convierte en un PDF
 en su lugar — este sitio cubre solo la aplicación web; la CLI tiene su
 propio README para instalarla y ejecutarla.
 
-<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/es/sheet-overview-light.webp" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/es/sheet-overview-dark.webp" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/es/sheet-overview-light-1x.webp" srcset="/docs/media/es/sheet-overview-light-1x.webp 1x, /docs/media/es/sheet-overview-light.webp 2x" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/es/sheet-overview-dark-1x.webp" srcset="/docs/media/es/sheet-overview-dark-1x.webp 1x, /docs/media/es/sheet-overview-dark.webp 2x" alt="La página principal: una guía de lavado con filtros de corte y montón, y un botón para descargar toda la hoja como PDF" />
 
 Empieza por lo que se ajuste a lo que quieres hacer:
 

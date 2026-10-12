@@ -66,8 +66,8 @@ The platform's own
 writes this same shape — reordering the strategy list there does exactly
 what reordering the JSON array would. No surprises, no scope creep:
 
-<img class="theme-shot" data-variant="light" src="/docs/media/linkedin/machine-editor-light.webp" alt="The machine editor's spin speeds, buttons and iron settings table" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" src="/docs/media/linkedin/machine-editor-dark.webp" alt="The machine editor's spin speeds, buttons and iron settings table" />
+<img class="theme-shot" data-variant="light" src="/docs/media/linkedin/machine-editor-light-1x.webp" srcset="/docs/media/linkedin/machine-editor-light-1x.webp 1x, /docs/media/linkedin/machine-editor-light.webp 2x" alt="The machine editor's spin speeds, buttons and iron settings table" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" src="/docs/media/linkedin/machine-editor-dark-1x.webp" srcset="/docs/media/linkedin/machine-editor-dark-1x.webp 1x, /docs/media/linkedin/machine-editor-dark.webp 2x" alt="The machine editor's spin speeds, buttons and iron settings table" />
 
 ```json
 {

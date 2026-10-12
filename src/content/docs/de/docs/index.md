@@ -11,8 +11,8 @@ und Maschinenbeschreibung und rendert sie stattdessen als PDF — diese Seite
 behandelt nur die Web-App; das CLI hat sein eigenes README für Installation
 und Nutzung.
 
-<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/de/sheet-overview-light.webp" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
-<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/de/sheet-overview-dark.webp" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
+<img class="theme-shot" data-variant="light" fetchpriority="high" width="390" height="844" src="/docs/media/de/sheet-overview-light-1x.webp" srcset="/docs/media/de/sheet-overview-light-1x.webp 1x, /docs/media/de/sheet-overview-light.webp 2x" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
+<img class="theme-shot" data-variant="dark" loading="lazy" decoding="async" width="390" height="844" src="/docs/media/de/sheet-overview-dark-1x.webp" srcset="/docs/media/de/sheet-overview-dark-1x.webp 1x, /docs/media/de/sheet-overview-dark.webp 2x" alt="Die Startseite: eine Wäschetabelle mit Filtern nach Ansicht und Stapel und einem Button zum Herunterladen des gesamten Blatts als PDF" />
 
 Fang mit dem an, was zu deinem Vorhaben passt:
 
