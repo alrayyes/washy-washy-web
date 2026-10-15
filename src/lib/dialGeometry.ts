@@ -35,5 +35,9 @@ export function arc(cx: number, cy: number, radius: number, from: number, to: nu
 export function segments(
   lines: { from: { x: number; y: number }; to: { x: number; y: number } }[],
 ): string {
-  return lines.map(({ from, to }) => `M ${from.x} ${from.y} L ${to.x} ${to.y}`).join(" ");
+  // Rounded: `polar` yields noise like 6e-17 at 90 degrees, which only bloats the markup.
+  const round = (value: number) => Math.round(value * 1000) / 1000;
+  return lines
+    .map(({ from, to }) => `M ${round(from.x)} ${round(from.y)} L ${round(to.x)} ${round(to.y)}`)
+    .join(" ");
 }
