@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { Machine } from "@washy-washy/core/browser";
-import { arc, polar } from "../lib/dialGeometry";
+import { arc, polar, segments } from "../lib/dialGeometry";
 import { colour } from "../lib/theme";
 
 interface Props {
@@ -23,6 +23,24 @@ let knob = $derived(outer * 0.45);
 let index = $derived(Math.max(0, washer.programs.indexOf(program)));
 let step = $derived(360 / washer.programs.length);
 let pointer = $derived(polar(centre, centre, knob - 1.5, index * step));
+// One path for every tick but the selected one, which is longer and a
+// different colour so keeps its own `<line>` (#357).
+let ticks = $derived(
+  washer.programs.flatMap((_, position) =>
+    position === index
+      ? []
+      : [
+          {
+            from: polar(centre, centre, outer - 4.5, position * step),
+            to: polar(centre, centre, outer, position * step),
+          },
+        ],
+  ),
+);
+let selectedTick = $derived({
+  from: polar(centre, centre, knob + 1, index * step),
+  to: polar(centre, centre, outer + 1.5, index * step),
+});
 </script>
 
 <svg width={size} height={size} viewBox="0 0 {size} {size}" aria-hidden="true">
@@ -32,22 +50,19 @@ let pointer = $derived(polar(centre, centre, knob - 1.5, index * step));
     stroke-width="0.8"
     fill="none"
   />
-  <g>
-    {#each washer.programs as name, position (name)}
-      {@const angle = position * step}
-      {@const selected = position === index}
-      {@const inner = polar(centre, centre, selected ? knob + 1 : outer - 4.5, angle)}
-      {@const edge = polar(centre, centre, selected ? outer + 1.5 : outer, angle)}
-      <line
-        x1={inner.x}
-        y1={inner.y}
-        x2={edge.x}
-        y2={edge.y}
-        stroke={selected ? colour.accent : colour.faint}
-        stroke-width={selected ? 2 : 0.7}
-      />
-    {/each}
-  </g>
+  {#if ticks.length > 0}
+    <path d={segments(ticks)} stroke={colour.faint} stroke-width="0.7" fill="none" />
+  {/if}
+  {#if washer.programs.length > 0}
+    <line
+      x1={selectedTick.from.x}
+      y1={selectedTick.from.y}
+      x2={selectedTick.to.x}
+      y2={selectedTick.to.y}
+      stroke={colour.accent}
+      stroke-width="2"
+    />
+  {/if}
   <circle cx={centre} cy={centre} r={knob} fill={colour.knob} stroke={colour.line} stroke-width="0.8" />
   <line x1={centre} y1={centre} x2={pointer.x} y2={pointer.y} stroke={colour.accent} stroke-width="2" />
   <circle cx={centre} cy={centre} r="1.6" fill={colour.accent} />

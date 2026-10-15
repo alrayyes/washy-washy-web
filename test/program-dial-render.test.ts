@@ -60,6 +60,18 @@ function num(attrs: Record<string, string>, key: string): number {
   return Number(value);
 }
 
+/**
+ * The segments of a `M x y L x y M x y L x y ...` path, as [x1, y1, x2, y2]
+ * tuples. The unselected ticks share one path (#357), so the tests read the
+ * geometry back out of its `d` attribute.
+ */
+function parseSegments(d: string): number[][] {
+  return d
+    .split("M")
+    .filter((part) => part.trim() !== "")
+    .map((part) => (part.match(/-?\d+(?:\.\d+)?(?:e-?\d+)?/g) ?? []).map(Number));
+}
+
 function closeToPoint(actual: { x: number; y: number }, expected: { x: number; y: number }): void {
   expect(actual.x).toBeCloseTo(expected.x);
   expect(actual.y).toBeCloseTo(expected.y);
@@ -74,12 +86,13 @@ describe("ProgramDial (Svelte)", () => {
   const OUTER = CENTRE - 3;
   const KNOB = OUTER * 0.45;
 
-  test("draws exactly one ring arc, one tick per program, a knob and a pointer", () => {
+  test("draws one ring arc, one path for the unselected ticks, a selected tick, a knob and a pointer", () => {
     const html = renderDial({ program: "B", washer: washer(["A", "B", "C", "D"]) });
 
     expect(html).toContain("<svg");
-    expect(parseTags(html, "path")).toHaveLength(1);
-    expect(parseTags(html, "line")).toHaveLength(4 + 1); // 4 ticks + pointer
+    expect(parseTags(html, "path")).toHaveLength(2); // ring + the 3 unselected ticks
+    expect(parseSegments(parseTags(html, "path")[1]?.d ?? "")).toHaveLength(3);
+    expect(parseTags(html, "line")).toHaveLength(1 + 1); // selected tick + pointer
     expect(parseTags(html, "circle")).toHaveLength(2); // knob + centre dot
   });
 
@@ -119,24 +132,36 @@ describe("ProgramDial (Svelte)", () => {
       washer: washer(programs),
     });
 
-    const lines = parseTags(html, "line");
-    const ticks = lines.slice(0, programs.length);
-    const pointer = lines[programs.length];
+    const [selectedTick, pointer] = parseTags(html, "line");
+    const [, unselected] = parseTags(html, "path");
+    const segments = parseSegments(unselected?.d ?? "");
+    expect(segments).toHaveLength(programs.length - 1);
+    expect(unselected?.stroke).toBe("var(--color-faint)");
+    expect(unselected?.["stroke-width"]).toBe("0.7");
+    expect(unselected?.fill).toBe("none");
 
+    const drawn = [...segments];
     programs.forEach((_, position) => {
       const selected = position === selectedIndex;
       const angle = position * step;
       const inner = refPolar(CENTRE, CENTRE, selected ? KNOB + 1 : OUTER - 4.5, angle);
       const edge = refPolar(CENTRE, CENTRE, selected ? OUTER + 1.5 : OUTER, angle);
-      const tick = ticks[position];
+      const tick = selected
+        ? [
+            num(selectedTick ?? {}, "x1"),
+            num(selectedTick ?? {}, "y1"),
+            num(selectedTick ?? {}, "x2"),
+            num(selectedTick ?? {}, "y2"),
+          ]
+        : drawn.shift();
       expect(tick).toBeDefined();
       if (!tick) return;
 
-      closeToPoint({ x: num(tick, "x1"), y: num(tick, "y1") }, inner);
-      closeToPoint({ x: num(tick, "x2"), y: num(tick, "y2") }, edge);
-      expect(tick.stroke).toBe(selected ? "var(--color-accent)" : "var(--color-faint)");
-      expect(tick["stroke-width"]).toBe(selected ? "2" : "0.7");
+      closeToPoint({ x: tick[0] as number, y: tick[1] as number }, inner);
+      closeToPoint({ x: tick[2] as number, y: tick[3] as number }, edge);
     });
+    expect(selectedTick?.stroke).toBe("var(--color-accent)");
+    expect(selectedTick?.["stroke-width"]).toBe("2");
 
     const pointerEnd = refPolar(CENTRE, CENTRE, KNOB - 1.5, selectedIndex * step);
     expect(pointer).toBeDefined();

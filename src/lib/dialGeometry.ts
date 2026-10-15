@@ -27,3 +27,13 @@ export function arc(cx: number, cy: number, radius: number, from: number, to: nu
   const largeArc = to - from > 180 ? 1 : 0;
   return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`;
 }
+
+/**
+ * Many separate straight segments as one SVG path, so a dial's ticks cost one
+ * DOM node instead of one each (#357).
+ */
+export function segments(
+  lines: { from: { x: number; y: number }; to: { x: number; y: number } }[],
+): string {
+  return lines.map(({ from, to }) => `M ${from.x} ${from.y} L ${to.x} ${to.y}`).join(" ");
+}

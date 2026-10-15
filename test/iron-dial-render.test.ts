@@ -49,6 +49,18 @@ function num(attrs: Record<string, string>, key: string): number {
   return Number(value);
 }
 
+/**
+ * The segments of a `M x y L x y M x y L x y ...` path, as [x1, y1, x2, y2]
+ * tuples. The unselected ticks share one path (#357), so the tests read the
+ * geometry back out of its `d` attribute.
+ */
+function parseSegments(d: string): number[][] {
+  return d
+    .split("M")
+    .filter((part) => part.trim() !== "")
+    .map((part) => (part.match(/-?\d+(?:\.\d+)?(?:e-?\d+)?/g) ?? []).map(Number));
+}
+
 function closeToPoint(actual: { x: number; y: number }, expected: { x: number; y: number }): void {
   expect(actual.x).toBeCloseTo(expected.x);
   expect(actual.y).toBeCloseTo(expected.y);
@@ -75,7 +87,7 @@ describe("IronDial (Svelte)", () => {
     return (FIRST + position * step + 360) % 360;
   }
 
-  test("draws the ring, one tick per setting, a knob and a pointer when not off", () => {
+  test("draws the ring, one path for the unselected ticks, the selected tick, a knob and a pointer when not off", () => {
     const settings = ironSettings([
       { key: "cool", steam: false },
       { key: "warm", steam: false },
@@ -83,8 +95,10 @@ describe("IronDial (Svelte)", () => {
     ]);
     const html = renderDial({ setting: "warm", settings });
 
-    expect(parseTags(html, "path")).toHaveLength(1); // ring only, no steam
-    expect(parseTags(html, "line")).toHaveLength(3 + 1); // 3 ticks + pointer
+    const paths = parseTags(html, "path"); // ring (no steam), then the unselected ticks
+    expect(paths).toHaveLength(2);
+    expect(parseSegments(paths[1]?.d ?? "")).toHaveLength(2);
+    expect(parseTags(html, "line")).toHaveLength(1 + 1); // selected tick + pointer
     expect(parseTags(html, "circle")).toHaveLength(2); // knob + centre dot
   });
 
@@ -118,10 +132,12 @@ describe("IronDial (Svelte)", () => {
     const settings = ironSettings([{ key: "only", steam: false }]);
     const html = renderDial({ setting: "only", settings });
 
+    // The only tick is also the selected one, so there is no unselected path.
+    expect(parseTags(html, "path")).toHaveLength(1);
     const [tick] = parseTags(html, "line");
     expect(tick).toBeDefined();
     if (!tick) return;
-    // The only tick is also selected: outer - 9 / outer + 1.5, at angleOf(0, 1).
+    // outer - 9 / outer + 1.5, at angleOf(0, 1).
     const angle = angleOf(0, 1);
     const inner = refPolar(CENTRE, CENTRE, OUTER - 9, angle);
     const edge = refPolar(CENTRE, CENTRE, OUTER + 1.5, angle);
@@ -135,24 +151,35 @@ describe("IronDial (Svelte)", () => {
     const selectedIndex = 3;
     const html = renderDial({ setting: keys[selectedIndex] as string, settings });
 
-    const lines = parseTags(html, "line");
-    const ticks = lines.slice(0, keys.length);
-    const pointer = lines[keys.length];
+    const [selectedTick, pointer] = parseTags(html, "line");
+    const unselected = parseTags(html, "path")[1];
+    const drawn = parseSegments(unselected?.d ?? "");
+    expect(drawn).toHaveLength(keys.length - 1);
+    expect(unselected?.stroke).toBe("var(--color-faint)");
+    expect(unselected?.["stroke-width"]).toBe("0.7");
+    expect(unselected?.fill).toBe("none");
 
     keys.forEach((_, position) => {
       const selected = position === selectedIndex;
       const angle = angleOf(position, keys.length);
       const inner = refPolar(CENTRE, CENTRE, OUTER - (selected ? 9 : 5), angle);
       const edge = refPolar(CENTRE, CENTRE, OUTER + (selected ? 1.5 : 0), angle);
-      const tick = ticks[position];
+      const tick = selected
+        ? [
+            num(selectedTick ?? {}, "x1"),
+            num(selectedTick ?? {}, "y1"),
+            num(selectedTick ?? {}, "x2"),
+            num(selectedTick ?? {}, "y2"),
+          ]
+        : drawn.shift();
       expect(tick).toBeDefined();
       if (!tick) return;
 
-      closeToPoint({ x: num(tick, "x1"), y: num(tick, "y1") }, inner);
-      closeToPoint({ x: num(tick, "x2"), y: num(tick, "y2") }, edge);
-      expect(tick.stroke).toBe(selected ? "var(--color-accent)" : "var(--color-faint)");
-      expect(tick["stroke-width"]).toBe(selected ? "2" : "0.7");
+      closeToPoint({ x: tick[0] as number, y: tick[1] as number }, inner);
+      closeToPoint({ x: tick[2] as number, y: tick[3] as number }, edge);
     });
+    expect(selectedTick?.stroke).toBe("var(--color-accent)");
+    expect(selectedTick?.["stroke-width"]).toBe("2");
 
     const pointerAngle = angleOf(selectedIndex, keys.length);
     const pointerEnd = refPolar(CENTRE, CENTRE, KNOB - 1.5, pointerAngle);
@@ -182,7 +209,7 @@ describe("IronDial (Svelte)", () => {
     const html = renderDial({ setting: "cool", settings });
 
     expect(html).not.toContain("var(--color-steam)");
-    expect(parseTags(html, "path")).toHaveLength(1);
+    expect(parseTags(html, "path")).toHaveLength(2); // ring + unselected ticks
   });
 
   test("still draws a steam arc when the very first setting is the one that steams", () => {
@@ -194,7 +221,7 @@ describe("IronDial (Svelte)", () => {
     const html = renderDial({ setting: "cool", settings });
 
     expect(html).toContain("var(--color-steam)");
-    expect(parseTags(html, "path")).toHaveLength(2);
+    expect(parseTags(html, "path")).toHaveLength(3); // ring + steam arc + ticks
   });
 
   test("draws a steam arc spanning the first through the last steaming setting", () => {
@@ -204,7 +231,7 @@ describe("IronDial (Svelte)", () => {
     const html = renderDial({ setting: "warm", settings });
 
     const paths = parseTags(html, "path");
-    expect(paths).toHaveLength(2); // ring + steam arc
+    expect(paths).toHaveLength(3); // ring + steam arc + unselected ticks
     const steamPath = paths[1];
     expect(steamPath?.stroke).toBe("var(--color-steam)");
     expect(steamPath?.["stroke-width"]).toBe("3");
@@ -219,7 +246,7 @@ describe("IronDial (Svelte)", () => {
     const html = renderDial({ setting: "warm", settings });
 
     const paths = parseTags(html, "path");
-    expect(paths).toHaveLength(2);
+    expect(paths).toHaveLength(3); // ring + steam arc + unselected ticks
     expect(paths[1]?.d).toBe(
       refArc(CENTRE, CENTRE, OUTER, angleOf(1, keys.length), angleOf(1, keys.length)),
     );
@@ -234,11 +261,11 @@ describe("IronDial (Svelte)", () => {
 
     expect(html).not.toContain("var(--color-steam)");
     const paths = parseTags(html, "path");
-    expect(paths).toHaveLength(1); // ring only, steam arc skipped entirely when off
+    expect(paths).toHaveLength(2); // ring + all ticks; steam arc skipped entirely when off
 
     const lines = parseTags(html, "line");
-    expect(lines).toHaveLength(2 + 1); // 2 ticks + the cross's own line, no pointer
-    const cross = lines[2];
+    expect(lines).toHaveLength(1); // only the cross's own line: no selected tick, no pointer
+    const cross = lines[0];
     expect(cross).toBeDefined();
     if (!cross) return;
     const from = refPolar(CENTRE, CENTRE, OUTER - 6, 225);
@@ -266,11 +293,9 @@ describe("IronDial (Svelte)", () => {
     ]);
     const html = renderDial({ setting: "warm", settings, off: true });
 
-    // The last line is the crossed-out ring's own cross-mark, not a tick.
-    const ticks = parseTags(html, "line").slice(0, settings.length);
-    for (const tick of ticks) {
-      expect(tick.stroke).toBe("var(--color-hairline)");
-    }
+    const ticks = parseTags(html, "path")[1];
+    expect(parseSegments(ticks?.d ?? "")).toHaveLength(settings.length);
+    expect(ticks?.stroke).toBe("var(--color-hairline)");
   });
 
   test("the knob face and radius switch between the on and off fills", () => {

@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { Machine } from "@washy-washy/core/browser";
-import { arc, polar } from "../lib/dialGeometry";
+import { arc, polar, segments } from "../lib/dialGeometry";
 import { colour } from "../lib/theme";
 
 interface Props {
@@ -43,6 +43,26 @@ let steamFrom = $derived(settings.findIndex((entry) => entry.steam));
 // observable output. Confirmed equivalent by inspection.
 // Stryker disable next-line UnaryOperator
 let steamTo = $derived(settings.reduce((last, entry, at) => (entry.steam ? at : last), -1));
+// One path for every tick but the selected one, which is longer and a
+// different colour so keeps its own `<line>` (#357). Nothing is selected
+// while the dial is off.
+let selectedAt = $derived(off ? -1 : index);
+let ticks = $derived(
+  positions.flatMap((position) =>
+    position === selectedAt
+      ? []
+      : [
+          {
+            from: polar(centre, centre, outer - 5, angleOf(position)),
+            to: polar(centre, centre, outer, angleOf(position)),
+          },
+        ],
+  ),
+);
+let selectedTick = $derived({
+  from: polar(centre, centre, outer - 9, angleOf(index)),
+  to: polar(centre, centre, outer + 1.5, angleOf(index)),
+});
 let offLine1 = $derived(polar(centre, centre, outer - 6, 225));
 let offLine2 = $derived(polar(centre, centre, outer - 6, 45));
 </script>
@@ -62,22 +82,19 @@ let offLine2 = $derived(polar(centre, centre, outer - 6, 45));
       fill="none"
     />
   {/if}
-  <g>
-    {#each positions as position (position)}
-      {@const angle = angleOf(position)}
-      {@const selected = !off && position === index}
-      {@const inner = polar(centre, centre, outer - (selected ? 9 : 5), angle)}
-      {@const edge = polar(centre, centre, outer + (selected ? 1.5 : 0), angle)}
-      <line
-        x1={inner.x}
-        y1={inner.y}
-        x2={edge.x}
-        y2={edge.y}
-        stroke={off ? colour.hairline : selected ? colour.accent : colour.faint}
-        stroke-width={selected ? 2 : 0.7}
-      />
-    {/each}
-  </g>
+  {#if ticks.length > 0}
+    <path d={segments(ticks)} stroke={off ? colour.hairline : colour.faint} stroke-width="0.7" fill="none" />
+  {/if}
+  {#if !off && positions.length > 0}
+    <line
+      x1={selectedTick.from.x}
+      y1={selectedTick.from.y}
+      x2={selectedTick.to.x}
+      y2={selectedTick.to.y}
+      stroke={colour.accent}
+      stroke-width="2"
+    />
+  {/if}
   <circle
     cx={centre}
     cy={centre}
