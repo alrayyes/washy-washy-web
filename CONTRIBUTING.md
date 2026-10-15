@@ -131,6 +131,13 @@ checks green before it can merge.
 `lighthouse` and `vale` (the advisory prose run) also run on every PR but
 aren't required.
 
+`.github/workflows/audit.yml` audits dependencies. On a PR that touches
+`package.json` or `bun.lock` it fails only on advisories the PR adds over
+`main`, so a newly published advisory can't turn an unrelated PR red. On
+`main` it keeps one open `Dependency advisories` issue listing everything
+else, runs daily, and closes the issue when the audit is clean. There's no
+ignore list: an advisory with no fix yet stays in that issue until one ships.
+
 Versioning is automatic: [semantic-release](https://semantic-release.gitbook.io/)
 reads the Conventional Commits on `main` and cuts a version, changelog and
 GitHub release — nobody picks a version by hand. Cloudflare's own GitHub
