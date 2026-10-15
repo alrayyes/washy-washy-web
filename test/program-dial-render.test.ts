@@ -200,4 +200,20 @@ describe("ProgramDial (Svelte)", () => {
     const known = renderDial({ program: "A", washer: washer(["A", "B"]) });
     expect(html).toBe(known);
   });
+
+  test("a dial with no programs draws no ticks, only the pointer", () => {
+    const html = renderDial({ program: "A", washer: washer([]) });
+
+    expect(parseTags(html, "path")).toHaveLength(1); // ring only
+    expect(parseTags(html, "line")).toHaveLength(1); // pointer only
+  });
+
+  test("a single program is the selected tick, with no unselected path", () => {
+    const html = renderDial({ program: "A", washer: washer(["A"]) });
+
+    expect(parseTags(html, "path")).toHaveLength(1); // ring only
+    const [tick, pointer] = parseTags(html, "line");
+    expect(tick?.stroke).toBe("var(--color-accent)");
+    expect(pointer).toBeDefined();
+  });
 });

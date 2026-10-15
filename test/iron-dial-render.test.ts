@@ -316,4 +316,20 @@ describe("IronDial (Svelte)", () => {
     expect(num(onKnob, "cx")).toBeCloseTo(CENTRE);
     expect(num(onKnob, "cy")).toBeCloseTo(CENTRE);
   });
+
+  test("a dial with no settings draws no ticks, only the pointer", () => {
+    const html = renderDial({ setting: "none", settings: [] });
+
+    expect(parseTags(html, "path")).toHaveLength(1); // ring only
+    expect(parseTags(html, "line")).toHaveLength(1); // pointer only
+  });
+
+  test("off with a single setting still draws that one tick, in the hairline colour", () => {
+    const settings = ironSettings([{ key: "only", steam: false }]);
+    const html = renderDial({ setting: "only", settings, off: true });
+
+    const ticks = parseTags(html, "path")[1];
+    expect(parseSegments(ticks?.d ?? "")).toHaveLength(1);
+    expect(ticks?.stroke).toBe("var(--color-hairline)");
+  });
 });
