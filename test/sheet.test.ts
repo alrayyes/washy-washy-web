@@ -286,6 +286,52 @@ describe("facetOptions", () => {
   });
 });
 
+describe("every Filters option offered", () => {
+  const fields = [
+    ["program", "programs"],
+    ["temperature", "temperatures"],
+    ["spin", "spins"],
+  ] as const;
+
+  test("picked alone, still matches at least one pile", async () => {
+    const { machine, items } = await loadWebChart();
+    const machineValues = {
+      program: machine.washer.programs,
+      temperature: machine.washer.temperatures,
+      spin: machine.washer.spins,
+    };
+    const facets = computeFacets(items, "", emptyAdvancedFilters);
+
+    for (const [field, facet] of fields) {
+      const offered = facetOptions(machineValues[field], facets[facet], "");
+      // An empty list would pass the loop below for the wrong reason (#118).
+      expect(offered.length).toBeGreaterThan(0);
+      for (const value of offered) {
+        const matches = filterAdvanced(items, { ...emptyAdvancedFilters, [field]: value });
+        expect(matches.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  test("after a Programme is picked, each Temperature and Spin still offered matches a pile", async () => {
+    const { machine, items } = await loadWebChart();
+    const program = items[0]?.program as string;
+    const picked = { ...emptyAdvancedFilters, program };
+    const facets = computeFacets(items, "", picked);
+
+    const offers = [
+      ["temperature", facetOptions(machine.washer.temperatures, facets.temperatures, "")],
+      ["spin", facetOptions(machine.washer.spins, facets.spins, "")],
+    ] as const;
+    for (const [field, offered] of offers) {
+      expect(offered.length).toBeGreaterThan(0);
+      for (const value of offered) {
+        expect(filterAdvanced(items, { ...picked, [field]: value }).length).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
 // The renderPhone tests below are the slow ones.
 // Real PDF rendering (react-pdf layout plus font work) takes 1 to 4s on an idle
 // machine. bun's 5s default leaves no room for the pre-push hook running it

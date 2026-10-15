@@ -154,64 +154,24 @@ test("the Filters panel is closed by default and filters combine with pile searc
   await expect(page.locator("#filter-pile")).toHaveValue("sock");
 });
 
-test("every Filters option offered, picked alone, still shows at least one pile", async ({
-  page,
-}) => {
+test("picking a Filters option still shows at least one pile", async ({ page }) => {
+  // Every option and its narrowing are covered over the filter functions in
+  // test/sheet.test.ts; this proves the select is wired to the chart.
   await goto(page);
   await openFilters(page);
 
-  for (const id of ["#filter-program", "#filter-temperature", "#filter-spin"]) {
-    const select = page.locator(id);
-    const values = await select
-      .locator("option")
-      .evaluateAll((options) =>
-        options
-          .map((option) => (option as HTMLOptionElement).value)
-          .filter((value) => value !== ""),
-      );
-    // The machine's own capability list (#118's bug) can, and for the
-    // bundled example does, name a value no pile actually uses — an empty
-    // list here would silently pass this test for the wrong reason.
-    expect(values.length).toBeGreaterThan(0);
-
-    for (const value of values) {
-      await select.selectOption(value);
-      await expect(page.locator("article")).not.toHaveCount(0);
-      await expect(page.getByText(/No pile matches/)).toHaveCount(0);
-    }
-    await select.selectOption("");
-  }
-});
-
-test("picking a Programme narrows Temperature and Spin live, and every option they still offer works", async ({
-  page,
-}) => {
-  await goto(page);
-  await openFilters(page);
-
-  const programSelect = page.locator("#filter-program");
-  const programValues = await programSelect
+  const select = page.locator("#filter-program");
+  const value = await select
     .locator("option")
-    .evaluateAll((options) =>
-      options.map((option) => (option as HTMLOptionElement).value).filter((value) => value !== ""),
-    );
-  await programSelect.selectOption(programValues[0] as string);
-
-  for (const id of ["#filter-temperature", "#filter-spin"]) {
-    const select = page.locator(id);
-    const values = await select
-      .locator("option")
-      .evaluateAll((options) =>
+    .evaluateAll(
+      (options) =>
         options
           .map((option) => (option as HTMLOptionElement).value)
-          .filter((value) => value !== ""),
-      );
-    for (const value of values) {
-      await select.selectOption(value);
-      await expect(page.locator("article")).not.toHaveCount(0);
-      await select.selectOption("");
-    }
-  }
+          .find((v) => v !== "") as string,
+    );
+  await select.selectOption(value);
+  await expect(page.locator("article")).not.toHaveCount(0);
+  await expect(page.getByText(/No pile matches/)).toHaveCount(0);
 });
 
 test("a detergent search matching nothing disables every Filters select, and the panel still passes accessibility", async ({
