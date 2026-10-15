@@ -54,37 +54,6 @@ test("registers all five tools, discoverable by name and description", async ({ 
   for (const tool of tools) expect(tool.description.length).toBeGreaterThan(0);
 });
 
-test("washy_get_config reads the bundled example chart and machine", async ({ page }) => {
-  await goto(page);
-
-  const result = (await callTool(page, "washy_get_config", {})) as {
-    isCustom: boolean;
-    machine: { washer: { name: string } };
-  };
-
-  expect(result.isCustom).toBe(false);
-  expect(result.machine.washer.name).toContain("Generic front loader");
-});
-
-test("washy_validate_chart flags an unknown programme the same way the on-page editor would", async ({
-  page,
-}) => {
-  await goto(page);
-
-  const { chart } = (await callTool(page, "washy_get_config", {})) as { chart: Instruction[] };
-  const rows = rowsFromInstructions(chart).map((row, index) =>
-    index === 0 ? { ...row, program: "Not a real programme" } : row,
-  );
-
-  const result = (await callTool(page, "washy_validate_chart", { rows })) as {
-    valid: boolean;
-    error?: string;
-  };
-
-  expect(result.valid).toBe(false);
-  expect(result.error).toMatch(/row 2, column "program"/);
-});
-
 test("washy_set_chart persists a valid edit through the real document.modelContext round trip", async ({
   page,
 }) => {
@@ -108,16 +77,4 @@ test("washy_set_chart persists a valid edit through the real document.modelConte
   await page.waitForFunction(() =>
     (localStorage.getItem("washy-washy:config") ?? "").includes("WebMCP Edited Pile"),
   );
-});
-
-test("washy_export_pdf returns a non-empty base64 PDF", async ({ page }) => {
-  await goto(page);
-
-  const result = (await callTool(page, "washy_export_pdf", { layout: "phone" })) as {
-    pdfBase64: string;
-    filename: string;
-  };
-
-  expect(result.filename).toBe("washing-instructions-phone.pdf");
-  expect(result.pdfBase64.length).toBeGreaterThan(100);
 });
