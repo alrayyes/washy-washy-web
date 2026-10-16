@@ -27,3 +27,17 @@ export function arc(cx: number, cy: number, radius: number, from: number, to: nu
   const largeArc = to - from > 180 ? 1 : 0;
   return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArc} 1 ${end.x} ${end.y}`;
 }
+
+/**
+ * Many separate straight segments as one SVG path, so a dial's ticks cost one
+ * DOM node instead of one each (#357).
+ */
+export function segments(
+  lines: { from: { x: number; y: number }; to: { x: number; y: number } }[],
+): string {
+  // Rounded: `polar` yields noise like 6e-17 at 90 degrees, which only bloats the markup.
+  const round = (value: number) => Math.round(value * 1000) / 1000;
+  return lines
+    .map(({ from, to }) => `M ${round(from.x)} ${round(from.y)} L ${round(to.x)} ${round(to.y)}`)
+    .join(" ");
+}
