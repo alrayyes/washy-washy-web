@@ -1,3 +1,9 @@
+## [1.53.7](https://github.com/alrayyes/washy-washy-web/compare/v1.53.6...v1.53.7) (2026-10-16)
+
+### Performance Improvements
+
+* **dials:** draw unselected ticks as one path to cut DOM size ([#358](https://github.com/alrayyes/washy-washy-web/issues/358)) ([bffa1ef](https://github.com/alrayyes/washy-washy-web/commit/bffa1ef243c1bcfb88433267b64182e2f1165f69)), closes [#357](https://github.com/alrayyes/washy-washy-web/issues/357)
+
 ## [1.53.6](https://github.com/alrayyes/washy-washy-web/compare/v1.53.5...v1.53.6) (2026-10-12)
 
 ### Performance Improvements
