@@ -1,3 +1,9 @@
+## [1.53.8](https://github.com/alrayyes/washy-washy-web/compare/v1.53.7...v1.53.8) (2026-10-16)
+
+### Bug Fixes
+
+* **deps:** override handlebars, http-cache-semantics, tmp and uuid ([#365](https://github.com/alrayyes/washy-washy-web/issues/365)) ([c001329](https://github.com/alrayyes/washy-washy-web/commit/c001329649b287a485bf1640a1cfe7b60366ab19)), closes [#361](https://github.com/alrayyes/washy-washy-web/issues/361)
+
 ## [1.53.7](https://github.com/alrayyes/washy-washy-web/compare/v1.53.6...v1.53.7) (2026-10-16)
 
 ### Performance Improvements
