@@ -26,7 +26,7 @@ async function goto(page: Page) {
   }, TOOL_NAMES.length);
 }
 
-/** `executeTool` takes/returns JSON strings — see `webmcp-global.d.ts`. */
+/** `executeTool` takes the input object and returns the result as a JSON string — see `webmcp-global.d.ts`. */
 async function callTool(page: Page, name: string, input: unknown): Promise<unknown> {
   const raw = await page.evaluate(
     async ({ name, input }) => {
@@ -35,7 +35,7 @@ async function callTool(page: Page, name: string, input: unknown): Promise<unkno
       const tools = await context.getTools();
       const tool = tools.find((candidate) => candidate.name === name);
       if (!tool) throw new Error(`no such tool: ${name}`);
-      return context.executeTool(tool, JSON.stringify(input));
+      return context.executeTool(tool, input);
     },
     { name, input },
   );
