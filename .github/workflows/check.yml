@@ -76,7 +76,7 @@ jobs:
       # Pull requests keep it for a day too, so the reports job can assemble
       # them; only the deploy is main-only.
       - name: Keep the unit test and coverage reports for the reports job
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-reports
           path: |
@@ -210,14 +210,14 @@ jobs:
       - run: bunx playwright test --reporter=github,junit
         env:
           PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit-e2e.xml
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
       - name: Keep the e2e results for the reports job
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-reports
           path: junit-e2e.xml
@@ -249,7 +249,7 @@ jobs:
           bun-version: 1.3.14
       - run: bun install --frozen-lockfile
       - run: bun run lighthouse
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: lighthouse-report
@@ -259,7 +259,7 @@ jobs:
       # representative one per page, and the reports job picks from it.
       # upload-artifact skips dot-directories unless told otherwise.
       - name: Keep the Lighthouse results for the reports job
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: lighthouse-reports
           path: .lighthouseci/
