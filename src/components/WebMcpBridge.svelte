@@ -47,8 +47,8 @@ onMount(() => {
   let cancelled = false;
 
   (async () => {
-    const { initializeWebMCPPolyfill } = await import("@mcp-b/webmcp-polyfill");
-    initializeWebMCPPolyfill();
+    const { installWebMCP } = await import("@mcp-b/webmcp-polyfill");
+    installWebMCP();
 
     const modelContext = document.modelContext;
     if (!modelContext || cancelled) return;

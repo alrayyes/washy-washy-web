@@ -27,7 +27,7 @@ interface WebMcpModelContext {
   ): Promise<void>;
   getTools(): Promise<WebMcpRegisteredTool[]>;
   /** Chromium/polyfill extension for invoking a tool from outside the page — e2e tests only, the app never calls this on itself. */
-  executeTool?(tool: WebMcpRegisteredTool, inputJson: string): Promise<string | null>;
+  executeTool?(tool: WebMcpRegisteredTool, input: unknown): Promise<string | null>;
 }
 
 declare global {
