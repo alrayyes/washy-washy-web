@@ -1,3 +1,14 @@
+## [1.53.9](https://github.com/alrayyes/washy-washy-web/compare/v1.53.8...v1.53.9) (2026-10-17)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/starlight from 0.42.5 to 0.42.6 ([eaa33db](https://github.com/alrayyes/washy-washy-web/commit/eaa33dbf4b4e3b1014042369d6a31ca7f71e7927))
+* **deps:** bump @mcp-b/webmcp-polyfill to 6.0.0 and move to installWebMCP ([#381](https://github.com/alrayyes/washy-washy-web/issues/381)) ([bbf08b7](https://github.com/alrayyes/washy-washy-web/commit/bbf08b710a43341120b2f026accc31361e5cc03d)), closes [#379](https://github.com/alrayyes/washy-washy-web/issues/379) [#372](https://github.com/alrayyes/washy-washy-web/issues/372)
+* **deps:** bump @playwright/test to 1.64.0 with its playwright-core override ([#382](https://github.com/alrayyes/washy-washy-web/issues/382)) ([3874f95](https://github.com/alrayyes/washy-washy-web/commit/3874f95de97a3f21ae5f05c00de554b48f8e73b3)), closes [#380](https://github.com/alrayyes/washy-washy-web/issues/380) [#374](https://github.com/alrayyes/washy-washy-web/issues/374)
+* **deps:** bump @washy-washy/core from 1.5.6 to 1.6.0 ([08094a9](https://github.com/alrayyes/washy-washy-web/commit/08094a98adc70a0eb458fc1b99502b66b082b4c0))
+* **deps:** bump @washy-washy/pdf from 2.5.2 to 2.6.0 ([d2eb2a3](https://github.com/alrayyes/washy-washy-web/commit/d2eb2a3de4ef56c9bab0f2d2f0de260beff0b9f3))
+* **deps:** bump svelte from 5.57.1 to 5.57.2 ([686b5d5](https://github.com/alrayyes/washy-washy-web/commit/686b5d57d40297150334689d76380c292b115ebd))
+
 ## [1.53.8](https://github.com/alrayyes/washy-washy-web/compare/v1.53.7...v1.53.8) (2026-10-16)
 
 ### Bug Fixes
