@@ -73,4 +73,8 @@ jobs:
           echo "::warning::Not merged after 40 minutes; nothing dispatched."
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
+          # No checkout here (see the job comment), so gh can't read the repo
+          # from git. Without this `gh workflow run` dies with "not a git
+          # repository" after the merge has already landed.
+          GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
