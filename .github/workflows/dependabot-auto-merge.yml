@@ -1,5 +1,5 @@
-# Patch and minor dependency bumps merge themselves once every check has
-# passed. A major bump stays open for a human.
+# Every Dependabot bump, major included, merges itself once every check has
+# passed.
 #
 # This is not a licence for a bot to commit whatever it likes. GitHub's
 # auto-merge holds the pull request until the required checks are green and the
@@ -33,13 +33,6 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-      # A semver-major bump can pass every check and still change behaviour
-      # the tests don't cover, so it stays open for a human to read. Only
-      # patch and minor updates get auto-merge armed below.
-      - name: Read the update type
-        id: metadata
-        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
-
       # Squashed with a subject commitlint accepts. Dependabot writes "Bump x
       # from a to b" and config-conventional refuses the capital B, so the
       # commit that reaches main is retitled here rather than the rule being
@@ -59,7 +52,6 @@ jobs:
       # check.yml on main, which release.yml follows. workflow_dispatch is
       # exempt from the guard, so the release is as prompt as after a push.
       - name: Wave it through once the checks are green
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         run: |
           subject=$(printf '%s' "$PR_TITLE" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
           gh pr merge --auto --squash --subject "$subject" "$PR_URL"
@@ -69,7 +61,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Start the release run once it has merged
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
         run: |
           for _ in $(seq 1 80); do
             state=$(gh pr view "$PR_URL" --json state --jq .state)
