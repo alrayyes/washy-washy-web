@@ -1,3 +1,12 @@
+## [1.53.10](https://github.com/alrayyes/washy-washy-web/compare/v1.53.9...v1.53.10) (2026-10-24)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/svelte from 9.0.1 to 9.1.0 ([e3d7f54](https://github.com/alrayyes/washy-washy-web/commit/e3d7f548b4e04b91e29a14759bc96df690e3990f))
+* **deps:** bump @mcp-b/webmcp-polyfill from 6.0.0 to 6.0.3 ([2bdc1ea](https://github.com/alrayyes/washy-washy-web/commit/2bdc1ea2b4762eddd54d4072f23a3c31f9a86a5c))
+* **deps:** bump @washy-washy/pdf from 2.6.0 to 2.6.4 ([8af59fc](https://github.com/alrayyes/washy-washy-web/commit/8af59fc329157a8b4d795b1533691899fe5108d6))
+* **deps:** bump astro from 7.3.5 to 7.4.0 ([8c0e69b](https://github.com/alrayyes/washy-washy-web/commit/8c0e69bf356c31d542f659a902c169a5072983d3))
+
 ## [1.53.9](https://github.com/alrayyes/washy-washy-web/compare/v1.53.8...v1.53.9) (2026-10-17)
 
 ### Bug Fixes
