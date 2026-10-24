@@ -1,3 +1,9 @@
+## [1.53.11](https://github.com/alrayyes/washy-washy-web/compare/v1.53.10...v1.53.11) (2026-10-24)
+
+### Bug Fixes
+
+* **ci:** give the release dispatch step a repo to target ([6de9063](https://github.com/alrayyes/washy-washy-web/commit/6de90631b05997f1e88762c334e60af322b49bd7)), closes [#396](https://github.com/alrayyes/washy-washy-web/issues/396)
+
 ## [1.53.10](https://github.com/alrayyes/washy-washy-web/compare/v1.53.9...v1.53.10) (2026-10-24)
 
 ### Bug Fixes
