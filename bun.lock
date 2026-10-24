@@ -9,7 +9,7 @@
         "@astrojs/svelte": "9.0.1",
         "@fontsource-variable/inter": "5.3.0",
         "@fontsource-variable/space-grotesk": "5.3.0",
-        "@mcp-b/webmcp-polyfill": "6.0.0",
+        "@mcp-b/webmcp-polyfill": "6.0.3",
         "@tailwindcss/vite": "4.3.3",
         "@washy-washy/core": "1.6.0",
         "@washy-washy/pdf": "2.6.4",
@@ -514,7 +514,7 @@
 
     "@lhci/utils": ["@lhci/utils@0.15.1", "", { "dependencies": { "debug": "^4.3.1", "isomorphic-fetch": "^3.0.0", "js-yaml": "^3.13.1", "lighthouse": "12.6.1", "tree-kill": "^1.2.1" } }, "sha512-WclJnUQJeOMY271JSuaOjCv/aA0pgvuHZS29NFNdIeI14id8eiFsjith85EGKYhljgoQhJ2SiW4PsVfFiakNNw=="],
 
-    "@mcp-b/webmcp-polyfill": ["@mcp-b/webmcp-polyfill@6.0.0", "", { "dependencies": { "webmcp-types": "0.1.9" } }, "sha512-Z1wYbaYjwEM1FjxHFyw1oRgDAuLCjcQYeAOHtNNlqZ3n1aVA44Ci0kQrnpi7gySZbeiva2zMEU8XO6EG5MS8FA=="],
+    "@mcp-b/webmcp-polyfill": ["@mcp-b/webmcp-polyfill@6.0.3", "", { "dependencies": { "webmcp-types": "0.1.9" } }, "sha512-pD8iKBXpDKLeYyqDcWPiNFI0JuK7/f+/RxspA6qW81kcDdabWUTt7A0fH+cJx6EIjpoHkk4o3QPci7yQPuHofA=="],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.3", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || ^2.0.0-alpha.4", "@emnapi/runtime": "^1.7.1 || ^2.0.0-alpha.4" } }, "sha512-UMduMbqO5s5zF2NkNacMT/yK5Y5QiKvWr2+50bzIIxFDwVJ2h49b+oyjaCGPhJxd2/gC2x39EHv/gHVuu36x2Q=="],
 
