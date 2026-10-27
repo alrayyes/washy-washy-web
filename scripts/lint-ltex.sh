@@ -6,6 +6,12 @@
 # on PATH. Anywhere else the same image runs through Docker, which beats every
 # machine keeping its own copy of a ~300 MB JDK-bundling tarball current.
 #
+# The container runs as the image's own user (root here), not the caller's: the
+# image keeps its install under a 0700 /opt owned by uid 1001, so any other
+# `--user` mapping gets "Permission denied" on the binary. The mount is read-only
+# because LTeX only reads, which also means root can't leave root-owned files in
+# the checkout.
+#
 # ltex-cli-plus exits 3 on findings, not 1; this script passes whatever code it
 # gets straight through, so any non-zero fails the caller.
 #
@@ -28,7 +34,7 @@ if command -v ltex-cli-plus >/dev/null 2>&1; then
 fi
 
 if command -v docker >/dev/null 2>&1; then
-  exec docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/work -w /work "$IMAGE" "$@"
+  exec docker run --rm -v "$PWD":/work:ro -w /work "$IMAGE" "$@"
 fi
 
 echo "lint-ltex: need ltex-cli-plus on PATH or Docker to run its image" >&2
