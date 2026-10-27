@@ -28,6 +28,7 @@
       "devtools",
       "filesystem",
       "gitignored",
+      "gitleaks",
       "lcov",
       "lefthook",
       "linted",
