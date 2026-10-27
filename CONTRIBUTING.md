@@ -13,6 +13,10 @@ you need to actually get a checkout running.
 bun install
 ```
 
+[gitleaks](https://github.com/gitleaks/gitleaks) has to be on your `PATH`. It
+scans the staged changes on every commit and the whole history on every push,
+and CI scans the whole history again on every pull request.
+
 Claude Code sessions in this repo get Svelte's own [MCP server](https://svelte.dev/docs/ai/overview) (`.mcp.json`, `AGENTS.md`) — Svelte/SvelteKit documentation lookup and static analysis for any Svelte component work.
 
 ## Pinned overrides
