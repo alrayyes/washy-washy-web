@@ -8,6 +8,10 @@ exact = true
 minimumReleaseAge = 604800
 
 [test]
+# Bun's 5 s per-test default is barely twice the slowest PDF and chart tests
+# (about 2.4 s on an idle machine). The pre-push hook runs them beside ten
+# other jobs, and load pushed them over the limit (#402). CI never hit it.
+timeout = 30000
 # Compiles `.svelte` imports (server-rendered by default, client-rendered
 # for a `?client`-suffixed import) before `bun test` evaluates them — see
 # the preload file's own comment for why this is needed and why it's
