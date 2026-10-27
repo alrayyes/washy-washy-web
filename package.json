@@ -68,7 +68,7 @@
     "@codecov/astro-plugin": "2.0.1",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
-    "@happy-dom/global-registrator": "20.14.6",
+    "@happy-dom/global-registrator": "21.0.3",
     "@hughescr/stryker-bun-runner": "1.6.0",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "1.64.1",
