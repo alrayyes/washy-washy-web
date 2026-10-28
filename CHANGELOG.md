@@ -1,3 +1,9 @@
+## [1.53.14](https://github.com/alrayyes/washy-washy-web/compare/v1.53.13...v1.53.14) (2026-10-28)
+
+### Bug Fixes
+
+* **deps:** bump happy-dom and its registrator to 21.0.4 ([#416](https://github.com/alrayyes/washy-washy-web/issues/416)) ([58b2b6f](https://github.com/alrayyes/washy-washy-web/commit/58b2b6f3b9d8ba8bfcda5664f18d602839ef2c44)), closes [#1](https://github.com/alrayyes/washy-washy-web/issues/1)
+
 ## [1.53.13](https://github.com/alrayyes/washy-washy-web/compare/v1.53.12...v1.53.13) (2026-10-28)
 
 ### Bug Fixes
