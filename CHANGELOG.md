@@ -1,3 +1,9 @@
+## [1.53.13](https://github.com/alrayyes/washy-washy-web/compare/v1.53.12...v1.53.13) (2026-10-28)
+
+### Bug Fixes
+
+* **test:** raise the per-test timeout so pre-push passes under load ([#413](https://github.com/alrayyes/washy-washy-web/issues/413)) ([d53e1be](https://github.com/alrayyes/washy-washy-web/commit/d53e1bec4f53024a79e8f915e2cc3cd882f4a7ee)), closes [#401](https://github.com/alrayyes/washy-washy-web/issues/401)
+
 ## [1.53.12](https://github.com/alrayyes/washy-washy-web/compare/v1.53.11...v1.53.12) (2026-10-28)
 
 ### Bug Fixes
