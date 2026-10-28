@@ -102,9 +102,10 @@ Docker. Hooks print nothing on success and the full linter output on failure
 (`output: [failure]`).
 
 `pre-push` runs its jobs in parallel, so a busy machine slows the unit tests.
-Tests that render a PDF or mount a component set a one-minute timeout with
-`setDefaultTimeout` instead of Bun's five-second default. Give a new slow test one
-rather than skipping the hook.
+`bunfig.toml` raises Bun's five-second per-test default to 30 seconds. A test that
+needs longer, such as one that renders a PDF or mounts a component, sets a
+one-minute timeout with `setDefaultTimeout`. Give a new slow test one rather than
+skipping the hook.
 
 The Vale pre-commit job only reads the staged Markdown and never touches the
 network. The pinned binary in `.tools/` and the style packages come from
