@@ -1,3 +1,11 @@
+## [1.53.12](https://github.com/alrayyes/washy-washy-web/compare/v1.53.11...v1.53.12) (2026-10-28)
+
+### Bug Fixes
+
+* **deps:** bump @washy-washy/core from 1.6.0 to 1.6.3 ([bf60f98](https://github.com/alrayyes/washy-washy-web/commit/bf60f98edc9df6f66b3859f0af6b3807de4450eb))
+* **deps:** bump astro from 7.4.0 to 7.4.1 ([42f34c1](https://github.com/alrayyes/washy-washy-web/commit/42f34c181f1c81bfc38e4deba4260334081330a2))
+* **lint:** run the ltex image as its own user, mounted read-only ([#414](https://github.com/alrayyes/washy-washy-web/issues/414)) ([deb6540](https://github.com/alrayyes/washy-washy-web/commit/deb65409ccbbc9a52c2eac03dbb69bc49f3ced97)), closes [#401](https://github.com/alrayyes/washy-washy-web/issues/401)
+
 ## [1.53.11](https://github.com/alrayyes/washy-washy-web/compare/v1.53.10...v1.53.11) (2026-10-24)
 
 ### Bug Fixes
