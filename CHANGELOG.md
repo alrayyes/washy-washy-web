@@ -1,3 +1,9 @@
+## [1.53.16](https://github.com/alrayyes/washy-washy-web/compare/v1.53.15...v1.53.16) (2026-10-31)
+
+### Bug Fixes
+
+* **deps:** pin re2js to 2.9.0, old enough for minimumReleaseAge ([#432](https://github.com/alrayyes/washy-washy-web/issues/432)) ([ad6960a](https://github.com/alrayyes/washy-washy-web/commit/ad6960a923e0040aa6a59aa2f7d42af27c695e8c))
+
 ## [1.53.15](https://github.com/alrayyes/washy-washy-web/compare/v1.53.14...v1.53.15) (2026-10-31)
 
 ### Bug Fixes
