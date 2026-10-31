@@ -57,7 +57,7 @@
     "@tailwindcss/vite": "4.3.3",
     "@washy-washy/core": "1.6.3",
     "@washy-washy/pdf": "2.6.4",
-    "astro": "7.4.1",
+    "astro": "7.4.2",
     "svelte": "5.57.2",
     "tailwindcss": "4.3.3"
   },
