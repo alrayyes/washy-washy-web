@@ -1,3 +1,13 @@
+## [1.53.15](https://github.com/alrayyes/washy-washy-web/compare/v1.53.14...v1.53.15) (2026-10-31)
+
+### Bug Fixes
+
+* **ci:** let genhtml skip out-of-range coverage lines ([#428](https://github.com/alrayyes/washy-washy-web/issues/428)) ([5fec6e2](https://github.com/alrayyes/washy-washy-web/commit/5fec6e29ca61246a040af111743cbf6c46379ef3))
+* **deps:** bump @astrojs/starlight from 0.42.6 to 0.42.7 ([7c9027c](https://github.com/alrayyes/washy-washy-web/commit/7c9027c635c40d3f79e833fd57ebc245076c944e))
+* **deps:** bump @astrojs/svelte from 9.1.0 to 9.1.1 ([#424](https://github.com/alrayyes/washy-washy-web/issues/424)) ([d965031](https://github.com/alrayyes/washy-washy-web/commit/d9650310564dffb09cf03de373e62a5025f1ffb1))
+* **deps:** bump astro from 7.4.1 to 7.4.2 ([29ab904](https://github.com/alrayyes/washy-washy-web/commit/29ab90403d674ce87030cc6ec3ec2bd350e059c9))
+* **deps:** pin re2js to 2.9.1 past GHSA-gg6h-894w-4m9c ([#430](https://github.com/alrayyes/washy-washy-web/issues/430)) ([8896ce9](https://github.com/alrayyes/washy-washy-web/commit/8896ce9035d58011a1add834824461b7e9ee662d))
+
 ## [1.53.14](https://github.com/alrayyes/washy-washy-web/compare/v1.53.13...v1.53.14) (2026-10-28)
 
 ### Bug Fixes
