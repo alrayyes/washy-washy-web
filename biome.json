@@ -19,6 +19,7 @@
   },
   "formatter": {
     "enabled": true,
+    "includes": ["**", "!**/*.md", "!**/*.mdx"],
     "useEditorconfig": true,
     "lineWidth": 100
   },
@@ -26,7 +27,7 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
-      "nursery": {
+      "suspicious": {
         "useBaseline": {
           "level": "warn",
           "options": {
