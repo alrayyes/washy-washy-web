@@ -94,6 +94,6 @@
     "semantic-release": "25.0.9",
     "sort-package-json": "4.1.0",
     "typescript": "6.0.3",
-    "wrangler": "4.152.0"
+    "wrangler": "4.156.0"
   }
 }
