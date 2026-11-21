@@ -71,7 +71,7 @@
     "@commitlint/config-conventional": "21.2.4",
     "@happy-dom/global-registrator": "21.0.4",
     "@hughescr/stryker-bun-runner": "1.6.0",
-    "@lhci/cli": "0.15.1",
+    "@lhci/cli": "0.16.1",
     "@playwright/test": "1.65.0",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
