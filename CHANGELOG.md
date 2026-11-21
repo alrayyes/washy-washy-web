@@ -1,3 +1,22 @@
+## [1.53.17](https://github.com/alrayyes/washy-washy-web/compare/v1.53.16...v1.53.17) (2026-11-21)
+
+### Bug Fixes
+
+* **deps:** bump @astrojs/starlight from 0.42.10 to 0.43.1 ([6ebc77f](https://github.com/alrayyes/washy-washy-web/commit/6ebc77f6d5095c58e63bd94af1e31b29e8310d51))
+* **deps:** bump @astrojs/starlight from 0.42.7 to 0.42.8 ([d7e3dcb](https://github.com/alrayyes/washy-washy-web/commit/d7e3dcbc5a903faca979ecd668fefdd54504406e))
+* **deps:** bump @astrojs/starlight from 0.42.8 to 0.42.10 ([326d3d6](https://github.com/alrayyes/washy-washy-web/commit/326d3d6b6c9714240df0be2b2cf90a386c2435cc))
+* **deps:** bump @astrojs/svelte from 9.1.1 to 9.1.2 ([019b000](https://github.com/alrayyes/washy-washy-web/commit/019b00054b46558f7f93309825490c0c5234fd66))
+* **deps:** bump @astrojs/svelte from 9.1.2 to 9.1.6 ([0fb1c69](https://github.com/alrayyes/washy-washy-web/commit/0fb1c69278930d1f23d251ebe694e667d5b9277a))
+* **deps:** bump @mcp-b/webmcp-polyfill from 6.0.3 to 6.2.0 ([63238fb](https://github.com/alrayyes/washy-washy-web/commit/63238fb20b4961d45a0545bf04c2d1be8fa8e275))
+* **deps:** bump @tailwindcss/vite from 4.3.3 to 4.3.5 ([fe91969](https://github.com/alrayyes/washy-washy-web/commit/fe91969c957648057bca52118d8f0dbe5d56fc36))
+* **deps:** bump @washy-washy/core from 1.6.3 to 1.6.4 ([bb2b1de](https://github.com/alrayyes/washy-washy-web/commit/bb2b1def2861e14657fd99472852992b9c3c10d4))
+* **deps:** bump astro from 7.4.2 to 7.4.4 ([6009ba6](https://github.com/alrayyes/washy-washy-web/commit/6009ba6669b2b0f1f0582452deae29028fc3812f))
+* **deps:** bump astro from 7.4.4 to 7.4.7 ([96097fd](https://github.com/alrayyes/washy-washy-web/commit/96097fd662dfbfc5a137d48c348cb6c6f8d17e46))
+* **deps:** bump astro from 7.4.7 to 7.4.12 ([e9868ab](https://github.com/alrayyes/washy-washy-web/commit/e9868ab006bab9ebba31849a64b08c9bd4d4d57d))
+* **deps:** bump svelte from 5.57.2 to 5.57.3 ([3bed004](https://github.com/alrayyes/washy-washy-web/commit/3bed004b2bcaabe0d00eacc0dfd4e0e01363d548))
+* **deps:** bump tailwindcss from 4.3.3 to 4.3.5 ([de50858](https://github.com/alrayyes/washy-washy-web/commit/de508582be5b4448c6715b62d5d21ddab9a58909))
+* **deps:** clear the bun audit advisories ([#464](https://github.com/alrayyes/washy-washy-web/issues/464)) ([eb2af05](https://github.com/alrayyes/washy-washy-web/commit/eb2af058e88a7757e651162445eb73444dff18df)), closes [#463](https://github.com/alrayyes/washy-washy-web/issues/463)
+
 ## [1.53.16](https://github.com/alrayyes/washy-washy-web/compare/v1.53.15...v1.53.16) (2026-10-31)
 
 ### Bug Fixes
