@@ -1,5 +1,17 @@
 <!-- release-please adds each release above the previous one. Keep this line: without text above the first heading, the new entry lands below it. -->
 
+## [1.54.0](https://github.com/alrayyes/washy-washy-web/compare/v1.53.19...v1.54.0) (2026-11-27)
+
+
+### Features
+
+* label the repository link just "GitHub" ([#489](https://github.com/alrayyes/washy-washy-web/issues/489)) ([f7f7cbb](https://github.com/alrayyes/washy-washy-web/commit/f7f7cbb1d6829051f2eae144aaa1a27693a2ac2b)), closes [#488](https://github.com/alrayyes/washy-washy-web/issues/488)
+
+
+### Bug Fixes
+
+* point GitHub and licence links at this repository ([#487](https://github.com/alrayyes/washy-washy-web/issues/487)) ([7e381b4](https://github.com/alrayyes/washy-washy-web/commit/7e381b492b510f5da1fe5384c605c1b110c0d5af)), closes [#486](https://github.com/alrayyes/washy-washy-web/issues/486)
+
 ## [1.53.19](https://github.com/alrayyes/washy-washy-web/compare/v1.53.18...v1.53.19) (2026-11-27)
 
 
