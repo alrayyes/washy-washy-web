@@ -47,7 +47,7 @@ test("a docs page has the same header and footer chrome as the rest of the site"
   await expect(page.getByTestId("theme-toggle")).toBeVisible();
 
   const footer = page.locator("footer");
-  await expect(footer.getByRole("link", { name: "Washy washy on GitHub" })).toBeVisible();
+  await expect(footer.getByRole("link", { name: "GitHub", exact: true })).toBeVisible();
   await expect(footer.getByRole("link", { name: "Disclaimer" })).toBeVisible();
   await expect(footer.getByRole("link", { name: "Privacy policy" })).toBeVisible();
 });
@@ -102,4 +102,14 @@ test("an explicit theme choice made on the main site carries to docs pages, no f
 
   await page.goto("/docs/chart-and-machine/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
+test("the mobile menu's repository link reads just GitHub", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto("/docs/chart-and-machine/");
+
+  await page.getByRole("button", { name: "Site menu" }).click();
+
+  const nav = page.getByRole("navigation", { name: "Site" });
+  await expect(nav.getByRole("link", { name: "GitHub", exact: true })).toBeVisible();
 });

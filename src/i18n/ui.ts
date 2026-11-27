@@ -39,7 +39,6 @@ export interface Ui {
   /** The phone header's menu button: opens the nav, language, upload and GitHub link (#288). "Site menu", not "Menu": the docs pages have Starlight's own sidebar "Menu" toggle beside it. Short, it shares a 390px row. */
   "nav.menu": string;
   "switcher.label": string;
-  "footer.github": string;
   "footer.disclaimer": string;
   "footer.privacy": string;
   "footer.copyrightBefore": string;
@@ -305,7 +304,6 @@ const en: Ui = {
   "nav.docs": "Docs",
   "nav.menu": "Site menu",
   "switcher.label": "Language",
-  "footer.github": "Washy washy on GitHub",
   "footer.disclaimer": "Disclaimer",
   "footer.privacy": "Privacy policy",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Licensed under the ",
@@ -555,7 +553,6 @@ const ja: Ui = {
   "nav.docs": "ドキュメント",
   "nav.menu": "サイトメニュー",
   "switcher.label": "言語",
-  "footer.github": "GitHubのwashy washy",
   "footer.disclaimer": "免責事項",
   "footer.privacy": "プライバシーポリシー",
   "footer.copyrightBefore": "© 2026 Ryan Kes。本ソフトウェアは",
@@ -805,7 +802,6 @@ const es: Ui = {
   "nav.docs": "Documentación",
   "nav.menu": "Menú del sitio",
   "switcher.label": "Idioma",
-  "footer.github": "Washy washy en GitHub",
   "footer.disclaimer": "Aviso legal",
   "footer.privacy": "Política de privacidad",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Publicado bajo la licencia ",
@@ -1056,7 +1052,6 @@ const de: Ui = {
   "nav.docs": "Dokumentation",
   "nav.menu": "Seitenmenü",
   "switcher.label": "Sprache",
-  "footer.github": "Washy washy auf GitHub",
   "footer.disclaimer": "Haftungsausschluss",
   "footer.privacy": "Datenschutz",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Veröffentlicht unter der Lizenz ",
@@ -1310,7 +1305,6 @@ const fr: Ui = {
   "nav.docs": "Docs",
   "nav.menu": "Menu du site",
   "switcher.label": "Langue",
-  "footer.github": "Washy washy sur GitHub",
   "footer.disclaimer": "Avertissement",
   "footer.privacy": "Politique de confidentialité",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Distribué sous licence ",
@@ -1563,7 +1557,6 @@ const ar: Ui = {
   "nav.docs": "الوثائق",
   "nav.menu": "قائمة الموقع",
   "switcher.label": "اللغة",
-  "footer.github": "Washy washy على GitHub",
   "footer.disclaimer": "إخلاء المسؤولية",
   "footer.privacy": "سياسة الخصوصية",
   "footer.copyrightBefore": "© 2026 رايان كيس. مرخّص بموجب ",
@@ -1802,7 +1795,6 @@ const zh: Ui = {
   "nav.docs": "文档",
   "nav.menu": "站点菜单",
   "switcher.label": "语言",
-  "footer.github": "GitHub 上的 Washy washy",
   "footer.disclaimer": "免责声明",
   "footer.privacy": "隐私政策",
   "footer.copyrightBefore": "© 2026 Ryan Kes。根据 ",
@@ -2032,7 +2024,6 @@ const tr: Ui = {
   "nav.docs": "Belgeler",
   "nav.menu": "Site menüsü",
   "switcher.label": "Dil",
-  "footer.github": "Washy washy GitHub'da",
   "footer.disclaimer": "Sorumluluk reddi",
   "footer.privacy": "Gizlilik politikası",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Şu lisans altında sunulmuştur: ",
@@ -2273,7 +2264,6 @@ const jive: Ui = {
   "nav.docs": "The Docs, Jack",
   "nav.menu": "Site menu",
   "switcher.label": "Jibber-Jabber",
-  "footer.github": "Washy washy, straight outta sight on GitHub",
   "footer.disclaimer": "The Fine Print",
   "footer.privacy": "Privacy Jibber-Jabber",
   "footer.copyrightBefore": "© 2026 Ryan Kes. This here jam's licensed up solid under the ",
@@ -2526,7 +2516,6 @@ const linkedin: Ui = {
   "nav.docs": "Playbook",
   "nav.menu": "Site menu",
   "switcher.label": "Network",
-  "footer.github": "Washy washy — open to work on GitHub",
   "footer.disclaimer": "Thought Leadership Disclaimer",
   "footer.privacy": "Data Privacy (We're Compliant, Promise)",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Proud to announce this is licensed under the ",
@@ -2781,7 +2770,6 @@ const ru: Ui = {
   "nav.docs": "Документация",
   "nav.menu": "Меню сайта",
   "switcher.label": "Язык",
-  "footer.github": "Washy washy на GitHub",
   "footer.disclaimer": "Отказ от ответственности",
   "footer.privacy": "Политика конфиденциальности",
   "footer.copyrightBefore": "© 2026 Ryan Kes. Лицензия ",
