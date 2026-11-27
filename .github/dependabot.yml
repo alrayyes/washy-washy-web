@@ -25,14 +25,6 @@ updates:
       prefix-development: chore
       include: scope
     ignore:
-      # js-yaml 5.x dropped the CJS default-export interop; Astro 7.2.2's
-      # bundled `js-yaml: ^4.3.0` still does a default import
-      # (astro/dist/runtime/prerender/static-paths.js), so bumping this
-      # direct devDependency to 5.x breaks the build outright even though
-      # nothing here imports js-yaml directly. Lift once Astro's own
-      # js-yaml range covers 5.x.
-      - dependency-name: js-yaml
-        update-types: ["version-update:semver-major"]
       # TypeScript 7's new native compiler doesn't yet expose the
       # programmatic API `astro check` (via @astrojs/language-server)
       # relies on -- astro check refuses to run under it outright. See
