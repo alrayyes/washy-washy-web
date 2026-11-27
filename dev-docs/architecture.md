@@ -17,8 +17,8 @@ plain server-rendered HTML — the header, the footer, page chrome — with the
 genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`,
 `SheetViewer`, `HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav`
 and `MachineEditor` — every island is Svelte
-(#239/#240/#241/#243/#244/#245/#246); the site uses no React of its own,
-which is only installed because `@washy-washy/pdf` renders with it. An island hydrates independently
+(#239/#240/#241/#243/#244/#245/#246); the site's own code uses no React.
+It's still installed, because `@washy-washy/pdf` renders with it. An island hydrates independently
 of the rest of the page, and each one that has meaningful client-side state
 to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see

@@ -53,7 +53,7 @@ function move(index: number, delta: number) {
 <div data-testid={`list-editor-${slug(label)}`}>
   <h3 class={FIELD_LABEL}>{label}</h3>
   <!-- text-body, not text-muted: muted-on-panel is 4.40:1, just under
-  WCAG AA's 4.5:1 (#57) — see the same note in SheetViewer.svelte. -->
+  WCAG AA's 4.5:1 (#57) — see the same note in src/lib/styles.ts. -->
   {#if hint}
     <p class="mt-0.5 mb-1 text-xs text-body">{hint}</p>
   {/if}

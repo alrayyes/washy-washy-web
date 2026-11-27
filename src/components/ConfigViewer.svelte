@@ -17,7 +17,7 @@
   this port.
 
   Every helper below (ChipList, MachineSummary, ProseField,
-  ChipSelectRow, ChipMultiRow, PillToggle, DurationField,
+  ChipSelectRow, ChipMultiRow, PillToggle, durationField,
   EditableSplitField, ReferenceLink, ChartCards) is a snippet, not a
   separate component: none of them hold any state of their own, they're
   all plain render-from-props-plus-a-callback, the same reasoning

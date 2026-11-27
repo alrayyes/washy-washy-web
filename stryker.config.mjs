@@ -10,37 +10,8 @@
 // Bun's Inspector Protocol. Same evaluation `alrayyes/washy-washy-core`#67
 // already did; see that repo's PR #72 for the full writeup.
 //
-// Pinned to 1.4.0, not 1.3.8: 1.3.8 has a confirmed bug where a mutant that
-// defeats the runner's own `testFiles` override lets `bun test` fall through
-// to auto-discovery and re-spawn itself from inside a spawn it already made,
-// with nothing to stop the nesting — unbounded process growth, not a slow
-// run (upstream's own A/B: "20% at 11min (ETA ~54min)" before the fix,
-// "completes in 7m52s" after, on the same machine and Stryker version). Hit
-// live in this repo's own CI on #249, the first PR to ever put
-// `src/i18n/ui.ts` (2210 mutants, 11 locale dictionaries) through the
-// mutation job: a clean 100%/0-timeout/2m28s run locally against 1.3.8
-// timed out on ~90%+ of mutants in CI regardless of `--concurrency` (tried
-// both 4 and 2 — lower concurrency made the *wall clock* worse). 1.4.0's
-// "Stop runaway recursive bun test spawns leaking process trees" is a
-// real, confirmed fix for a real bug; see
-// github.com/hughescr/stryker-bun-runner's 1.3.8...1.4.0 compare for the
-// full writeup, including the process-group/depth-limiting mechanism. It
-// did not, on its own, explain #249's actual CI timeout rate, though —
-// #251 spent five real CI runs chasing the real mechanism (confirmed
-// concurrency 2 still being worse than 4 wasn't this bug either,
-// retested fresh against 1.4.0, same result) and concluded it's a real,
-// permanent constraint of this runner class against a file `ui.ts`'s
-// size, not a fixable bug: see `.github/workflows/check.yml`'s mutation
-// job for the full writeup. #265 later scoped `ui.ts`'s own mutant count
-// down (excluding the locale dictionaries' string literals from
-// mutation, via the inline `// Stryker disable StringLiteral` pairs in
-// the file itself) rather than fixing this runner-class constraint, so
-// `ui.ts` is back in CI's mutation job despite it.
-//
-// `@stryker-mutator/core` stays pinned to 9.6.1 rather than jumping to the
-// current 10.0.0: 1.4.0 widened the runner's own peer range to
-// `^9.0.0 || ^10.0.0`, so a 10.0.0 upgrade is possible now, but it's a
-// separate, deliberate major-version bump this fix doesn't also make.
+// Don't go back to a runner older than 1.4.0: 1.3.8 can re-spawn `bun test`
+// from inside its own spawn, with nothing to stop the nesting.
 //
 // Unlike washy-washy-core, this repo's pinned `typescript` (6.0.3) is the
 // classic compiler, not the Go rewrite — `require("typescript")` exposes the
@@ -70,12 +41,9 @@ export default {
   // of them — harmless, not a hole this introduces: they're checked by
   // running their tests same as before, same as every mutant already was.
   checkers: ["typescript"],
-  // Scoped to the code the `bun:test` suite exercises directly:
-  // src/lib/**/*.ts, src/i18n/**/*.ts and the Svelte components that are
-  // pure rendering or can be mounted in a test. The other components and
-  // every .astro page touch window, document, the clipboard or Astro's own
-  // render pipeline, so their mutants would survive under bun:test with no
-  // coverage. They stay e2e-only, on purpose.
+  // The mutation scope is src/lib, src/i18n and the components listed below.
+  // The other components and the .astro pages aren't mutated; the e2e suite
+  // covers them.
   //
   // `bun run mutation` with no arguments checks the whole list. CI's
   // `mutation` job in `.github/workflows/check.yml` narrows it with

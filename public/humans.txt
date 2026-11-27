@@ -1,6 +1,6 @@
 /* SITE */
     Last update: 2026/11/27
-    Language: English
+    Language: English, Japanese, German, Spanish, French, Arabic, Chinese, Turkish, Russian
     Doctype: HTML5
     Standards: HTML5, CSS3
     Components: Astro, Starlight, Svelte, Tailwind CSS

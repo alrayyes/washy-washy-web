@@ -10,7 +10,7 @@
 export const CHART_FIELD_LIMITS = {
   clothingType: 60,
   detergent: 200,
-  /** The stored value, including the leading "~" `DurationField` always adds back. */
+  /** The stored value, including the leading "~" `durationField` always adds back. */
   duration: 12,
   ironingNotes: 400,
   drying: 150,

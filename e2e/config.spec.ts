@@ -428,7 +428,7 @@ test("chips and pills all apply and download correctly", async ({ page }) => {
   await goto(page);
 
   // Every constrained field is a click, styled the same as the read-only
-  // sheet's chip rows (Sheet.svelte's ChipRow) — see the screenshot in #90.
+  // sheet's chip rows (Sheet.svelte's chipRow) — see the screenshot in #90.
   const card = page.locator('[data-testid="chart-cards"] > article').first();
   await card.locator('[data-testid="chip-temperature-30"]').click();
   await card.locator('[data-testid="toggle-fabric_softener"]').click();

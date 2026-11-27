@@ -127,6 +127,7 @@ jobs:
   # src/i18n/ui.ts is in scope because its dictionaries are fenced with
   # `// Stryker disable StringLiteral`. Without that its translated strings
   # alone are thousands of mutants, more than this runner can finish.
+  # test/ui.test.ts checks those strings for missing keys and empty values.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 25

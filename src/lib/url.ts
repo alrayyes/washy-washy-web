@@ -18,9 +18,10 @@ function isVariant(value: string | null): value is Variant {
  * apart from a link that explicitly asks for the bundled/default view.
  *
  * Kept in its own file, apart from the `window`-touching write side
- * (`urlHistory.ts`): `tsconfig.json` has no DOM lib, and a plain function
- * like this one is worth unit-testing from the `test/` suite — which
- * only works because nothing in this file's module graph reaches `window`.
+ * (`urlHistory.ts`): `tsconfig.test.json`, which type-checks `test/` and
+ * what it imports, has no DOM lib. A plain function like this one is worth
+ * unit-testing there, which only works because nothing in this file's
+ * module graph reaches `window`.
  */
 export function readUrlFilters(search: string): Partial<StoredFilters> {
   const params = new URLSearchParams(search);
