@@ -39,6 +39,9 @@ jobs:
       # relaxed for everyone else. A custom --subject loses GitHub's " (#N)", so
       # it goes back on: the release notes need it for the `released` label.
       #
+      # Disarmed first when already armed: arming again keeps the first subject,
+      # so a Dependabot retitle would ship under the old version (#484).
+      #
       # --auto is the whole safety story: it holds the pull request until the
       # required checks on main have passed. Without a ruleset naming those
       # checks it merges the moment the branch is mergeable, red or not.
@@ -54,11 +57,18 @@ jobs:
       # exempt from the guard, so the release is as prompt as after a push.
       - name: Wave it through once the checks are green
         run: |
-          subject=$(printf '%s' "$PR_TITLE" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
+          # The title is read live, since the event's goes stale on a re-run. It
+          # is assigned on its own line so a failed read stops the step.
+          pr=$(gh pr view "$PR_URL" --json title,state,autoMergeRequest \
+            --jq '"\(.state == "OPEN" and .autoMergeRequest != null) \(.title)"')
+          read -r armed title <<< "$pr"
+          subject=$(printf '%s' "$title" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
+          if [ "$armed" = true ]; then
+            gh pr merge --disable-auto "$PR_URL"
+          fi
           gh pr merge --auto --squash --subject "$subject (#$PR_NUMBER)" "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          PR_TITLE: ${{ github.event.pull_request.title }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
