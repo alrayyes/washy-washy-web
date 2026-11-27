@@ -69,7 +69,7 @@ export default defineConfig({
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/alrayyes/washy-washy",
+          href: "https://github.com/alrayyes/washy-washy-web",
         },
       ],
       editLink: {
