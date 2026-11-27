@@ -143,10 +143,13 @@ aren't required.
 else, runs daily, and closes the issue when the audit is clean. There's no
 ignore list: an advisory with no fix yet stays in that issue until one ships.
 
-Versioning is automatic: [semantic-release](https://semantic-release.gitbook.io/)
-reads the Conventional Commits on `main` and cuts a version, changelog and
-GitHub release — nobody picks a version by hand. Cloudflare's own GitHub
-integration handles the actual deploy on every push to `main`, and posts a
-preview URL on every pull request.
+Versioning is automatic: [release-please](https://github.com/googleapis/release-please)
+reads the Conventional Commits on `main` and keeps a release pull request open
+with the next version and its `CHANGELOG.md` entry. That pull request merges
+itself once its checks pass, and the merge tags `vX.Y.Z` and writes the GitHub
+release. Nobody picks a version by hand. Cloudflare's own GitHub integration
+handles the actual deploy on every push to `main`, and posts a preview URL on
+every pull request. Both release workflows need the `RELEASE_TOKEN` secret, a
+token that can write contents, issues and pull requests.
 
-On a release, the same job also builds the site and captures a light and a dark screenshot of every English page except the footer's (disclaimer and privacy), then attaches the 18 PNGs to the GitHub release. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.
+The release starts as a draft. The `publish` job in `release.yml` builds the site, captures a light and a dark screenshot of every English page except the footer's (disclaimer and privacy), attaches the 18 PNGs, publishes the release and labels what shipped `released`. If it fails, re-run the failed job. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.

@@ -1,8 +1,6 @@
 /**
- * semantic-release (.releaserc.json) writes CHANGELOG.md newest-first and
- * never bumps package.json's own version (no @semantic-release/npm
- * plugin), so the changelog's top heading is the only build-time source of
- * truth for "what version is this".
+ * release-please writes CHANGELOG.md newest-first, so its top version
+ * heading is the build-time answer to "what version is this".
  */
 const VERSION_HEADING = /^## \[(\d+\.\d+\.\d+)\]/m;
 

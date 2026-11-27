@@ -24,7 +24,7 @@ export const collections = {
     loader: glob({ pattern: "**/*.md", base: "./src/content/docs-linkedin" }),
     schema: z.object({ title: z.string(), description: z.string() }),
   }),
-  // semantic-release (.releaserc.json) writes the real CHANGELOG.md at the
+  // release-please writes the real CHANGELOG.md at the
   // repo root, not under src/content/ — the glob loader's own `base` can
   // point anywhere, same trick as docsJive/docsLinkedin pointing outside
   // the default content dir. One entry, no frontmatter, rendered as-is on

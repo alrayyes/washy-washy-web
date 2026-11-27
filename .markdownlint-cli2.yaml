@@ -42,8 +42,8 @@ globs:
 ignores:
   - "**/node_modules/**"
   - "dist/**"
-  # Written by semantic-release from the commit subjects, and committed by the
-  # release job without passing through any hook. Linting it means failing a
+  # Written by release-please from the commit subjects, in a release pull
+  # request that passes through no hook. Linting it means failing a
   # run over prose no human chose and no human can fix in place.
   - "CHANGELOG.md"
   # Playwright's own error-context.md dumps, written into test-results/

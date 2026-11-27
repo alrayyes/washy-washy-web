@@ -268,7 +268,7 @@ jobs:
           retention-days: 1
 
   # The commit-msg hook already reads every message, but a hook is skippable and
-  # these messages are load-bearing: semantic-release reads the Conventional
+  # these messages are load-bearing: release-please reads the Conventional
   # Commits that landed to decide the next version, so a stray "wip" is a
   # release that does not happen. Pull requests only — there is no range to
   # check on a push, and rewriting history to fix an old message is worse than

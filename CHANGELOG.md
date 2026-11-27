@@ -1,3 +1,5 @@
+<!-- release-please adds each release above the previous one. Keep this line: without text above the first heading, the new entry lands below it. -->
+
 ## [1.53.17](https://github.com/alrayyes/washy-washy-web/compare/v1.53.16...v1.53.17) (2026-11-21)
 
 ### Bug Fixes
