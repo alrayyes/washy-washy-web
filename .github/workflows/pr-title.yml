@@ -1,7 +1,7 @@
 # Merges here are squashes, so the pull request title becomes the subject of
 # the commit that lands on main and the branch commits become its body.
 # `check.yml`'s `commits` job lints the branch — exactly the half a squash
-# throws away. Nothing reads the title, and semantic-release reads nothing
+# throws away. Nothing reads the title, and release-please reads nothing
 # else.
 #
 # commitlint has no PR-title mode — it only ever reads commit objects — so

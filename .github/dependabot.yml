@@ -25,14 +25,6 @@ updates:
       prefix-development: chore
       include: scope
     ignore:
-      # Held at 9.x deliberately. 10.x exports the new-style preset config
-      # ({commits, parser, writer}) and @semantic-release/release-notes-generator
-      # 14 still reads writerOpts, so the notes come out as a version heading
-      # with nothing under it and no step fails. Dependabot bumps merge
-      # themselves here, so without this the fix would be undone by a bot.
-      # Lift it when the generator understands the new shape.
-      - dependency-name: conventional-changelog-conventionalcommits
-        update-types: ["version-update:semver-major"]
       # js-yaml 5.x dropped the CJS default-export interop; Astro 7.2.2's
       # bundled `js-yaml: ^4.3.0` still does a default import
       # (astro/dist/runtime/prerender/static-paths.js), so bumping this

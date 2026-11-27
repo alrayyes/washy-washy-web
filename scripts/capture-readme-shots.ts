@@ -4,8 +4,8 @@
  * GitHub release. The README links them at `releases/latest/download/`, so
  * nothing is committed and the images follow each release.
  *
- * Run by semantic-release's prepare step (`.releaserc.json`), so it only
- * costs anything when a release is actually being cut. By hand:
+ * Run by `release.yml`'s `publish` job, so it only costs anything when a
+ * release is actually being cut. By hand:
  * `bun run readme:shots`.
  */
 import { mkdir } from "node:fs/promises";

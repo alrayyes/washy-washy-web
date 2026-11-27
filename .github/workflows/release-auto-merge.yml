@@ -1,0 +1,34 @@
+# release-please has no built-in auto-merge, same gap as Dependabot, same fix:
+# gate on the label release-please itself applies, then arm auto-merge and let
+# GitHub wait for the required checks.
+#
+# `labeled` is in the trigger types because release-please adds its label after
+# opening the pull request, so the `opened` payload never carries it.
+#
+# pull_request, not pull_request_target: release-please's branch lives in this
+# repo, never a fork, and nothing here checks code out.
+#
+# RELEASE_TOKEN, not GITHUB_TOKEN: a GITHUB_TOKEN merge fires no workflow on
+# main, so check would never run and the release would never be tagged
+# (alrayyes/washy-washy-cli#188).
+name: release-auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+permissions: {}
+
+jobs:
+  auto-merge:
+    # The label rather than the actor: RELEASE_TOKEN's owner authors the pull
+    # request, not a bot account.
+    if: "contains(github.event.pull_request.labels.*.name, 'autorelease: pending')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Enable auto-merge
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
