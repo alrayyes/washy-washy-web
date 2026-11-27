@@ -160,4 +160,8 @@ If `publish` fails, the release stays a draft. Use **Re-run failed jobs**. **Re-
 gh release edit vX.Y.Z --draft=false --latest
 ```
 
-Use `--latest=false` instead if a newer version is already published. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.
+Use `--latest=false` instead if a newer version is already published. Publishing by hand skips the labelling, so add `released` to what shipped yourself.
+
+The same command is the way out if the `release-please` job itself goes red after creating the draft: a re-run finds the release already made, so `publish` stays skipped.
+
+The README links the screenshots at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.
