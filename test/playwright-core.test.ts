@@ -8,7 +8,7 @@ const lockfile = readFileSync(new URL("../bun.lock", import.meta.url), "utf8");
 describe("playwright-core", () => {
   test("resolves once, at the version playwright depends on", () => {
     const resolved = [...lockfile.matchAll(/\["playwright-core@([^"]+)"/g)].map(([, v]) => v);
-    const wanted = lockfile.match(/"playwright-core": "([^"]+)" \}, "bin"/)?.[1];
+    const wanted = lockfile.match(/\["playwright@[^\n]*?"playwright-core": "([^"]+)"/)?.[1];
 
     expect(wanted).toBeDefined();
     expect(resolved).toEqual([wanted as string]);
