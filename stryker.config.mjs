@@ -142,6 +142,9 @@ export default {
     // (transformers/svelte-transformer.js), so these mutate the same way
     // any other pure-render source here does.
     "src/lib/dialGeometry.ts",
+    // Parsing a .svelte file needs estree-walker, which Stryker imports from
+    // svelte's directory though neither depends on it. Keep the devDependency
+    // (test/mutation-parser-deps.test.ts).
     "src/components/ProgramDial.svelte",
     "src/components/IronDial.svelte",
     "src/components/SectionHeading.svelte",
