@@ -12,13 +12,17 @@ declare global {
 import { afterEach, beforeEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import type { Instruction } from "@washy-washy/core";
 import { mount, tick, unmount } from "svelte";
-import ConfigViewer from "../src/components/ConfigViewer.svelte?client";
 import { translator } from "../src/i18n/ui";
 import { CONFIG_CARD_BATCH } from "../src/lib/configCards";
 import { readCustomConfig } from "../src/lib/customConfig";
+import { importClient } from "./support/importClient";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 setDefaultTimeout(60_000);
+
+const { default: ConfigViewer } = await importClient(
+  () => import("../src/components/ConfigViewer.svelte?client"),
+);
 
 const t = translator("en");
 const { machine, chart } = await loadConfig(DIST_CONFIG);

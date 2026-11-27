@@ -33,8 +33,8 @@ declare global {
 import { afterEach, beforeEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { cardGroups, type ResolvedInstruction, resolve } from "@washy-washy/core";
 import { mount, tick, unmount } from "svelte";
-import Sheet from "../src/components/Sheet.svelte?client";
 import { translator } from "../src/i18n/ui";
+import { importClient } from "./support/importClient";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 // Mounting a Svelte component under happy-dom costs a second or two on an idle
@@ -43,6 +43,10 @@ import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 // covers the beforeEach/afterEach hooks here. One minute fails a hung test
 // without failing a busy machine; the assertions are unchanged. See #322.
 setDefaultTimeout(60_000);
+
+const { default: Sheet } = await importClient(
+  () => import("../src/components/Sheet.svelte?client"),
+);
 
 const t = translator("en");
 const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
