@@ -14,3 +14,17 @@ describe("repository links", () => {
     expect(sources.filter((file) => OLD_NAME.test(readFileSync(file, "utf8")))).toEqual([]);
   });
 });
+
+const REPO = "https://github.com/alrayyes/washy-washy-web";
+
+describe("repository link targets", () => {
+  test.each([
+    ["src/components/SiteHeader.astro", `"${REPO}"`],
+    ["src/components/SiteFooter.astro", `"${REPO}"`],
+    ["src/components/SiteFooter.astro", `"${REPO}/blob/main/LICENSE"`],
+    ["src/layouts/Layout.astro", `"${REPO}"`],
+    ["astro.config.mjs", `"${REPO}"`],
+  ])("%s links %s", (file, href) => {
+    expect(readFileSync(file, "utf8")).toContain(href);
+  });
+});
