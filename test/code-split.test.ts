@@ -9,7 +9,7 @@ describe("SheetViewer", () => {
     const source = await Bun.file(SHEET_VIEWER).text();
 
     // A static `import ... from "@washy-washy/pdf"` ships @react-pdf/renderer
-    // and pdf-lib in the page's main chunk even though nothing needs them
+    // in the page's main chunk even though nothing needs it
     // until the download button is clicked. Only a dynamic import() lets a
     // bundler split that weight into its own chunk, loaded on demand.
     expect(source).not.toMatch(/^import\s[^;]*from\s+["']@washy-washy\/pdf["']/m);

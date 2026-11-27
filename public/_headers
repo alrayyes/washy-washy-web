@@ -1,6 +1,6 @@
 # Cloudflare Workers static assets read this file from the build output.
 # Everything revalidates by default: no-cache keeps the ETag round trip but
-# never serves a stale page, and the service worker (sw.js) needs the same.
+# never serves a stale page.
 # Astro fingerprints everything under /_astro/, so that one path is cached for
 # a year and never revalidated. The "!" detaches the default above, since
 # matching rules otherwise merge their values into one header.

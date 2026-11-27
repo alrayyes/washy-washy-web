@@ -278,7 +278,7 @@ test("the nav doesn't force horizontal scroll at a 320px viewport", async ({ pag
   await page.goto("/");
   await page.waitForSelector('[data-hydrated="true"]');
 
-  // Scoped to the site chrome's own <header> — Sheet.tsx has an unrelated
+  // Scoped to the site chrome's own <header> — Sheet.svelte has an unrelated
   // <header> of its own further down the page.
   const header = page.locator("body > header");
   await expect.poll(() => header.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
@@ -308,7 +308,7 @@ for (const { locale, label } of OVERLAP_TEST_LOCALES) {
     // tried to override it by appending a later Tailwind class in the same
     // string — class order in a `className` attribute doesn't affect the
     // generated stylesheet's cascade order, so both this title input and
-    // DurationField's own input silently ignored their intended overrides
+    // durationField's own input silently ignored their intended overrides
     // and fought each other for space on a 320px-wide card.
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(locale ? `/${locale}/config` : "/config");
@@ -428,7 +428,7 @@ test("chips and pills all apply and download correctly", async ({ page }) => {
   await goto(page);
 
   // Every constrained field is a click, styled the same as the read-only
-  // sheet's chip rows (Sheet.tsx's ChipRow) — see the screenshot in #90.
+  // sheet's chip rows (Sheet.svelte's chipRow) — see the screenshot in #90.
   const card = page.locator('[data-testid="chart-cards"] > article').first();
   await card.locator('[data-testid="chip-temperature-30"]').click();
   await card.locator('[data-testid="toggle-fabric_softener"]').click();
@@ -451,8 +451,8 @@ test("chips and pills all apply and download correctly", async ({ page }) => {
 test("toggling ironing off hides the iron setting chips and clears the value", async ({ page }) => {
   await goto(page);
 
-  // The first pile in the bundled chart is ironed — see data/washing-
-  // instructions.csv.dist — so its iron-setting chips start visible.
+  // The first pile in the bundled chart is ironed — see data/washy-
+  // washy.json.dist — so its iron-setting chips start visible.
   const card = page.locator('[data-testid="chart-cards"] > article').first();
   await expect(card.locator('[data-testid="chip-iron_setting-3"]')).toBeVisible();
 

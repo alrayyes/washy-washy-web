@@ -14,7 +14,7 @@ export interface ReadmePage {
   /** Stem of the file name, and the picture's alt text. */
   name: string;
   alt: string;
-  /** Pages with a React island wait for it to hydrate before the shot. */
+  /** Pages with a Svelte island wait for it to hydrate before the shot. */
   hydrated: boolean;
 }
 

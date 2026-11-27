@@ -2,7 +2,7 @@ import { expect, type Page, test } from "@playwright/test";
 import { expectNoA11yViolations } from "./a11y";
 
 /**
- * Reused across pages by construction (`KeyboardNav.tsx` mounts once, in
+ * Reused across pages by construction (`KeyboardNav.svelte` mounts once, in
  * `SiteHeader`) — most of these run against the front page, which has both
  * a search-style field (`/`'s target) and enough content to scroll, and one
  * test confirms the same bindings reach `/config` too, proving this isn't

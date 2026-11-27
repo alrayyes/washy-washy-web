@@ -119,40 +119,15 @@ jobs:
   # as "the suite has a gap" rather than "the code is broken".
   #
   # Scoped to files this PR actually changed (or, on a push to main, the
-  # last commit's own files), not stryker.config.mjs's full `mutate` list —
-  # per rules/testing.md, inherited mutation-testing debt gets a tracked
-  # issue rather than blocking every unrelated PR on gaps it didn't
-  # introduce. `thresholds.break: 100` still applies to whatever's in scope
-  # for a given run — no ratchet, just a narrower set.
+  # last commit's own files), not stryker.config.mjs's full `mutate` list,
+  # so a gap that was already there can't block an unrelated PR.
+  # `thresholds.break: 100` still applies to whatever's in scope. The paths
+  # below mirror that list: change both together.
   #
-  # #219 closed both of that issue's holes: src/lib and src/i18n now cover
-  # every file in each directory (including urlHistory.ts — see
-  # stryker.config.mjs's own comment for why it was excluded before and
-  # isn't anymore), plus the pure-render-logic components that used to be
-  # three .tsx files and are now their Svelte ports (dials.tsx/
-  # SectionHeading.tsx/TranslationProvider.tsx are all deleted — #245 was
-  # the last consumer). The rest of the .tsx/.astro layer stays a
-  # deliberate, permanent exclusion — not debt — for the same reason
-  # stryker.config.mjs documents.
-  #
-  # src/i18n/ui.ts no longer needs a carve-out. #251 diagnosed the CI-only
-  # timeout on this file as a real, permanent constraint of this CI
-  # runner class against ui.ts's own size (2210 mutants, by far the
-  # largest target in this repo — everything else tops out in the
-  # hundreds) rather than a fixable bug, and #251's own companion PR
-  # excluded the file entirely as a stopgap. That mutant count was
-  # dominated by the 11 locale dictionaries' string literals, which
-  # test/ui.test.ts's key-parity and non-empty-value checks already
-  # covered without any help from mutation testing — Stryker never had
-  # real leverage over translated string content in the first place.
-  # #265 scoped Stryker's mutation of ui.ts down to `translator()` and its
-  # interpolation logic via inline `// Stryker disable StringLiteral` /
-  # `// Stryker restore StringLiteral` pairs around each locale
-  # dictionary — the same pattern already used in src/lib/storage.ts,
-  # src/lib/filter.ts and src/i18n/locales.ts — which dropped the file's
-  # real mutant count to roughly 20, back in line with every other file
-  # this job covers, and removed the reason for the exclusion above
-  # along with it.
+  # src/i18n/ui.ts is in scope because its dictionaries are fenced with
+  # `// Stryker disable StringLiteral`. Without that its translated strings
+  # alone are thousands of mutants, more than this runner can finish.
+  # test/ui.test.ts checks those strings for missing keys and empty values.
   mutation:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -186,7 +161,7 @@ jobs:
           --mutate "$(echo "${{ steps.changed.outputs.files }}" | paste -sd, -)"
       - name: Nothing to mutate
         if: steps.changed.outputs.files == ''
-        run: echo "No src/lib or src/i18n changes in this diff — nothing to mutate."
+        run: echo "No file in the mutation scope changed, so there is nothing to mutate."
 
   # Real browser, real clicks — the layer type checks and static-markup
   # assertions can't reach. Runs against a plain static file server over a

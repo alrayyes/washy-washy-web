@@ -4,7 +4,7 @@
  * `astro preview` can't be used here: it always daemonizes and the invoking
  * process exits immediately once the daemon is up (or already running),
  * which Playwright's `webServer` reads as a crash — it expects the command
- * to keep running in the foreground. `apps/web` is genuinely static, so a
+ * to keep running in the foreground. The app is genuinely static, so a
  * plain file server is also the more honest test: it's what Cloudflare
  * actually serves, not an Astro-specific dev tool standing in for it.
  */

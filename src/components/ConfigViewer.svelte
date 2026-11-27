@@ -16,9 +16,9 @@
   `dials.tsx` (`ProgramDial`/`IronDial`) — all three are deleted alongside
   this port.
 
-  Every helper below (ChipList, MachineSummary, ProseField,
-  ChipSelectRow, ChipMultiRow, PillToggle, DurationField,
-  EditableSplitField, ReferenceLink, ChartCards) is a snippet, not a
+  Every helper below (chipList, machineSummary, proseField,
+  chipSelectRow, chipMultiRow, pillToggle, durationField,
+  editableSplitField, referenceLink, chartCards) is a snippet, not a
   separate component: none of them hold any state of their own, they're
   all plain render-from-props-plus-a-callback, the same reasoning
   `Sheet.svelte` (#243) already applied to its own read-only equivalents
