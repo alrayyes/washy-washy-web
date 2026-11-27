@@ -39,6 +39,9 @@ jobs:
       # relaxed for everyone else. A custom --subject loses GitHub's " (#N)", so
       # it goes back on: the release notes need it for the `released` label.
       #
+      # Disarmed first when already armed: arming again keeps the first subject,
+      # so a Dependabot retitle would ship under the old version (#484).
+      #
       # --auto is the whole safety story: it holds the pull request until the
       # required checks on main have passed. Without a ruleset naming those
       # checks it merges the moment the branch is mergeable, red or not.
@@ -55,6 +58,9 @@ jobs:
       - name: Wave it through once the checks are green
         run: |
           subject=$(printf '%s' "$PR_TITLE" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
+          if [ "$(gh pr view "$PR_URL" --json autoMergeRequest --jq '.autoMergeRequest != null')" = true ]; then
+            gh pr merge --disable-auto "$PR_URL"
+          fi
           gh pr merge --auto --squash --subject "$subject (#$PR_NUMBER)" "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
