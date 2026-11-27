@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Runs against a real static build (`astro build`, served by
- * scripts/serve-dist.ts), not `astro dev` or `astro preview` — `apps/web`
+ * scripts/serve-dist.ts), not `astro dev` or `astro preview` — the app
  * ships as a static site with no server, and both of Astro's own dev tools
  * run as a background daemon that exits immediately once started, which
  * Playwright's `webServer` reads as a crash rather than a running server.

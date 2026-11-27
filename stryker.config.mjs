@@ -70,77 +70,21 @@ export default {
   // of them — harmless, not a hole this introduces: they're checked by
   // running their tests same as before, same as every mutant already was.
   checkers: ["typescript"],
-  // Scoped to the pure-logic modules this repo's own `bun:test` suite
-  // exercises directly — src/lib/**/*.ts and src/i18n/**/*.ts, plus the
-  // handful of .tsx pieces below that turned out to be pure render logic
-  // (props/hooks in, markup out, nothing touching window/document/refs) once
-  // #219 actually went looking. urlHistory.ts, previously excluded here, is
-  // included too now — see that file's own history for why.
+  // Scoped to the code the `bun:test` suite exercises directly:
+  // src/lib/**/*.ts, src/i18n/**/*.ts and the Svelte components that are
+  // pure rendering or can be mounted in a test. The other components and
+  // every .astro page touch window, document, the clipboard or Astro's own
+  // render pipeline, so their mutants would survive under bun:test with no
+  // coverage. They stay e2e-only, on purpose.
   //
-  // #219's two holes, and what closed each:
-  //
-  // Hole 1 — every .tsx/.astro file was outside this glob entirely. Most of
-  // them still are, .svelte now rather than .tsx for the ones already
-  // ported (#239): HeaderUpload/ConfigViewer/MachineEditor/SheetViewer/
-  // WarningBanner/KeyboardNav/ThemeToggle all read window/document/refs
-  // directly (file uploads, clipboard, matchMedia, native <dialog>, scroll
-  // position) and every .astro page needs Astro's own render pipeline, not
-  // React's — mutating any of that would still only produce unkillable
-  // NoCoverage mutants under bun:test, the same blind spot codecov.yml
-  // documents for e2e-covered DOM-interaction code. That's a deliberate,
-  // permanent call: they stay e2e-only.
-  //
-  // But four files turned out to have *no* DOM surface at all — all four
-  // now deleted, their Svelte ports (or, for Sheet.tsx, nothing at all —
-  // ConfigViewer.tsx duplicated its own read-only rendering rather than
-  // importing it) taking their place in the list below: Sheet.tsx
-  // (module-level, confirmed by grep — no window/document/useRef/useEffect
-  // anywhere in it; test/sheet-render.test.ts has quietly unit-tested it via
-  // `renderToStaticMarkup` since #21, years before mutation testing existed
-  // here), dials.tsx's ProgramDial/IronDial (pure geometry-to-SVG functions),
-  // SectionHeading.tsx (one string transform), and TranslationProvider.tsx
-  // (a Context provider plus two hooks, no DOM types anywhere in its
-  // signature). None of these needed a DOM shim (jsdom/happy-dom): React's
-  // own `react-dom/server` rendered a real, correct markup string for a pure
-  // component without ever touching a `window`. A DOM-capable layer for the
-  // genuinely interactive components above was investigated and rejected —
-  // getting those to a real 100% would mean re-deriving most of Playwright's
-  // own coverage through a mocked DOM, for components already exercised by
-  // real clicks in a real browser (e2e/*.spec.ts).
-  //
-  // Hole 2 — urlHistory.ts was excluded even though it's a plain .ts file:
-  // its own module graph reaches `window`, which tsconfig.test.json
-  // deliberately has no types for (see url.ts's doc comment, which draws
-  // this same line for its sibling file). test/support/windowShim.d.ts now
-  // gives tsconfig.test.json's program a minimal, hand-written `window`
-  // shape — just `location.pathname` and `history.replaceState`, the only
-  // two members this file touches — instead of pulling the full "DOM" lib
-  // into every other test file's type-checking. test/url-history.test.ts
-  // stands up a real object matching that shape at runtime (Bun itself has
-  // no `window` global either) and calls `writeUrlFilters` directly.
-  //
-  // This is the full local-audit scope (currently a genuine 100%, verified
-  // 2026-09-11) — `bun run mutation` with no arguments checks all of it.
-  // CI's own `mutation` job in `.github/workflows/check.yml` narrows this
-  // further at invocation time, via `stryker run --mutate <changed files>`,
-  // to just the files a given PR actually touched: rules/testing.md tracks
-  // pre-existing mutation-testing debt as its own issue and gates new/
-  // changed code only, rather than blocking unrelated work on gaps it
-  // didn't introduce. There's no debt in this scope right now, but the CI
-  // job is written the same way regardless, since the remaining .tsx/.astro
-  // layer is exactly that kind of permanent, out-of-scope exclusion rather
-  // than debt to burn down.
+  // `bun run mutation` with no arguments checks the whole list. CI's
+  // `mutation` job in `.github/workflows/check.yml` narrows it with
+  // `--mutate <changed files>`, so a pull request answers only for the files
+  // it touched. A component added here has to be added there too.
   mutate: [
     "src/lib/**/*.ts",
     "src/i18n/**/*.ts",
-    // The Svelte ports of dials.tsx/SectionHeading.tsx (#243's first
-    // stage) — dials.tsx, SectionHeading.tsx and TranslationProvider.tsx
-    // are all deleted now (#245 was their last consumer), so there's
-    // nothing left to list alongside these. dialGeometry.ts is the
-    // plain-TS geometry math shared by both new dials, and the
-    // instrumenter has a native Svelte transformer/printer
-    // (transformers/svelte-transformer.js), so these mutate the same way
-    // any other pure-render source here does.
+    // The geometry both dials share.
     "src/lib/dialGeometry.ts",
     // Parsing a .svelte file needs estree-walker, which Stryker imports from
     // svelte's directory though neither depends on it. Keep the devDependency
@@ -148,12 +92,6 @@ export default {
     "src/components/ProgramDial.svelte",
     "src/components/IronDial.svelte",
     "src/components/SectionHeading.svelte",
-    // Sheet.tsx's own Svelte port (#243's second stage) — Sheet.tsx itself
-    // is deleted once this lands (nothing else needs the React version),
-    // so it's replaced here rather than added alongside. CardActions.svelte
-    // is the one sub-component that became its own file instead of a
-    // snippet (see its own doc comment for why); everything else in the
-    // original Sheet.tsx is a snippet inside Sheet.svelte itself.
     "src/components/Sheet.svelte",
     "src/components/CardActions.svelte",
   ],

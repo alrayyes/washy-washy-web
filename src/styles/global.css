@@ -46,7 +46,7 @@
      text-body there instead, not this one (#57). */
   --color-muted: light-dark(#71717a, #a1a1aa);
   /* Never meets WCAG AA as text on any background this app uses
-     (2.3-2.6:1 on white/panel) — decorative only (dials.tsx's tick
+     (2.3-2.6:1 on white/panel) — decorative only (the dials' tick
      marks), never text (#57). */
   --color-faint: light-dark(#a1a1aa, #52525b);
   --color-line: light-dark(#d4d4d8, #3f3f46);
@@ -95,7 +95,7 @@
      form controls and scrollbars follow prefers-color-scheme too,
      without a second dark: declaration anywhere (#62) — and is what
      every `light-dark()` value above resolves against. The explicit
-     toggle (`ThemeToggle.tsx`) narrows this to a single scheme by
+     toggle (`ThemeToggle.svelte`) narrows this to a single scheme by
      setting `data-theme` on this element; `themePreference.ts`'s inline
      bootstrap script does the same before first paint so there's no
      flash (#111). */

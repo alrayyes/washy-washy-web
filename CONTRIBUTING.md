@@ -7,7 +7,7 @@ you need to actually get a checkout running.
 
 ## Toolchain
 
-- [Bun](https://bun.sh/) 1.4.5, [TypeScript](https://www.typescriptlang.org/) 6.0.3 (pinned separately from `washy-washy`'s own TypeScript — see `astro check`'s own version needs).
+- [Bun](https://bun.sh/) 1.4.5, [TypeScript](https://www.typescriptlang.org/) 6.0.3.
 
 ```sh
 bun install
@@ -66,7 +66,7 @@ and never reaches a server.
   paint.
 - Unknown URLs get `src/pages/404.astro`, served with a 404 status because `wrangler.jsonc` sets `assets.not_found_handling` to `"404-page"`. Starlight's own 404 route is off (`disable404Route`), or it would build the same file. The file server in `scripts/serve-dist.ts` doesn't read that setting, so `e2e/not-found.spec.ts` runs against `wrangler dev`.
 - `@washy-washy/pdf` is dynamically imported only when a download button is
-  clicked (`SheetViewer.svelte`'s `handleDownload`/`handleDownloadCard`), never
+  clicked (`SheetViewer.svelte`'s `handleDownloadPhone`/`handleDownloadPrint`/`handleDownloadCard`), never
   on page load or a filter change — filtering never triggers a render nobody
   asked for.
 
@@ -132,6 +132,7 @@ checks green before it can merge.
 - `check`, `mutation` and `e2e`, from `.github/workflows/check.yml`
 - `commits`, `ltex`, `dependency-review` and `semgrep`, from the same file
 - `pr-title`, from `.github/workflows/pr-title.yml`
+- `secrets`, from `.github/workflows/gitleaks.yml`
 
 `lighthouse` and `vale` (the advisory prose run) also run on every PR but
 aren't required.

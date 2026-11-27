@@ -17,8 +17,8 @@ plain server-rendered HTML — the header, the footer, page chrome — with the
 genuinely interactive parts mounted as islands (`client:load`): `ConfigViewer`,
 `SheetViewer`, `HeaderUpload`, `ThemeToggle`, `WarningBanner`, `KeyboardNav`
 and `MachineEditor` — every island is Svelte
-(#239/#240/#241/#243/#244/#245/#246); React itself, `@astrojs/react` included,
-is gone from the dependency tree entirely. An island hydrates independently
+(#239/#240/#241/#243/#244/#245/#246); the site uses no React of its own,
+which is only installed because `@washy-washy/pdf` renders with it. An island hydrates independently
 of the rest of the page, and each one that has meaningful client-side state
 to restore (from
 `localStorage` or the URL) sets `data-hydrated="true"` once that's done — see
@@ -39,7 +39,7 @@ component would otherwise duplicate it — currently just `useKeyboardNav`
 `/docs` (`src/content/docs/docs/*`) is the only
 [Starlight](https://starlight.astro.build/) content in this project — one
 level deeper than Starlight's own default `src/content/docs/*`, specifically
-so it doesn't own the site root. It's translated into five languages
+so it doesn't own the site root. It's translated into every locale the app has
 (`src/i18n/locales.ts`'s `DOCS_LOCALES`, #144), so its own chrome and
 sidebar carry per-locale `translations` (`astro.config.mjs`).
 
@@ -65,4 +65,4 @@ full-parity decision.
 dynamically imported only when a download button is actually clicked
 (`SheetViewer.svelte`'s `handleDownloadPhone`/`handleDownloadPrint`/
 `handleDownloadCard`) — filtering the chart never pulls in `@react-pdf/
-renderer` or `pdf-lib`, both sizeable, for a render nobody asked for yet.
+renderer`, which is sizeable, for a render nobody asked for yet.

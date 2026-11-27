@@ -9,9 +9,9 @@ import type { StoredFilters } from "./storage";
  * the plain unfiltered view keeps a plain URL.
  *
  * Separate from `url.ts`'s `readUrlFilters`: this one touches `window`,
- * which the root tsconfig has no types for (see that file's comment) — only
- * `apps/web`'s own `astro check`, which does have a DOM lib, ever type-checks
- * this file.
+ * which `tsconfig.json` has no types for (see that file's comment).
+ * `tsconfig.test.json` gets just enough of it from
+ * `test/support/windowShim.d.ts`.
  */
 export function writeUrlFilters(filters: StoredFilters): void {
   const params = new URLSearchParams();

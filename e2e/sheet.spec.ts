@@ -10,9 +10,9 @@ import { expectNoA11yViolations } from "./a11y";
 
 /**
  * `SheetViewer` is a client:load island: the server-rendered HTML is on the
- * page before React attaches to it. An interaction fired in that gap still
+ * page before Svelte attaches to it. An interaction fired in that gap still
  * "succeeds" — Playwright mutates the real DOM node — but nothing is
- * listening yet, so the change never reaches React state. Racy without this:
+ * listening yet, so the change never reaches component state. Racy without this:
  * passed most of the time, since hydration is normally fast, and failed
  * outright once it wasn't.
  */

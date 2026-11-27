@@ -1,7 +1,8 @@
 /* SITE */
-    Last update: 2026/08/22
+    Last update: 2026/11/27
     Language: English
     Doctype: HTML5
     Standards: HTML5, CSS3
-    Components: Astro, React, Tailwind CSS
+    Components: Astro, Starlight, Svelte, Tailwind CSS
     Software: Bun, TypeScript, Biome, Playwright, Wrangler
+    Hosting: Cloudflare

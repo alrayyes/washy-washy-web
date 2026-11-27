@@ -6,7 +6,7 @@ pieces fit together, how this repo relates to its siblings in the washy-washy
 ecosystem, and the patterns you'll run into reading the code.
 
 Plain repo markdown, not part of the deployed site — `/docs` is translated
-into five languages (#144) and this isn't, so it stays out of the same
+into every language the app has (#144) and this isn't, so it stays out of the same
 webpage rather than being the one untranslated corner of it. For toolchain
 versions, build/test/lint commands, hooks and the release process, see
 [`CONTRIBUTING.md`](../CONTRIBUTING.md) — that stays the first stop for
