@@ -4,7 +4,8 @@
 // a real click, so `svelte/server`'s `render()` (test/sheet-render.test.ts's
 // and test/sheet-fields.test.ts's own tool) can only ever see its initial,
 // idle render. happy-dom's `GlobalRegistrator`, registered per test below
-// and nowhere else, gives this one file a real `window`/`document` so
+// (and around the component import, see test/support/importClient.ts),
+// gives this one file a real `window`/`document` so
 // Svelte's own `mount`/`unmount` (imported from the plain `"svelte"`
 // package, via a `?client`-suffixed import — see
 // test/support/svelteCompile.ts's own doc comment for why) can mount, click
@@ -117,6 +118,8 @@ function downloadButton() {
 // test/storage.test.ts's own comment) behind for whatever file loads next
 // in that same process. `beforeEach`/`afterEach` scope the swap to exactly
 // the span of one test, however this file's own tests are selected to run.
+// `importClient` does register at module scope, but unregisters before the
+// next line runs, so nothing is left behind.
 //
 // That still isn't quite enough under `bun --inspect` specifically (the
 // mode Stryker's own bun runner always uses for per-test coverage,
