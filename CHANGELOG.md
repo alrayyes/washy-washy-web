@@ -1,5 +1,12 @@
 <!-- release-please adds each release above the previous one. Keep this line: without text above the first heading, the new entry lands below it. -->
 
+## [1.54.1](https://github.com/alrayyes/washy-washy-web/compare/v1.54.0...v1.54.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **ci:** re-arm Dependabot auto-merge so a new title sticks ([#491](https://github.com/alrayyes/washy-washy-web/issues/491)) ([81501e5](https://github.com/alrayyes/washy-washy-web/commit/81501e571be86503a30892800dc8b5bc91ffbfad)), closes [#484](https://github.com/alrayyes/washy-washy-web/issues/484)
+
 ## [1.54.0](https://github.com/alrayyes/washy-washy-web/compare/v1.53.19...v1.54.0) (2026-11-27)
 
 
