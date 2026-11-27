@@ -5,8 +5,12 @@
  * scripts/released-refs.ts owner/repo`.
  */
 export function releasedRefs(notes: string, repo: string): number[] {
-  const link = new RegExp(`https://github\\.com/${repo}/(?:issues|pull)/(\\d+)`, "g");
-  const numbers = [...notes.matchAll(link)].map((match) => Number(match[1]));
+  // A constant pattern with the repo compared afterwards: semgrep rejects a
+  // RegExp built from an argument.
+  const link = /https:\/\/github\.com\/([\w.-]+\/[\w.-]+)\/(?:issues|pull)\/(\d+)/g;
+  const numbers = [...notes.matchAll(link)]
+    .filter((match) => match[1] === repo)
+    .map((match) => Number(match[2]));
 
   return [...new Set(numbers)].sort((a, b) => a - b);
 }
