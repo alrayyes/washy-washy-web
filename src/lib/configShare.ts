@@ -78,7 +78,7 @@ export async function decodeConfigHash(hash: string): Promise<Config | null> {
   const bytes = fromBase64Url(encoded);
   // `as any`, not `as BlobPart`: this file is also imported (for testing)
   // under tsconfig.test.json, which deliberately has no DOM lib — the
-  // same reasoning `SheetViewer.tsx`'s `savePdf` needs a narrowing cast
+  // same reasoning `SheetViewer.svelte`'s `savePdf` needs a narrowing cast
   // for (TS types Uint8Array over the wider ArrayBufferLike, which also
   // covers SharedArrayBuffer, while a Blob part wants the plain
   // ArrayBuffer-backed kind — fromBase64Url's own `new

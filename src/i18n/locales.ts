@@ -88,7 +88,7 @@ const PAGE_PATHS: Record<TranslatedPage, string> = {
  * (src/pages/jive/docs/[...slug].astro, src/pages/linkedin/docs/
  * [...slug].astro, src/content.config.ts's `docsJive`/`docsLinkedin`
  * collections) that happen to land on the exact same URL shape Starlight
- * gives the other five. That's why this alias is worth keeping even though
+ * gives the other locales. That's why this alias is worth keeping even though
  * it's just `LOCALES` today — it documents "every locale has docs", not
  * "every locale has Starlight".
  */

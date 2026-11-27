@@ -5,7 +5,7 @@ import { expectNoA11yViolations } from "./a11y";
 /**
  * Home, disclaimer and privacy all mount SheetViewer-free chrome except the
  * home page itself, which carries SheetViewer's `data-hydrated` flag — see
- * dev-docs/hydration.md. The banner's dismiss button is a real React
+ * dev-docs/hydration.md. The banner's dismiss button is a real Svelte
  * handler (WarningBanner is `client:load`), so tests that click it go
  * through the home page and wait on that flag the same way sheet.spec.ts
  * does; the language switcher itself is a plain <select> with an inline

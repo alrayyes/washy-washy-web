@@ -23,7 +23,7 @@ export async function waitForServer(url: string, timeoutMs = 15_000) {
   throw new Error(`Server at ${url} did not come up within ${timeoutMs}ms`);
 }
 
-/** React islands (`client:load`) hydrate after first paint — this flag is the e2e suite's own signal that listeners are attached. */
+/** Svelte islands (`client:load`) hydrate after first paint — this flag is the e2e suite's own signal that listeners are attached. */
 export async function waitForHydration(page: Page) {
   await page.waitForSelector('[data-hydrated="true"]');
 }

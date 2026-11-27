@@ -13,9 +13,9 @@ It also registers [WebMCP](https://washy-washy.ryankes.eu/docs/webmcp/)
 tools, so a WebMCP-aware browser or extension can read, validate and edit
 that same chart and machine directly.
 
-Split out of [`washy-washy`](https://github.com/alrayyes/washy-washy)'s
-`apps/web` into its own repo so it can version and deploy independently of
-the CLI. Uses [`@washy-washy/core`](https://github.com/alrayyes/washy-washy-sdk)
+Split out of [`washy-washy-cli`](https://github.com/alrayyes/washy-washy-cli)'s
+repository, where it was `apps/web`, into its own repo so it can version and
+deploy independently of the CLI. Uses [`@washy-washy/core`](https://github.com/alrayyes/washy-washy-core)
 for chart/machine parsing and validation, and
 [`@washy-washy/pdf`](https://github.com/alrayyes/washy-washy-pdf) for the
 same PDF rendering the CLI uses, so a single card can be downloaded straight

@@ -105,7 +105,7 @@ export interface Ui {
   /** aria-label on every HelpBubble ("?") button. */
   "common.whatDoesThisDo": string;
 
-  // --- SheetViewer.tsx (home page's filter bar and status/error text) ---
+  // --- SheetViewer.svelte (home page's filter bar and status/error text) ---
   "sheetViewer.cutEverything": string;
   "sheetViewer.cutWashOnly": string;
   "sheetViewer.cutIronOnly": string;
@@ -152,7 +152,7 @@ export interface Ui {
   /** "Couldn't render in the print PDF: {chars}" */
   "sheetViewer.couldntRenderPrint": string;
 
-  // --- Sheet.tsx (the read-only rendered sheet, and each card) ---
+  // --- Sheet.svelte (the read-only rendered sheet, and each card) ---
   "sheet.subtitleFull": string;
   "sheet.subtitleWash": string;
   "sheet.subtitleIron": string;
@@ -197,7 +197,7 @@ export interface Ui {
   /** "Couldn't render in the PDF: {chars}" */
   "sheet.couldntRenderInPdf": string;
 
-  // --- ConfigViewer.tsx (/config, the washing-loads editor) ---
+  // --- ConfigViewer.svelte (/config, the washing-loads editor) ---
   "config.editMachine": string;
   "config.programmes": string;
   "config.temperatures": string;
@@ -222,7 +222,7 @@ export interface Ui {
   "config.colourGroupHeading": string;
   "config.mixTagsHeading": string;
 
-  // --- MachineEditor.tsx (/config/machine) ---
+  // --- MachineEditor.svelte (/config/machine) ---
   /** "Move {value} up" */
   "machine.moveUp": string;
   /** "Move {value} down" */
@@ -268,7 +268,7 @@ export interface Ui {
   // --- HeaderUpload.svelte ---
   "upload.uploadConfig": string;
 
-  // --- KeyboardNav.tsx + lib/keyboardNav.ts ---
+  // --- KeyboardNav.svelte + lib/keyboardNav.ts ---
   "keyboardNav.title": string;
   "keyboardNav.close": string;
   "keyboardNav.scrollDown": string;

@@ -258,9 +258,9 @@ async function handleDownloadPhone() {
   phoneDownloadError = null;
   phoneDownloadDropped = [];
   try {
-    // Dynamic, not static: @washy-washy/pdf pulls in @react-pdf/renderer
-    // and pdf-lib, which nothing needs until this click — a static import
-    // would ship both in the page's main chunk regardless.
+    // Dynamic, not static: @washy-washy/pdf pulls in @react-pdf/renderer,
+    // which nothing needs until this click — a static import
+    // would ship it in the page's main chunk regardless.
     const { renderPhone } = await import("@washy-washy/pdf");
     const { pdf, dropped } = await renderPhone(filtered, activeMachine, cut);
     savePdf(pdf, `${STEM}-phone${SUFFIX[cut]}.pdf`);
