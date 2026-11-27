@@ -4,7 +4,8 @@
 // a real click, so `svelte/server`'s `render()` (test/sheet-render.test.ts's
 // and test/sheet-fields.test.ts's own tool) can only ever see its initial,
 // idle render. happy-dom's `GlobalRegistrator`, registered per test below
-// and nowhere else, gives this one file a real `window`/`document` so
+// (and around the component import, see test/support/importClient.ts),
+// gives this one file a real `window`/`document` so
 // Svelte's own `mount`/`unmount` (imported from the plain `"svelte"`
 // package, via a `?client`-suffixed import — see
 // test/support/svelteCompile.ts's own doc comment for why) can mount, click
@@ -33,8 +34,8 @@ declare global {
 import { afterEach, beforeEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { cardGroups, type ResolvedInstruction, resolve } from "@washy-washy/core";
 import { mount, tick, unmount } from "svelte";
-import Sheet from "../src/components/Sheet.svelte?client";
 import { translator } from "../src/i18n/ui";
+import { importClient } from "./support/importClient";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 // Mounting a Svelte component under happy-dom costs a second or two on an idle
@@ -43,6 +44,10 @@ import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 // covers the beforeEach/afterEach hooks here. One minute fails a hung test
 // without failing a busy machine; the assertions are unchanged. See #322.
 setDefaultTimeout(60_000);
+
+const { default: Sheet } = await importClient(
+  () => import("../src/components/Sheet.svelte?client"),
+);
 
 const t = translator("en");
 const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
@@ -113,6 +118,8 @@ function downloadButton() {
 // test/storage.test.ts's own comment) behind for whatever file loads next
 // in that same process. `beforeEach`/`afterEach` scope the swap to exactly
 // the span of one test, however this file's own tests are selected to run.
+// `importClient` does register at module scope, but unregisters before the
+// next line runs, so nothing is left behind.
 //
 // That still isn't quite enough under `bun --inspect` specifically (the
 // mode Stryker's own bun runner always uses for per-test coverage,

@@ -13,11 +13,15 @@ import { cardGroups, resolve } from "@washy-washy/core";
 import { mount, tick, unmount } from "svelte";
 import { render as svelteRender } from "svelte/server";
 import SheetServer from "../src/components/Sheet.svelte";
-import Sheet from "../src/components/Sheet.svelte?client";
 import { translator } from "../src/i18n/ui";
+import { importClient } from "./support/importClient";
 import { DIST_CONFIG, loadConfig } from "./support/loadConfig";
 
 setDefaultTimeout(60_000);
+
+const { default: Sheet } = await importClient(
+  () => import("../src/components/Sheet.svelte?client"),
+);
 
 const t = translator("en");
 const { machine, chart: instructions } = await loadConfig(DIST_CONFIG);
