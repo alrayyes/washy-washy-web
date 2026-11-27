@@ -36,7 +36,8 @@ jobs:
       # Squashed with a subject commitlint accepts. Dependabot writes "Bump x
       # from a to b" and config-conventional refuses the capital B, so the
       # commit that reaches main is retitled here rather than the rule being
-      # relaxed for everyone else.
+      # relaxed for everyone else. A custom --subject loses GitHub's " (#N)", so
+      # it goes back on: the release notes need it for the `released` label.
       #
       # --auto is the whole safety story: it holds the pull request until the
       # required checks on main have passed. Without a ruleset naming those
@@ -54,10 +55,11 @@ jobs:
       - name: Wave it through once the checks are green
         run: |
           subject=$(printf '%s' "$PR_TITLE" | sed -E 's/^([a-z]+(\([^)]*\))?: )([A-Z])/\1\l\3/')
-          gh pr merge --auto --squash --subject "$subject" "$PR_URL"
+          gh pr merge --auto --squash --subject "$subject (#$PR_NUMBER)" "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Start the release run once it has merged
