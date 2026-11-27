@@ -308,7 +308,7 @@ for (const { locale, label } of OVERLAP_TEST_LOCALES) {
     // tried to override it by appending a later Tailwind class in the same
     // string — class order in a `className` attribute doesn't affect the
     // generated stylesheet's cascade order, so both this title input and
-    // DurationField's own input silently ignored their intended overrides
+    // durationField's own input silently ignored their intended overrides
     // and fought each other for space on a 320px-wide card.
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(locale ? `/${locale}/config` : "/config");
