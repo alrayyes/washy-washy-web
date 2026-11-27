@@ -51,7 +51,7 @@ jobs:
   # release-please leaves the release as a draft (its tag already pushed), and
   # this job publishes it once the README's screenshots are attached, so
   # releases/latest/download/ never points at a release without them. If it
-  # fails, re-run the failed job.
+  # fails, use "Re-run failed jobs" (CONTRIBUTING.md has the rest).
   publish:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
@@ -78,13 +78,17 @@ jobs:
       - run: bunx playwright install --with-deps chromium
       - run: bun run readme:shots
 
+      # --latest only when nothing newer is published: a late re-run of an older
+      # release must not move releases/latest, and the README with it, back.
       # GitHub's secondary rate limit clears within a minute or two. --clobber
       # makes a second attempt safe.
       - uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
         with:
           command: |
             gh release upload "$TAG_NAME" screenshots/*.png --clobber &&
-              gh release edit "$TAG_NAME" --draft=false --latest
+              published=$(gh release list --exclude-drafts --exclude-pre-releases --limit 100 --json tagName --jq '.[].tagName') &&
+              latest=$(bun scripts/latest-flag.ts "$TAG_NAME" <<< "$published") &&
+              gh release edit "$TAG_NAME" --draft=false "$latest"
           shell: bash
           max_attempts: 3
           timeout_minutes: 5
@@ -97,7 +101,8 @@ jobs:
         run: |
           notes=$(gh release view "$TAG_NAME" --json body --jq .body)
           url=$(gh release view "$TAG_NAME" --json url --jq .url)
-          for number in $(bun scripts/released-refs.ts "$GH_REPO" <<< "$notes"); do
+          refs=$(bun scripts/released-refs.ts "$GH_REPO" <<< "$notes")
+          for number in $refs; do
             gh issue edit "$number" --add-label released ||
               gh pr edit "$number" --add-label released ||
               echo "::warning::could not label #$number"

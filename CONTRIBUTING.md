@@ -152,4 +152,12 @@ handles the actual deploy on every push to `main`, and posts a preview URL on
 every pull request. Both release workflows need the `RELEASE_TOKEN` secret, a
 token that can write contents, issues and pull requests.
 
-The release starts as a draft. The `publish` job in `release.yml` builds the site, captures a light and a dark screenshot of every English page except the footer's (disclaimer and privacy), attaches the 18 PNGs, publishes the release and labels what shipped `released`. If it fails, re-run the failed job. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.
+The release starts as a draft. The `publish` job in `release.yml` builds the site, captures a light and a dark screenshot of every English page except the footer's (disclaimer and privacy), attaches the 18 PNGs, publishes the release and labels what shipped `released`.
+
+If `publish` fails, the release stays a draft. Use **Re-run failed jobs**. **Re-run all jobs** doesn't recover it: `release-please` reports no new release the second time, so `publish` is skipped. A re-run also checks out the same tag, so it can't fix a bug that's in that tag's tree. The manual way out is to publish the draft by hand, with or without screenshots:
+
+```sh
+gh release edit vX.Y.Z --draft=false --latest
+```
+
+Use `--latest=false` instead if a newer version is already published. The README links them at `releases/latest/download/`, so they follow each release and nothing binary is committed. A push that doesn't release builds and captures nothing. The page list lives in `scripts/readme-shots.ts`: add a page there and in the README's Screenshots section, and `test/readme-shots.test.ts` fails if the two disagree.
