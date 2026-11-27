@@ -8,8 +8,9 @@
 // gives this file a real `window`/`document` so Svelte's own
 // `mount`/`unmount` (imported from the plain `"svelte"` package, via a
 // `?client`-suffixed import — see test/support/svelteCompile.ts's own doc
-// comment for why) can mount, click and re-render it for real. Only a test
-// that needs that pays for a DOM; the render tests stay without one.
+// comment for why) can mount, click and re-render it for real. Only the
+// files that mount a component register one; test/sheet-render.test.ts and
+// test/sheet-fields.test.ts stay without.
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
 /**
