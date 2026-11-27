@@ -1,5 +1,12 @@
 <!-- release-please adds each release above the previous one. Keep this line: without text above the first heading, the new entry lands below it. -->
 
+## [1.54.2](https://github.com/alrayyes/washy-washy-web/compare/v1.54.1...v1.54.2) (2026-11-27)
+
+
+### Bug Fixes
+
+* **deps:** bump svelte from 5.58.1 to 5.59.0 ([#495](https://github.com/alrayyes/washy-washy-web/issues/495)) ([3656cb7](https://github.com/alrayyes/washy-washy-web/commit/3656cb7440b3155cb28612e2d55949370d567a6e))
+
 ## [1.54.1](https://github.com/alrayyes/washy-washy-web/compare/v1.54.0...v1.54.1) (2026-11-27)
 
 
