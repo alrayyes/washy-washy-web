@@ -5,22 +5,21 @@
 // and test/sheet-fields.test.ts's own tool) can only ever see its initial,
 // idle render. happy-dom's `GlobalRegistrator`, registered per test below
 // (and around the component import, see test/support/importClient.ts),
-// gives this one file a real `window`/`document` so
-// Svelte's own `mount`/`unmount` (imported from the plain `"svelte"`
-// package, via a `?client`-suffixed import — see
-// test/support/svelteCompile.ts's own doc comment for why) can mount, click
-// and re-render it for real — see stryker.config.mjs's own comment on why
-// this file, specifically, earns that over the DOM-free approach everything
-// else exercising Sheet.svelte uses.
+// gives this file a real `window`/`document` so Svelte's own
+// `mount`/`unmount` (imported from the plain `"svelte"` package, via a
+// `?client`-suffixed import — see test/support/svelteCompile.ts's own doc
+// comment for why) can mount, click and re-render it for real. Only the
+// files that mount a component register one; test/sheet-render.test.ts and
+// test/sheet-fields.test.ts stay without.
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
 /**
  * This program's own tsconfig (tsconfig.test.json) deliberately carries no
- * "DOM" lib — every other test file in it is plain `bun:test` logic, and
- * pulling the DOM lib in for everyone just for this file's own happy-dom
- * usage was rejected (see stryker.config.mjs). `document` itself is
- * therefore not a name TypeScript knows here; this declares just enough of
- * it — untyped, on purpose — for the calls below to resolve at all. It
+ * "DOM" lib — most test files in it are plain `bun:test` logic, and adding
+ * the lib for the few that mount a component would give all the others DOM
+ * globals they have no business seeing. `document` itself is therefore not
+ * a name TypeScript knows here; this declares just enough of it — untyped,
+ * on purpose — for the calls below to resolve at all. It
  * mirrors test/support/windowShim.d.ts's own reasoning for urlHistory.ts,
  * scaled to "no types" rather than "a hand-written minimal type", since
  * this file's job is exercising real interactive markup, not one or two
