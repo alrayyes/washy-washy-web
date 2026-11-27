@@ -1,5 +1,12 @@
 <!-- release-please adds each release above the previous one. Keep this line: without text above the first heading, the new entry lands below it. -->
 
+## [1.53.19](https://github.com/alrayyes/washy-washy-web/compare/v1.53.18...v1.53.19) (2026-11-27)
+
+
+### Bug Fixes
+
+* **ci:** keep the pull request number on Dependabot merges ([#483](https://github.com/alrayyes/washy-washy-web/issues/483)) ([cd2bfe3](https://github.com/alrayyes/washy-washy-web/commit/cd2bfe3f2e1852c587f5159d0b5c2f7c506a3827)), closes [#482](https://github.com/alrayyes/washy-washy-web/issues/482)
+
 ## [1.53.18](https://github.com/alrayyes/washy-washy-web/compare/v1.53.17...v1.53.18) (2026-11-27)
 
 
