@@ -77,6 +77,6 @@
     "sharp": "0.35.5",
     "sort-package-json": "4.1.0",
     "typescript": "6.0.3",
-    "wrangler": "4.165.0"
+    "wrangler": "4.166.0"
   }
 }
